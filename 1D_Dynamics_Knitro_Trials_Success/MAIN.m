@@ -14,7 +14,7 @@ g = 9.80665; %m/s^2
 %==========================================================
 %Time parameters
 h = 0.125; %Time Step in seconds
-EndTime = h*20; %in seconds BONMIN can handle maximumly 30 time steps
+EndTime = h*15; %in seconds BONMIN can handle maximumly 30 time steps
 % missing checking the endtime is the multiple of the time step
 TimeSeries = 0:h:EndTime;
 TimeSeriesLength = length(TimeSeries);
@@ -387,9 +387,9 @@ x0 = rand(namesLength,1);
 
 %modify the solver call
 
-options = optimset('Display','iter','MaxIter',100);
+options = optimset('Display','iter');
 
-result.x = knitromatlab_mip(func,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options);
+result.x = knitromatlab_mip(func,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,'mipoptions.opt');
 
 %% Plot Figures
 

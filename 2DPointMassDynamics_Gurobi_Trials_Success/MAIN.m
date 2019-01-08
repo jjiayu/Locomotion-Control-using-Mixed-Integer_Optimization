@@ -14,7 +14,7 @@ g = 9.80665; %m/s^2
 %==========================================================
 %Time parameters
 h = 0.125; %Time Step in seconds
-EndTime = h*30; %in seconds BONMIN can handle maximumly 30 time steps
+EndTime = h*20; %in seconds BONMIN can handle maximumly 30 time steps
 % missing checking the endtime is the multiple of the time step
 TimeSeries = 0:h:EndTime;
 TimeSeriesLength = length(TimeSeries);
@@ -135,10 +135,10 @@ for i = 1:varListLength
     for j = 1:varListLength
         if (varList(i) == "FFx" && varList{j} == "FFx") || (varList{i} == "FFy" && varList{j} == "FFy") || (varList{i} == "FHx" && varList{j} == "FHx") || (varList{i} == "FHy" && varList{j} == "FHy")
             QCell{i,j} = eye(LengthList(i),LengthList(j));
-        %elseif varList(i) == "CF" && varList(j) == "CF"
-        %    QCell{i,j} = 50000*eye(LengthList(i),LengthList(j));
-        %elseif varList(i) == "CH" && varList(j) == "CH"
-        %    QCell{i,j} = 50000*eye(LengthList(i),LengthList(j));
+        elseif varList(i) == "CF" && varList(j) == "CF"
+           QCell{i,j} = 10000*eye(LengthList(i),LengthList(j));
+        elseif varList(i) == "CH" && varList(j) == "CH"
+           QCell{i,j} = 50000*eye(LengthList(i),LengthList(j));
         else
             QCell{i,j} = zeros(LengthList(i),LengthList(j));
         end
@@ -146,29 +146,29 @@ for i = 1:varListLength
 end
 % 
 Q = cell2mat(QCell);
-contact_cost = 1e7;
-Q(find(names == 'CF0'),find(names == 'CF0')) = contact_cost;
-Q(find(names == 'CF1'),find(names == 'CF1')) = contact_cost;
-Q(find(names == 'CF2'),find(names == 'CF2')) = contact_cost;
-Q(find(names == 'CF3'),find(names == 'CF3')) = contact_cost;
-Q(find(names == 'CF4'),find(names == 'CF4')) = contact_cost;
-Q(find(names == 'CF5'),find(names == 'CF5')) = contact_cost;
-Q(find(names == 'CF6'),find(names == 'CF6')) = contact_cost;
-Q(find(names == 'CF7'),find(names == 'CF7')) = contact_cost;
-Q(find(names == 'CF8'),find(names == 'CF8')) = contact_cost;
-Q(find(names == 'CF9'),find(names == 'CF9')) = contact_cost;
-Q(find(names == 'CF10'),find(names == 'CF10')) = contact_cost;
-Q(find(names == 'CH0'),find(names == 'CH0')) = contact_cost;
-Q(find(names == 'CH1'),find(names == 'CH1')) = contact_cost;
-Q(find(names == 'CH2'),find(names == 'CH2')) = contact_cost;
-Q(find(names == 'CH3'),find(names == 'CH3')) = contact_cost;
-Q(find(names == 'CH4'),find(names == 'CH4')) = contact_cost;
-Q(find(names == 'CH5'),find(names == 'CH5')) = contact_cost;
-Q(find(names == 'CH6'),find(names == 'CH6')) = contact_cost;
-Q(find(names == 'CH7'),find(names == 'CH7')) = contact_cost;
-Q(find(names == 'CH8'),find(names == 'CH8')) = contact_cost;
-Q(find(names == 'CH9'),find(names == 'CH9')) = contact_cost;
-Q(find(names == 'CH10'),find(names == 'CH10')) = contact_cost;
+% contact_cost = 1e7;
+% Q(find(names == 'CF0'),find(names == 'CF0')) = contact_cost;
+% Q(find(names == 'CF1'),find(names == 'CF1')) = contact_cost;
+% Q(find(names == 'CF2'),find(names == 'CF2')) = contact_cost;
+% Q(find(names == 'CF3'),find(names == 'CF3')) = contact_cost;
+% Q(find(names == 'CF4'),find(names == 'CF4')) = contact_cost;
+% Q(find(names == 'CF5'),find(names == 'CF5')) = contact_cost;
+% Q(find(names == 'CF6'),find(names == 'CF6')) = contact_cost;
+% Q(find(names == 'CF7'),find(names == 'CF7')) = contact_cost;
+% Q(find(names == 'CF8'),find(names == 'CF8')) = contact_cost;
+% Q(find(names == 'CF9'),find(names == 'CF9')) = contact_cost;
+% Q(find(names == 'CF10'),find(names == 'CF10')) = contact_cost;
+% Q(find(names == 'CH0'),find(names == 'CH0')) = contact_cost;
+% Q(find(names == 'CH1'),find(names == 'CH1')) = contact_cost;
+% Q(find(names == 'CH2'),find(names == 'CH2')) = contact_cost;
+% Q(find(names == 'CH3'),find(names == 'CH3')) = contact_cost;
+% Q(find(names == 'CH4'),find(names == 'CH4')) = contact_cost;
+% Q(find(names == 'CH5'),find(names == 'CH5')) = contact_cost;
+% Q(find(names == 'CH6'),find(names == 'CH6')) = contact_cost;
+% Q(find(names == 'CH7'),find(names == 'CH7')) = contact_cost;
+% Q(find(names == 'CH8'),find(names == 'CH8')) = contact_cost;
+% Q(find(names == 'CH9'),find(names == 'CH9')) = contact_cost;
+% Q(find(names == 'CH10'),find(names == 'CH10')) = contact_cost;
 Q_backup = Q;
 
 % % Test Code to assign Q matrix
