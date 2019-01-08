@@ -615,6 +615,13 @@ Typecomplementarity = [TypePFy_Con1;TypePFy_Con2;...
                        TypeFHy_Con1;TypeFHy_Con2
                        ];
 %---------------------------------------------------------------
+%       Kinematics Constraints
+angle = 45/180*pi;
+maxLegLength = 0.4;
+maxXbias = maxLegLength*sin(angle);
+maxYbias = maxLegLength*cos(angle);
+%---------------------------------------------------------------
+%---------------------------------------------------------------
 %   Set Boundary Conditions
 %---------------------------------------------------------------
 %       Initial State
