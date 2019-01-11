@@ -24,7 +24,7 @@ g = 9.80665; %m/s^2
 
 %==========================================================
 %Time parameters
-NumTimeSteps = 15; %number of time steps
+NumTimeSteps = 10; %number of time steps
 h = 0.125; %Time Step in seconds
 EndTime = h*NumTimeSteps; %in seconds
 % missing checking the endtime is the multiple of the time step
@@ -35,13 +35,13 @@ TimeSeriesLength = length(TimeSeries);
 %=========================================================
 %Initial Conditions
 x_init = 0;
-y_init = 0.5;
+y_init = 0; %0.2
 xdot_init = 0;
 ydot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditions
-x_end = 20;
-y_end = 0.5;
+x_end = 0; %20
+y_end = 2; %0.2
 xdot_end = 0;
 ydot_end = 0;
 %=========================================================
@@ -615,6 +615,121 @@ Typecomplementarity = [TypePFy_Con1;TypePFy_Con2;...
                        TypeFHy_Con1;TypeFHy_Con2
                        ];
 %---------------------------------------------------------------
+%       Kinematics Constraint
+%---------------------------------------------------------------
+%           Set up parameters
+HipAngle = 45; %degrees
+HipAngle = HipAngle/180*pi;
+maxLegLength = 0.4;%max leg length = 0.4
+maxXbias = maxLegLength*sin(HipAngle);
+maxYbias = maxLegLength;
+%---------------------------------------------------------------
+%           Front Foot
+%---------------------------------------------------------------
+%               x-axis
+%---------------------------------------------------------------
+%               First Constraint: PFx - x <= maxXbias
+%               Build A matrix
+APFx_Kine_Con1 = zeros(PFxLength,namesLength);
+for k = 1:PFxLength
+    APFx_Kine_Con1(k,find(names == strcat('PFx',num2str(k-1)))) = 1;
+    APFx_Kine_Con1(k,find(names == strcat('x',num2str(k-1)))) = -1;
+end
+%               Build b vector
+bPFx_Kine_Con1 = repmat(maxXbias,size(APFx_Kine_Con1,1),1);
+%               Setup Constraint Type
+Type_bPFx_Kine_Con1 = repmat(-1,size(APFx_Kine_Con1,1),1);
+%---------------------------------------------------------------
+%               Second Constraint: x - PFx <= maxXbias
+%               Build A matrix
+APFx_Kine_Con2 = zeros(PFxLength,namesLength);
+for k = 1:PFxLength
+    APFx_Kine_Con2(k,find(names == strcat('PFx',num2str(k-1)))) = -1;
+    APFx_Kine_Con2(k,find(names == strcat('x',num2str(k-1)))) = 1;
+end
+%               Build b vector
+bPFx_Kine_Con2 = repmat(maxXbias,size(APFx_Kine_Con2,1),1);
+%               Setup Constraint Type
+Type_bPFx_Kine_Con2 = repmat(-1,size(APFx_Kine_Con2,1),1);
+%---------------------------------------------------------------
+%               y-axis: PFy - y <= maxYbias
+%---------------------------------------------------------------
+%               Build A matrix
+APFy_Kine = zeros(PFyLength,namesLength);
+for k = 1:PFyLength
+    APFy_Kine(k,find(names == strcat('PFy',num2str(k-1)))) = 1;
+    APFy_Kine(k,find(names == strcat('y',num2str(k-1)))) = -1;
+end
+%               Build b vector
+bPFy_Kine = repmat(maxYbias,size(APFy_Kine,1),1);
+%               Setup Constraint Type
+Type_bPFy_Kine = repmat(-1,size(APFy_Kine,1),1);
+%----------------------------------------------------------------
+%           Hind Foot
+%----------------------------------------------------------------
+%               x-axis
+%----------------------------------------------------------------
+%               First Constraint: PHx - x <= maxXbias
+%               Build A matrix
+APHx_Kine_Con1 = zeros(PHxLength,namesLength);
+for k = 1:PHxLength
+    APHx_Kine_Con1(k,find(names == strcat('PHx',num2str(k-1)))) = 1;
+    APHx_Kine_Con1(k,find(names == strcat('x',num2str(k-1)))) = -1;
+end
+%               Build b vector
+bPHx_Kine_Con1 = repmat(maxXbias,size(APHx_Kine_Con1,1),1);
+%               Setup Constraint Type
+Type_bPHx_Kine_Con1 = repmat(-1,size(APHx_Kine_Con1,1),1);
+%----------------------------------------------------------------
+%               Second Constraint: x - PHx <= maxXbias
+%               Build A matrix
+APHx_Kine_Con2 = zeros(PHxLength,namesLength);
+for k = 1:PHxLength
+    APHx_Kine_Con2(k,find(names == strcat('PHx',num2str(k-1)))) = -1;
+    APHx_Kine_Con2(k,find(names == strcat('x',num2str(k-1)))) = 1;
+end
+%               Build b vector
+bPHx_Kine_Con2 = repmat(maxXbias,size(APHx_Kine_Con2,1),1);
+%               Setup Constraint Type
+Type_bPHx_Kine_Con2 = repmat(-1,size(APHx_Kine_Con2,1),1);
+%----------------------------------------------------------------
+%               y-axis: PHy - y <= maxYbias
+%----------------------------------------------------------------
+%               Build A matrix
+APHy_Kine = zeros(PHyLength,namesLength);
+for k = 1:PHyLength
+    APFy_Kine(k,find(names == strcat('PHy',num2str(k-1)))) = 1;
+    APFy_Kine(k,find(names == strcat('y',num2str(k-1)))) = -1;
+end
+%               Build b vector
+bPHy_Kine = repmat(maxYbias,size(APHy_Kine,1),1);
+%               Setup Constraint Type
+Type_bPHy_Kine = repmat(-1,size(APHy_Kine,1),1);
+%---------------------------------------------------------------
+%           Collect Kinematics Constraint
+Akinematics = [APFx_Kine_Con1;
+               APFx_Kine_Con2;
+               APFy_Kine;
+               APHx_Kine_Con1;
+               APHx_Kine_Con2;
+               APHy_Kine;
+              ];
+bKinematics = [bPFx_Kine_Con1;
+               bPFx_Kine_Con2;
+               bPFy_Kine;
+               bPHx_Kine_Con1;
+               bPHx_Kine_Con2;
+               bPHy_Kine;
+              ];
+TypeKinematics = [Type_bPFx_Kine_Con1;
+                  Type_bPFx_Kine_Con2;
+                  Type_bPFy_Kine;
+                  Type_bPHx_Kine_Con1;
+                  Type_bPHx_Kine_Con2;
+                  Type_bPHy_Kine;
+                 ];
+          
+%---------------------------------------------------------------
 %   Set Boundary Conditions
 %---------------------------------------------------------------
 %       Initial State
@@ -672,9 +787,9 @@ Aeq = [Ainit;Aend;Adyn];
 beq = [binit;bend;bdyn];
 %---------------------------------------------------------------
 %   Collect all A, b and Type for linear inequality constraints
-A = [Acomplementarity];
-b = [bcomplementarity];
-IneqType = [Typecomplementarity];
+A = [Acomplementarity;Akinematics];
+b = [bcomplementarity;bKinematics];
+IneqType = [Typecomplementarity;TypeKinematics];
 %------------------------------------------------------------
 %   Variable Lower and Upper Boundaries, Inf slow down computing speed,
 %   seems like
