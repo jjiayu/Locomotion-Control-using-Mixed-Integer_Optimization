@@ -24,8 +24,8 @@ g = 9.80665; %m/s^2
 
 %==========================================================
 %Time parameters
-NumTimeSteps = 50; %number of time steps
-h = 0.05; %Time Step in seconds
+NumTimeSteps = 100; %number of time steps
+h = 0.01; %Time Step in seconds
 EndTime = h*NumTimeSteps; %in seconds
 % missing checking the endtime is the multiple of the time step
 TimeSeries = 0:h:EndTime;
@@ -40,7 +40,7 @@ xdot_init = 0;
 ydot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditions
-x_end = 20; %20
+x_end = 10; %20
 y_end = 0.5; %0.2
 xdot_end = 0;
 ydot_end = 0;
@@ -177,7 +177,7 @@ for i = 1:varListLength
         if (varList(i) == "FFx" && varList{j} == "FFx") || (varList{i} == "FFy" && varList{j} == "FFy") || (varList{i} == "FHx" && varList{j} == "FHx") || (varList{i} == "FHy" && varList{j} == "FHy")
             QCell{i,j} = eye(LengthList(i),LengthList(j));
 %         elseif varList(i) == "CF" && varList(j) == "CF"
-%             QCell{i,j} = 10000*eye(LengthList(i),LengthList(j));
+%             QCell{i,j} = 50000*eye(LengthList(i),LengthList(j));
 %         elseif varList(i) == "CH" && varList(j) == "CH"
 %             QCell{i,j} = 50000*eye(LengthList(i),LengthList(j));
         else
