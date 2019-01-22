@@ -12,20 +12,20 @@ addpath('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab')
 addpath('C:\gurobi810')
 %==========================================================
 %Choose Solver
-solver = "knitro";
-%solver = "gurobi";
+%solver = "knitro";
+solver = "gurobi";
 
 %==========================================================
-%Inertia Parameters (Information from MIT Cheetah)
-m = 33; %kg
-I = 2.9; %kg m^2
+%Inertia Parameters(Information from MIT Cheetah 3)
+m = 45; %kg
+I = 2.1; %kg m^2
 g = 9.80665; %m/s^2
 %==========================================================
 
 %==========================================================
 %Time parameters
-NumTimeSteps = 10; %number of time steps
-h = 0.125; %Time Step in seconds
+NumTimeSteps = 50; %number of time steps
+h = 0.01; %Time Step in seconds
 EndTime = h*NumTimeSteps; %in seconds
 % missing checking the endtime is the multiple of the time step
 TimeSeries = 0:h:EndTime;
@@ -40,8 +40,8 @@ xdot_init = 0;
 ydot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditions
-x_end = 5; %20
-y_end = 0.5; %0.2
+x_end = 1.5; %20
+y_end = 0.6; %0.2
 xdot_end = 0;
 ydot_end = 0;
 %=========================================================
@@ -254,8 +254,9 @@ APFx_dyn = zeros(PFxLength-1, namesLength);
 for k = 0:TimeSeriesLength - 2
     APFx_dyn(k+1,find(names == strcat('PFx',num2str(k+1)))) = 1;
     APFx_dyn(k+1,find(names == strcat('PFx',num2str(k))))   =-1;
-    APFx_dyn(k+1,find(names == strcat('PFxdot',num2str(k+1)))) = -1/2*h;
-    APFx_dyn(k+1,find(names == strcat('PFxdot',num2str(k))))   =-1/2*h;
+    %APFx_dyn(k+1,find(names == strcat('PFxdot',num2str(k+1)))) = -1/2*h;
+    %APFx_dyn(k+1,find(names == strcat('PFxdot',num2str(k))))   =-1/2*h;
+    APFx_dyn(k+1,find(names == strcat('PFxdot',num2str(k))))   =-h; %euler integration
 end
 %               Build b vector
 bPFx_dyn = zeros(size(APFx_dyn,1),1);
@@ -266,8 +267,9 @@ APFy_dyn = zeros(PFyLength-1, namesLength);
 for k = 0:TimeSeriesLength - 2
     APFy_dyn(k+1,find(names == strcat('PFy',num2str(k+1)))) = 1;
     APFy_dyn(k+1,find(names == strcat('PFy',num2str(k))))   =-1;
-    APFy_dyn(k+1,find(names == strcat('PFydot',num2str(k+1)))) = -1/2*h;
-    APFy_dyn(k+1,find(names == strcat('PFydot',num2str(k))))   =-1/2*h;
+    %APFy_dyn(k+1,find(names == strcat('PFydot',num2str(k+1)))) = -1/2*h;
+    %APFy_dyn(k+1,find(names == strcat('PFydot',num2str(k))))   =-1/2*h;
+    APFy_dyn(k+1,find(names == strcat('PFydot',num2str(k))))   =-h; %Euler Integration
 end
 %               Build b vector
 bPFy_dyn = zeros(size(APFy_dyn,1),1);
@@ -279,8 +281,9 @@ APHx_dyn = zeros(PHxLength-1, namesLength);
 for k = 0:TimeSeriesLength - 2
     APHx_dyn(k+1,find(names == strcat('PHx',num2str(k+1)))) = 1;
     APHx_dyn(k+1,find(names == strcat('PHx',num2str(k))))   =-1;
-    APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k+1)))) = -1/2*h;
-    APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k))))   =-1/2*h;
+    %APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k+1)))) = -1/2*h;
+    %APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k))))   =-1/2*h;
+    APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k))))   =-h; %Euler Integration
 end
 %               Build b vector
 bPHx_dyn = zeros(size(APHx_dyn,1),1);
@@ -291,8 +294,9 @@ APHy_dyn = zeros(PHyLength-1, namesLength);
 for k = 0:TimeSeriesLength - 2
     APHy_dyn(k+1,find(names == strcat('PHy',num2str(k+1)))) = 1;
     APHy_dyn(k+1,find(names == strcat('PHy',num2str(k))))   =-1;
-    APHy_dyn(k+1,find(names == strcat('PHydot',num2str(k+1)))) = -1/2*h;
-    APHy_dyn(k+1,find(names == strcat('PHydot',num2str(k))))   =-1/2*h;
+    %APHy_dyn(k+1,find(names == strcat('PHydot',num2str(k+1)))) = -1/2*h;
+    %APHy_dyn(k+1,find(names == strcat('PHydot',num2str(k))))   =-1/2*h;
+    APHy_dyn(k+1,find(names == strcat('PHydot',num2str(k))))   =-h; %Euler Integration
 end
 %               Build b vector
 bPHy_dyn = zeros(size(APHy_dyn,1),1);
@@ -579,38 +583,40 @@ bFHy_Con2 = zeros(size(AFHy_Con2,1),1);
 TypeFHy_Con2 = repmat(1,size(AFHy_Con2,1),1);
 %---------------------------------------------------------------
 %           Collect Complementarity Constraints
+%           Question: Should we include velocity constraint on y-axis of
+%           the end-effectors
 Acomplementarity = [APFy_Con1;APFy_Con2;...
                     APFxdot_Con1;APFxdot_Con2;...
-%                    APFydot_Con1;APFydot_Con2;...
+                    APFydot_Con1;APFydot_Con2;...
                     AFFx_Con1;AFFx_Con2;...
                     AFFy_Con1;AFFy_Con2;...
                     APHy_Con1;APHy_Con2;...
                     APHxdot_Con1;APHxdot_Con2;...
-%                    APHydot_Con1;APHydot_Con2;...
+                    APHydot_Con1;APHydot_Con2;...
                     AFHx_Con1;AFHx_Con2;...
                     AFHy_Con1;AFHy_Con2
                     ];
 
 bcomplementarity = [bPFy_Con1;bPFy_Con2;...
                     bPFxdot_Con1;bPFxdot_Con2;...
-%                    bPFydot_Con1;bPFydot_Con2;...
+                    bPFydot_Con1;bPFydot_Con2;...
                     bFFx_Con1;bFFx_Con2;...
                     bFFy_Con1;bFFy_Con2;...
                     bPHy_Con1;bPHy_Con2;...
                     bPHxdot_Con1;bPHxdot_Con2;...
-%                    bPHydot_Con1;bPHydot_Con2;...
+                    bPHydot_Con1;bPHydot_Con2;...
                     bFHx_Con1;bFHx_Con2;...
                     bFHy_Con1;bFHy_Con2
                     ];
 
 Typecomplementarity = [TypePFy_Con1;TypePFy_Con2;...
                        TypePFxdot_Con1;TypePFxdot_Con2;...
-%                       TypePFydot_Con1;TypePFydot_Con2;...
+                       TypePFydot_Con1;TypePFydot_Con2;...
                        TypeFFx_Con1;TypeFFx_Con2;...
                        TypeFFy_Con1;TypeFFy_Con2;...
                        TypePHy_Con1;TypePHy_Con2;...
                        TypePHxdot_Con1;TypePHxdot_Con2;...
-%                       TypePHydot_Con1;TypePHydot_Con2;...
+                       TypePHydot_Con1;TypePHydot_Con2;...
                        TypeFHx_Con1;TypeFHx_Con2;...
                        TypeFHy_Con1;TypeFHy_Con2
                        ];
@@ -820,8 +826,7 @@ IneqType = [Typecomplementarity;
             TypeKinematics
             ];
 %------------------------------------------------------------
-%   Variable Lower and Upper Boundaries, Inf slow down computing speed,
-%   seems like
+%   Variable Lower and Upper Boundaries
 lb = [repmat(-inf,1, sum(LengthList(find(varList == "x"):find(varList == "FHy")))),repmat(0,1,CFLength + CHLength)];
 ub = [repmat( inf,1, sum(LengthList(find(varList == "x"):find(varList == "FHy")))),repmat(1,1,CFLength + CHLength)];
 %   Variable Type
@@ -871,11 +876,22 @@ elseif solver == "gurobi"
     model.sense = [model.sense;repmat('=',length(beq),1)];
     %Call Gurobi
     result = gurobi(model);
+    gurobi_write(model, 'MILP.mps');
     
 else
     disp("Unknown solver");
     disp{" "}
 end
+
+%========================================================================
+%Extract Input Results
+FFx_result = result.x(find(names == 'FFx0'):find(names == FFx_label(end)));
+FFy_result = result.x(find(names == 'FFy0'):find(names == FFy_label(end)));
+FHx_result = result.x(find(names == 'FHx0'):find(names == FHx_label(end)));
+FHy_result = result.x(find(names == 'FHx0'):find(names == FHx_label(end)));
+
+NetForceX = FFx_result + FHx_result;
+NetForceY = FFy_result + FHy_result;
 
 %% Plot Figures
 
