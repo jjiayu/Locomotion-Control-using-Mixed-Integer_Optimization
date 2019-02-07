@@ -12,8 +12,8 @@ addpath('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab')
 addpath('C:\gurobi810')
 %==========================================================
 %Choose Solver
-%solver = "knitro";
-solver = "gurobi";
+solver = "knitro";
+%solver = "gurobi";
 
 %==========================================================
 %Inertia Parameters(Information from MIT Cheetah 3)
@@ -24,8 +24,8 @@ g = 9.80665; %m/s^2
 
 %==========================================================
 %Time parameters
-NumTimeSteps = 50; %number of time steps
-h = 0.01; %Time Step in seconds
+NumTimeSteps = 30; %number of time steps
+h = 0.1; %Time Step in seconds
 EndTime = h*NumTimeSteps; %in seconds
 % missing checking the endtime is the multiple of the time step
 TimeSeries = 0:h:EndTime;
@@ -35,13 +35,13 @@ TimeSeriesLength = length(TimeSeries);
 %=========================================================
 %Initial Conditions
 x_init = 0;
-y_init = 0.5; %0.2
+y_init = 0.3; %0.2
 xdot_init = 0;
 ydot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditions
-x_end = 1.5; %20
-y_end = 0.6; %0.2
+x_end = 0.7; %20
+y_end = 0.3; %0.2
 xdot_end = 0;
 ydot_end = 0;
 %=========================================================
@@ -120,7 +120,7 @@ FHy_label = strings(1,TimeSeriesLength);
 for i = 1:TimeSeriesLength
     FFx_label(i) = strcat('FFx',num2str((i-1)));
     FFy_label(i) = strcat('FFy',num2str((i-1)));
-    FHx_label(i) = strcat('FHx',num2str((i-1))); 
+    FHx_label(i) = strcat('FHx',num2str((i-1)));
     FHy_label(i) = strcat('FHy',num2str((i-1)));
 end
 %   Save List Length
@@ -185,8 +185,16 @@ for i = 1:varListLength
         end
     end
 end
-% 
+%
 Q = cell2mat(QCell);
+
+% Q(find(names == 'y15'),find(names == 'y15')) = 1e30;
+% Q(find(names == 'y14'),find(names == 'y14')) = 1e30;
+% Q(find(names == 'y13'),find(names == 'y13')) = 1e30;
+% Q(find(names == 'y16'),find(names == 'y16')) = 1e30;
+% Q(find(names == 'y17'),find(names == 'y17')) = 1e30;
+% Q(find(names == 'y18'),find(names == 'y18')) = 1e30;
+
 Q_backup = Q;
 Q = sparse(Q);
 %------------------------------------------------------------
@@ -199,8 +207,9 @@ Ax_pos_dyn = zeros(xLength-1,namesLength);
 for k = 0:TimeSeriesLength-2 %NOTE: minus 2, 0 to (length -1) -1
     Ax_pos_dyn(k+1,find(names == strcat('x',num2str(k+1)))) = 1;
     Ax_pos_dyn(k+1,find(names == strcat('x',num2str(k))))   = -1;
-    Ax_pos_dyn(k+1,find(names == strcat('xdot',num2str(k+1))))= -1/2*h;
-    Ax_pos_dyn(k+1,find(names == strcat('xdot',num2str(k))))= -1/2*h;
+    %Ax_pos_dyn(k+1,find(names == strcat('xdot',num2str(k+1))))= -1/2*h;
+    %Ax_pos_dyn(k+1,find(names == strcat('xdot',num2str(k))))= -1/2*h;
+    Ax_pos_dyn(k+1,find(names == strcat('xdot',num2str(k))))= -h; %Euler Integration
 end
 %               Build b vector
 bx_pos_dyn = zeros(size(Ax_pos_dyn,1),1);
@@ -211,10 +220,12 @@ Ax_vel_dyn = zeros(xdotLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     Ax_vel_dyn(k+1,find(names == strcat('xdot',num2str(k+1)))) = 1;
     Ax_vel_dyn(k+1,find(names == strcat('xdot',num2str(k))))   = -1;
-    Ax_vel_dyn(k+1,find(names == strcat('FFx',num2str(k+1))))  = -1/2*h/m;
-    Ax_vel_dyn(k+1,find(names == strcat('FHx',num2str(k+1))))  = -1/2*h/m;
-    Ax_vel_dyn(k+1,find(names == strcat('FFx',num2str(k))))  = -1/2*h/m;
-    Ax_vel_dyn(k+1,find(names == strcat('FHx',num2str(k))))  = -1/2*h/m;
+%     Ax_vel_dyn(k+1,find(names == strcat('FFx',num2str(k+1))))  = -1/2*h/m;
+%     Ax_vel_dyn(k+1,find(names == strcat('FHx',num2str(k+1))))  = -1/2*h/m;
+%     Ax_vel_dyn(k+1,find(names == strcat('FFx',num2str(k))))  = -1/2*h/m;
+%     Ax_vel_dyn(k+1,find(names == strcat('FHx',num2str(k))))  = -1/2*h/m;
+    Ax_vel_dyn(k+1,find(names == strcat('FFx',num2str(k))))  = -h/m;%Euler Integration
+    Ax_vel_dyn(k+1,find(names == strcat('FHx',num2str(k))))  = -h/m;%Euler Integration
 end
 %               Build b vector
 bx_vel_dyn = zeros(size(Ax_vel_dyn,1),1);
@@ -225,8 +236,9 @@ Ay_pos_dyn = zeros(yLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     Ay_pos_dyn(k+1,find(names == strcat('y',num2str(k+1)))) = 1;
     Ay_pos_dyn(k+1,find(names == strcat('y',num2str(k))))   =-1;
-    Ay_pos_dyn(k+1,find(names == strcat('ydot',num2str(k+1)))) = -1/2*h;
-    Ay_pos_dyn(k+1,find(names == strcat('ydot',num2str(k)))) = -1/2*h;  
+%     Ay_pos_dyn(k+1,find(names == strcat('ydot',num2str(k+1)))) = -1/2*h;
+%     Ay_pos_dyn(k+1,find(names == strcat('ydot',num2str(k)))) = -1/2*h;  
+    Ay_pos_dyn(k+1,find(names == strcat('ydot',num2str(k)))) = -h; %Euler Integration
 end
 %               Build b vector
 by_pos_dyn = zeros(size(Ay_pos_dyn,1),1);
@@ -237,10 +249,12 @@ Ay_vel_dyn = zeros(ydotLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     Ay_vel_dyn(k+1,find(names == strcat('ydot',num2str(k+1)))) = 1;
     Ay_vel_dyn(k+1,find(names == strcat('ydot',num2str(k))))   =-1;
-    Ay_vel_dyn(k+1,find(names == strcat('FFy',num2str(k+1))))  =-1/2*h/m;
-    Ay_vel_dyn(k+1,find(names == strcat('FHy',num2str(k+1))))  =-1/2*h/m;
-    Ay_vel_dyn(k+1,find(names == strcat('FFy',num2str(k))))    =-1/2*h/m;
-    Ay_vel_dyn(k+1,find(names == strcat('FHy',num2str(k))))    =-1/2*h/m;
+%     Ay_vel_dyn(k+1,find(names == strcat('FFy',num2str(k+1))))  =-1/2*h/m;
+%     Ay_vel_dyn(k+1,find(names == strcat('FHy',num2str(k+1))))  =-1/2*h/m;
+%     Ay_vel_dyn(k+1,find(names == strcat('FFy',num2str(k))))    =-1/2*h/m;
+%     Ay_vel_dyn(k+1,find(names == strcat('FHy',num2str(k))))    =-1/2*h/m;
+    Ay_vel_dyn(k+1,find(names == strcat('FFy',num2str(k))))    =-h/m; %Euler Integration
+    Ay_vel_dyn(k+1,find(names == strcat('FHy',num2str(k))))    =-h/m; %Euler Integration
 end
 %               Build b vector
 by_vel_dyn = repmat(-h*g,size(Ay_vel_dyn,1),1);
@@ -311,10 +325,10 @@ bdyn = [bx_pos_dyn;bx_vel_dyn;by_pos_dyn;by_vel_dyn;bPFx_dyn;bPFy_dyn;bPHx_dyn;b
 %           Parameter settings
 %---------------------------------------------------------------
 height = 0; %terrain height
-Mpos_y = 1000; %big-M for Foot position in y-axis
-Mvel = 1000; %big-M for Foot velocity in both x and y axis
-Mfx = 1000; %big-M for foot-ground reaction forces for x-axis
-Mfy = 1000; %big-M for foot-ground reaction forces for y-axis
+Mpos_y = 50; %big-M for Foot position in y-axis
+Mvel = 0.4; %big-M for Foot velocity in both x and y axis
+Mfx = 10000; %big-M for foot-ground reaction forces for x-axis
+Mfy = 10000; %big-M for foot-ground reaction forces for y-axis
 %---------------------------------------------------------------
 %           Front Leg
 %---------------------------------------------------------------
@@ -626,10 +640,10 @@ Typecomplementarity = [TypePFy_Con1;TypePFy_Con2;...
 %           Set up parameters
 BodyHeight = 0.2; %m
 BodyLength = 0.6;%m
-minLegX = 0.1; %m 
-maxLegX = 0.4; %m
-minLegY = 0.1; %m
-maxLegY = 0.5; %m
+minLegX = 0.2; %m 
+maxLegX = 0.1; %m %0.4
+minLegY = 0.2; %m %0.1
+maxLegY = 0.5; %m %0.5
 %---------------------------------------------------------------
 %           Hind Foot
 %---------------------------------------------------------------
@@ -888,11 +902,10 @@ end
 FFx_result = result.x(find(names == 'FFx0'):find(names == FFx_label(end)));
 FFy_result = result.x(find(names == 'FFy0'):find(names == FFy_label(end)));
 FHx_result = result.x(find(names == 'FHx0'):find(names == FHx_label(end)));
-FHy_result = result.x(find(names == 'FHx0'):find(names == FHx_label(end)));
+FHy_result = result.x(find(names == 'FHy0'):find(names == FHy_label(end)));
 
 NetForceX = FFx_result + FHx_result;
 NetForceY = FFy_result + FHy_result;
-
 %% Plot Figures
 
 %Plot CoM trajectory in 2D Space
@@ -925,40 +938,40 @@ figure(3)
 suptitle('Contact Configuration and Foot-Ground Reaction Forces')
 
 subplot(3,2,1)
-plot(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
 title('Contact Configuration of Front Leg, 0/1: on/off')
 xlabel('Time (s)')
 set(gca,'FontSize',20)
 
 subplot(3,2,2)
-plot(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
 title('Contact Configuration of Hind Leg, 0/1: on/off')
 xlabel('Time (s)')
 set(gca,'FontSize',20)
 
 subplot(3,2,3)
-plot(TimeSeries,result.x(find(names == 'FFx0'):find(names == FFx_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'FFx0'):find(names == FFx_label(end))),'LineWidth',2)
 title('Horizontal Forces (x-axis) from Front Foot')
 xlabel('Time (s)')
 ylabel('Force (N)')
 set(gca,'FontSize',20)
 
 subplot(3,2,4)
-plot(TimeSeries,result.x(find(names == 'FHx0'):find(names == FHx_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'FHx0'):find(names == FHx_label(end))),'LineWidth',2)
 title('Horizontal Forces (x-axis) from Hind Foot')
 xlabel('Time (s)')
 ylabel('Force (N)')
 set(gca,'FontSize',20)
 
 subplot(3,2,5)
-plot(TimeSeries,result.x(find(names == 'FFy0'):find(names == FFy_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'FFy0'):find(names == FFy_label(end))),'LineWidth',2)
 title('Vertical Forces (y-axis) from Front Foot')
 xlabel('Time (s)')
 ylabel('Force (N)')
 set(gca,'FontSize',20)
 
 subplot(3,2,6)
-plot(TimeSeries,result.x(find(names == 'FHy0'):find(names == FHy_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'FHy0'):find(names == FHy_label(end))),'LineWidth',2)
 title('Vertical Forces (y-axis) from Hind Foot')
 xlabel('Time (s)')
 ylabel('Force (N)')
@@ -969,13 +982,13 @@ figure(4)
 suptitle('Contact Configuration and Vertical End-Effector Positions')
 
 subplot(3,2,1)
-plot(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
 title('Contact Configuration of Front Foot, 0/1: on/off')
 xlabel('Time (s)')
 set(gca,'FontSize',20)
 
 subplot(3,2,2)
-plot(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
 title('Contact Configuration of Hind Foot, 0/1: on/off')
 xlabel('Time (s)')
 set(gca,'FontSize',20)
@@ -1013,40 +1026,40 @@ figure(5)
 suptitle('Contact Configuration and End-Effector Velocities')
 
 subplot(3,2,1)
-plot(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
 title('Contact Configuration of Front Foot, 0/1: on/off')
 xlabel('Time (s)')
 set(gca,'FontSize',20)
 
 subplot(3,2,2)
-plot(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
 title('Contact Configuration of Hind Foot, 0/1: on/off')
 xlabel('Time (s)')
 set(gca,'FontSize',20)
 
 subplot(3,2,3)
-plot(TimeSeries,result.x(find(names == 'PFxdot0'):find(names == PFxdot_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'PFxdot0'):find(names == PFxdot_label(end))),'LineWidth',2)
 title('Horizontal Velocity (x-axis) of Front Foot')
 xlabel('Time (s)')
 ylabel('Velocity (m/s)')
 set(gca,'FontSize',20)
 
 subplot(3,2,4)
-plot(TimeSeries,result.x(find(names == 'PHxdot0'):find(names == PHxdot_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'PHxdot0'):find(names == PHxdot_label(end))),'LineWidth',2)
 title('Horizontal Velocity (x-axis) of Hind Foot')
 xlabel('Time (s)')
 ylabel('Velocity (m/s)')
 set(gca,'FontSize',20)
 
 subplot(3,2,5)
-plot(TimeSeries,result.x(find(names == 'PFydot0'):find(names == PFydot_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'PFydot0'):find(names == PFydot_label(end))),'LineWidth',2)
 title('Vertical Velocity (y-axis) of Front Foot')
 xlabel('Time (s)')
 ylabel('Velocity (m/s)')
 set(gca,'FontSize',20)
 
 subplot(3,2,6)
-plot(TimeSeries,result.x(find(names == 'PHydot0'):find(names == PHydot_label(end))),'LineWidth',2)
+stairs(TimeSeries,result.x(find(names == 'PHydot0'):find(names == PHydot_label(end))),'LineWidth',2)
 title('Vertical Velocity (y-axis) of Hind Foot')
 xlabel('Time (s)')
 ylabel('Velocity (m/s)')
