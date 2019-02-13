@@ -24,8 +24,8 @@ g = 9.80665; %m/s^2
 
 %==========================================================
 %Time parameters
-NumTimeSteps = 30; %number of time steps
-h = 0.1; %Time Step in seconds
+NumTimeSteps = 20; %number of time steps
+h = 0.05; %Time Step in seconds
 EndTime = h*NumTimeSteps; %in seconds
 % missing checking the endtime is the multiple of the time step
 TimeSeries = 0:h:EndTime;
@@ -36,14 +36,18 @@ TimeSeriesLength = length(TimeSeries);
 %Initial Conditions
 x_init = 0;
 y_init = 0.3; %0.2
+theta_init = 0;
 xdot_init = 0;
 ydot_init = 0;
+thetadot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditions
-x_end = 0.7; %20
+x_end = 0.5; %20
 y_end = 0.3; %0.2
+theta_end = 0;
 xdot_end = 0;
 ydot_end = 0;
+thetadot_end = 0;
 %=========================================================
 
 %==========================================================
@@ -52,26 +56,34 @@ ydot_end = 0;
 %   States: r = [x,y,theta,xdot,ydot,thetadot]
 %       x: horizontal position
 %       y: vertical position
+%       theta: torso orientation
 %       xdot: horizontal velocity
 %       ydot: vertical velocity
+%       thetadot: torso angular acceleration
 %----------------------------------------------------------
 %   Initialize Variable Name Containers
 x_label = strings(1,TimeSeriesLength);
 y_label = strings(1,TimeSeriesLength);
+theta_label = strings(1,TimeSeriesLength);
 xdot_label = strings(1,TimeSeriesLength);
 ydot_label = strings(1,TimeSeriesLength);
+thetadot_label = strings(1,TimeSeriesLength);
 %   Assign Variable Names
 for i = 1:TimeSeriesLength
     x_label(i) = strcat('x',num2str((i-1)));
     y_label(i) = strcat('y',num2str((i-1)));
+    theta_label(i) = strcat('theta',num2str(i-1));
     xdot_label(i) = strcat('xdot',num2str((i-1)));
     ydot_label(i) = strcat('ydot',num2str((i-1)));
+    thetadot_label(i) = strcat('thetadot',num2str(i-1));
 end
 %   Save List Length
 xLength = length(x_label);
 yLength = length(y_label);
+thetaLength = length(theta_label);
 xdotLength = length(xdot_label);
 ydotLength = length(ydot_label);
+thetadotLength = length(thetadot_label);
 %----------------------------------------------------------
 %   Footstep Locations(IN WORLD FRAME):
 %       Front Leg: PF = [PFx, PFy, PFxdot, PFydot]
@@ -146,17 +158,44 @@ CFLength = length(CF_label);
 CHLength = length(CH_label);
 %----------------------------------------------------------
 %   Full Decision Variable Name List
-names = [x_label, y_label, xdot_label, ydot_label, PFx_label, PFy_label, PFxdot_label, PFydot_label, PHx_label, PHy_label, PHxdot_label, PHydot_label, FFx_label, FFy_label, FHx_label, FHy_label, CF_label, CH_label];
+names = [x_label, y_label, theta_label, xdot_label, ydot_label, thetadot_label, PFx_label, PFy_label, PFxdot_label, PFydot_label, PHx_label, PHy_label, PHxdot_label, PHydot_label, FFx_label, FFy_label, FHx_label, FHy_label, CF_label, CH_label];
 %   Length of the name list
 namesLength = length(names);
 %   Length list of all variable list
-LengthList = [xLength, yLength, xdotLength, ydotLength, PFxLength, PFyLength, PFxdotLength, PFydotLength, PHxLength, PHyLength, PHxdotLength, PHydotLength, FFxLength, FFyLength, FHxLength, FHyLength, CFLength, CHLength];
+LengthList = [xLength, yLength, thetaLength, xdotLength, ydotLength, thetadotLength, PFxLength, PFyLength, PFxdotLength, PFydotLength, PHxLength, PHyLength, PHxdotLength, PHydotLength, FFxLength, FFyLength, FHxLength, FHyLength, CFLength, CHLength];
 %----------------------------------------------------------
 %   List for all decision variable names
-varList = ["x", "y", "xdot", "ydot", "PFx", "PFy", "PFxdot", "PFydot", "PHx", "PHy", "PHxdot", "PHydot", "FFx", "FFy", "FHx", "FHy", "CF", "CH"];
+varList = ["x", "y", "theta", "xdot", "ydot", "thetadot", "PFx", "PFy", "PFxdot", "PFydot", "PHx", "PHy", "PHxdot", "PHydot", "FFx", "FFy", "FHx", "FHy", "CF", "CH"];
 %   Length of the decision varibale name list
 varListLength = length(varList);
+%----------------------------------------------------------
+%   Extract Variable Index
+xIdx_init = find(names == 'x0');
+xIdx_end  = find(names == x_label(end));
+yIdx_init = find(names == 'y0');
+yIdx_end  = find(names == y_label(end));
+thetaIdx_init = find(names == 'theta0');
+thetaIdx_end  = find(names == theta_label(end));
+thetadotIdx_init = find(names == 'thetadot0');
+thetadotIdx_end  = find(names == thetadot_label(end));
+PFxIdx_init = find(names == 'PFx0');
+PFxIdx_end  = find(names == PFx_label(end));
+PFyIdx_init = find(names == 'PFy0');
+PFyIdx_end  = find(names == PFy_label(end));
+PHxIdx_init = find(names == 'PHx0');
+PHxIdx_end  = find(names == PHx_label(end));
+PHyIdx_init = find(names == 'PHy0');
+PHyIdx_end  = find(names == PHy_label(end));
+FFxIdx_init = find(names == 'FFx0');
+FFxIdx_end  = find(names == FFx_label(end));
+FFyIdx_init = find(names == 'FFy0');
+FFyIdx_end  = find(names == FFy_label(end));
+FHxIdx_init = find(names == 'FHx0');
+FHxIdx_end  = find(names == FHx_label(end));
+FHyIdx_init = find(names == 'FHy0');
+FHyIdx_end  = find(names == FHy_label(end));
 %==========================================================
+
 
 %==========================================================
 %Setup Optimization Problem
@@ -165,8 +204,8 @@ varListLength = length(varList);
 %       minimize F^2 -> FFx(t)^2 + FFy(t)^2 + FHx(t)^2 + FHy(t)^2
 %   Quadratic form:
 %       minimize F'*Q*F
-%   v = [x;   y;   xdot;   ydot;   PFx;   PFy;  PFxdot;  PFydot;  PHx;  PHy;  PHxdot;  PHydot;   FFx;    FFy;    FHx;    FHy;   CF;   CH]
-%   idx: 1    2     3        4      5      6      7         8      9     10     11       12       13      14      15     16     17    18
+%   v = [x;   y;   theta;   xdot;   ydot;   thetadot;  PFx;   PFy;  PFxdot;  PFydot;  PHx;  PHy;  PHxdot;  PHydot;   FFx;    FFy;    FHx;    FHy;   CF;   CH]
+%   idx: 1    2     3        4        5         6       7      8      9        10      11    12     13      14        15     16       17      18     19   20
 %   v'*Q*v = sigma(i,j) v1*Q11*v1 + v1*Q12*v2 + .... + v2*Q21*v1 + v2*Q22*v2 ...
 %-----------------------------------------------------------
 %   Define Q
@@ -259,6 +298,17 @@ end
 %               Build b vector
 by_vel_dyn = repmat(-h*g,size(Ay_vel_dyn,1),1);
 %---------------------------------------------------------------
+%           theta position dynamics --> theta(k+1)- theta(k) =h*thetadot(k) --> theta(k+1) - theta(k) - h*thetadot(k) = 0
+%               Build A matrix
+Atheta_pos_dyn = zeros(thetadotLength-1,namesLength);
+for k = 0:TimeSeriesLength-2
+    Atheta_pos_dyn(k+1,find(names == strcat('theta',num2str(k+1)))) = 1;
+    Atheta_pos_dyn(k+1,find(names == strcat('theta',num2str(k))))   = -1;
+    Atheta_pos_dyn(k+1,find(names == strcat('thetadot',num2str(k)))) = -h;
+end
+%               Build b vector
+btheta_pos_dyn = zeros(size(Atheta_pos_dyn,1),1);
+%---------------------------------------------------------------
 %   Foot/End-Effector Dynamics
 %---------------------------------------------------------------
 %       Front Leg PF
@@ -296,7 +346,7 @@ for k = 0:TimeSeriesLength - 2
     APHx_dyn(k+1,find(names == strcat('PHx',num2str(k+1)))) = 1;
     APHx_dyn(k+1,find(names == strcat('PHx',num2str(k))))   =-1;
     %APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k+1)))) = -1/2*h;
-    %APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k))))   =-1/2*h;
+    %APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k))))   =-1/2*h; 
     APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k))))   =-h; %Euler Integration
 end
 %               Build b vector
@@ -317,8 +367,8 @@ bPHy_dyn = zeros(size(APHy_dyn,1),1);
 %---------------------------------------------------------------
 %           Collect System Dynamic Constraints (Centroidal + End-effector Dynamics)
 %---------------------------------------------------------------
-Adyn = [Ax_pos_dyn;Ax_vel_dyn;Ay_pos_dyn;Ay_vel_dyn;APFx_dyn;APFy_dyn;APHx_dyn;APHy_dyn];
-bdyn = [bx_pos_dyn;bx_vel_dyn;by_pos_dyn;by_vel_dyn;bPFx_dyn;bPFy_dyn;bPHx_dyn;bPHy_dyn];
+Adyn = [Ax_pos_dyn;Ax_vel_dyn;Ay_pos_dyn;Ay_vel_dyn;Atheta_pos_dyn;APFx_dyn;APFy_dyn;APHx_dyn;APHy_dyn];
+bdyn = [bx_pos_dyn;bx_vel_dyn;by_pos_dyn;by_vel_dyn;btheta_pos_dyn;bPFx_dyn;bPFy_dyn;bPHx_dyn;bPHy_dyn];
 %---------------------------------------------------------------
 %       Complementarity Constraints
 %---------------------------------------------------------------
@@ -326,7 +376,7 @@ bdyn = [bx_pos_dyn;bx_vel_dyn;by_pos_dyn;by_vel_dyn;bPFx_dyn;bPFy_dyn;bPHx_dyn;b
 %---------------------------------------------------------------
 height = 0; %terrain height
 Mpos_y = 50; %big-M for Foot position in y-axis
-Mvel = 0.4; %big-M for Foot velocity in both x and y axis
+Mvel = 0.5; %big-M for Foot velocity in both x and y axis
 Mfx = 10000; %big-M for foot-ground reaction forces for x-axis
 Mfy = 10000; %big-M for foot-ground reaction forces for y-axis
 %---------------------------------------------------------------
@@ -640,138 +690,138 @@ Typecomplementarity = [TypePFy_Con1;TypePFy_Con2;...
 %           Set up parameters
 BodyHeight = 0.2; %m
 BodyLength = 0.6;%m
-minLegX = 0.2; %m 
-maxLegX = 0.1; %m %0.4
+minLegX = 0.15; %m 
+maxLegX = 0.2; %m %0.4
 minLegY = 0.2; %m %0.1
 maxLegY = 0.5; %m %0.5
-%---------------------------------------------------------------
-%           Hind Foot
-%---------------------------------------------------------------
-%               y-axis
-%---------------------------------------------------------------
-%               First Constraint: y - PHy >= BodyHeight/2 + minLegY
-%               Build A matrix:
-APHy_Kine_Con1 = zeros(PHyLength, namesLength);
-for k = 1:PHyLength
-    APHy_Kine_Con1(k,find(names == strcat('y',num2str(k-1))))   =  1;
-    APHy_Kine_Con1(k,find(names == strcat('PHy',num2str(k-1)))) = -1;
-end
-%               Build b vector
-bPHy_Kine_Con1 = repmat(BodyHeight/2 + minLegY,size(APHy_Kine_Con1,1),1);
-%               Setup Constraint Type
-Type_PHy_Kine_Con1 = repmat(1,size(APHy_Kine_Con1,1),1);
-%---------------------------------------------------------------
-%               Second Constraint: y - PHy <= BodyHeight/2 + minLegY + maxLegY
-%               Build A matrix
-APHy_Kine_Con2 = zeros(PHyLength, namesLength);
-for k = 1:PHyLength
-    APHy_Kine_Con2(k,find(names == strcat('y',num2str(k-1)))) = 1;
-    APHy_Kine_Con2(k,find(names == strcat('PHy',num2str(k-1)))) = -1;
-end
-%               Build b vector
-bPHy_Kine_Con2 = repmat(BodyHeight/2 + minLegY + maxLegY,size(APHy_Kine_Con2,1),1);
-%               Setup Constraint Type
-Type_PHy_Kine_Con2 = repmat(-1,size(APHy_Kine_Con2,1),1);
-%---------------------------------------------------------------
-%               x-axis
-%---------------------------------------------------------------
-%               First Constraint: x - PHx >= minLegX
-%               Build A matrix
-APHx_Kine_Con1 = zeros(PHxLength, namesLength);
-for k = 1:PHxLength
-    APHx_Kine_Con1(k,find(names == strcat('x',num2str(k-1)))) = 1;
-    APHx_Kine_Con1(k,find(names == strcat('PHx',num2str(k-1)))) = -1;
-end
-%               Build b vector
-bPHx_Kine_Con1 = repmat(minLegX,size(APHx_Kine_Con1,1),1);
-%               Setup Constraint Type
-Type_PHx_Kine_Con1 = repmat(1,size(APHx_Kine_Con1,1),1);
-%---------------------------------------------------------------
-%               Second Constraint: x - PHx <= minLegX + maxLegX
-%               Build A matrix
-APHx_Kine_Con2 = zeros(PHxLength, namesLength);
-for k =1:PHxLength
-    APHx_Kine_Con2(k,find(names == strcat('x',num2str(k-1)))) = 1;
-    APHx_Kine_Con2(k,find(names == strcat('PHx',num2str(k-1)))) = -1;
-end
-%               Build b vector
-bPHx_Kine_Con2 = repmat(minLegX+maxLegX, size(APHx_Kine_Con2,1),1);
-%               Setup Constraint Type
-Type_PHx_Kine_Con2 = repmat(-1,size(APHx_Kine_Con2,1),1);
-%---------------------------------------------------------------
-%           Front Foot
-%---------------------------------------------------------------
-%               y-axis
-%---------------------------------------------------------------
-%               First Constraint: y - PFy >= BodyHeight/2 + minLegY
-%               Build A matrix
-APFy_Kine_Con1 = zeros(PFyLength, namesLength);
-for k = 1:PFyLength
-    APFy_Kine_Con1(k,find(names == strcat('y',num2str(k-1)))) = 1;
-    APFy_Kine_Con1(k,find(names == strcat('PFy',num2str(k-1)))) = -1;
-end
-%               Build b vector
-bPFy_Kine_Con1 = repmat(BodyHeight/2 + minLegY, size(APFy_Kine_Con1,1),1);
-%               Setup Constraint Type
-Type_PFy_Kine_Con1 = repmat(1,size(APFy_Kine_Con1,1),1);
-%---------------------------------------------------------------
-%               Second Constraint: y - PFy <= BodyHeight/2 + minLegY + maxLegY
-%               Build A matrix
-APFy_Kine_Con2 = zeros(PFyLength, namesLength);
-for k = 1:PFyLength
-    APFy_Kine_Con1(k,find(names == strcat('y',num2str(k-1)))) = 1;
-    APFy_Kine_Con1(k,find(names == strcat('PFy',num2str(k-1)))) = -1;
-end
-%               Build b vector
-bPFy_Kine_Con2 = repmat(BodyHeight/2 + minLegY + maxLegY, size(APFy_Kine_Con1,1),1);
-%               Setup Constraint Type
-Type_PFy_Kine_Con2 = repmat(-1, size(APFy_Kine_Con1,1),1);
-%---------------------------------------------------------------
-%               x-axis
-%---------------------------------------------------------------
-%               First Constraint: PFx - x >= minLegX
-%               Build A matrix
-APFx_Kine_Con1 = zeros(PFxLength, namesLength);
-for k = 1:PFxLength
-    APFx_Kine_Con1(k,find(names == strcat('PFx',num2str(k-1)))) = 1;
-    APFx_Kine_Con1(k,find(names == strcat('x',num2str(k-1)))) = -1;
-end
-%               Build b vector
-bPFx_Kine_Con1 = repmat(minLegX,size(APFx_Kine_Con1,1),1);
-%               Setup Constraint Type
-Type_PFx_Kine_Con1 = repmat(1, size(APFx_Kine_Con1,1),1);
-%---------------------------------------------------------------
-%               Second Constraint: PFx - x <= minLegX + maxLegX
-%               Build A matrix
-APFx_Kine_Con2 = zeros(PFxLength, namesLength);
-for k = 1:PFxLength
-    APFx_Kine_Con2(k,find(names == strcat('PFx',num2str(k-1)))) = 1;
-    APFx_Kine_Con2(k,find(names == strcat('x',num2str(k-1)))) = -1;
-end
-%               Build b vector
-bPFx_Kine_Con2 = repmat(minLegX + maxLegX, size(APFx_Kine_Con2,1),1);
-%               Setup Constraint Type
-Type_PFx_Kine_Con2 = repmat(-1,size(APFx_Kine_Con2,1),1);
-%---------------------------------------------------------------
-%           Collect Kinematics Constraint
-%---------------------------------------------------------------
-AKinematics = [APHy_Kine_Con1;APHy_Kine_Con2;
-               APHx_Kine_Con1;APHx_Kine_Con2;
-               APFy_Kine_Con1;APFy_Kine_Con2;
-               APFx_Kine_Con1;APFx_Kine_Con2;
-              ];
-     
-bKinematics = [bPHy_Kine_Con1;bPHy_Kine_Con2;
-               bPHx_Kine_Con1;bPHx_Kine_Con2;
-               bPFy_Kine_Con1;bPFy_Kine_Con2;
-               bPFx_Kine_Con1;bPFx_Kine_Con2;
-              ];
-    
-TypeKinematics = [Type_PHy_Kine_Con1;Type_PHy_Kine_Con2;
-                  Type_PHx_Kine_Con1;Type_PHx_Kine_Con2;
-                  Type_PFy_Kine_Con1;Type_PFy_Kine_Con2;
-                  Type_PFx_Kine_Con1;Type_PFx_Kine_Con2;
-                 ];          
+% %---------------------------------------------------------------
+% %           Hind Foot
+% %---------------------------------------------------------------
+% %               y-axis
+% %---------------------------------------------------------------
+% %               First Constraint: y - PHy >= BodyHeight/2 + minLegY
+% %               Build A matrix:
+% APHy_Kine_Con1 = zeros(PHyLength, namesLength);
+% for k = 1:PHyLength
+%     APHy_Kine_Con1(k,find(names == strcat('y',num2str(k-1))))   =  1;
+%     APHy_Kine_Con1(k,find(names == strcat('PHy',num2str(k-1)))) = -1;
+% end
+% %               Build b vector
+% bPHy_Kine_Con1 = repmat(BodyHeight/2 + minLegY,size(APHy_Kine_Con1,1),1);
+% %               Setup Constraint Type
+% Type_PHy_Kine_Con1 = repmat(1,size(APHy_Kine_Con1,1),1);
+% %---------------------------------------------------------------
+% %               Second Constraint: y - PHy <= BodyHeight/2 + minLegY + maxLegY
+% %               Build A matrix
+% APHy_Kine_Con2 = zeros(PHyLength, namesLength);
+% for k = 1:PHyLength
+%     APHy_Kine_Con2(k,find(names == strcat('y',num2str(k-1)))) = 1;
+%     APHy_Kine_Con2(k,find(names == strcat('PHy',num2str(k-1)))) = -1;
+% end
+% %               Build b vector
+% bPHy_Kine_Con2 = repmat(BodyHeight/2 + minLegY + maxLegY,size(APHy_Kine_Con2,1),1);
+% %               Setup Constraint Type
+% Type_PHy_Kine_Con2 = repmat(-1,size(APHy_Kine_Con2,1),1);
+% %---------------------------------------------------------------
+% %               x-axis
+% %---------------------------------------------------------------
+% %               First Constraint: x - PHx >= minLegX
+% %               Build A matrix
+% APHx_Kine_Con1 = zeros(PHxLength, namesLength);
+% for k = 1:PHxLength
+%     APHx_Kine_Con1(k,find(names == strcat('x',num2str(k-1)))) = 1;
+%     APHx_Kine_Con1(k,find(names == strcat('PHx',num2str(k-1)))) = -1;
+% end
+% %               Build b vector
+% bPHx_Kine_Con1 = repmat(minLegX,size(APHx_Kine_Con1,1),1);
+% %               Setup Constraint Type
+% Type_PHx_Kine_Con1 = repmat(1,size(APHx_Kine_Con1,1),1);
+% %---------------------------------------------------------------
+% %               Second Constraint: x - PHx <= minLegX + maxLegX
+% %               Build A matrix
+% APHx_Kine_Con2 = zeros(PHxLength, namesLength);
+% for k =1:PHxLength
+%     APHx_Kine_Con2(k,find(names == strcat('x',num2str(k-1)))) = 1;
+%     APHx_Kine_Con2(k,find(names == strcat('PHx',num2str(k-1)))) = -1;
+% end
+% %               Build b vector
+% bPHx_Kine_Con2 = repmat(minLegX+maxLegX, size(APHx_Kine_Con2,1),1);
+% %               Setup Constraint Type
+% Type_PHx_Kine_Con2 = repmat(-1,size(APHx_Kine_Con2,1),1);
+% %---------------------------------------------------------------
+% %           Front Foot
+% %---------------------------------------------------------------
+% %               y-axis
+% %---------------------------------------------------------------
+% %               First Constraint: y - PFy >= BodyHeight/2 + minLegY
+% %               Build A matrix
+% APFy_Kine_Con1 = zeros(PFyLength, namesLength);
+% for k = 1:PFyLength
+%     APFy_Kine_Con1(k,find(names == strcat('y',num2str(k-1)))) = 1;
+%     APFy_Kine_Con1(k,find(names == strcat('PFy',num2str(k-1)))) = -1;
+% end
+% %               Build b vector
+% bPFy_Kine_Con1 = repmat(BodyHeight/2 + minLegY, size(APFy_Kine_Con1,1),1);
+% %               Setup Constraint Type
+% Type_PFy_Kine_Con1 = repmat(1,size(APFy_Kine_Con1,1),1);
+% %---------------------------------------------------------------
+% %               Second Constraint: y - PFy <= BodyHeight/2 + minLegY + maxLegY
+% %               Build A matrix
+% APFy_Kine_Con2 = zeros(PFyLength, namesLength);
+% for k = 1:PFyLength
+%     APFy_Kine_Con1(k,find(names == strcat('y',num2str(k-1)))) = 1;
+%     APFy_Kine_Con1(k,find(names == strcat('PFy',num2str(k-1)))) = -1;
+% end
+% %               Build b vector
+% bPFy_Kine_Con2 = repmat(BodyHeight/2 + minLegY + maxLegY, size(APFy_Kine_Con1,1),1);
+% %               Setup Constraint Type
+% Type_PFy_Kine_Con2 = repmat(-1, size(APFy_Kine_Con1,1),1);
+% %---------------------------------------------------------------
+% %               x-axis
+% %---------------------------------------------------------------
+% %               First Constraint: PFx - x >= minLegX
+% %               Build A matrix
+% APFx_Kine_Con1 = zeros(PFxLength, namesLength);
+% for k = 1:PFxLength
+%     APFx_Kine_Con1(k,find(names == strcat('PFx',num2str(k-1)))) = 1;
+%     APFx_Kine_Con1(k,find(names == strcat('x',num2str(k-1)))) = -1;
+% end
+% %               Build b vector
+% bPFx_Kine_Con1 = repmat(minLegX,size(APFx_Kine_Con1,1),1);
+% %               Setup Constraint Type
+% Type_PFx_Kine_Con1 = repmat(1, size(APFx_Kine_Con1,1),1);
+% %---------------------------------------------------------------
+% %               Second Constraint: PFx - x <= minLegX + maxLegX
+% %               Build A matrix
+% APFx_Kine_Con2 = zeros(PFxLength, namesLength);
+% for k = 1:PFxLength
+%     APFx_Kine_Con2(k,find(names == strcat('PFx',num2str(k-1)))) = 1;
+%     APFx_Kine_Con2(k,find(names == strcat('x',num2str(k-1)))) = -1;
+% end
+% %               Build b vector
+% bPFx_Kine_Con2 = repmat(minLegX + maxLegX, size(APFx_Kine_Con2,1),1);
+% %               Setup Constraint Type
+% Type_PFx_Kine_Con2 = repmat(-1,size(APFx_Kine_Con2,1),1);
+% %---------------------------------------------------------------
+% %           Collect Kinematics Constraint
+% %---------------------------------------------------------------
+% AKinematics = [APHy_Kine_Con1;APHy_Kine_Con2;
+%                APHx_Kine_Con1;APHx_Kine_Con2;
+%                APFy_Kine_Con1;APFy_Kine_Con2;
+%                APFx_Kine_Con1;APFx_Kine_Con2;
+%               ];
+%      
+% bKinematics = [bPHy_Kine_Con1;bPHy_Kine_Con2;
+%                bPHx_Kine_Con1;bPHx_Kine_Con2;
+%                bPFy_Kine_Con1;bPFy_Kine_Con2;
+%                bPFx_Kine_Con1;bPFx_Kine_Con2;
+%               ];
+%     
+% TypeKinematics = [Type_PHy_Kine_Con1;Type_PHy_Kine_Con2;
+%                   Type_PHx_Kine_Con1;Type_PHx_Kine_Con2;
+%                   Type_PFy_Kine_Con1;Type_PFy_Kine_Con2;
+%                   Type_PFx_Kine_Con1;Type_PFx_Kine_Con2;
+%                  ];          
 %---------------------------------------------------------------
 %   Set Boundary Conditions
 %---------------------------------------------------------------
@@ -785,17 +835,25 @@ Axdot_init = zeros(1,namesLength);
 Axdot_init(find(names == 'xdot0')) = 1;
 Aydot_init = zeros(1,namesLength);
 Aydot_init(find(names == 'ydot0')) = 1;
+Atheta_init = zeros(1,namesLength);
+Atheta_init(find(names == 'theta0')) = 1;
+Athetadot_init = zeros(1,namesLength);
+Athetadot_init(find(names == 'thetadot0')) = 1;
 %               Collect into an A matrix
 Ainit = [Ax_init;
          Ay_init;
          Axdot_init;
-         Aydot_init
+         Aydot_init;
+         Atheta_init;
+         Athetadot_init
         ];
 %           Build b vectors
 binit = [x_init;
          y_init;
          xdot_init;
-         ydot_init
+         ydot_init;
+         theta_init;
+         thetadot_init
         ];
 %---------------------------------------------------------------
 %       Terminal State
@@ -808,17 +866,25 @@ Axdot_end = zeros(1,namesLength);
 Axdot_end(find(names == xdot_label(end))) = 1;
 Aydot_end = zeros(1,namesLength);
 Aydot_end(find(names == ydot_label(end))) = 1;
+Atheta_end = zeros(1,namesLength);
+Atheta_end(find(names == theta_label(end))) = 1;
+Athetadot_end = zeros(1,namesLength);
+Athetadot_end(find(names == thetadot_label(end))) = 1;
 %               Collect in to an A matrix
 Aend = [Ax_end;
         Ay_end;
         Axdot_end;
-        Aydot_end
+        Aydot_end;
+        Atheta_end;
+        Athetadot_end
        ];
 %           Build b vectors
 bend = [x_end;
         y_end;
         xdot_end;
         ydot_end
+        theta_end;
+        thetadot_end
        ];
 %---------------------------------------------------------------
 %===============================================================
@@ -831,13 +897,13 @@ beq = [binit;bend;bdyn];
 %---------------------------------------------------------------
 %   Collect all A, b and Type for linear inequality constraints
 A = [Acomplementarity;
-     AKinematics
+%     AKinematics
      ];
 b = [bcomplementarity;
-     bKinematics
+%     bKinematics
      ];
 IneqType = [Typecomplementarity;
-            TypeKinematics
+%            TypeKinematics
             ];
 %------------------------------------------------------------
 %   Variable Lower and Upper Boundaries
@@ -855,8 +921,28 @@ if solver == "knitro"
         %Build Objective Function
     objfunc = @(vars)cost(vars,Q); %!!!!Cost function may need quadrature as well
         %nonlinear constraints
-    nlcon = @(vars) nlconstraint(vars);
-        %other parameters
+    nlcon = @(vars) nlconstraint(vars,...
+                                h,...
+                                I,...
+                                xIdx_init,xIdx_end,...
+                                yIdx_init,yIdx_end,...
+                                thetaIdx_init,thetaIdx_end,...
+                                thetadotIdx_init,thetadotIdx_end,...
+                                PFxIdx_init,PFxIdx_end,...
+                                PFyIdx_init,PFyIdx_end,...
+                                PHxIdx_init,PHxIdx_end,...
+                                PHyIdx_init,PHyIdx_end,...
+                                FFxIdx_init,FFxIdx_end,...
+                                FFyIdx_init,FFyIdx_end,...
+                                FHxIdx_init,FHxIdx_end,...
+                                FHyIdx_init,FHyIdx_end,...
+                                BodyHeight,...
+                                BodyLength,...
+                                minLegX,...
+                                maxLegX,...
+                                minLegY,...
+                                maxLegY);
+    %other parameters
     objFnType = 0;
     cFnType = [];
     x0 = rand(namesLength,1);
@@ -1065,9 +1151,29 @@ xlabel('Time (s)')
 ylabel('Velocity (m/s)')
 set(gca,'FontSize',20)
 
-%%
+%Plot Angular States
 figure(6)
+
+subplot(1,2,1)
+plot(TimeSeries, result.x(find(names == 'theta0'):find(names == theta_label(end))),'LineWidth',2);
+title('Angular State')
+xlabel('Time (s)')
+ylabel('Angle (rad)')
+set(gca,'FontSize',20)
+
+subplot(1,2,2)
+plot(TimeSeries, result.x(find(names == 'thetadot0'):find(names == thetadot_label(end))),'LineWidth',2);
+title('Angular Velocity')
+xlabel('Time (s)')
+ylabel('Angular Velocity (rad/s)')
+set(gca,'FontSize', 20)
+
+%%
+figure(7)
 hold on
 plot(result.x(find(names == 'x0'):find(names == x_label(end))),result.x(find(names == 'y0'):find(names == y_label(end))),'o','LineWidth',2)
 plot(result.x(find(names == 'PFx0'):find(names == PFx_label(end))),result.x(find(names == 'PFy0'):find(names == PFy_label(end))),'o')
 plot(result.x(find(names == 'PHx0'):find(names == PHx_label(end))),result.x(find(names == 'PHy0'):find(names == PHy_label(end))),'o')
+title('CoM and Footstep Positions')
+xlabel('Time (s)')
+ylabel('Positions (m)')
