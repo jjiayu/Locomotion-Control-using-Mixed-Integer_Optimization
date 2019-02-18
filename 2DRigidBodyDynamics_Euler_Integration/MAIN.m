@@ -1002,10 +1002,8 @@ FFy_result = result.x(find(names == 'FFy0'):find(names == FFy_label(end)));
 FHx_result = result.x(find(names == 'FHx0'):find(names == FHx_label(end)));
 FHy_result = result.x(find(names == 'FHy0'):find(names == FHy_label(end)));
 
-
-
-NetForceX = FFx_result + FHx_result;
-NetForceY = FFy_result + FHy_result;
+%NetForceX = FFx_result + FHx_result;
+%NetForceY = FFy_result + FHy_result;
 %% Plot Figures
 
 %Plot CoM trajectory in 2D Space
