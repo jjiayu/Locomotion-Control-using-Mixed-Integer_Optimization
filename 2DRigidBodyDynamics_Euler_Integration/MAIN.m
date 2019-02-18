@@ -18,14 +18,14 @@ solver = "knitro";
 %==========================================================
 %Inertia Parameters(Information from MIT Cheetah 3)
 m = 45; %kg
-I = 2.1; %kg m^2
+I = 2.1; %kg m^2 Izz
 g = 9.80665; %m/s^2
 %==========================================================
 
 %==========================================================
 %Time parameters
-NumTimeSteps = 20; %number of time steps
-h = 0.05; %Time Step in seconds
+NumTimeSteps = 40; %number of time steps
+h = 0.025; %Time Step in seconds
 EndTime = h*NumTimeSteps; %in seconds
 % missing checking the endtime is the multiple of the time step
 TimeSeries = 0:h:EndTime;
@@ -42,7 +42,7 @@ ydot_init = 0;
 thetadot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditions
-x_end = 0.5; %20
+x_end = 1.0; %20
 y_end = 0.3; %0.2
 theta_end = 0;
 xdot_end = 0;
@@ -376,7 +376,7 @@ bdyn = [bx_pos_dyn;bx_vel_dyn;by_pos_dyn;by_vel_dyn;btheta_pos_dyn;bPFx_dyn;bPFy
 %---------------------------------------------------------------
 height = 0; %terrain height
 Mpos_y = 50; %big-M for Foot position in y-axis
-Mvel = 0.5; %big-M for Foot velocity in both x and y axis
+Mvel = 5; %big-M for Foot velocity in both x and y axis
 Mfx = 10000; %big-M for foot-ground reaction forces for x-axis
 Mfy = 10000; %big-M for foot-ground reaction forces for y-axis
 %---------------------------------------------------------------
@@ -985,10 +985,24 @@ end
 
 %========================================================================
 %Extract Input Results
+%robot state
+x_result = result.x(find(names == 'x0'):find(names == x_label(end)));
+y_result = result.x(find(names == 'y0'):find(names == y_label(end)));
+theta_result = result.x(find(names == 'theta0'):find(names == theta_label(end)));
+
+%end-effector locations
+PFx_result = result.x(find(names == 'PFx0'):find(names == PFx_label(end)));
+PFy_result = result.x(find(names == 'PFy0'):find(names == PFy_label(end)));
+PHx_result = result.x(find(names == 'PHx0'):find(names == PHx_label(end)));
+PHy_result = result.x(find(names == 'PHy0'):find(names == PHy_label(end)));
+
+%contact force result
 FFx_result = result.x(find(names == 'FFx0'):find(names == FFx_label(end)));
 FFy_result = result.x(find(names == 'FFy0'):find(names == FFy_label(end)));
 FHx_result = result.x(find(names == 'FHx0'):find(names == FHx_label(end)));
 FHy_result = result.x(find(names == 'FHy0'):find(names == FHy_label(end)));
+
+
 
 NetForceX = FFx_result + FHx_result;
 NetForceY = FFy_result + FHy_result;

@@ -24,8 +24,8 @@ g = 9.80665; %m/s^2
 
 %==========================================================
 %Time parameters
-NumTimeSteps = 30; %number of time steps
-h = 0.1; %Time Step in seconds
+NumTimeSteps = 20; %number of time steps
+h = 0.05; %Time Step in seconds
 EndTime = h*NumTimeSteps; %in seconds
 % missing checking the endtime is the multiple of the time step
 TimeSeries = 0:h:EndTime;
@@ -326,7 +326,7 @@ bdyn = [bx_pos_dyn;bx_vel_dyn;by_pos_dyn;by_vel_dyn;bPFx_dyn;bPFy_dyn;bPHx_dyn;b
 %---------------------------------------------------------------
 height = 0; %terrain height
 Mpos_y = 50; %big-M for Foot position in y-axis
-Mvel = 0.4; %big-M for Foot velocity in both x and y axis
+Mvel = 5; %big-M for Foot velocity in both x and y axis
 Mfx = 10000; %big-M for foot-ground reaction forces for x-axis
 Mfy = 10000; %big-M for foot-ground reaction forces for y-axis
 %---------------------------------------------------------------
@@ -640,9 +640,9 @@ Typecomplementarity = [TypePFy_Con1;TypePFy_Con2;...
 %           Set up parameters
 BodyHeight = 0.2; %m
 BodyLength = 0.6;%m
-minLegX = 0.2; %m 
-maxLegX = 0.1; %m %0.4
-minLegY = 0.2; %m %0.1
+minLegX = 0.1; %m 
+maxLegX = 0.4; %m %0.4
+minLegY = 0.1; %m %0.1
 maxLegY = 0.5; %m %0.5
 %---------------------------------------------------------------
 %           Hind Foot
