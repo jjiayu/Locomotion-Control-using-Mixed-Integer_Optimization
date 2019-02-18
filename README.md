@@ -1,2 +1,1 @@
-# Mixed-Integer_Optimization
-Code for Mixed-integer Optimization Problems, mainly focus on 
+# Locomotion Control using Mixed-Integer_Optimization
