@@ -24,8 +24,8 @@ g = 9.80665; %m/s^2
 
 %==========================================================
 %Time parameters
-NumTimeSteps = 40; %number of time steps
-h = 0.025; %Time Step in seconds
+NumTimeSteps = 100; %number of time steps
+h = 0.01; %Time Step in seconds
 EndTime = h*NumTimeSteps; %in seconds
 % missing checking the endtime is the multiple of the time step
 TimeSeries = 0:h:EndTime;
@@ -42,8 +42,8 @@ ydot_init = 0;
 thetadot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditions
-x_end = 1.0; %20
-y_end = 0.3; %0.2
+x_end = 0; %20
+y_end = 0.5; %0.2
 theta_end = 0;
 xdot_end = 0;
 ydot_end = 0;
@@ -376,9 +376,9 @@ bdyn = [bx_pos_dyn;bx_vel_dyn;by_pos_dyn;by_vel_dyn;btheta_pos_dyn;bPFx_dyn;bPFy
 %---------------------------------------------------------------
 height = 0; %terrain height
 Mpos_y = 50; %big-M for Foot position in y-axis
-Mvel = 5; %big-M for Foot velocity in both x and y axis
-Mfx = 10000; %big-M for foot-ground reaction forces for x-axis
-Mfy = 10000; %big-M for foot-ground reaction forces for y-axis
+Mvel = 25; %big-M for Foot velocity in both x and y axis
+Mfx = 1000; %big-M for foot-ground reaction forces for x-axis
+Mfy = 1000; %big-M for foot-ground reaction forces for y-axis
 %---------------------------------------------------------------
 %           Front Leg
 %---------------------------------------------------------------
