@@ -247,7 +247,7 @@ end
 Q = cell2mat(QCell);
 
 Q_backup = Q;
-%Q = sparse(Q);
+Q = sparse(Q);
 %------------------------------------------------------------
 %   Add Constraints
 %       System Dynamics (equality constraints)
