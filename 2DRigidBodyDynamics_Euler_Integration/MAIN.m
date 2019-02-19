@@ -24,7 +24,7 @@ g = 9.80665; %m/s^2
 
 %==========================================================
 %Time parameters
-NumTimeSteps = 25; %number of time steps
+NumTimeSteps = 20; %number of time steps
 h = 0.05; %Time Step in seconds
 EndTime = h*NumTimeSteps; %in seconds
 % missing checking the endtime is the multiple of the time step
@@ -42,7 +42,7 @@ ydot_init = 0;
 thetadot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditions
-x_end = 0.7; %20
+x_end = 0.5; %20
 y_end = 0.3; %0.2
 theta_end = 0;
 xdot_end = 0;
@@ -247,7 +247,7 @@ end
 Q = cell2mat(QCell);
 
 Q_backup = Q;
-Q = sparse(Q);
+%Q = sparse(Q);
 %------------------------------------------------------------
 %   Add Constraints
 %       System Dynamics (equality constraints)
