@@ -997,16 +997,32 @@ end
 %%
 %========================================================================
 %Extract Input Results
-%robot state
+%========================================================================
+%robot state (Position)
 x_result = result.x(find(names == 'x0'):find(names == x_label(end)));
 y_result = result.x(find(names == 'y0'):find(names == y_label(end)));
 theta_result = result.x(find(names == 'theta0'):find(names == theta_label(end)));
+
+%robot state (Velocity)
+xdot_result = result.x(find(names == 'xdot0'):find(names == xdot_label(end)));
+ydot_result = result.x(find(names == 'ydot0'):find(names == ydot_label(end)));
+thetadot_result = result.x(find(names == 'thetadot0'):find(names == thetadot_label(end)));
+
+%Contact Configuration
+CF_result = result.x(find(names == 'CF0'):find(names == CF_label(end)));
+CH_result = result.x(find(names == 'CH0'):find(names == CH_label(end)));
 
 %end-effector locations
 PFx_result = result.x(find(names == 'PFx0'):find(names == PFx_label(end)));
 PFy_result = result.x(find(names == 'PFy0'):find(names == PFy_label(end)));
 PHx_result = result.x(find(names == 'PHx0'):find(names == PHx_label(end)));
 PHy_result = result.x(find(names == 'PHy0'):find(names == PHy_label(end)));
+
+%end-effector velocities
+PFxdot_result = result.x(find(names == 'PFxdot0'):find(names == PFxdot_label(end)));
+PFydot_result = result.x(find(names == 'PFydot0'):find(names == PFydot_label(end)));
+PHxdot_result = result.x(find(names == 'PHxdot0'):find(names == PHxdot_label(end)));
+PHydot_result = result.x(find(names == 'PHydot0'):find(names == PHydot_label(end)));
 
 %contact force result
 FFx_result = result.x(find(names == 'FFx0'):find(names == FFx_label(end)));
@@ -1015,235 +1031,460 @@ FHx_result = result.x(find(names == 'FHx0'):find(names == FHx_label(end)));
 FHy_result = result.x(find(names == 'FHy0'):find(names == FHy_label(end)));
 
 %Torque on the body
-FFTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_result).*FFx_result;
-FHTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
+FrontTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_result).*FFx_result;
+HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
 
 %% Plot Figures
 figNum = 1;
 
-%Plot CoM State Trajectory
+%Plot CoM and FootStep Locations
 figure(figNum)
 hold on
-plot(result.x(find(names == 'x0'):find(names == x_label(end))),result.x(find(names == 'y0'):find(names == y_label(end))),'o','LineWidth',2)
-plot(result.x(find(names == 'PFx0'):find(names == PFx_label(end))),result.x(find(names == 'PFy0'):find(names == PFy_label(end))),'o')
-plot(result.x(find(names == 'PHx0'):find(names == PHx_label(end))),result.x(find(names == 'PHy0'):find(names == PHy_label(end))),'o')
+plot(x_result, y_result, '-o', 'LineWidth', 2)
+plot(PFx_result, PFy_result, '-o', 'LineWidth', 2)
+plot(PHx_result, PHy_result, '-o', 'LineWidth', 2)
 title('CoM and Footstep Positions')
+xlabel('x (m)')
+ylabel('y (m)')
+hold off
+
+figNum = figNum + 1;
+
+%Plot CoM States
+figure(figNum)
+suptitle('CoM State Trajecotry')
+
+subplot(2,3,1)
+plot(TimeSeries, x_result, 'LineWidth', 2)
+title('X-axis Positions')
 xlabel('Time (s)')
 ylabel('Positions (m)')
 
-
-
-%% Plot Figures
-
-figNum = 1;
-
-%Plot CoM trajectory in 2D Space
-figure(figNum)
-plot(result.x(find(names == 'x0'):find(names == x_label(end))),result.x(find(names == 'y0'):find(names == y_label(end))),'LineWidth',2)
-title('CoM Trajectory')
-xlabel('x-axis Position')
-ylabel('y-axis Position')
-set(gca,'FontSize',20)
-
-figNum = figNum + 1;
-
-%Plot CoM Velocity in x and y axis
-figure(figNum)
-subplot(1,2,1)
-plot(TimeSeries,result.x(find(names == 'xdot0'):find(names == xdot_label(end))),'LineWidth',2)
-hold on
-title('CoM Velocity in x-axis')
+subplot(2,3,2)
+plot(TimeSeries, y_result, 'LineWidth', 2)
+title('Y-axis Positions')
 xlabel('Time (s)')
-ylabel('Velocity (m/s)')
-set(gca,'FontSize',20)
+ylabel('Positions (m)')
 
-subplot(1,2,2)
-plot(TimeSeries,result.x(find(names == 'ydot0'):find(names == ydot_label(end))),'LineWidth',2)
-title('CoM Velocity in y-axis')
-xlabel('Time (s)')
-ylabel('Velocity (m/s)')
-set(gca,'FontSize',20)
-
-figNum = figNum + 1;
-
-%Plot Contact Configuration and Foot-Ground Reaction Forces
-figure(figNum)
-suptitle('Contact Configuration and Foot-Ground Reaction Forces')
-
-subplot(3,2,1)
-stairs(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
-title('Contact Configuration of Front Leg, 0/1: off/on')
-xlabel('Time (s)')
-set(gca,'FontSize',20)
-
-subplot(3,2,2)
-stairs(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
-title('Contact Configuration of Hind Leg, 0/1: off/on')
-xlabel('Time (s)')
-set(gca,'FontSize',20)
-
-subplot(3,2,3)
-stairs(TimeSeries,result.x(find(names == 'FFx0'):find(names == FFx_label(end))),'LineWidth',2)
-title('Horizontal Forces (x-axis) from Front Foot')
-xlabel('Time (s)')
-ylabel('Force (N)')
-set(gca,'FontSize',20)
-
-subplot(3,2,4)
-stairs(TimeSeries,result.x(find(names == 'FHx0'):find(names == FHx_label(end))),'LineWidth',2)
-title('Horizontal Forces (x-axis) from Hind Foot')
-xlabel('Time (s)')
-ylabel('Force (N)')
-set(gca,'FontSize',20)
-
-subplot(3,2,5)
-stairs(TimeSeries,result.x(find(names == 'FFy0'):find(names == FFy_label(end))),'LineWidth',2)
-title('Vertical Forces (y-axis) from Front Foot')
-xlabel('Time (s)')
-ylabel('Force (N)')
-set(gca,'FontSize',20)
-
-subplot(3,2,6)
-stairs(TimeSeries,result.x(find(names == 'FHy0'):find(names == FHy_label(end))),'LineWidth',2)
-title('Vertical Forces (y-axis) from Hind Foot')
-xlabel('Time (s)')
-ylabel('Force (N)')
-set(gca,'FontSize',20)
-
-figNum = figNum + 1;
-
-%Plot Contact Configuration and End-Effector Positions
-figure(figNum)
-suptitle('Contact Configuration and Vertical End-Effector Positions')
-
-subplot(3,2,1)
-stairs(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
-title('Contact Configuration of Front Foot, 0/1: off/on')
-xlabel('Time (s)')
-set(gca,'FontSize',20)
-
-subplot(3,2,2)
-stairs(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
-title('Contact Configuration of Hind Foot, 0/1: off/on')
-xlabel('Time (s)')
-set(gca,'FontSize',20)
-
-subplot(3,2,3)
-plot(TimeSeries,result.x(find(names == 'PFx0'):find(names == PFx_label(end))),'LineWidth',2)
-title('Horizontal Position (x-axis) of Front Foot')
-xlabel('Time (s)')
-ylabel('Position (m)')
-set(gca,'FontSize',20)
-
-subplot(3,2,4)
-plot(TimeSeries,result.x(find(names == 'PHx0'):find(names == PHx_label(end))),'LineWidth',2)
-title('Horizontal Position (x-axis) of Hind Foot')
-xlabel('Time (s)')
-ylabel('Position (m)')
-set(gca,'FontSize',20)
-
-subplot(3,2,5)
-plot(TimeSeries,result.x(find(names == 'PFy0'):find(names == PFy_label(end))),'LineWidth',2)
-title('Verticle Position of Front Foot')
-xlabel('Time (s)')
-ylabel('Position (m)')
-set(gca,'FontSize',20)
-
-subplot(3,2,6)
-plot(TimeSeries,result.x(find(names == 'PHy0'):find(names == PHy_label(end))),'LineWidth',2)
-title('Verticle Position of Hind Foot')
-xlabel('Time (s)')
-ylabel('Position (m)')
-set(gca,'FontSize',20)
-
-figNum = figNum + 1;
-
-%Plot Torque Generated on the Robot Body
-figure(figNum)
-suptitle('Torques on the Robot Body')
-
-subplot(4,1,1)
-stairs(TimeSeries, result.x(find(names == 'CF0'):find(names == CF_label(end))))
-title('Contacct Configuration of Front Foot, 0/1: off/on')
-
-subplot(4,2,1)
-stairs(TimeSeries, FFTorque_result,'LineWidth',2)
-
-figNum = figNum + 1;
-
-%Plot Contact Configuration and End-Effector Velocities
-figure(figNum)
-suptitle('Contact Configuration and End-Effector Velocities')
-
-subplot(3,2,1)
-stairs(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
-title('Contact Configuration of Front Foot, 0/1: on/off')
-xlabel('Time (s)')
-set(gca,'FontSize',20)
-
-subplot(3,2,2)
-stairs(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
-title('Contact Configuration of Hind Foot, 0/1: on/off')
-xlabel('Time (s)')
-set(gca,'FontSize',20)
-
-subplot(3,2,3)
-stairs(TimeSeries,result.x(find(names == 'PFxdot0'):find(names == PFxdot_label(end))),'LineWidth',2)
-title('Horizontal Velocity (x-axis) of Front Foot')
-xlabel('Time (s)')
-ylabel('Velocity (m/s)')
-set(gca,'FontSize',20)
-
-subplot(3,2,4)
-stairs(TimeSeries,result.x(find(names == 'PHxdot0'):find(names == PHxdot_label(end))),'LineWidth',2)
-title('Horizontal Velocity (x-axis) of Hind Foot')
-xlabel('Time (s)')
-ylabel('Velocity (m/s)')
-set(gca,'FontSize',20)
-
-subplot(3,2,5)
-stairs(TimeSeries,result.x(find(names == 'PFydot0'):find(names == PFydot_label(end))),'LineWidth',2)
-title('Vertical Velocity (y-axis) of Front Foot')
-xlabel('Time (s)')
-ylabel('Velocity (m/s)')
-set(gca,'FontSize',20)
-
-subplot(3,2,6)
-stairs(TimeSeries,result.x(find(names == 'PHydot0'):find(names == PHydot_label(end))),'LineWidth',2)
-title('Vertical Velocity (y-axis) of Hind Foot')
-xlabel('Time (s)')
-ylabel('Velocity (m/s)')
-set(gca,'FontSize',20)
-
-figNum = figNum + 1;
-
-%Plot Angular States
-figure(figNum)
-
-subplot(1,2,1)
-plot(TimeSeries, result.x(find(names == 'theta0'):find(names == theta_label(end))),'LineWidth',2);
-title('Angular State')
+subplot(2,3,3)
+plot(TimeSeries, theta_result, 'LineWidth', 2)
+title('Robot Orientation Trajectory')
 xlabel('Time (s)')
 ylabel('Angle (rad)')
-set(gca,'FontSize',20)
 
-subplot(1,2,2)
-plot(TimeSeries, result.x(find(names == 'thetadot0'):find(names == thetadot_label(end))),'LineWidth',2);
-title('Angular Velocity')
+subplot(2,3,4)
+plot(TimeSeries, xdot_result, 'LineWidth', 2)
+title('X-axis Velocity')
+xlabel('Time (s)')
+ylabel('Velocity (m/s)')
+
+subplot(2,3,5)
+plot(TimeSeries, ydot_result, 'LineWidth', 2)
+title('Y-axis Velocity')
+xlabel('Time (s)')
+ylabel('Velocity (m/s)')
+
+subplot(2,3,6)
+plot(TimeSeries, thetadot_result, 'LineWidth', 2)
+title('Angular Velocity Trajectory of the Robot Torso')
 xlabel('Time (s)')
 ylabel('Angular Velocity (rad/s)')
-set(gca,'FontSize', 20)
 
 figNum = figNum + 1;
 
-%%
+%Plot Footstep Positions 
 figure(figNum)
-hold on
-plot(result.x(find(names == 'x0'):find(names == x_label(end))),result.x(find(names == 'y0'):find(names == y_label(end))),'o','LineWidth',2)
-plot(result.x(find(names == 'PFx0'):find(names == PFx_label(end))),result.x(find(names == 'PFy0'):find(names == PFy_label(end))),'o')
-plot(result.x(find(names == 'PHx0'):find(names == PHx_label(end))),result.x(find(names == 'PHy0'):find(names == PHy_label(end))),'o')
-title('CoM and Footstep Positions')
+suptitle('FootStep Positions')
+
+subplot(3,2,1)
+stairs(TimeSeries, CF_result, 'LineWidth', 2)
+title('Front Leg Contact Configuration 0/1: off/on')
 xlabel('Time (s)')
-ylabel('Positions (m)')
+ylabel('Contact Configuation')
+
+subplot(3,2,2)
+stairs(TimeSeries, CH_result, 'LineWidth', 2)
+title('Hind Leg Contact Configuration 0/1: off/on')
+xlabel('Time (s)')
+ylabel('Contact Configuration')
+
+subplot(3,2,3)
+stairs(TimeSeries, PFx_result, 'LineWidth', 2)
+title('X-axis Position of Front Leg')
+xlabel('Time(s)')
+ylabel('Position (m)')
+
+subplot(3,2,4)
+stairs(TimeSeries, PHx_result, 'LineWidth', 2)
+title('X-axis Position of Hind Leg')
+xlabel('Time (s)')
+ylabel('Position (m)')
+
+subplot(3,2,5)
+stairs(TimeSeries, PFy_result, 'LineWidth', 2)
+title('Y-axis Position of Front Leg')
+xlabel('Time (s)')
+ylabel('Position (m)')
+
+subplot(3,2,6)
+stairs(TimeSeries, PHy_result, 'LineWidth', 2)
+title('Y-axis Position of Hind Leg')
+xlabel('Time (s)')
+ylabel('Position (m)')
 
 figNum = figNum + 1;
+
+%Plot Foot Velocity
+figure(figNum)
+suptitle('Foot Swing Velocity')
+
+subplot(3,2,1)
+stairs(TimeSeries, CF_result, 'LineWidth', 2)
+title('Front Leg Contact Configuration 0/1: off/on')
+xlabel('Time (s)')
+ylabel('Contact Configuration')
+
+subplot(3,2,2)
+stairs(TimeSeries, CH_result, 'LineWidth',2)
+title('Hind Leg Contact Configuration 0/1: off/on')
+xlabel('Time (s)')
+ylabel('Contact Configuration')
+
+subplot(3,2,3)
+stairs(TimeSeries, PFxdot_result, 'LineWidth', 2)
+title('Front Leg X-axis Velocity')
+xlabel('Time (s)')
+ylabel('Velocity (m/s)')
+
+subplot(3,2,4)
+stairs(TimeSeries, PHxdot_result, 'LineWidth', 2)
+title('Hind Leg X-axis Velocity')
+xlabel('Time (s)')
+ylabel('Velocity (m/s)')
+
+subplot(3,2,5)
+stairs(TimeSeries, PFydot_result, 'LineWidth', 2)
+title('Front Leg Y-axis Velocity')
+xlabel('Time (s)')
+ylabel('Velocity (m/s)')
+
+subplot(3,2,6)
+stairs(TimeSeries, PHydot_result, 'LineWidth', 2)
+title('Hind Leg Y-axis Velocity')
+xlabel('Time (s)')
+ylabel('Velocity (m/s)')
+
+figNum = figNum + 1;
+
+%Plot Foot-Ground Reaction Forces
+figure(figNum)
+suptitle('Foot-Ground Reaction Forces')
+
+subplot(3,2,1)
+stairs(TimeSeries, CF_result, 'LineWidth', 2)
+title('Front Leg Contact Configuration 0/1: off/on')
+xlabel('Time (s)')
+ylabel('Contact Configuration')
+
+subplot(3,2,2)
+stairs(TimeSeries, CH_result, 'LineWidth', 2)
+title('Hind Leg Contact Configuration 0/1: off/on')
+xlabel('Time (s)')
+ylabel('Contact Configuration')
+
+subplot(3,2,3)
+stairs(TimeSeries, FFx_result, 'LineWidth', 2)
+title('Front Leg Force X-axis')
+xlabel('Time (s)')
+ylabel('Foot-Ground Reaction Forces (N)')
+
+subplot(3,2,4)
+stairs(TimeSeries, FHx_result, 'LineWidth', 2)
+title('Hind Leg Force X-axis')
+xlabel('Time (s)')
+ylabel('Foot-Ground Reaction Forces (N)')
+
+subplot(3,2,5)
+stairs(TimeSeries, FFy_result, 'LineWidth', 2)
+title('Front Leg Force Y-axis')
+xlabel('Time (s)')
+ylabel('Foot-Grond Reaction Forces (N)')
+
+subplot(3,2,6)
+stairs(TimeSeries, FHy_result, 'LineWidth', 2)
+title('Hind Leg Force Y-axis')
+xlabel('Time (s)')
+ylabel('Foot-Ground Reaction Forces (N)')
+
+figNum = figNum + 1;
+
+%Plot Torque exerted on robot torso
+figure(figNum)
+suptitle('Torques Generated by Each Leg')
+
+subplot(2,2,1)
+stairs(TimeSeries, CF_result, 'LineWidth', 2)
+title('Front Leg Foot-Ground Contact Configurations 0/1: off/on')
+xlabel('Time (s)')
+ylabel('Contact Configurations')
+
+subplot(2,2,2)
+stairs(TimeSeries, CH_result, 'LineWidth', 2)
+title('Hind Leg Foot-Ground COntact Configurations 0/1: off/on')
+xlabel('Time (s)')
+ylabel('Contact Configuration')
+
+subplot(2,2,3)
+stairs(TimeSeries, FrontTorque_result, 'LineWidth', 2)
+title('Front Leg Torque')
+xlabel('Time (s)')
+ylabel('Torque (Nm)')
+
+subplot(2,2,4)
+stairs(TimeSeries, HindTorque_result, 'LineWidth', 2)
+title('Hind Leg Torque')
+xlabel('TIme(s)')
+ylabel('Torque (Nm)')
+
+figNum = figNum + 1;
+
+
+%Plot Net Forces and Torques exerted on the robot torso
+figure(figNum)
+suptitle('Net Forces and Torques on the Robot Torso')
+
+subplot(3,1,1)
+stairs(TimeSeries, FFx_result + FHx_result, 'LineWidth', 2)
+title('X-axis Net Force')
+xlabel('Time (s)')
+ylabel('Force (N)')
+
+subplot(3,1,2)
+stairs(TimeSeries, FFy_result + FHy_result, 'LineWidth', 2)
+title('Y-axis Net Force')
+xlabel('Time (s)')
+ylabel('Force (N)')
+
+subplot(3,1,3)
+stairs(TimeSeries, FrontTorque_result + HindTorque_result, 'LineWidth', 2)
+title('Net Torque')
+xlabel('Time(s)')
+ylabel('Torque (Nm)')
+
+figNum = figNum + 1;
+
+
+% %% Plot Figures
+% 
+% figNum = 1;
+% 
+% %Plot CoM trajectory in 2D Space
+% figure(figNum)
+% plot(result.x(find(names == 'x0'):find(names == x_label(end))),result.x(find(names == 'y0'):find(names == y_label(end))),'LineWidth',2)
+% title('CoM Trajectory')
+% xlabel('x-axis Position')
+% ylabel('y-axis Position')
+% set(gca,'FontSize',20)
+% 
+% figNum = figNum + 1;
+% 
+% %Plot CoM Velocity in x and y axis
+% figure(figNum)
+% subplot(1,2,1)
+% plot(TimeSeries,result.x(find(names == 'xdot0'):find(names == xdot_label(end))),'LineWidth',2)
+% hold on
+% title('CoM Velocity in x-axis')
+% xlabel('Time (s)')
+% ylabel('Velocity (m/s)')
+% set(gca,'FontSize',20)
+% 
+% subplot(1,2,2)
+% plot(TimeSeries,result.x(find(names == 'ydot0'):find(names == ydot_label(end))),'LineWidth',2)
+% title('CoM Velocity in y-axis')
+% xlabel('Time (s)')
+% ylabel('Velocity (m/s)')
+% set(gca,'FontSize',20)
+% 
+% figNum = figNum + 1;
+% 
+% %Plot Contact Configuration and Foot-Ground Reaction Forces
+% figure(figNum)
+% suptitle('Contact Configuration and Foot-Ground Reaction Forces')
+% 
+% subplot(3,2,1)
+% stairs(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
+% title('Contact Configuration of Front Leg, 0/1: off/on')
+% xlabel('Time (s)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,2)
+% stairs(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
+% title('Contact Configuration of Hind Leg, 0/1: off/on')
+% xlabel('Time (s)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,3)
+% stairs(TimeSeries,result.x(find(names == 'FFx0'):find(names == FFx_label(end))),'LineWidth',2)
+% title('Horizontal Forces (x-axis) from Front Foot')
+% xlabel('Time (s)')
+% ylabel('Force (N)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,4)
+% stairs(TimeSeries,result.x(find(names == 'FHx0'):find(names == FHx_label(end))),'LineWidth',2)
+% title('Horizontal Forces (x-axis) from Hind Foot')
+% xlabel('Time (s)')
+% ylabel('Force (N)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,5)
+% stairs(TimeSeries,result.x(find(names == 'FFy0'):find(names == FFy_label(end))),'LineWidth',2)
+% title('Vertical Forces (y-axis) from Front Foot')
+% xlabel('Time (s)')
+% ylabel('Force (N)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,6)
+% stairs(TimeSeries,result.x(find(names == 'FHy0'):find(names == FHy_label(end))),'LineWidth',2)
+% title('Vertical Forces (y-axis) from Hind Foot')
+% xlabel('Time (s)')
+% ylabel('Force (N)')
+% set(gca,'FontSize',20)
+% 
+% figNum = figNum + 1;
+% 
+% %Plot Contact Configuration and End-Effector Positions
+% figure(figNum)
+% suptitle('Contact Configuration and Vertical End-Effector Positions')
+% 
+% subplot(3,2,1)
+% stairs(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
+% title('Contact Configuration of Front Foot, 0/1: off/on')
+% xlabel('Time (s)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,2)
+% stairs(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
+% title('Contact Configuration of Hind Foot, 0/1: off/on')
+% xlabel('Time (s)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,3)
+% plot(TimeSeries,result.x(find(names == 'PFx0'):find(names == PFx_label(end))),'LineWidth',2)
+% title('Horizontal Position (x-axis) of Front Foot')
+% xlabel('Time (s)')
+% ylabel('Position (m)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,4)
+% plot(TimeSeries,result.x(find(names == 'PHx0'):find(names == PHx_label(end))),'LineWidth',2)
+% title('Horizontal Position (x-axis) of Hind Foot')
+% xlabel('Time (s)')
+% ylabel('Position (m)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,5)
+% plot(TimeSeries,result.x(find(names == 'PFy0'):find(names == PFy_label(end))),'LineWidth',2)
+% title('Verticle Position of Front Foot')
+% xlabel('Time (s)')
+% ylabel('Position (m)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,6)
+% plot(TimeSeries,result.x(find(names == 'PHy0'):find(names == PHy_label(end))),'LineWidth',2)
+% title('Verticle Position of Hind Foot')
+% xlabel('Time (s)')
+% ylabel('Position (m)')
+% set(gca,'FontSize',20)
+% 
+% figNum = figNum + 1;
+% 
+% %Plot Torque Generated on the Robot Body
+% figure(figNum)
+% suptitle('Torques on the Robot Body')
+% 
+% subplot(4,1,1)
+% stairs(TimeSeries, result.x(find(names == 'CF0'):find(names == CF_label(end))))
+% title('Contacct Configuration of Front Foot, 0/1: off/on')
+% 
+% subplot(4,2,1)
+% stairs(TimeSeries, FFTorque_result,'LineWidth',2)
+% 
+% figNum = figNum + 1;
+% 
+% %Plot Contact Configuration and End-Effector Velocities
+% figure(figNum)
+% suptitle('Contact Configuration and End-Effector Velocities')
+% 
+% subplot(3,2,1)
+% stairs(TimeSeries,result.x(find(names == 'CF0'):find(names == CF_label(end))),'LineWidth',2)
+% title('Contact Configuration of Front Foot, 0/1: on/off')
+% xlabel('Time (s)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,2)
+% stairs(TimeSeries,result.x(find(names == 'CH0'):find(names == CH_label(end))),'LineWidth',2)
+% title('Contact Configuration of Hind Foot, 0/1: on/off')
+% xlabel('Time (s)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,3)
+% stairs(TimeSeries,result.x(find(names == 'PFxdot0'):find(names == PFxdot_label(end))),'LineWidth',2)
+% title('Horizontal Velocity (x-axis) of Front Foot')
+% xlabel('Time (s)')
+% ylabel('Velocity (m/s)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,4)
+% stairs(TimeSeries,result.x(find(names == 'PHxdot0'):find(names == PHxdot_label(end))),'LineWidth',2)
+% title('Horizontal Velocity (x-axis) of Hind Foot')
+% xlabel('Time (s)')
+% ylabel('Velocity (m/s)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,5)
+% stairs(TimeSeries,result.x(find(names == 'PFydot0'):find(names == PFydot_label(end))),'LineWidth',2)
+% title('Vertical Velocity (y-axis) of Front Foot')
+% xlabel('Time (s)')
+% ylabel('Velocity (m/s)')
+% set(gca,'FontSize',20)
+% 
+% subplot(3,2,6)
+% stairs(TimeSeries,result.x(find(names == 'PHydot0'):find(names == PHydot_label(end))),'LineWidth',2)
+% title('Vertical Velocity (y-axis) of Hind Foot')
+% xlabel('Time (s)')
+% ylabel('Velocity (m/s)')
+% set(gca,'FontSize',20)
+% 
+% figNum = figNum + 1;
+
+% %Plot Angular States
+% figure(figNum)
+% 
+% subplot(1,2,1)
+% plot(TimeSeries, result.x(find(names == 'theta0'):find(names == theta_label(end))),'LineWidth',2);
+% title('Angular State')
+% xlabel('Time (s)')
+% ylabel('Angle (rad)')
+% set(gca,'FontSize',20)
+% 
+% subplot(1,2,2)
+% plot(TimeSeries, result.x(find(names == 'thetadot0'):find(names == thetadot_label(end))),'LineWidth',2);
+% title('Angular Velocity')
+% xlabel('Time (s)')
+% ylabel('Angular Velocity (rad/s)')
+% set(gca,'FontSize', 20)
+% 
+% figNum = figNum + 1;
+
+% %%
+% figure(figNum)
+% hold on
+% plot(result.x(find(names == 'x0'):find(names == x_label(end))),result.x(find(names == 'y0'):find(names == y_label(end))),'o','LineWidth',2)
+% plot(result.x(find(names == 'PFx0'):find(names == PFx_label(end))),result.x(find(names == 'PFy0'):find(names == PFy_label(end))),'o')
+% plot(result.x(find(names == 'PHx0'):find(names == PHx_label(end))),result.x(find(names == 'PHy0'):find(names == PHy_label(end))),'o')
+% title('CoM and Footstep Positions')
+% xlabel('Time (s)')
+% ylabel('Positions (m)')
+% 
+% figNum = figNum + 1;
