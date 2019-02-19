@@ -246,6 +246,13 @@ end
 %
 Q = cell2mat(QCell);
 
+% Q(find(names == 'y15'),find(names == 'y15')) = 1e30;
+% Q(find(names == 'y14'),find(names == 'y14')) = 1e30;
+% Q(find(names == 'y13'),find(names == 'y13')) = 1e30;
+% Q(find(names == 'y16'),find(names == 'y16')) = 1e30;
+% Q(find(names == 'y17'),find(names == 'y17')) = 1e30;
+% Q(find(names == 'y18'),find(names == 'y18')) = 1e30;
+
 Q_backup = Q;
 Q = sparse(Q);
 %------------------------------------------------------------
@@ -1021,15 +1028,6 @@ FHTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).
 %% Plot Figures
 figNum = 1;
 
-%Plot CoM State Trajectory
-figure(figNum)
-hold on
-plot(result.x(find(names == 'x0'):find(names == x_label(end))),result.x(find(names == 'y0'):find(names == y_label(end))),'o','LineWidth',2)
-plot(result.x(find(names == 'PFx0'):find(names == PFx_label(end))),result.x(find(names == 'PFy0'):find(names == PFy_label(end))),'o')
-plot(result.x(find(names == 'PHx0'):find(names == PHx_label(end))),result.x(find(names == 'PHy0'):find(names == PHy_label(end))),'o')
-title('CoM and Footstep Positions')
-xlabel('Time (s)')
-ylabel('Positions (m)')
 
 
 
