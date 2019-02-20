@@ -42,7 +42,7 @@ ydot_init = 0;
 thetadot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditionsconsta
-x_end = 0.5; %20
+x_end = 0.7; %20
 y_end = 0.3; %0.2
 theta_end = 0;
 xdot_end = 0;
@@ -58,8 +58,8 @@ thetadot_end = 0;
 height = 0; %terrain height
 Mpos_y = 50; %big-M for Foot position in y-axis
 Mvel = 2; %big-M for Foot velocity in both x and y axis
-Mfx = 1000; %big-M for foot-ground reaction forces for x-axis
-Mfy = 1000; %big-M for foot-ground reaction forces for y-axis
+Mfx = 10000; %big-M for foot-ground reaction forces for x-axis
+Mfy = 10000; %big-M for foot-ground reaction forces for y-axis
 %---------------------------------------------------------
 %   Kinematics Constraint Parameters
 %---------------------------------------------------------
