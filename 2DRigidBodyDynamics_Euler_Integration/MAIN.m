@@ -41,7 +41,7 @@ xdot_init = 0;
 ydot_init = 0;
 thetadot_init = 0;
 %---------------------------------------------------------
-%Terminal Conditions
+%Terminal Conditionsconsta
 x_end = 0.5; %20
 y_end = 0.3; %0.2
 theta_end = 0;
@@ -57,7 +57,7 @@ thetadot_end = 0;
 %---------------------------------------------------------
 height = 0; %terrain height
 Mpos_y = 50; %big-M for Foot position in y-axis
-Mvel = 25; %big-M for Foot velocity in both x and y axis
+Mvel = 2; %big-M for Foot velocity in both x and y axis
 Mfx = 1000; %big-M for foot-ground reaction forces for x-axis
 Mfy = 1000; %big-M for foot-ground reaction forces for y-axis
 %---------------------------------------------------------
@@ -247,7 +247,7 @@ end
 Q = cell2mat(QCell);
 
 Q_backup = Q;
-Q = sparse(Q);
+%Q = sparse(Q);
 %------------------------------------------------------------
 %   Add Constraints
 %       System Dynamics (equality constraints)
