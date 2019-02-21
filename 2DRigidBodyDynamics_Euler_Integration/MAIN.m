@@ -8,8 +8,7 @@ clc;
 %Add solvers' Path
 %Knitro
 addpath('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab')
-%Gurobi
-addpath('C:\gurobi810')
+%Gurobiaddpath('C:\gurobi810')
 %==========================================================
 %Choose Solver
 solver = "knitro";
