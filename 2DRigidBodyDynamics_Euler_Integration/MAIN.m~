@@ -1030,14 +1030,9 @@ FFy_result = result.x(find(names == 'FFy0'):find(names == FFy_label(end)));
 FHx_result = result.x(find(names == 'FHx0'):find(names == FHx_label(end)));
 FHy_result = result.x(find(names == 'FHy0'):find(names == FHy_label(end)));
 
-NetForceX = FFx_result + FHx_result;
-NetForceY = FFy_result + FHy_result;
-
 %Torque on the body
 FrontTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_result).*FFx_result;
 HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
-
-NetTorque = FrontTorque_result + HindTorque_result;
 
 %% Plot Figures
 figNum = 1;
@@ -1259,19 +1254,19 @@ figure(figNum)
 suptitle('Net Forces and Torques on the Robot Torso')
 
 subplot(3,1,1)
-stairs(TimeSeries, NetForceX, 'LineWidth', 2)
+stairs(TimeSeries, FFx_result + FHx_result, 'LineWidth', 2)
 title('X-axis Net Force')
 xlabel('Time (s)')
 ylabel('Force (N)')
 
 subplot(3,1,2)
-stairs(TimeSeries, NetForceY, 'LineWidth', 2)
+stairs(TimeSeries, FFy_result + FHy_result, 'LineWidth', 2)
 title('Y-axis Net Force')
 xlabel('Time (s)')
 ylabel('Force (N)')
 
 subplot(3,1,3)
-stairs(TimeSeries, NetTorque, 'LineWidth', 2)
+stairs(TimeSeries, FrontTorque_result + HindTorque_result, 'LineWidth', 2)
 title('Net Torque')
 xlabel('Time(s)')
 ylabel('Torque (Nm)')
