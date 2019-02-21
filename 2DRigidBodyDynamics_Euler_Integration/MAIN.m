@@ -43,7 +43,7 @@ ydot_init = 0;
 thetadot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditionsconsta
-x_end = 0.7; %20
+x_end = 0.5; %20
 y_end = 0.3; %0.2
 theta_end = 0;
 xdot_end = 0;
@@ -107,7 +107,7 @@ disp(' ')
 %==========================================================
 %Settings for Soft/Hard Constraint of Terminal Conditions
 %----------------------------------------------------------
-SoftTerminalConstraint = 0; %on/off (1/0) of putting Terminal conditions into cost function (soft constraint) or hard constraints
+SoftTerminalConstraint = input('Set How the Terminal Condition will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function'); %on/off (1/0) of putting Terminal conditions into cost function (soft constraint) or hard constraints
 %----------------------------------------------------------
 %Display Settings
 if SoftTerminalConstraint == 1
@@ -242,8 +242,12 @@ varListLength = length(varList);
 %   Extract Variable Index
 xIdx_init = find(names == 'x0');
 xIdx_end  = find(names == x_label(end));
+xdotIdx_init = find(names == 'xdot0');
+xdotIdx_end = find(names == xdot_label(end));
 yIdx_init = find(names == 'y0');
 yIdx_end  = find(names == y_label(end));
+ydotIdx_init = find(names == 'ydot0');
+ydotIdx_end = find(names == ydot_label(end));
 thetaIdx_init = find(names == 'theta0');
 thetaIdx_end  = find(names == theta_label(end));
 thetadotIdx_init = find(names == 'thetadot0');
@@ -751,145 +755,7 @@ Typecomplementarity = [TypePFy_Con1;TypePFy_Con2;...
                        TypePHydot_Con1;TypePHydot_Con2;...
                        TypeFHx_Con1;TypeFHx_Con2;...
                        TypeFHy_Con1;TypeFHy_Con2
-                       ];
-%---------------------------------------------------------------
-%       Kinematics Constraint
-%---------------------------------------------------------------
-%           Set up parameters
-% BodyHeight = 0.2; %m
-% BodyLength = 0.6;%m
-% minLegX = 0.15; %m 
-% maxLegX = 0.2; %m %0.4
-% minLegY = 0.2; %m %0.1
-% maxLegY = 0.5; %m %0.5
-% %---------------------------------------------------------------
-% %           Hind Foot
-% %---------------------------------------------------------------
-% %               y-axis
-% %---------------------------------------------------------------
-% %               First Constraint: y - PHy >= BodyHeight/2 + minLegY
-% %               Build A matrix:
-% APHy_Kine_Con1 = zeros(PHyLength, namesLength);
-% for k = 1:PHyLength
-%     APHy_Kine_Con1(k,find(names == strcat('y',num2str(k-1))))   =  1;
-%     APHy_Kine_Con1(k,find(names == strcat('PHy',num2str(k-1)))) = -1;
-% end
-% %               Build b vector
-% bPHy_Kine_Con1 = repmat(BodyHeight/2 + minLegY,size(APHy_Kine_Con1,1),1);
-% %               Setup Constraint Type
-% Type_PHy_Kine_Con1 = repmat(1,size(APHy_Kine_Con1,1),1);
-% %---------------------------------------------------------------
-% %               Second Constraint: y - PHy <= BodyHeight/2 + minLegY + maxLegY
-% %               Build A matrix
-% APHy_Kine_Con2 = zeros(PHyLength, namesLength);
-% for k = 1:PHyLength
-%     APHy_Kine_Con2(k,find(names == strcat('y',num2str(k-1)))) = 1;
-%     APHy_Kine_Con2(k,find(names == strcat('PHy',num2str(k-1)))) = -1;
-% end
-% %               Build b vector
-% bPHy_Kine_Con2 = repmat(BodyHeight/2 + minLegY + maxLegY,size(APHy_Kine_Con2,1),1);
-% %               Setup Constraint Type
-% Type_PHy_Kine_Con2 = repmat(-1,size(APHy_Kine_Con2,1),1);
-% %---------------------------------------------------------------
-% %               x-axis
-% %---------------------------------------------------------------
-% %               First Constraint: x - PHx >= minLegX
-% %               Build A matrix
-% APHx_Kine_Con1 = zeros(PHxLength, namesLength);
-% for k = 1:PHxLength
-%     APHx_Kine_Con1(k,find(names == strcat('x',num2str(k-1)))) = 1;
-%     APHx_Kine_Con1(k,find(names == strcat('PHx',num2str(k-1)))) = -1;
-% end
-% %               Build b vector
-% bPHx_Kine_Con1 = repmat(minLegX,size(APHx_Kine_Con1,1),1);
-% %               Setup Constraint Type
-% Type_PHx_Kine_Con1 = repmat(1,size(APHx_Kine_Con1,1),1);
-% %---------------------------------------------------------------
-% %               Second Constraint: x - PHx <= minLegX + maxLegX
-% %               Build A matrix
-% APHx_Kine_Con2 = zeros(PHxLength, namesLength);
-% for k =1:PHxLength
-%     APHx_Kine_Con2(k,find(names == strcat('x',num2str(k-1)))) = 1;
-%     APHx_Kine_Con2(k,find(names == strcat('PHx',num2str(k-1)))) = -1;
-% end
-% %               Build b vector
-% bPHx_Kine_Con2 = repmat(minLegX+maxLegX, size(APHx_Kine_Con2,1),1);
-% %               Setup Constraint Type
-% Type_PHx_Kine_Con2 = repmat(-1,size(APHx_Kine_Con2,1),1);
-% %---------------------------------------------------------------
-% %           Front Foot
-% %---------------------------------------------------------------
-% %               y-axis
-% %---------------------------------------------------------------
-% %               First Constraint: y - PFy >= BodyHeight/2 + minLegY
-% %               Build A matrix
-% APFy_Kine_Con1 = zeros(PFyLength, namesLength);
-% for k = 1:PFyLength
-%     APFy_Kine_Con1(k,find(names == strcat('y',num2str(k-1)))) = 1;
-%     APFy_Kine_Con1(k,find(names == strcat('PFy',num2str(k-1)))) = -1;
-% end
-% %               Build b vector
-% bPFy_Kine_Con1 = repmat(BodyHeight/2 + minLegY, size(APFy_Kine_Con1,1),1);
-% %               Setup Constraint Type
-% Type_PFy_Kine_Con1 = repmat(1,size(APFy_Kine_Con1,1),1);
-% %---------------------------------------------------------------
-% %               Second Constraint: y - PFy <= BodyHeight/2 + minLegY + maxLegY
-% %               Build A matrix
-% APFy_Kine_Con2 = zeros(PFyLength, namesLength);
-% for k = 1:PFyLength
-%     APFy_Kine_Con1(k,find(names == strcat('y',num2str(k-1)))) = 1;
-%     APFy_Kine_Con1(k,find(names == strcat('PFy',num2str(k-1)))) = -1;
-% end
-% %               Build b vector
-% bPFy_Kine_Con2 = repmat(BodyHeight/2 + minLegY + maxLegY, size(APFy_Kine_Con1,1),1);
-% %               Setup Constraint Type
-% Type_PFy_Kine_Con2 = repmat(-1, size(APFy_Kine_Con1,1),1);
-% %---------------------------------------------------------------
-% %               x-axis
-% %---------------------------------------------------------------
-% %               First Constraint: PFx - x >= minLegX
-% %               Build A matrix
-% APFx_Kine_Con1 = zeros(PFxLength, namesLength);
-% for k = 1:PFxLength
-%     APFx_Kine_Con1(k,find(names == strcat('PFx',num2str(k-1)))) = 1;
-%     APFx_Kine_Con1(k,find(names == strcat('x',num2str(k-1)))) = -1;
-% end
-% %               Build b vector
-% bPFx_Kine_Con1 = repmat(minLegX,size(APFx_Kine_Con1,1),1);
-% %               Setup Constraint Type
-% Type_PFx_Kine_Con1 = repmat(1, size(APFx_Kine_Con1,1),1);
-% %---------------------------------------------------------------
-% %               Second Constraint: PFx - x <= minLegX + maxLegX
-% %               Build A matrix
-% APFx_Kine_Con2 = zeros(PFxLength, namesLength);
-% for k = 1:PFxLength
-%     APFx_Kine_Con2(k,find(names == strcat('PFx',num2str(k-1)))) = 1;
-%     APFx_Kine_Con2(k,find(names == strcat('x',num2str(k-1)))) = -1;
-% end
-% %               Build b vector
-% bPFx_Kine_Con2 = repmat(minLegX + maxLegX, size(APFx_Kine_Con2,1),1);
-% %               Setup Constraint Type
-% Type_PFx_Kine_Con2 = repmat(-1,size(APFx_Kine_Con2,1),1);
-% %---------------------------------------------------------------
-% %           Collect Kinematics Constraint
-% %---------------------------------------------------------------
-% AKinematics = [APHy_Kine_Con1;APHy_Kine_Con2;
-%                APHx_Kine_Con1;APHx_Kine_Con2;
-%                APFy_Kine_Con1;APFy_Kine_Con2;
-%                APFx_Kine_Con1;APFx_Kine_Con2;
-%               ];
-%      
-% bKinematics = [bPHy_Kine_Con1;bPHy_Kine_Con2;
-%                bPHx_Kine_Con1;bPHx_Kine_Con2;
-%                bPFy_Kine_Con1;bPFy_Kine_Con2;
-%                bPFx_Kine_Con1;bPFx_Kine_Con2;
-%               ];
-%     
-% TypeKinematics = [Type_PHy_Kine_Con1;Type_PHy_Kine_Con2;
-%                   Type_PHx_Kine_Con1;Type_PHx_Kine_Con2;
-%                   Type_PFy_Kine_Con1;Type_PFy_Kine_Con2;
-%                   Type_PFx_Kine_Con1;Type_PFx_Kine_Con2;
-%                  ];          
+                       ];     
 %---------------------------------------------------------------
 %   Set Boundary Conditions
 %---------------------------------------------------------------
@@ -960,8 +826,13 @@ bend = [x_end;
 %===============================================================
 %   Collect all Aeq matrices and beq vectors for linear equality
 %   constraints
-Aeq = [Ainit;Aend;Adyn]; 
-beq = [binit;bend;bdyn];
+Aeq = [Ainit;Adyn]; 
+beq = [binit;bdyn];
+%   Add Terminal Conditions into hard constraint
+if SoftTerminalConstraint == 0
+    Aeq = [Aeq;Aend];
+    beq = [beq;bend];
+end
 %---------------------------------------------------------------
 %   Collect all A, b and Type for linear inequality constraints
 A = [Acomplementarity;
@@ -981,14 +852,36 @@ ub = [repmat( inf,1, sum(LengthList(find(varList == "x"):find(varList == "FHy"))
 vtype = [repmat('C', 1, sum(LengthList(find(varList == "x"):find(varList == "FHy")))), repmat('B',1, CFLength + CHLength)];
 %=============================================================
 %Call Solvers
+%-------------------------------------------------------------
 if solver == "knitro"
     %Display Info
     disp("Use Knitro")
     disp(" ")
+%-------------------------------------------------------------
     %Set up problem
+%-------------------------------------------------------------
         %Build Objective Function
-    objfunc = @(vars)cost(vars,Q); %!!!!Cost function may need quadrature as well
-        %nonlinear constraints
+    if SoftTerminalConstraint == 0 %Set Terminal Condition as hard Constraint
+        objfunc = @(vars)cost(vars,Q); %!!!!Cost function may need quadrature as well
+    elseif SoftTerminalConstraint == 1 %Set Terminal Condition as soft constraint, put into cost function
+        objfunc = @(vars)cost_softconstraint(vars,...
+                                             Q,...
+                                             xIdx_end,...
+                                             xdotIdx_end,...
+                                             yIdx_end,...
+                                             ydotIdx_end,...
+                                             thetaIdx_end,...
+                                             thetadotIdx_end,...
+                                             x_end,...
+                                             xdot_end,...   
+                                             y_end,...
+                                             ydot_end,...
+                                             theta_end,...
+                                             thetadot_end);
+    end
+
+%-------------------------------------------------------------
+        %Nonlinear Constraints
     nlcon = @(vars) nlconstraint(vars,...
                                 h,...
                                 I,...
@@ -1010,49 +903,35 @@ if solver == "knitro"
                                 maxLegX,...
                                 minLegY,...
                                 maxLegY);
+%-------------------------------------------------------------
     %other parameters
     objFnType = 0;
     cFnType = [];
     x0 = rand(namesLength,1);
-    %flip constraints, Knitro only takes < constraints
+%-------------------------------------------------------------
+    %flip inequality constraints, Knitro only takes < constraints
     A(find(IneqType == 1),:) = -A(find(IneqType == 1),:);
     b(find(IneqType == 1)) = -b(find(IneqType == 1));
-    %Sparsity A matrix and b vectors
+%-------------------------------------------------------------
+    %Sparsify A matrix and b vectors
     if A_Sparsity == 1
         A = sparse(A);
         b = sparse(b);
         Aeq = sparse(Aeq);
         beq = sparse(beq);
     end
+%-------------------------------------------------------------
     %transpose lower and upper bounds, Knitro requires
     lb = lb';
     ub = ub';
+%-------------------------------------------------------------
     %reset vType vector, Knitro requires
     vtype = [repmat(0, sum(LengthList(find(varList == "x"):find(varList == "FHy"))), 1); repmat(2, CFLength + CHLength, 1)]; %0 -> continuous variable, 2 -> discrete variable
+%-------------------------------------------------------------
     %call knitro
     options = optimset('Display','iter');
     [result.x,result.objval,result.exitflag,optInfo] = knitromatlab_mip(objfunc,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,'mipoptions.opt');
-    
-% elseif solver == "gurobi"
-%     %Dispaly Info
-%     disp("Use Gurobi");
-%     disp(" ");
-%     %Set up problem
-%     model.Q = Q;
-%     model.modelsense = 'min';
-%     model.vtype = vtype;
-%     model.lb = lb;
-%     model.ub = ub;
-%     model.A = sparse([A;Aeq]);
-%     model.rhs = [b;beq];
-%     model.sense = IneqType;
-%     model.sense(find(model.sense == -1)) ='<';
-%     model.sense(find(model.sense == 1)) ='>';
-%     model.sense = [model.sense;repmat('=',length(beq),1)];
-%     %Call Gurobi
-%     result = gurobi(model);
-%     gurobi_write(model, 'MILP.mps');
-    
+%-------------------------------------------------------------
 else
     disp("Unknown solver");
     disp{" "}
