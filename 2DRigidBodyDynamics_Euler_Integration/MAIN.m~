@@ -1017,13 +1017,6 @@ if solver == "knitro"
     %flip constraints, Knitro only takes < constraints
     A(find(IneqType == 1),:) = -A(find(IneqType == 1),:);
     b(find(IneqType == 1)) = -b(find(IneqType == 1));
-    %Sparsity A matrix and b vectors
-    if A_Sparsity == 1
-        A = sparse(A);
-        b = sparse(b);
-        Aeq = sparse(Aeq);
-        beq = sparse(beq);
-    end
     %transpose lower and upper bounds, Knitro requires
     lb = lb';
     ub = ub';
