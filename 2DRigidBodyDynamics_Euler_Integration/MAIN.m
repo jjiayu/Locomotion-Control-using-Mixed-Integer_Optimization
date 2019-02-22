@@ -42,7 +42,7 @@ ydot_init = 0;
 thetadot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditionsconsta
-x_end = 0.8; %20
+x_end = 0.5; %20
 y_end = 0.3; %0.2
 theta_end = 0;
 xdot_end = 0;
