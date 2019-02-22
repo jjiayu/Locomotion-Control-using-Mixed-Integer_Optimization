@@ -1,6 +1,12 @@
 % Mixed-Integer Nonlinear Optimization in 2D Case (Planar Cheetah)
 % Mode Selection described as foot-ground contact changes 0/1
 
+%Note:
+%Control Input has the same length with states --> u_1:N and x_1:N, but
+%dynamics constraint only acts from time step 0 to N-1 (in other words, only u_1:N-1 are useful)
+%But u_N is included in the cost function which has no effects of the final
+%result
+
 clear;
 clc;
 
