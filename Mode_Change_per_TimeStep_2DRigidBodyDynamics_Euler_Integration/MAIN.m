@@ -13,7 +13,8 @@
 %constraints (ALL! dynamic constraint, kinematics constraint, complementarity constraint...,check all constraint)
 %-----------------------------------------------------------------------------------
 %Note 2:
-%For the kienmatics constraint, we can su
+%For the kienmatics constraint, we can use tensor-based formualtion to
+%speed up computation time and simplfy the program -->Ask Chris and Theo
 
 clear;
 clc;
