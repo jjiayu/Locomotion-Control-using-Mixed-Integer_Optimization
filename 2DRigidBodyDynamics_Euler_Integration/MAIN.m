@@ -124,7 +124,7 @@ disp(' ')
 %==========================================================
 %Settings for Soft/Hard Constraint of Terminal Conditions
 %----------------------------------------------------------
-SoftTerminalConstraint = input('Set How the Terminal Condition will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function'); %on/off (1/0) of putting Terminal conditions into cost function (soft constraint) or hard constraints
+SoftTerminalConstraint = input('Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function \n'); %on/off (1/0) of putting Terminal conditions into cost function (soft constraint) or hard constraints
 %----------------------------------------------------------
 %Display Settings
 if SoftTerminalConstraint == 1
