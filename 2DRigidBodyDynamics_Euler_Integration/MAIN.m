@@ -44,7 +44,7 @@ TimeSeriesLength = length(TimeSeries);
 %=========================================================
 %Initial Conditions
 x_init = 0;
-y_init = 0.3; %0.2
+y_init = 0.4; %0.2
 theta_init = 0;
 xdot_init = 0;
 ydot_init = 0;
@@ -52,7 +52,7 @@ thetadot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditionsconsta
 x_end = 0.5; %20
-y_end = 0.3; %0.2
+y_end = 0.4; %0.2
 theta_end = 0;
 xdot_end = 0;
 ydot_end = 0;
@@ -84,8 +84,8 @@ PHcenterY = -(1/2*BodyHeight + Default_Leg_Length);
 %PF_center = [1/2*BodyLength,  -(1/2*BodyHeight + Default_Leg_Length)]';
 %PH_center = [-1/2*BodyLength, -(1/2*BodyHeight + Default_Leg_Length)]';
 %       Kinematics Bounding Box Constraint
-BoundingBox_Width = 0.2;
-BoundingBox_Height= 0.2;
+BoundingBox_Width = 0.3;
+BoundingBox_Height= 0.3;
 BoundingBox = [BoundingBox_Width,BoundingBox_Height]';
 %==========================================================
 
