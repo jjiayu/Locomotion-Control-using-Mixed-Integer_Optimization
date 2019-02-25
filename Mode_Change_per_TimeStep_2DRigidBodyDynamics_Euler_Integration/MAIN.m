@@ -20,6 +20,11 @@ clear;
 clc;
 
 %==========================================================
+%Print Information
+disp('Locomotion Control using Mixed-integer Optimization --> Allow Mode Selection at Every Time Step')
+disp(' ')
+
+%==========================================================
 %Add solvers' Path
 %Knitro
 addpath('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab')
