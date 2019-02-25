@@ -86,7 +86,6 @@ BoundingBox = [BoundingBox_Width,BoundingBox_Height]';
 %Initial Conditions
 x_init = 0;
 y_init = 1/2*BodyHeight + Default_Leg_Length; %0.2
-%y_init = 0.5;
 theta_init = 0;
 xdot_init = 0;
 ydot_init = 0;
@@ -95,25 +94,16 @@ thetadot_init = 0;
 %Terminal Conditionsconsts
 x_end = 0.5; %20
 y_end = 1/2*BodyHeight + Default_Leg_Length; %0.2
-%y_end = 0.3;
 theta_end = 0;
 xdot_end = 0;
 ydot_end = 0;
 thetadot_end = 0;
 %---------------------------------------------------------
 %Test if initial and terminal conditions meet kinematics constraint
-%robot height should set in a way that the highest foot position is not
-%under the terrain height, otherwise conflicts with complementarity
-%constraint
-if (y_init - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
-    disp('init robot height violates kinematics constraints')
+if y_init <= 
 end
 
-if (y_init - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
-    disp('terminal robot height violates kinematics constraints')
-end
-
-disp(' ')
+if y_end
 %==========================================================
 
 %==========================================================
