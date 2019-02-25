@@ -45,6 +45,9 @@ cross_product = (PFx - x).*FFy - (PFy - y).*FFx + (PHx - x).*FHy - (PHy - y).*FH
 ceq_rotation_dynamics = I.*thetadot_future - I.*thetadot_current - h.*cross_product;
 %-------------------------------------------------------------------------
 %       Kinematics Constraint
+%           Move to tensor-based formulation to speed up computation and
+%           problem formulation --> Ask Chris and Theo
+%-------------------------------------------------------------------------
 %       R = [cos(theta), -sin(theta);
 %            sin(theta), cos(theta)]
 %************************************************************
