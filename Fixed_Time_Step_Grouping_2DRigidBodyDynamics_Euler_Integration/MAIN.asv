@@ -486,7 +486,7 @@ bdyn = [bx_pos_dyn;bx_vel_dyn;by_pos_dyn;by_vel_dyn;btheta_pos_dyn;bPFx_dyn;bPFy
 APFy_Con1 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     APFy_Con1(k+1,find(names == strcat('PFy',num2str(k)))) = 1;
-    APFy_Con1(k+1,find(names == strcat('CF',num2str(floor(k/NumLocalTimeSteps)+1)))) = Mpos_y;
+    APFy_Con1(k+1,find(names == strcat('CF',num2str(floor(k/NumLocalTimesteps)+1)))) = Mpos_y;
 end
 %                   Build B matrix
 bPFy_Con1 = repmat(height + Mpos_y, size(APFy_Con1,1),1);
@@ -512,7 +512,7 @@ TypePFy_Con2 = repmat(1,size(APFy_Con2,1),1);%-1 <=, 0 ==, 1 >=
 APFxdot_Con1 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     APFxdot_Con1(k+1,find(names == strcat('PFxdot',num2str(k)))) = 1;
-    APFxdot_Con1(k+1,find(names == strcat('CF',num2str(floor(k/NumLocalTimeSteps)+1)))) = Mvel;
+    APFxdot_Con1(k+1,find(names == strcat('CF',num2str(floor(k/NumLocalTimesteps)+1)))) = Mvel;
 end
 %                       Build b vector
 bPFxdot_Con1 = repmat(Mvel,size(APFxdot_Con1,1),1);
@@ -524,7 +524,7 @@ TypePFxdot_Con1 = repmat(-1,size(APFxdot_Con1,1),1); %-1 <=, 0 ==, 1 >=
 APFxdot_Con2 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     APFxdot_Con2(k+1,find(names == strcat('PFxdot',num2str(k)))) = 1;
-    APFxdot_Con2(k+1,find(names == strcat('CF',num2str(floor(k/NumLocalTimeSteps)+1)))) = -Mvel;
+    APFxdot_Con2(k+1,find(names == strcat('CF',num2str(floor(k/NumLocalTimesteps)+1)))) = -Mvel;
 end
 %                       Build b vector
 bPFxdot_Con2 = repmat(-Mvel,size(APFxdot_Con2,1),1);
@@ -538,7 +538,7 @@ TypePFxdot_Con2 = repmat(1,size(APFxdot_Con2,1),1);%-1 <=, 0 ==, 1 >=
 APFydot_Con1 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     APFydot_Con1(k+1,find(names == strcat('PFydot',num2str(k)))) = 1;
-    APFydot_Con1(k+1,find(names == strcat('CF', num2str(floor(k/NumLocalTimeSteps)+1)))) = Mvel;
+    APFydot_Con1(k+1,find(names == strcat('CF', num2str(floor(k/NumLocalTimesteps)+1)))) = Mvel;
 end
 %                       Build b vector
 bPFydot_Con1 = repmat(Mvel,size(APFydot_Con1,1),1);
@@ -550,7 +550,7 @@ TypePFydot_Con1 = repmat(-1,size(APFydot_Con1,1),1); %-1 <=, 0 ==, 1 >=
 APFydot_Con2 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     APFydot_Con2(k+1,find(names == strcat('PFydot',num2str(k)))) = 1;
-    APFydot_Con2(k+1,find(names == strcat('CF', num2str(floor(k/NumLocalTimeSteps)+1)))) = -Mvel;
+    APFydot_Con2(k+1,find(names == strcat('CF', num2str(floor(k/NumLocalTimesteps)+1)))) = -Mvel;
 end
 %                       Build b vector
 bPFydot_Con2 = repmat(-Mvel,size(APFydot_Con2,1),1);
@@ -566,7 +566,7 @@ TypePFydot_Con2 = repmat(1,size(APFydot_Con2,1),1);%-1 <=, 0 ==, 1 >=
 AFFx_Con1 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     AFFx_Con1(k+1,find(names == strcat('FFx',num2str(k)))) = 1;
-    AFFx_Con1(k+1,find(names == strcat('CF', num2str(floor(k/NumLocalTimeSteps)+1))))  = -Mfx;
+    AFFx_Con1(k+1,find(names == strcat('CF', num2str(floor(k/NumLocalTimesteps)+1))))  = -Mfx;
 end
 %                       Build b vector
 bFFx_Con1 = zeros(size(AFFx_Con1,1),1);
@@ -578,7 +578,7 @@ TypeFFx_Con1 = repmat(-1,size(AFFx_Con1,1),1);%-1 <=, 0 ==, 1 >=
 AFFx_Con2 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     AFFx_Con2(k+1,find(names == strcat('FFx',num2str(k)))) = 1;
-    AFFx_Con2(k+1,find(names == strcat('CF', num2str(floor(k/NumLocalTimeSteps)+1))))  = Mfx;
+    AFFx_Con2(k+1,find(names == strcat('CF', num2str(floor(k/NumLocalTimesteps)+1))))  = Mfx;
 end
 %                       Build b vector
 bFFx_Con2 = zeros(size(AFFx_Con2,1),1);
@@ -592,7 +592,7 @@ TypeFFx_Con2 = repmat(1,size(AFFx_Con2,1),1);%-1 <=, 0 ==, 1 >=
 AFFy_Con1 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     AFFy_Con1(k+1,find(names == strcat('FFy',num2str(k)))) = 1;
-    AFFy_Con1(k+1,find(names == strcat('CF', num2str(floor(k/NumLocalTimeSteps)+1)))) = -Mfy;
+    AFFy_Con1(k+1,find(names == strcat('CF', num2str(floor(k/NumLocalTimesteps)+1)))) = -Mfy;
 end
 %                       Build b vector
 bFFy_Con1 = zeros(size(AFFy_Con1,1),1);
@@ -619,7 +619,7 @@ TypeFFy_Con2 = repmat(1,size(AFFy_Con2,1),1);
 APHy_Con1 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     APHy_Con1(k+1,find(names == strcat('PHy',num2str(k)))) = 1;
-    APHy_Con1(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimeSteps)+1)))) = Mpos_y;
+    APHy_Con1(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = Mpos_y;
 end
 %                   Build B matrix
 bPHy_Con1 = repmat(height + Mpos_y, size(APHy_Con1,1),1);
@@ -645,7 +645,7 @@ TypePHy_Con2 = repmat(1,size(APHy_Con2,1),1);%-1 <=, 0 ==, 1 >=
 APHxdot_Con1 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     APHxdot_Con1(k+1,find(names == strcat('PHxdot',num2str(k)))) = 1;
-    APHxdot_Con1(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimeSteps)+1)))) = Mvel;
+    APHxdot_Con1(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = Mvel;
 end
 %                       Build b vector
 bPHxdot_Con1 = repmat(Mvel,size(APHxdot_Con1,1),1);
@@ -657,7 +657,7 @@ TypePHxdot_Con1 = repmat(-1,size(APHxdot_Con1,1),1); %-1 <=, 0 ==, 1 >=
 APHxdot_Con2 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
     APHxdot_Con2(k+1,find(names == strcat('PHxdot',num2str(k)))) = 1;
-    APHxdot_Con2(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimeSteps)+1)))) = -Mvel;
+    APHxdot_Con2(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = -Mvel;
 end
 %                       Build b vector
 bPHxdot_Con2 = repmat(-Mvel,size(APHxdot_Con2,1),1);
@@ -670,8 +670,8 @@ TypePHxdot_Con2 = repmat(1,size(APHxdot_Con2,1),1);%-1 <=, 0 ==, 1 >=
 %                       Build A matrix
 APHydot_Con1 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
-    APHydot_Con1(k+1,find(names == strcat('PHydot',num2str(k)))) = 1;
-    APHydot_Con1(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimeSteps)+1)))) = Mvel;
+    APHydot_Con1(k,find(names == strcat('PHydot',num2str(k)))) = 1;
+    APHydot_Con1(k,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = Mvel;
 end
 %                       Build b vector
 bPHydot_Con1 = repmat(Mvel,size(APHydot_Con1,1),1);
@@ -682,8 +682,8 @@ TypePHydot_Con1 = repmat(-1,size(APHydot_Con1,1),1); %-1 <=, 0 ==, 1 >=
 %                       Build A matrix
 APHydot_Con2 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
-    APHydot_Con2(k+1,find(names == strcat('PHydot',num2str(k)))) = 1;
-    APHydot_Con2(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimeSteps)+1)))) = -Mvel;
+    APHydot_Con2(k,find(names == strcat('PHydot',num2str(k)))) = 1;
+    APHydot_Con2(k,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = -Mvel;
 end
 %                       Build b vector
 bPHydot_Con2 = repmat(-Mvel,size(APHydot_Con2,1),1);
@@ -698,8 +698,8 @@ TypePHydot_Con2 = repmat(1,size(APHydot_Con2,1),1);%-1 <=, 0 ==, 1 >=
 %                       Build A matrix
 AFHx_Con1 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
-    AFHx_Con1(k+1,find(names == strcat('FHx',num2str(k)))) = 1;
-    AFHx_Con1(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimeSteps)+1)))) = -Mfx;
+    AFHx_Con1(k,find(names == strcat('FHx',num2str(k)))) = 1;
+    AFHx_Con1(k,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = -Mfx;
 end
 %                       Build b vector
 bFHx_Con1 = zeros(size(AFHx_Con1,1),1);
@@ -710,8 +710,8 @@ TypeFHx_Con1 = repmat(-1,size(AFHx_Con1,1),1);%-1 <=, 0 ==, 1 >=
 %                       Build A matrix
 AFHx_Con2 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
-    AFHx_Con2(k+1,find(names == strcat('FHx',num2str(k)))) = 1;
-    AFHx_Con2(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimeSteps)+1)))) = Mfx;
+    AFHx_Con2(k,find(names == strcat('FHx',num2str(k)))) = 1;
+    AFHx_Con2(k,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = Mfx;
 end
 %                       Build b vector
 bFHx_Con2 = zeros(size(AFHx_Con2,1),1);
@@ -724,8 +724,8 @@ TypeFHx_Con2 = repmat(1,size(AFHx_Con2,1),1);%-1 <=, 0 ==, 1 >=
 %                       Build A matrix
 AFHy_Con1 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
-    AFHy_Con1(k+1,find(names == strcat('FHy',num2str(k)))) = 1;
-    AFHy_Con1(k+1,find(names == strcat('CH', num2str(floor(k/NumLocalTimeSteps)+1)))) = -Mfy;
+    AFHy_Con1(k,find(names == strcat('FHy',num2str(k)))) = 1;
+    AFHy_Con1(k,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = -Mfy;
 end
 %                       Build b vector
 bFHy_Con1 = zeros(size(AFHy_Con1,1),1);
@@ -736,7 +736,7 @@ TypeFHy_Con1 = repmat(-1,size(AFHy_Con1,1),1);%-1 <=, 0 ==, 1 >=
 %                       Build A matrix
 AFHy_Con2 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
-    AFHy_Con2(k+1,find(names == strcat('FHy',num2str(k)))) = 1;
+    AFHy_Con2(k,find(names == strcat('FHy',num2str(k)))) = 1;
 end
 %                       Build b vector
 bFHy_Con2 = zeros(size(AFHy_Con2,1),1);
