@@ -697,9 +697,9 @@ TypePHydot_Con2 = repmat(1,size(APHydot_Con2,1),1);%-1 <=, 0 ==, 1 >=
 %                       1st Constraint: FHx <= 0 + Mfx*CH -> FHx - Mfx*CH <= 0
 %                       Build A matrix
 AFHx_Con1 = zeros(TimeSeriesLength-1,namesLength);
-for k = 0:TimeSeriesLength-2
-    AFHx_Con1(k,find(names == strcat('FHx',num2str(k)))) = 1;
-    AFHx_Con1(k,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = -Mfx;
+for k = 1:CHLength
+    AFHx_Con1(k,find(names == strcat('FHx',num2str(k-1)))) = 1;
+    AFHx_Con1(k,find(names == strcat('CH',num2str(k-1))))  = -Mfx;
 end
 %                       Build b vector
 bFHx_Con1 = zeros(size(AFHx_Con1,1),1);
@@ -708,10 +708,10 @@ TypeFHx_Con1 = repmat(-1,size(AFHx_Con1,1),1);%-1 <=, 0 ==, 1 >=
 %---------------------------------------------------------------
 %                       2nd Constraint: FHx >= 0 - Mfx*CH -> FHx + Mfx*CH >= 0
 %                       Build A matrix
-AFHx_Con2 = zeros(TimeSeriesLength-1,namesLength);
-for k = 0:TimeSeriesLength-2
-    AFHx_Con2(k,find(names == strcat('FHx',num2str(k)))) = 1;
-    AFHx_Con2(k,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = Mfx;
+AFHx_Con2 = zeros(CHLength,namesLength);
+for k = 1:CHLength
+    AFHx_Con2(k,find(names == strcat('FHx',num2str(k-1)))) = 1;
+    AFHx_Con2(k,find(names == strcat('CH',num2str(k-1))))  = Mfx;
 end
 %                       Build b vector
 bFHx_Con2 = zeros(size(AFHx_Con2,1),1);
@@ -722,10 +722,10 @@ TypeFHx_Con2 = repmat(1,size(AFHx_Con2,1),1);%-1 <=, 0 ==, 1 >=
 %---------------------------------------------------------------
 %                       1st Constraint: FHy <= 0 + Mfy*CH -> FHy - Mfy*CH <= 0
 %                       Build A matrix
-AFHy_Con1 = zeros(TimeSeriesLength-1,namesLength);
-for k = 0:TimeSeriesLength-2
-    AFHy_Con1(k,find(names == strcat('FHy',num2str(k)))) = 1;
-    AFHy_Con1(k,find(names == strcat('CH', num2str(floor(k/NumLocalTimesteps)+1)))) = -Mfy;
+AFHy_Con1 = zeros(CHLength,namesLength);
+for k = 1:CHLength
+    AFHy_Con1(k,find(names == strcat('FHy',num2str(k-1)))) = 1;
+    AFHy_Con1(k,find(names == strcat('CH',num2str(k-1)))) = -Mfy;
 end
 %                       Build b vector
 bFHy_Con1 = zeros(size(AFHy_Con1,1),1);
@@ -734,9 +734,9 @@ TypeFHy_Con1 = repmat(-1,size(AFHy_Con1,1),1);%-1 <=, 0 ==, 1 >=
 %---------------------------------------------------------------
 %                       2nd Constraint: FHy >= 0
 %                       Build A matrix
-AFHy_Con2 = zeros(TimeSeriesLength-1,namesLength);
-for k = 0:TimeSeriesLength-2
-    AFHy_Con2(k,find(names == strcat('FHy',num2str(k)))) = 1;
+AFHy_Con2 = zeros(CHLength,namesLength);
+for k = 1:CHLength
+    AFHy_Con2(k,find(names == strcat('FHy',num2str(k-1)))) = 1;
 end
 %                       Build b vector
 bFHy_Con2 = zeros(size(AFHy_Con2,1),1);
