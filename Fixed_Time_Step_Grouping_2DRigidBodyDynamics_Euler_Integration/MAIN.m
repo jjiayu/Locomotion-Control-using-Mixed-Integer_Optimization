@@ -39,32 +39,18 @@ g = 9.80665; %m/s^2
 
 %==========================================================
 %Time Step Parameter Settings
-NumTimeSteps = 20; %number of time steps
 h = 0.05; %Time Step in seconds
+NumTimeSteps = 20; %number of time steps
 NumPhases = 4; %Number of Phases
+if mod(NumTimeSteps,NumPhases) ~= 0
+    ME_NumLocalTimeSteps = MException('Initialization:NumofLocalTimeSteps','Number of Time Steps for Each Phase is not an Integer');
+    throw(ME_NumLocalTimeSteps)
+end
 NumLocalTimeSteps = NumTimeSteps/NumPhases; %Number of local time steps for each phase
 EndTime = h*NumTimeSteps; %in seconds
 % missing checking the endtime is the multiple of the time step
 TimeSeries = 0:h:EndTime;
 TimeSeriesLength = length(TimeSeries);
-%=========================================================
-
-%=========================================================
-%Initial Conditions
-x_init = 0;
-y_init = 0.4; %0.2
-theta_init = 0;
-xdot_init = 0;
-ydot_init = 0;
-thetadot_init = 0;
-%---------------------------------------------------------
-%Terminal Conditionsconsta
-x_end = 0.5; %20
-y_end = 0.4; %0.2
-theta_end = 0;
-xdot_end = 0;
-ydot_end = 0;
-thetadot_end = 0;
 %=========================================================
 
 %=========================================================
@@ -97,6 +83,38 @@ BoundingBox_Height= 0.3;
 BoundingBox = [BoundingBox_Width,BoundingBox_Height]';
 %==========================================================
 
+%=========================================================
+%Initial Conditions
+x_init = 0;
+y_init = 1/2*BodyHeight + Default_Leg_Length; %0.4
+theta_init = 0;
+xdot_init = 0;
+ydot_init = 0;
+thetadot_init = 0;
+%---------------------------------------------------------
+%Terminal Conditionsconsta
+x_end = 0.5; %20
+y_end = 1/2*BodyHeight + Default_Leg_Length; %0.4
+theta_end = 0;
+xdot_end = 0;
+ydot_end = 0;
+thetadot_end = 0;
+%---------------------------------------------------------
+%Test if initial and terminal conditions meet kinematics constraint
+%robot height should set in a way that the highest foot position is not
+%under the terrain height, otherwise conflicts with complementarity
+%constraint
+if (y_init - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
+    ME_InitHeight = MException('Initialization:ProblematicInitialHeight','Initial Hight Error (y_init), Increase Initial Height');
+    throw(ME_InitHeight)
+end
+
+if (y_end - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
+    ME_TerminalHeight = MException('Initialization:ProblematicTerminalHeight','Terminal Hight Error (y_end), Increase Terminal Height');
+    throw(ME_TerminalHeight)
+end
+%=========================================================
+
 %==========================================================
 %Settings for Matrix Sparsity
 %----------------------------------------------------------
@@ -109,7 +127,8 @@ if Q_Sparsity == 1
 elseif Q_Sparsity == 0
     disp('Q matrix in the Cost Function is Non-Sparse')
 else
-    disp('Wrong Settings of Q Matrix Sparsity !')
+    ME_QSparsity = MException('Initialization:QMatrixSparsity','Wrong Setings of Q Matrix Sparsity');
+    throw(ME_QSparsity)
 end
 
 if A_Sparsity == 1
@@ -117,7 +136,8 @@ if A_Sparsity == 1
 elseif A_Sparsity == 0
     disp('A matrix for Constraints is Non-Sparse')
 else
-    disp('Wrong Settings of A Matrix Sparsity !')
+    ME_ASparsity = MException('Initialization:AMatrixSparsity','Wrong Setings of A Matrix Sparsity');
+    throw(ME_ASparsity)
 end
 disp(' ')
 %----------------------------------------------------------
@@ -140,7 +160,8 @@ if SoftTerminalConstraint == 1
 elseif SoftTerminalConstraint == 0
     disp('Terminal Condition is Set as Hard Constraints')
 else
-    disp('Wrong Settings of on/off of Soft/Hard Constraint Formulation of Terminal Conditions !')
+    ME_TerminalCondition = MException('Initialization:TerminalCondition','Wrong Settings of on/off of Soft/Hard Constraint Formulation of Terminal Conditions');
+    throw(ME_TerminalCondition)
 end
 disp(' ')
 %==========================================================
