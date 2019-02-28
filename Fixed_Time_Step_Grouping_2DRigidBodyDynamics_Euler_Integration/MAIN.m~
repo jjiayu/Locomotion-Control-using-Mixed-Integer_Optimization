@@ -747,13 +747,11 @@ bFHy_Con1 = zeros(size(AFHy_Con1,1),1);
 %                       Setup Constraint Type
 TypeFHy_Con1 = repmat(-1,size(AFHy_Con1,1),1);%-1 <=, 0 ==, 1 >=
 %---------------------------------------------------------------
-%                       2nd Constraint: FHy >= 0 /
-%                       [Fhx,Fhy]'*[TerrainNormx,TerrainNormy] >= 0
+%                       2nd Constraint: FHy >= 0
 %                       Build A matrix
 AFHy_Con2 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
-    AFHy_Con2(k+1,find(names == strcat('FHx',num2str(k)))) = TerrainNorm(1);
-    AFHy_Con2(k+1,find(names == strcat('FHy',num2str(k)))) = TerrainNorm(2);
+    AFHy_Con2(k+1,find(names == strcat('FHy',num2str(k)))) = 1;
 end
 %                       Build b vector
 bFHy_Con2 = zeros(size(AFHy_Con2,1),1);
