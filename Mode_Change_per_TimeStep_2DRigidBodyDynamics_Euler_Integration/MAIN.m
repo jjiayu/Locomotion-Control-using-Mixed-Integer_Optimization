@@ -1,20 +1,7 @@
 % Mixed-Integer Nonlinear Optimization in 2D Case (Planar Cheetah)
 % Mode Selection described as foot-ground contact changes 0/1
 
-%Note:
-%-----------------------------------------------------------------------------------
-%Note 1:
-%Control Input has the same length with states --> u_1:N and x_1:N, but
-%dynamics constraint only acts from time step 0 to N-1 (in other words, only u_1:N-1 are useful)
-%But currently u_N is included in the cost function which has no effects of the final
-%result
-%u_N will be useful when higher order quadrature method is used
-%(trapzoidal), then we need to check all indice in cost functions and
-%constraints (ALL! dynamic constraint, kinematics constraint, complementarity constraint...,check all constraint)
-%-----------------------------------------------------------------------------------
-%Note 2:
-%For the kienmatics constraint, we can use tensor-based formualtion to
-%speed up computation time and simplfy the program -->Ask Chris and Theo
+%Check Readme for notes and future improvements
 
 clear;
 clc;
