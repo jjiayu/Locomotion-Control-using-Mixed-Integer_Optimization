@@ -28,6 +28,7 @@ g = 9.80665; %m/s^2
 %Environment Information
 TerrainHeight = 0; %terrain height
 TerrainNorm = [0,1];
+miu = 0.5; %friction coefficient
 %==========================================================
 
 %==========================================================
@@ -941,7 +942,8 @@ if solver == "knitro"
                                  FHyIdx_init,FHyIdx_end,...
                                  PFcenterX,PFcenterY,...
                                  PHcenterX,PHcenterY,...
-                                 BoundingBox_Width,BoundingBox_Height);
+                                 BoundingBox_Width,BoundingBox_Height,...
+                                 TerrainNorm,miu);
 %-------------------------------------------------------------
     %other parameters
     objFnType = 0;

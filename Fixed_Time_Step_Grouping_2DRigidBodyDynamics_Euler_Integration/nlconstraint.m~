@@ -16,7 +16,7 @@
                                     PFcenterX,PFcenterY,...
                                     PHcenterX,PHcenterY,...
                                     BoundingBox_Width,BoundingBox_Height,...
-                                    TerrainNorm,miu)
+                                    TerrainNorm)
 %   OUTPUT
 %       c: nonlinear inequality constraint
 %       ceq: nonlinear equality constraint
@@ -105,19 +105,12 @@ KineCon = [FrontLegKine1;FrontLegKine2;FrontLegKine3;FrontLegKine4;...
 %       Friction Cone
 %-------------------------------------------------------------------------
 %           Front Leg
-%               sqrt(FFx^2 + FFy^2) <= miu*f_n, f_n = [FFx,FFy]'*[TerrainNormx,TerrainNormy]
-%               sqrt(FFx^2 + FFy^2) - miu*f_n <= 0
-FrictionFrontLeg = sqrt(FFx.^2 + FFy.^2) - miu.*(TerrainNorm(1).*FFx + TerrainNorm(2).*FFy);
+sqrt(FFx.^2+FFy.^2) - miu.*(TerrainNorm(1)*FFx+TerrainNorm(2).*FFy)
 %-------------------------------------------------------------------------
 %           Hind Leg
-%               sqrt(FHx^2 + FHy^2) <= miu*f_n, f_n = [FHx,FHy]'*[TerrainNormx,TerrainNormy]
-%               sqrt(FHx^2 + FHy^2) - miu*f_n <= 0
-FrictionHindLeg = sqrt(FHx.^2 + FHy.^2) - miu.*(TerrainNorm(1).*FHx + TerrainNorm(2).*FHy);
-%-------------------------------------------------------------------------
-%   Collect Friction Cone Constraint
-FrictionCone = [FrictionFrontLeg;FrictionHindLeg];
 
-c = [KineCon;FrictionCone];
+
+c = [KineCon];
 ceq = [ceq_rotation_dynamics];
 %ceq = [];
 
