@@ -12,6 +12,8 @@
 
 - For phase-based formulation, particularly the formulation that each phase has same number of time steps, the dynamics, kinematics and complementarity constraints are not enforced on the last time step (tf), because we are using Euler Integration that the control and foot step location of last time step has no effects on the state trajectory.
 
+- Friction Cone formulation is different in 2D and 3D case. 2D case is a linear friction cone where 3D case is nonlinear.
+
 
 ## Trouble Shooting
 

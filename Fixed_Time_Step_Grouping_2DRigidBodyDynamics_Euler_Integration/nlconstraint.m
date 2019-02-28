@@ -105,14 +105,16 @@ KineCon = [FrontLegKine1;FrontLegKine2;FrontLegKine3;FrontLegKine4;...
 %       Friction Cone
 %-------------------------------------------------------------------------
 %           Front Leg
-%               sqrt(FFx^2 + FFy^2) <= miu*f_n, f_n = [FFx,FFy]'*[TerrainNormx,TerrainNormy]
+%               sqrt(FFx^2 + FFy^2) <= miu*f_n, f_n =
+%               [FFx,FFy]'*[TerrainNormx,TerrainNormy] ---> in 3D
 %               sqrt(FFx^2 + FFy^2) - miu*f_n <= 0
-FrictionFrontLeg = sqrt(FFx.^2 + FFy.^2) - miu.*(TerrainNorm(1).*FFx + TerrainNorm(2).*FFy);
+FrictionFrontLeg = FFx - miu.*(TerrainNorm(1).*FFx + TerrainNorm(2).*FFy);
 %-------------------------------------------------------------------------
 %           Hind Leg
-%               sqrt(FHx^2 + FHy^2) <= miu*f_n, f_n = [FHx,FHy]'*[TerrainNormx,TerrainNormy]
+%               sqrt(FHx^2 + FHy^2) <= miu*f_n, f_n =
+%               [FHx,FHy]'*[TerrainNormx,TerrainNormy] ---> in 3D
 %               sqrt(FHx^2 + FHy^2) - miu*f_n <= 0
-FrictionHindLeg = sqrt(FHx.^2 + FHy.^2) - miu.*(TerrainNorm(1).*FHx + TerrainNorm(2).*FHy);
+FrictionHindLeg = FHx - miu.*(TerrainNorm(1).*FHx + TerrainNorm(2).*FHy);
 %-------------------------------------------------------------------------
 %   Collect Friction Cone Constraint
 FrictionCone = [FrictionFrontLeg;FrictionHindLeg];
