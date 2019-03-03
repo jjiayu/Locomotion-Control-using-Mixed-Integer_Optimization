@@ -34,8 +34,12 @@ miu = 0.5; %friction coefficient
 %==========================================================
 %Time Step Parameter Settings
 h = 0.05; %Time Step in seconds
-NumTimeSteps = 20; %number of time steps
-NumPhases = 4; %Number of Phases
+NumTimeSteps = input('Input Number of Time Steps (e.g. 20): \n');
+disp(' ');
+NumPhases = input('Input Number of Phases (type the same value with number of time steps if we want to allow mode change per time step): \n');
+disp(' ');
+%NumTimeSteps = 20; %number of time steps
+%NumPhases = 4; %Number of Phases
 if mod(NumTimeSteps,NumPhases) ~= 0
     ME_NumLocalTimeSteps = MException('Initialization:NumofLocalTimeSteps','Number of Time Steps for Each Phase is not an Integer');
     throw(ME_NumLocalTimeSteps)
