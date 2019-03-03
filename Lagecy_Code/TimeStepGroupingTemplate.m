@@ -1,7 +1,7 @@
 %Time Step Grouping (Each Phase has Fixed Number of Time Steps) Template
 
 NumTimeSteps = 20;
-NumPhases = 4;
+NumPhases = 20;
 h = 0.05;
 TimeSeries = 0:h:h*NumTimeSteps;
 TimeSeriesLength = length(TimeSeries);
