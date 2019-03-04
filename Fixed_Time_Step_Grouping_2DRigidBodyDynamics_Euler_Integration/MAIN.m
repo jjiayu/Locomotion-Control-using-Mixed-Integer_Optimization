@@ -91,7 +91,9 @@ ydot_init = 0;
 thetadot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditionsconsta
-x_end = 0.5; %20
+x_end = input('Input Goal State (Travel Distance e.g. 0.5): \n');
+disp(' ');
+%x_end = 0.5; %20
 y_end = 1/2*BodyHeight + Default_Leg_Length; %0.4
 theta_end = 0;
 xdot_end = 0;
