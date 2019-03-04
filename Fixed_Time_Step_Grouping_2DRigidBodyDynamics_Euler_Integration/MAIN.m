@@ -9,11 +9,15 @@ clc;
 %========================================================
 %Command Line Logging
 diary off
-dairy_filename = strcat('log', datestr(datetime('now')));
-diary dairy_filename
+dairy_filename = strcat('log-', datestr(datetime('now'),30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+diary(dairy_filename);
 
 %=========================================================
 %Display Script Information
+disp('Date and Time:');
+disp(datetime('now'));
+disp(['Correspond Log File Name: ', dairy_filename]);
+disp(' ');
 disp('Locomotion Control with Mixed-integer Nonlinear Optimization in 2D')
 disp('Time Step Grouping Script - All the Phases have the same Number of Time Steps')
 disp(' ')
