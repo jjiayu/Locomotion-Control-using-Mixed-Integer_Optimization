@@ -6,6 +6,18 @@
 clear;
 clc;
 
+%========================================================
+%Command Line Logging
+diary off
+dairy_filename = strcat('log', datestr(datetime('now')));
+diary dairy_filename
+
+%=========================================================
+%Display Script Information
+disp('Locomotion Control with Mixed-integer Nonlinear Optimization in 2D')
+disp('Time Step Grouping Script - All the Phases have the same Number of Time Steps')
+disp(' ')
+
 %==========================================================
 %Add solvers' Path
 %Knitro
@@ -983,6 +995,9 @@ else
     disp("Unknown solver");
     disp{" "}
 end
+
+%Close command line logging
+diary off
 %%
 %========================================================================
 %Extract Input Results
@@ -1027,4 +1042,3 @@ FrontTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_resul
 HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
 
 NetTorque = FrontTorque_result + HindTorque_result;
-
