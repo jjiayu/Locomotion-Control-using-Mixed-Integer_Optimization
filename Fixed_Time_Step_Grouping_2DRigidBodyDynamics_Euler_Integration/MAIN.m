@@ -9,14 +9,14 @@ clc;
 %========================================================
 %Command Line Logging
 diary off
-dairy_filename = strcat('log-', datestr(datetime('now'),30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
-diary(dairy_filename);
+diary_filename = strcat('log-', datestr(datetime('now'),30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+diary(diary_filename);
 
 %=========================================================
 %Display Script Information
 disp('Date and Time:');
 disp(datetime('now'));
-disp(['Correspond Log File Name: ', dairy_filename]);
+disp(['Correspond Log File Name: ', diary_filename]);
 disp(' ');
 disp('Locomotion Control with Mixed-integer Nonlinear Optimization in 2D')
 disp('Time Step Grouping Script - All the Phases have the same Number of Time Steps')
@@ -49,8 +49,10 @@ miu = 0.5; %friction coefficient
 
 %==========================================================
 %Time Step Parameter Settings
-h = 0.05; %Time Step in seconds
+%h = 0.05; %Time Step in seconds
 NumTimeSteps = input('Input Number of Time Steps (e.g. 20): \n');
+disp(' ');
+h = input('Input Size of Time Steps (e.g. 0.05): \n');
 disp(' ');
 NumPhases = input('Input Number of Phases (type the same value with number of time steps if we want to allow mode change per time step): \n');
 disp(' ');
