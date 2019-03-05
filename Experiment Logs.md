@@ -11,3 +11,8 @@ Experiment setup:
 - Goal Position: 0.8
 
 Round 1 - log-20190304T193157 (find correspodning command line log file and workspace data file)
+Round 2 - log-20190305T132720
+
+Computation Time: Converged with similar time
+Final Solution: Very Different
+Final Cost: Exactly the same
