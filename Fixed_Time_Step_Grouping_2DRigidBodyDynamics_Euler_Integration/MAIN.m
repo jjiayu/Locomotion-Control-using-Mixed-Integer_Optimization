@@ -1050,3 +1050,10 @@ FrontTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_resul
 HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
 
 NetTorque = FrontTorque_result + HindTorque_result;
+
+%Foot Bounding Box Result
+PFcenterX_result_world = x_result + cos(theta_result)*PFcenterX - sin(theta_result)*PFcenterY;
+PFcenterY_result_world = y_result + sin(theta_result)*PFcenterX + cos(theta_result)*PFcenterY;
+
+PHcenterX_result_world = x_result + cos(theta_result)*PHcenterX - sin(theta_result)*PHcenterY;
+PHcenterY_result_world = y_result + sin(theta_result)*PHcenterX + cos(theta_result)*PHcenterY;
