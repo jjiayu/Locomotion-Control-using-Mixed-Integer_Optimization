@@ -1,0 +1,100 @@
+Date and Time:
+   12-Mar-2019 13:38:11
+
+Correspondent Log File Name: log-20190312T133811
+ 
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+MultiPhase Formulation: Optimize over States, Control Inputs and Switching Times
+ 
+[Warning: Name is nonexistent or not a directory: /Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/C] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m',109,0)">line 109</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m',86,0)">line 86</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 29)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',29,0)">line 29</a>)] 
+[Warning: Name is nonexistent or not a directory: /Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/\Program
+Files\Artelys\Knitro 11.1.0\knitromatlab] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m',109,0)">line 109</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m',86,0)">line 86</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 29)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',29,0)">line 29</a>)] 
+Knots/Time Parameter tau Setup:
+Good Example Setups: Number of Knots = 20 or 100 (Knot Step Length = tau_upper_limit/Number of Knots, tau_upper_limit = 1), Num of Phases: 4 or 5
+Results in uniform tau discretization length
+ 
+Input Number of Knots/Discretization of Time/parameter tau (e.g. 20): 
+20
+ 
+Input Number of Phases (e.g. 4, all phases have the same number of knots), larger the number of phases, more difficult for the solver to solve the problem (more integer variables): 
+4
+ 
+Input Goal State (Travel Distance e.g. 0.5): 
+0.5
+ 
+Q matrix in the Cost Function is Sparse
+A matrix for Constraints is Sparse
+ 
+Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function 
+0
+Terminal Condition is Set as Hard Constraints
+ 
+xIdx_end-xIdx_init + 1 
+
+ans =
+
+    21
+
+names(xIdx_end)
+
+ans = 
+
+    "x20"
+
+names(xIdx_end-1)
+
+ans = 
+
+    "x19"
+
+names(xIdx_end-5)
+
+ans = 
+
+    "x15"
+
+LengthList
+
+LengthList =
+
+    21    21    21    21    21    21    21    21    21    21    21    21    21    21    21    21    21    21     4     4     4
+
+varList
+
+varList = 
+
+  1×21 <a href="matlab:helpPopup string" style="font-weight:bold">string</a> array
+
+  Columns 1 through 15
+
+    "x"    "y"    "theta"    "xdot"    "ydot"    "thetadot"    "PFx"    "PFy"    "PFxdot"    "PFydot"    "PHx"    "PHy"    "PHxdot"    "PHydot"    "FFx"
+
+  Columns 16 through 21
+
+    "FFy"    "FHx"    "FHy"    "SwitchingTime"    "CF"    "CH"
+
+length(LengthList)
+
+ans =
+
+    21
+
+length(varList)
+
+ans =
+
+    21
+
+tauSeriesLength
+
+tauSeriesLength =
+
+    21
+
+MultiPhaseMAIN

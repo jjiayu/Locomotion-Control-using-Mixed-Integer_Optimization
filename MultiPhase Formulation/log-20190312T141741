@@ -1,0 +1,214 @@
+Date and Time:
+   12-Mar-2019 14:17:41
+
+Correspondent Log File Name: log-20190312T141741
+ 
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+MultiPhase Formulation: Optimize over States, Control Inputs and Switching Times
+ 
+[Warning: Name is nonexistent or not a directory: /Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/C] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m',109,0)">line 109</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m',86,0)">line 86</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 29)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',29,0)">line 29</a>)] 
+[Warning: Name is nonexistent or not a directory: /Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/\Program
+Files\Artelys\Knitro 11.1.0\knitromatlab] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m',109,0)">line 109</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m',86,0)">line 86</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 29)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',29,0)">line 29</a>)] 
+Knots/Time Parameter tau Setup:
+Good Example Setups: Number of Knots = 20 or 100 (Knot Step Length = tau_upper_limit/Number of Knots, tau_upper_limit = 1), Num of Phases: 4 or 5
+Results in uniform tau discretization length
+ 
+Input Number of Knots/Discretization of Time/parameter tau (e.g. 20): 
+20
+ 
+Input Number of Phases (e.g. 4, all phases have the same number of knots), larger the number of phases, more difficult for the solver to solve the problem (more integer variables): 
+4
+ 
+Input Goal State (Travel Distance e.g. 0.5): 
+0.5
+ 
+Q matrix in the Cost Function is Sparse
+A matrix for Constraints is Sparse
+ 
+Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function 
+0
+Terminal Condition is Set as Hard Constraints
+ 
+test = APFy_Con1(1,:)
+
+test =
+
+  Columns 1 through 26
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 27 through 52
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 53 through 78
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 79 through 104
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 105 through 130
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 131 through 156
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     1     0     0     0     0     0     0     0     0
+
+  Columns 157 through 182
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 183 through 208
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 209 through 234
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 235 through 260
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 261 through 286
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 287 through 312
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 313 through 338
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 339 through 364
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0
+
+  Columns 365 through 390
+
+     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0    50     0     0     0     0     0     0     0
+
+test(find(names == 'CF1'))
+
+ans =
+
+    50
+
+test(find(names == 'CF2'))
+
+ans =
+
+     0
+
+test(find(names == 'CF3'))
+
+ans =
+
+     0
+
+test(find(names == 'CF4'))
+
+ans =
+
+     0
+
+APFy_Con1(2,find(names == 'CF1'))
+
+ans =
+
+    50
+
+APFy_Con1(2,find(names == 'CF2'))
+
+ans =
+
+     0
+
+APFy_Con1(2,find(names == 'CF1'):find(names == 'CF4'))
+
+ans =
+
+    50     0     0     0
+
+APFy_Con1(2,find(names == 'CH1'):find(names == 'CH4'))
+
+ans =
+
+     0     0     0     0
+
+APFy_Con1(3,find(names == 'CF1'):find(names == 'CF4'))
+
+ans =
+
+    50     0     0     0
+
+APFy_Con1(4,find(names == 'CF1'):find(names == 'CF4'))
+
+ans =
+
+    50     0     0     0
+
+APFy_Con1(5,find(names == 'CF1'):find(names == 'CF4'))
+
+ans =
+
+    50     0     0     0
+
+APFy_Con1(6,find(names == 'CF1'):find(names == 'CF4'))
+
+ans =
+
+     0    50     0     0
+
+clc
+APFy_Con1(1:20,find(names == 'CF1'):find(names == 'CF4'))
+
+ans =
+
+    50     0     0     0
+    50     0     0     0
+    50     0     0     0
+    50     0     0     0
+    50     0     0     0
+     0    50     0     0
+     0    50     0     0
+     0    50     0     0
+     0    50     0     0
+     0    50     0     0
+     0     0    50     0
+     0     0    50     0
+     0     0    50     0
+     0     0    50     0
+     0     0    50     0
+     0     0     0    50
+     0     0     0    50
+     0     0     0    50
+     0     0     0    50
+     0     0     0    50
+
+names(1:20)
+
+ans = 
+
+  1×20 <a href="matlab:helpPopup string" style="font-weight:bold">string</a> array
+
+  Columns 1 through 18
+
+    "x0"    "x1"    "x2"    "x3"    "x4"    "x5"    "x6"    "x7"    "x8"    "x9"    "x10"    "x11"    "x12"    "x13"    "x14"    "x15"    "x16"    "x17"
+
+  Columns 19 through 20
+
+    "x18"    "x19"
+
+MultiPhaseMAIN
