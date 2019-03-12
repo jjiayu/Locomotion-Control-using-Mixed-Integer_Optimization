@@ -6,6 +6,22 @@
 clear;
 clc;
 
+%========================================================
+%Command Line Logging
+diary off
+diary_filename = strcat('log-', datestr(datetime('now'),30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+diary(diary_filename);
+
+%=========================================================
+%Display Script Information
+disp('Date and Time:');
+disp(datetime('now'));
+disp(['Correspond Log File Name: ', diary_filename]);
+disp(' ');
+disp('Locomotion Control with Mixed-integer Nonlinear Optimization in 2D')
+disp('Time Step Grouping Script - All the Phases have the same Number of Time Steps')
+disp(' ');
+
 %==========================================================
 %Add solvers' Path
 %Knitro
@@ -14,6 +30,8 @@ addpath('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab')
 %==========================================================
 %Choose Solver
 solver = "knitro";
+%Knitro Option File
+option_file = 'mipoptions_default.opt';
 %solver = "gurobi";
 %==========================================================
 
@@ -28,13 +46,20 @@ g = 9.80665; %m/s^2
 %Environment Information
 TerrainHeight = 0; %terrain height
 TerrainNorm = [0,1];
+miu = 0.5; %friction coefficient
 %==========================================================
 
 %==========================================================
 %Time Step Parameter Settings
-h = 0.05; %Time Step in seconds
-NumTimeSteps = 20; %number of time steps
-NumPhases = 4; %Number of Phases
+%h = 0.05; %Time Step in seconds
+NumTimeSteps = input('Input Number of Time Steps (e.g. 20): \n');
+disp(' ');
+h = input('Input Size of Time Steps (e.g. 0.05): \n');
+disp(' ');
+NumPhases = input('Input Number of Phases (type the same value with number of time steps if we want to allow mode change per time step): \n');
+disp(' ');
+%NumTimeSteps = 20; %number of time steps
+%NumPhases = 4; %Number of Phases
 if mod(NumTimeSteps,NumPhases) ~= 0
     ME_NumLocalTimeSteps = MException('Initialization:NumofLocalTimeSteps','Number of Time Steps for Each Phase is not an Integer');
     throw(ME_NumLocalTimeSteps)
@@ -86,7 +111,9 @@ ydot_init = 0;
 thetadot_init = 0;
 %---------------------------------------------------------
 %Terminal Conditionsconsta
-x_end = 0.5; %20
+x_end = input('Input Goal State (Travel Distance e.g. 0.5): \n');
+disp(' ');
+%x_end = 0.5; %20
 y_end = 1/2*BodyHeight + Default_Leg_Length; %0.4
 theta_end = 0;
 xdot_end = 0;
@@ -747,11 +774,13 @@ bFHy_Con1 = zeros(size(AFHy_Con1,1),1);
 %                       Setup Constraint Type
 TypeFHy_Con1 = repmat(-1,size(AFHy_Con1,1),1);%-1 <=, 0 ==, 1 >=
 %---------------------------------------------------------------
-%                       2nd Constraint: FHy >= 0
+%                       2nd Constraint: FHy >= 0 /
+%                       [Fhx,Fhy]'*[TerrainNormx,TerrainNormy] >= 0
 %                       Build A matrix
 AFHy_Con2 = zeros(TimeSeriesLength-1,namesLength);
 for k = 0:TimeSeriesLength-2
-    AFHy_Con2(k+1,find(names == strcat('FHy',num2str(k)))) = 1;
+    AFHy_Con2(k+1,find(names == strcat('FHx',num2str(k)))) = TerrainNorm(1);
+    AFHy_Con2(k+1,find(names == strcat('FHy',num2str(k)))) = TerrainNorm(2);
 end
 %                       Build b vector
 bFHy_Con2 = zeros(size(AFHy_Con2,1),1);
@@ -939,7 +968,8 @@ if solver == "knitro"
                                  FHyIdx_init,FHyIdx_end,...
                                  PFcenterX,PFcenterY,...
                                  PHcenterX,PHcenterY,...
-                                 BoundingBox_Width,BoundingBox_Height);
+                                 BoundingBox_Width,BoundingBox_Height,...
+                                 TerrainNorm,miu);
 %-------------------------------------------------------------
     %other parameters
     objFnType = 0;
@@ -967,12 +997,15 @@ if solver == "knitro"
 %-------------------------------------------------------------
     %call knitro
     options = optimset('Display','iter');
-    [result.x,result.objval,result.exitflag,optInfo] = knitromatlab_mip(objfunc,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,'mipoptions.opt');
+    [result.x,result.objval,result.exitflag,optInfo] = knitromatlab_mip(objfunc,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,option_file);
 %-------------------------------------------------------------
 else
     disp("Unknown solver");
     disp{" "}
 end
+
+%Close command line logging
+diary off
 %%
 %========================================================================
 %Extract Input Results
@@ -1018,3 +1051,9 @@ HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result
 
 NetTorque = FrontTorque_result + HindTorque_result;
 
+%Foot Bounding Box Result
+PFcenterX_result_world = x_result + cos(theta_result)*PFcenterX - sin(theta_result)*PFcenterY;
+PFcenterY_result_world = y_result + sin(theta_result)*PFcenterX + cos(theta_result)*PFcenterY;
+
+PHcenterX_result_world = x_result + cos(theta_result)*PHcenterX - sin(theta_result)*PHcenterY;
+PHcenterY_result_world = y_result + sin(theta_result)*PHcenterX + cos(theta_result)*PHcenterY;
