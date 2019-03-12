@@ -1,0 +1,146 @@
+Date and Time:
+   12-Mar-2019 13:22:39
+
+Correspondent Log File Name: log-20190312T132239
+ 
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+MultiPhase Formulation: Optimize over States, Control Inputs and Switching Times
+ 
+[Warning: Name is nonexistent or not a directory: /Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/C] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m',109,0)">line 109</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m',86,0)">line 86</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 29)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',29,0)">line 29</a>)] 
+[Warning: Name is nonexistent or not a directory: /Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/\Program
+Files\Artelys\Knitro 11.1.0\knitromatlab] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m',109,0)">line 109</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m',86,0)">line 86</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 29)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',29,0)">line 29</a>)] 
+Knots/Time Parameter tau Setup:
+Good Example Setups: Number of Knots = 20 or 100 (Knot Step Length = tau_upper_limit/Number of Knots, tau_upper_limit = 1), Num of Phases: 4 or 5
+Results in uniform tau discretization length
+ 
+Input Number of Knots/Discretization of Time/parameter tau (e.g. 20): 
+20
+ 
+Input Number of Phases (e.g. 4, all phases have the same number of knots), larger the number of phases, more difficult for the solver to solve the problem (more integer variables): 
+4
+ 
+Input Goal State (Travel Distance e.g. 0.5): 
+0.5
+ 
+Q matrix in the Cost Function is Sparse
+A matrix for Constraints is Sparse
+ 
+Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function 
+0
+Terminal Condition is Set as Hard Constraints
+ 
+names
+
+names = 
+
+  1×390 <a href="matlab:helpPopup string" style="font-weight:bold">string</a> array
+
+  Columns 1 through 18
+
+    "x0"    "x1"    "x2"    "x3"    "x4"    "x5"    "x6"    "x7"    "x8"    "x9"    "x10"    "x11"    "x12"    "x13"    "x14"    "x15"    "x16"    "x17"
+
+  Columns 19 through 36
+
+    "x18"    "x19"    "x20"    "y0"    "y1"    "y2"    "y3"    "y4"    "y5"    "y6"    "y7"    "y8"    "y9"    "y10"    "y11"    "y12"    "y13"    "y14"
+
+  Columns 37 through 50
+
+    "y15"    "y16"    "y17"    "y18"    "y19"    "y20"    "theta0"    "theta1"    "theta2"    "theta3"    "theta4"    "theta5"    "theta6"    "theta7"
+
+  Columns 51 through 62
+
+    "theta8"    "theta9"    "theta10"    "theta11"    "theta12"    "theta13"    "theta14"    "theta15"    "theta16"    "theta17"    "theta18"    "theta19"
+
+  Columns 63 through 76
+
+    "theta20"    "xdot0"    "xdot1"    "xdot2"    "xdot3"    "xdot4"    "xdot5"    "xdot6"    "xdot7"    "xdot8"    "xdot9"    "xdot10"    "xdot11"    "xdot12"
+
+  Columns 77 through 89
+
+    "xdot13"    "xdot14"    "xdot15"    "xdot16"    "xdot17"    "xdot18"    "xdot19"    "xdot20"    "ydot0"    "ydot1"    "ydot2"    "ydot3"    "ydot4"
+
+  Columns 90 through 102
+
+    "ydot5"    "ydot6"    "ydot7"    "ydot8"    "ydot9"    "ydot10"    "ydot11"    "ydot12"    "ydot13"    "ydot14"    "ydot15"    "ydot16"    "ydot17"
+
+  Columns 103 through 113
+
+    "ydot18"    "ydot19"    "ydot20"    "thetadot0"    "thetadot1"    "thetadot2"    "thetadot3"    "thetadot4"    "thetadot5"    "thetadot6"    "thetadot7"
+
+  Columns 114 through 123
+
+    "thetadot8"    "thetadot9"    "thetadot10"    "thetadot11"    "thetadot12"    "thetadot13"    "thetadot14"    "thetadot15"    "thetadot16"    "thetadot17"
+
+  Columns 124 through 137
+
+    "thetadot18"    "thetadot19"    "thetadot20"    "PFx0"    "PFx1"    "PFx2"    "PFx3"    "PFx4"    "PFx5"    "PFx6"    "PFx7"    "PFx8"    "PFx9"    "PFx10"
+
+  Columns 138 through 151
+
+    "PFx11"    "PFx12"    "PFx13"    "PFx14"    "PFx15"    "PFx16"    "PFx17"    "PFx18"    "PFx19"    "PFx20"    "PFy0"    "PFy1"    "PFy2"    "PFy3"
+
+  Columns 152 through 166
+
+    "PFy4"    "PFy5"    "PFy6"    "PFy7"    "PFy8"    "PFy9"    "PFy10"    "PFy11"    "PFy12"    "PFy13"    "PFy14"    "PFy15"    "PFy16"    "PFy17"    "PFy18"
+
+  Columns 167 through 178
+
+    "PFy19"    "PFy20"    "PFxdot0"    "PFxdot1"    "PFxdot2"    "PFxdot3"    "PFxdot4"    "PFxdot5"    "PFxdot6"    "PFxdot7"    "PFxdot8"    "PFxdot9"
+
+  Columns 179 through 189
+
+    "PFxdot10"    "PFxdot11"    "PFxdot12"    "PFxdot13"    "PFxdot14"    "PFxdot15"    "PFxdot16"    "PFxdot17"    "PFxdot18"    "PFxdot19"    "PFxdot20"
+
+  Columns 190 through 201
+
+    "PFydot0"    "PFydot1"    "PFydot2"    "PFydot3"    "PFydot4"    "PFydot5"    "PFydot6"    "PFydot7"    "PFydot8"    "PFydot9"    "PFydot10"    "PFydot11"
+
+  Columns 202 through 213
+
+    "PFydot12"    "PFydot13"    "PFydot14"    "PFydot15"    "PFydot16"    "PFydot17"    "PFydot18"    "PFydot19"    "PFydot20"    "PHx0"    "PHx1"    "PHx2"
+
+  Columns 214 through 228
+
+    "PHx3"    "PHx4"    "PHx5"    "PHx6"    "PHx7"    "PHx8"    "PHx9"    "PHx10"    "PHx11"    "PHx12"    "PHx13"    "PHx14"    "PHx15"    "PHx16"    "PHx17"
+
+  Columns 229 through 243
+
+    "PHx18"    "PHx19"    "PHx20"    "PHy0"    "PHy1"    "PHy2"    "PHy3"    "PHy4"    "PHy5"    "PHy6"    "PHy7"    "PHy8"    "PHy9"    "PHy10"    "PHy11"
+
+  Columns 244 through 256
+
+    "PHy12"    "PHy13"    "PHy14"    "PHy15"    "PHy16"    "PHy17"    "PHy18"    "PHy19"    "PHy20"    "PHxdot0"    "PHxdot1"    "PHxdot2"    "PHxdot3"
+
+  Columns 257 through 267
+
+    "PHxdot4"    "PHxdot5"    "PHxdot6"    "PHxdot7"    "PHxdot8"    "PHxdot9"    "PHxdot10"    "PHxdot11"    "PHxdot12"    "PHxdot13"    "PHxdot14"
+
+  Columns 268 through 278
+
+    "PHxdot15"    "PHxdot16"    "PHxdot17"    "PHxdot18"    "PHxdot19"    "PHxdot20"    "PHydot0"    "PHydot1"    "PHydot2"    "PHydot3"    "PHydot4"
+
+  Columns 279 through 289
+
+    "PHydot5"    "PHydot6"    "PHydot7"    "PHydot8"    "PHydot9"    "PHydot10"    "PHydot11"    "PHydot12"    "PHydot13"    "PHydot14"    "PHydot15"
+
+  Columns 290 through 302
+
+    "PHydot16"    "PHydot17"    "PHydot18"    "PHydot19"    "PHydot20"    "FFx0"    "FFx1"    "FFx2"    "FFx3"    "FFx4"    "FFx5"    "FFx6"    "FFx7"
+
+  Columns 303 through 316
+
+    "FFx8"    "FFx9"    "FFx10"    "FFx11"    "FFx12"    "FFx13"    "FFx14"    "FFx15"    "FFx16"    "FFx17"    "FFx18"    "FFx19"    "FFx20"    "FFy0"
+
+  Columns 317 through 331
+
+    "FFy1"    "FFy2"    "FFy3"    "FFy4"    "FFy5"    "FFy6"    "FFy7"    "FFy8"    "FFy9"    "FFy10"    "FFy11"    "FFy12"    "FFy13"    "FFy14"    "FFy15"
+
+  Columns 332 through 346
+
+    "FFy16"    "FFy17"    "FFy18"    "FFy19"    "FFy20

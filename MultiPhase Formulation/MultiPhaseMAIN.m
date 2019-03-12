@@ -103,241 +103,254 @@ BoundingBox_Width = 0.3;
 BoundingBox_Height= 0.3;
 BoundingBox = [BoundingBox_Width,BoundingBox_Height]';
 %==========================================================
-% 
-% %=========================================================
-% %Initial Conditions
-% x_init = 0;
-% y_init = 1/2*BodyHeight + Default_Leg_Length; %0.4
-% theta_init = 0;
-% xdot_init = 0;
-% ydot_init = 0;
-% thetadot_init = 0;
-% %---------------------------------------------------------
-% %Terminal Conditionsconsta
-% x_end = input('Input Goal State (Travel Distance e.g. 0.5): \n');
-% disp(' ');
-% %x_end = 0.5; %20
-% y_end = 1/2*BodyHeight + Default_Leg_Length; %0.4
-% theta_end = 0;
-% xdot_end = 0;
-% ydot_end = 0;
-% thetadot_end = 0;
-% %---------------------------------------------------------
-% %Test if initial and terminal conditions meet kinematics constraint
-% %robot height should set in a way that the highest foot position is not
-% %under the terrain height, otherwise conflicts with complementarity
-% %constraint
-% if (y_init - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
-%     ME_InitHeight = MException('Initialization:ProblematicInitialHeight','Initial Hight Error (y_init), Increase Initial Height');
-%     throw(ME_InitHeight)
-% end
-% 
-% if (y_end - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
-%     ME_TerminalHeight = MException('Initialization:ProblematicTerminalHeight','Terminal Hight Error (y_end), Increase Terminal Height');
-%     throw(ME_TerminalHeight)
-% end
-% %=========================================================
-% 
-% %==========================================================
-% %Settings for Matrix Sparsity
-% %----------------------------------------------------------
-% Q_Sparsity = 1; %on/off (1/0) of Q matrix Sparsity
-% A_Sparsity = 1; %on/off (1/0) of A matrix Sparsity
-% %----------------------------------------------------------
-% %Display Settings
-% if Q_Sparsity == 1
-%     disp('Q matrix in the Cost Function is Sparse')
-% elseif Q_Sparsity == 0
-%     disp('Q matrix in the Cost Function is Non-Sparse')
-% else
-%     ME_QSparsity = MException('Initialization:QMatrixSparsity','Wrong Setings of Q Matrix Sparsity');
-%     throw(ME_QSparsity)
-% end
-% 
-% if A_Sparsity == 1
-%     disp('A matrix for Constraints is Sparse')
-% elseif A_Sparsity == 0
-%     disp('A matrix for Constraints is Non-Sparse')
-% else
-%     ME_ASparsity = MException('Initialization:AMatrixSparsity','Wrong Setings of A Matrix Sparsity');
-%     throw(ME_ASparsity)
-% end
-% disp(' ')
-% %----------------------------------------------------------
-% %Effects of Sparsity
-% %   Non-sparse matrix (Q) gives rise to faster computing speed, but seems
-% %   like take more memory
-% %   Sparse Matrix (Q) seems like take less memory
-% %   Non-Sparse/Sparse Matrix has nothing to do with feasibility. Try
-% %   multiple times if the solver reports the problem is infeasible to solve
-% %==========================================================
-% 
-% %==========================================================
-% %Settings for Soft/Hard Constraint of Terminal Conditions
-% %----------------------------------------------------------
-% SoftTerminalConstraint = input('Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function \n'); %on/off (1/0) of putting Terminal conditions into cost function (soft constraint) or hard constraints
-% %----------------------------------------------------------
-% %Display Settings
-% if SoftTerminalConstraint == 1
-%     disp('Terminal Condition is Set as Soft Constraints in the Cost Function')
-% elseif SoftTerminalConstraint == 0
-%     disp('Terminal Condition is Set as Hard Constraints')
-% else
-%     ME_TerminalCondition = MException('Initialization:TerminalCondition','Wrong Settings of on/off of Soft/Hard Constraint Formulation of Terminal Conditions');
-%     throw(ME_TerminalCondition)
-% end
-% disp(' ')
-% %==========================================================
-% 
-% %==========================================================
-% %Define/Create Modeling Variables
-% %----------------------------------------------------------
-% %   States: r = [x,y,theta,xdot,ydot,thetadot]
-% %       x: horizontal position
-% %       y: vertical position
-% %       theta: torso orientation
-% %       xdot: horizontal velocity
-% %       ydot: vertical velocity
-% %       thetadot: torso angular acceleration
-% %----------------------------------------------------------
-% %   Initialize Variable Name Containers
-% x_label = strings(1,TimeSeriesLength);
-% y_label = strings(1,TimeSeriesLength);
-% theta_label = strings(1,TimeSeriesLength);
-% xdot_label = strings(1,TimeSeriesLength);
-% ydot_label = strings(1,TimeSeriesLength);
-% thetadot_label = strings(1,TimeSeriesLength);
-% %   Assign Variable Names
-% for i = 1:TimeSeriesLength
-%     x_label(i) = strcat('x',num2str((i-1)));
-%     y_label(i) = strcat('y',num2str((i-1)));
-%     theta_label(i) = strcat('theta',num2str(i-1));
-%     xdot_label(i) = strcat('xdot',num2str((i-1)));
-%     ydot_label(i) = strcat('ydot',num2str((i-1)));
-%     thetadot_label(i) = strcat('thetadot',num2str(i-1));
-% end
-% %   Save List Length
-% xLength = length(x_label);
-% yLength = length(y_label);
-% thetaLength = length(theta_label);
-% xdotLength = length(xdot_label);
-% ydotLength = length(ydot_label);
-% thetadotLength = length(thetadot_label);
-% %----------------------------------------------------------
-% %   Footstep Locations(IN WORLD FRAME):
-% %       Front Leg: PF = [PFx, PFy, PFxdot, PFydot]
-% %       Hind Leg:  PH = [PHx, PHy, PHxdot, PHydot]
-% %----------------------------------------------------------
-% %   Initialize Variable Name Containers
-% PFx_label = strings(1,TimeSeriesLength);
-% PFy_label = strings(1,TimeSeriesLength);
-% PFxdot_label = strings(1,TimeSeriesLength);
-% PFydot_label = strings(1,TimeSeriesLength);
-% PHx_label = strings(1,TimeSeriesLength);
-% PHy_label = strings(1,TimeSeriesLength);
-% PHxdot_label = strings(1,TimeSeriesLength);
-% PHydot_label = strings(1,TimeSeriesLength);
-% %   Assign Variable Names
-% for i = 1:TimeSeriesLength
-%     PFx_label(i) = strcat('PFx',num2str((i-1)));
-%     PFy_label(i) = strcat('PFy',num2str((i-1)));
-%     PFxdot_label(i) = strcat('PFxdot',num2str(i-1));
-%     PFydot_label(i) = strcat('PFydot',num2str(i-1));
-%     PHx_label(i) = strcat('PHx',num2str((i-1)));
-%     PHy_label(i) = strcat('PHy',num2str((i-1)));
-%     PHxdot_label(i) = strcat('PHxdot',num2str(i-1));
-%     PHydot_label(i) = strcat('PHydot',num2str(i-1));
-% end
-% %   Save List Length
-% PFxLength = length(PFx_label);
-% PFyLength = length(PFy_label);
-% PFxdotLength = length(PFxdot_label);
-% PFydotLength = length(PFydot_label);
-% PHxLength = length(PHx_label);
-% PHyLength = length(PHy_label);
-% PHxdotLength = length(PHxdot_label);
-% PHydotLength = length(PHydot_label);
-% %----------------------------------------------------------
-% %   Foot-Ground Reaction Forces(IN WORLD FRAME):
-% %       Front Leg Forces: FF = [FFx, FFy]
-% %       Hind Leg Forces:  FH = [FHx, FHy]
-% %----------------------------------------------------------
-% %   Initialize Variable Name Containers
-% FFx_label = strings(1,TimeSeriesLength);
-% FFy_label = strings(1,TimeSeriesLength);
-% FHx_label = strings(1,TimeSeriesLength);
-% FHy_label = strings(1,TimeSeriesLength);
-% %   Assign Variable Names
-% for i = 1:TimeSeriesLength
-%     FFx_label(i) = strcat('FFx',num2str((i-1)));
-%     FFy_label(i) = strcat('FFy',num2str((i-1)));
-%     FHx_label(i) = strcat('FHx',num2str((i-1)));
-%     FHy_label(i) = strcat('FHy',num2str((i-1)));
-% end
-% %   Save List Length
-% FFxLength = length(FFx_label);
-% FFyLength = length(FFy_label);
-% FHxLength = length(FHx_label);
-% FHyLength = length(FHy_label);
-% %----------------------------------------------------------
-% %   Mode Selection (Defined as the contact configuration for each leg):
-% %       Leg Contact Configuration: C = [CF, CH]; CF,CH = 0/1 (Binary Varibale)
-% %           Front Leg Contact On/Off: CF
-% %           Hind Leg Contact On/Off:  CH
-% %   Initialize Variable Name Containers
-% CF_label = strings(1,NumPhases);
-% CH_label = strings(1,NumPhases);
-% %   Assign Variable Names
-% for i = 1:NumPhases
-%     CF_label(i) = strcat('CF',num2str((i)));
-%     CH_label(i) = strcat('CH',num2str((i)));
-% end
-% %   Save List Length
-% CFLength = length(CF_label);
-% CHLength = length(CH_label);
-% %----------------------------------------------------------
-% %   Full Decision Variable Name List
-% names = [x_label, y_label, theta_label, xdot_label, ydot_label, thetadot_label, PFx_label, PFy_label, PFxdot_label, PFydot_label, PHx_label, PHy_label, PHxdot_label, PHydot_label, FFx_label, FFy_label, FHx_label, FHy_label, CF_label, CH_label];
-% %   Length of the name list
-% namesLength = length(names);
-% %   Length list of all variable list
-% LengthList = [xLength, yLength, thetaLength, xdotLength, ydotLength, thetadotLength, PFxLength, PFyLength, PFxdotLength, PFydotLength, PHxLength, PHyLength, PHxdotLength, PHydotLength, FFxLength, FFyLength, FHxLength, FHyLength, CFLength, CHLength];
-% %----------------------------------------------------------
-% %   List for all decision variable names
-% varList = ["x", "y", "theta", "xdot", "ydot", "thetadot", "PFx", "PFy", "PFxdot", "PFydot", "PHx", "PHy", "PHxdot", "PHydot", "FFx", "FFy", "FHx", "FHy", "CF", "CH"];
-% %   Length of the decision varibale name list
-% varListLength = length(varList);
-% %----------------------------------------------------------
-% %   Extract Variable Index
-% xIdx_init = find(names == 'x0');
-% xIdx_end  = find(names == x_label(end));
-% xdotIdx_init = find(names == 'xdot0');
-% xdotIdx_end = find(names == xdot_label(end));
-% yIdx_init = find(names == 'y0');
-% yIdx_end  = find(names == y_label(end));
-% ydotIdx_init = find(names == 'ydot0');
-% ydotIdx_end = find(names == ydot_label(end));
-% thetaIdx_init = find(names == 'theta0');
-% thetaIdx_end  = find(names == theta_label(end));
-% thetadotIdx_init = find(names == 'thetadot0');
-% thetadotIdx_end  = find(names == thetadot_label(end));
-% PFxIdx_init = find(names == 'PFx0');
-% PFxIdx_end  = find(names == PFx_label(end));
-% PFyIdx_init = find(names == 'PFy0');
-% PFyIdx_end  = find(names == PFy_label(end));
-% PHxIdx_init = find(names == 'PHx0');
-% PHxIdx_end  = find(names == PHx_label(end));
-% PHyIdx_init = find(names == 'PHy0');
-% PHyIdx_end  = find(names == PHy_label(end));
-% FFxIdx_init = find(names == 'FFx0');
-% FFxIdx_end  = find(names == FFx_label(end));
-% FFyIdx_init = find(names == 'FFy0');
-% FFyIdx_end  = find(names == FFy_label(end));
-% FHxIdx_init = find(names == 'FHx0');
-% FHxIdx_end  = find(names == FHx_label(end));
-% FHyIdx_init = find(names == 'FHy0');
-% FHyIdx_end  = find(names == FHy_label(end));
-% %==========================================================
+
+%=========================================================
+%Initial Conditions
+x_init = 0;
+y_init = 1/2*BodyHeight + Default_Leg_Length; %0.4
+theta_init = 0;
+xdot_init = 0;
+ydot_init = 0;
+thetadot_init = 0;
+%---------------------------------------------------------
+%Terminal Conditionsconsta
+x_end = input('Input Goal State (Travel Distance e.g. 0.5): \n');
+disp(' ');
+%x_end = 0.5; %20
+y_end = 1/2*BodyHeight + Default_Leg_Length; %0.4
+theta_end = 0;
+xdot_end = 0;
+ydot_end = 0;
+thetadot_end = 0;
+%---------------------------------------------------------
+%Test if initial and terminal conditions meet kinematics constraint
+%robot height should set in a way that the highest foot position is not
+%under the terrain height, otherwise conflicts with complementarity
+%constraint
+if (y_init - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
+    ME_InitHeight = MException('Initialization:ProblematicInitialHeight','Initial Hight Error (y_init), Increase Initial Height');
+    throw(ME_InitHeight)
+end
+
+if (y_end - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
+    ME_TerminalHeight = MException('Initialization:ProblematicTerminalHeight','Terminal Hight Error (y_end), Increase Terminal Height');
+    throw(ME_TerminalHeight)
+end
+%=========================================================
+
+%==========================================================
+%Settings for Matrix Sparsity
+%----------------------------------------------------------
+Q_Sparsity = 1; %on/off (1/0) of Q matrix Sparsity
+A_Sparsity = 1; %on/off (1/0) of A matrix Sparsity
+%----------------------------------------------------------
+%Display Settings
+if Q_Sparsity == 1
+    disp('Q matrix in the Cost Function is Sparse')
+elseif Q_Sparsity == 0
+    disp('Q matrix in the Cost Function is Non-Sparse')
+else
+    ME_QSparsity = MException('Initialization:QMatrixSparsity','Wrong Setings of Q Matrix Sparsity');
+    throw(ME_QSparsity)
+end
+
+if A_Sparsity == 1
+    disp('A matrix for Constraints is Sparse')
+elseif A_Sparsity == 0
+    disp('A matrix for Constraints is Non-Sparse')
+else
+    ME_ASparsity = MException('Initialization:AMatrixSparsity','Wrong Setings of A Matrix Sparsity');
+    throw(ME_ASparsity)
+end
+disp(' ')
+%----------------------------------------------------------
+%Effects of Sparsity
+%   Non-sparse matrix (Q) gives rise to faster computing speed, but seems
+%   like take more memory
+%   Sparse Matrix (Q) seems like take less memory
+%   Non-Sparse/Sparse Matrix has nothing to do with feasibility. Try
+%   multiple times if the solver reports the problem is infeasible to solve
+%==========================================================
+
+%==========================================================
+%Settings for Soft/Hard Constraint of Terminal Conditions
+%----------------------------------------------------------
+SoftTerminalConstraint = input('Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function \n'); %on/off (1/0) of putting Terminal conditions into cost function (soft constraint) or hard constraints
+%----------------------------------------------------------
+%Display Settings
+if SoftTerminalConstraint == 1
+    disp('Terminal Condition is Set as Soft Constraints in the Cost Function')
+elseif SoftTerminalConstraint == 0
+    disp('Terminal Condition is Set as Hard Constraints')
+else
+    ME_TerminalCondition = MException('Initialization:TerminalCondition','Wrong Settings of on/off of Soft/Hard Constraint Formulation of Terminal Conditions');
+    throw(ME_TerminalCondition)
+end
+disp(' ')
+%==========================================================
+
+%==========================================================
+%Define/Create Modeling Variables (All indexed by tau/knots)
+%----------------------------------------------------------
+%   States: r = [x,y,theta,xdot,ydot,thetadot]
+%       x: horizontal position
+%       y: vertical position
+%       theta: torso orientation
+%       xdot: horizontal velocity
+%       ydot: vertical velocity
+%       thetadot: torso angular acceleration
+%----------------------------------------------------------
+%   Initialize Variable Name Containers
+x_label = strings(1,tauSeriesLength);
+y_label = strings(1,tauSeriesLength);
+theta_label = strings(1,tauSeriesLength);
+xdot_label = strings(1,tauSeriesLength);
+ydot_label = strings(1,tauSeriesLength);
+thetadot_label = strings(1,tauSeriesLength);
+%   Assign Variable Names
+for i = 1:tauSeriesLength
+    x_label(i) = strcat('x',num2str((i-1)));
+    y_label(i) = strcat('y',num2str((i-1)));
+    theta_label(i) = strcat('theta',num2str(i-1));
+    xdot_label(i) = strcat('xdot',num2str((i-1)));
+    ydot_label(i) = strcat('ydot',num2str((i-1)));
+    thetadot_label(i) = strcat('thetadot',num2str(i-1));
+end
+%   Save List Length
+xLength = length(x_label);
+yLength = length(y_label);
+thetaLength = length(theta_label);
+xdotLength = length(xdot_label);
+ydotLength = length(ydot_label);
+thetadotLength = length(thetadot_label);
+%----------------------------------------------------------
+%   Footstep Locations(IN WORLD FRAME):
+%       Front Leg: PF = [PFx, PFy, PFxdot, PFydot]
+%       Hind Leg:  PH = [PHx, PHy, PHxdot, PHydot]
+%----------------------------------------------------------
+%   Initialize Variable Name Containers
+PFx_label = strings(1,tauSeriesLength);
+PFy_label = strings(1,tauSeriesLength);
+PFxdot_label = strings(1,tauSeriesLength);
+PFydot_label = strings(1,tauSeriesLength);
+PHx_label = strings(1,tauSeriesLength);
+PHy_label = strings(1,tauSeriesLength);
+PHxdot_label = strings(1,tauSeriesLength);
+PHydot_label = strings(1,tauSeriesLength);
+%   Assign Variable Names
+for i = 1:tauSeriesLength
+    PFx_label(i) = strcat('PFx',num2str((i-1)));
+    PFy_label(i) = strcat('PFy',num2str((i-1)));
+    PFxdot_label(i) = strcat('PFxdot',num2str(i-1));
+    PFydot_label(i) = strcat('PFydot',num2str(i-1));
+    PHx_label(i) = strcat('PHx',num2str((i-1)));
+    PHy_label(i) = strcat('PHy',num2str((i-1)));
+    PHxdot_label(i) = strcat('PHxdot',num2str(i-1));
+    PHydot_label(i) = strcat('PHydot',num2str(i-1));
+end
+%   Save List Length
+PFxLength = length(PFx_label);
+PFyLength = length(PFy_label);
+PFxdotLength = length(PFxdot_label);
+PFydotLength = length(PFydot_label);
+PHxLength = length(PHx_label);
+PHyLength = length(PHy_label);
+PHxdotLength = length(PHxdot_label);
+PHydotLength = length(PHydot_label);
+%----------------------------------------------------------
+%   Foot-Ground Reaction Forces(IN WORLD FRAME):
+%       Front Leg Forces: FF = [FFx, FFy]
+%       Hind Leg Forces:  FH = [FHx, FHy]
+%----------------------------------------------------------
+%   Initialize Variable Name Containers
+FFx_label = strings(1,tauSeriesLength);
+FFy_label = strings(1,tauSeriesLength);
+FHx_label = strings(1,tauSeriesLength);
+FHy_label = strings(1,tauSeriesLength);
+%   Assign Variable Names
+for i = 1:tauSeriesLength
+    FFx_label(i) = strcat('FFx',num2str((i-1)));
+    FFy_label(i) = strcat('FFy',num2str((i-1)));
+    FHx_label(i) = strcat('FHx',num2str((i-1)));
+    FHy_label(i) = strcat('FHy',num2str((i-1)));
+end
+%   Save List Length
+FFxLength = length(FFx_label);
+FFyLength = length(FFy_label);
+FHxLength = length(FHx_label);
+FHyLength = length(FHy_label);
+%----------------------------------------------------------
+%   Switching Time Instances:
+%   t_tilta = [t_tilta1, t_tilta_2,...,t_tilta_NumPhases]
+%   t_tilta_NumPhases = t_F (Terminal Time, can be optimized or fixed by constraints)
+%----------------------------------------------------------
+%   Initialize Variable Name Containers
+SwitchingTime_label = strings(1,NumPhases);
+%   Assign Variable Names
+for i = 1:NumPhases
+    SwitchingTime_label(i) = strcat('SwitchingTime',num2str(i));
+end
+%   Save List Length
+SwitchingTimeLength = length(SwitchingTime_label);
+%----------------------------------------------------------
+%   Mode Selection (Defined as the contact configuration for each leg):
+%       Leg Contact Configuration: C = [CF, CH]; CF,CH = 0/1 (Binary Varibale)
+%           Front Leg Contact On/Off: CF
+%           Hind Leg Contact On/Off:  CH
+%   Initialize Variable Name Containers
+CF_label = strings(1,NumPhases);
+CH_label = strings(1,NumPhases);
+%   Assign Variable Names
+for i = 1:NumPhases
+    CF_label(i) = strcat('CF',num2str(i));
+    CH_label(i) = strcat('CH',num2str(i));
+end
+%   Save List Length
+CFLength = length(CF_label);
+CHLength = length(CH_label);
+%----------------------------------------------------------
+%   Full Decision Variable Name List
+names = [x_label, y_label, theta_label, xdot_label, ydot_label, thetadot_label, PFx_label, PFy_label, PFxdot_label, PFydot_label, PHx_label, PHy_label, PHxdot_label, PHydot_label, FFx_label, FFy_label, FHx_label, FHy_label, SwitchingTime_label, CF_label, CH_label];
+%   Length of the name list
+namesLength = length(names);
+%   Length list of all variable list
+LengthList = [xLength, yLength, thetaLength, xdotLength, ydotLength, thetadotLength, PFxLength, PFyLength, PFxdotLength, PFydotLength, PHxLength, PHyLength, PHxdotLength, PHydotLength, FFxLength, FFyLength, FHxLength, FHyLength, SwitchingTimeLength, CFLength, CHLength];
+%----------------------------------------------------------
+%   List for all decision variable names
+varList = ["x", "y", "theta", "xdot", "ydot", "thetadot", "PFx", "PFy", "PFxdot", "PFydot", "PHx", "PHy", "PHxdot", "PHydot", "FFx", "FFy", "FHx", "FHy", "SwitchingTime", "CF", "CH"];
+%   Length of the decision varibale name list
+varListLength = length(varList);
+%----------------------------------------------------------
+%   Extract Variable Index
+xIdx_init = find(names == 'x0');
+xIdx_end  = find(names == x_label(end));
+xdotIdx_init = find(names == 'xdot0');
+xdotIdx_end = find(names == xdot_label(end));
+yIdx_init = find(names == 'y0');
+yIdx_end  = find(names == y_label(end));
+ydotIdx_init = find(names == 'ydot0');
+ydotIdx_end = find(names == ydot_label(end));
+thetaIdx_init = find(names == 'theta0');
+thetaIdx_end  = find(names == theta_label(end));
+thetadotIdx_init = find(names == 'thetadot0');
+thetadotIdx_end  = find(names == thetadot_label(end));
+PFxIdx_init = find(names == 'PFx0');
+PFxIdx_end  = find(names == PFx_label(end));
+PFyIdx_init = find(names == 'PFy0');
+PFyIdx_end  = find(names == PFy_label(end));
+PHxIdx_init = find(names == 'PHx0');
+PHxIdx_end  = find(names == PHx_label(end));
+PHyIdx_init = find(names == 'PHy0');
+PHyIdx_end  = find(names == PHy_label(end));
+FFxIdx_init = find(names == 'FFx0');
+FFxIdx_end  = find(names == FFx_label(end));
+FFyIdx_init = find(names == 'FFy0');
+FFyIdx_end  = find(names == FFy_label(end));
+FHxIdx_init = find(names == 'FHx0');
+FHxIdx_end  = find(names == FHx_label(end));
+FHyIdx_init = find(names == 'FHy0');
+FHyIdx_end  = find(names == FHy_label(end));
+%==========================================================
 % 
 % 
 % %==========================================================
@@ -918,8 +931,8 @@ BoundingBox = [BoundingBox_Width,BoundingBox_Height]';
 %             ];
 % %------------------------------------------------------------
 % %   Variable Lower and Upper Boundaries
-% lb = [repmat(-inf,1, sum(LengthList(find(varList == "x"):find(varList == "FHy")))),repmat(0,1,CFLength + CHLength)];
-% ub = [repmat( inf,1, sum(LengthList(find(varList == "x"):find(varList == "FHy")))),repmat(1,1,CFLength + CHLength)];
+% lb = [repmat(-inf,1, sum(LengthList(find(varList == "x"):find(varList == "SwitchingTime")))),repmat(0,1,CFLength + CHLength)];
+% ub = [repmat( inf,1, sum(LengthList(find(varList == "x"):find(varList == "SwitchingTime")))),repmat(1,1,CFLength + CHLength)];
 % %   Variable Type
 % vtype = [repmat('C', 1, sum(LengthList(find(varList == "x"):find(varList == "FHy")))), repmat('B',1, CFLength + CHLength)];
 % %=============================================================
@@ -996,7 +1009,7 @@ BoundingBox = [BoundingBox_Width,BoundingBox_Height]';
 %     ub = ub';
 % %-------------------------------------------------------------
 %     %reset vType vector, Knitro requires
-%     vtype = [repmat(0, sum(LengthList(find(varList == "x"):find(varList == "FHy"))), 1); repmat(2, CFLength + CHLength, 1)]; %0 -> continuous variable, 2 -> discrete variable
+%     vtype = [repmat(0, sum(LengthList(find(varList == "x"):find(varList == "SwitchingTime"))), 1); repmat(2, CFLength + CHLength, 1)]; %0 -> continuous variable, 2 -> discrete variable
 % %-------------------------------------------------------------
 %     %call knitro
 %     options = optimset('Display','iter');

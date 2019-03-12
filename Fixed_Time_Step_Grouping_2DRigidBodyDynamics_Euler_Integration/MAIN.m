@@ -286,8 +286,8 @@ CF_label = strings(1,NumPhases);
 CH_label = strings(1,NumPhases);
 %   Assign Variable Names
 for i = 1:NumPhases
-    CF_label(i) = strcat('CF',num2str((i)));
-    CH_label(i) = strcat('CH',num2str((i)));
+    CF_label(i) = strcat('CF',num2str(i));
+    CH_label(i) = strcat('CH',num2str(i));
 end
 %   Save List Length
 CFLength = length(CF_label);
