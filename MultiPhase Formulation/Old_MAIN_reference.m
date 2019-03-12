@@ -1,5 +1,6 @@
 % Mixed-Integer Nonlinear Optimization in 2D Case (Planar Cheetah)
 % Mode Selection described as foot-ground contact changes 0/1
+% MultiPhase Formulation
 
 %Check Readme for notes and future improvements
 
@@ -16,11 +17,11 @@ diary(diary_filename);
 %Display Script Information
 disp('Date and Time:');
 disp(datetime('now'));
-disp(['Correspond Log File Name: ', diary_filename]);
+disp(['Correspondent Log File Name: ', diary_filename]);
 disp(' ');
-disp('Locomotion Control with Mixed-integer Nonlinear Optimization in 2D')
-disp('Time Step Grouping Script - All the Phases have the same Number of Time Steps')
-disp(' ');
+disp('2D Locomotion Control using Mixed-integer Nonlinear Optimization')
+disp('MultiPhase Formulation: Optimize over States, Control Inputs and Switching Times')
+disp(' ')
 
 %==========================================================
 %Add solvers' Path
@@ -52,16 +53,13 @@ miu = 0.5; %friction coefficient
 %==========================================================
 %Time Step Parameter Settings
 %h = 0.05; %Time Step in seconds
-NumTimeSteps = input('Input Number of Time Steps (e.g. 20): \n');
+NumKnots = input('Input Number of Knots/Discretization of Time/parameter tau (e.g. 20): \n');
 disp(' ');
-h = input('Input Size of Time Steps (e.g. 0.05): \n');
+tauh = 1/NumKnots; %Step length in tau (parameterized time)
+NumPhases = input('Input Number of Phases (e.g. 4), larger the number of phases, more difficult for the solver to solve the problem: \n');
 disp(' ');
-NumPhases = input('Input Number of Phases (type the same value with number of time steps if we want to allow mode change per time step): \n');
-disp(' ');
-%NumTimeSteps = 20; %number of time steps
-%NumPhases = 4; %Number of Phases
-if mod(NumTimeSteps,NumPhases) ~= 0
-    ME_NumLocalTimeSteps = MException('Initialization:NumofLocalTimeSteps','Number of Time Steps for Each Phase is not an Integer');
+if NumPhase > NumTimeSteps
+    ME_NumLocalTimeSteps = MException('Initialization:NumofLocalTimeSteps','Number of Phases is Larger than the Number of Time Steps');
     throw(ME_NumLocalTimeSteps)
 end
 NumLocalTimeSteps = NumTimeSteps/NumPhases; %Number of local time steps for each phase
