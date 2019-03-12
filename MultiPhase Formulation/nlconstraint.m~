@@ -83,7 +83,7 @@ FHy_future = vars(FHyIdx_init + 1:FHyIdx_end);
 
 %-------------------------------------------------------------------------
 %       Build constraint
-cross_product = (PFx_current - x_current).*FFy_current - (PFy_current - y_current).*FFx_current + (PHx_current - x_current).*FHy_current - (PHy_current - y_current).*FHx_current;
+cross_product = (PFx - x).*FFy - (PFy - y).*FFx + (PHx - x).*FHy - (PHy - y).*FHx;
 ceq_rotation_dynamics = I.*thetadot_future - I.*thetadot_current - h.*cross_product;
 %-------------------------------------------------------------------------
 
@@ -121,8 +121,8 @@ FrontLegKine3 = -PFx_RobotFrame + PFcenterX - BoundingBox_Width/2;
 FrontLegKine4 = -PFy_RobotFrame + PFcenterY - BoundingBox_Height/2;
 %-------------------------------------------------------------------------
 %       Hind Leg:
-PHx_RobotFrame = cos(theta_current).*(PHx_current - x_current) + sin(theta_current).*(PHy_current - y_current);
-PHy_RobotFrame = -sin(theta_current).*(PHx_current - x_current) + cos(theta_current).*(PHy_current - y_current);
+PHx_RobotFrame = cos(theta_current).*(PHx_current - x_current) + sin(theta_current).*(PHy_current - y);
+PHy_RobotFrame = -sin(theta_current).*(PHx_current - x_current) + cos(theta_current).*(PHy_current - y);
 %           Kinematics Constraint 1:
 %           PHx_RobotFrame - PHcenterX <= BoundingBoxWidth/2
 %           PHx_RobotFrame - PHcenterX - BoundingBoxWidth/2 <= 0
@@ -151,13 +151,13 @@ KineCon = [FrontLegKine1;FrontLegKine2;FrontLegKine3;FrontLegKine4;...
 %               sqrt(FFx^2 + FFy^2) <= miu*f_n, f_n =
 %               [FFx,FFy]'*[TerrainNormx,TerrainNormy] ---> in 3D
 %               sqrt(FFx^2 + FFy^2) - miu*f_n <= 0
-FrictionFrontLeg = FFx_current - miu.*(TerrainNorm(1).*FFx_current + TerrainNorm(2).*FFy_current);
+FrictionFrontLeg = FFx - miu.*(TerrainNorm(1).*FFx + TerrainNorm(2).*FFy);
 %-------------------------------------------------------------------------
 %           Hind Leg
 %               sqrt(FHx^2 + FHy^2) <= miu*f_n, f_n =
 %               [FHx,FHy]'*[TerrainNormx,TerrainNormy] ---> in 3D
 %               sqrt(FHx^2 + FHy^2) - miu*f_n <= 0
-FrictionHindLeg = FHx_current - miu.*(TerrainNorm(1).*FHx_current + TerrainNorm(2).*FHy_current);
+FrictionHindLeg = FHx - miu.*(TerrainNorm(1).*FHx + TerrainNorm(2).*FHy);
 %-------------------------------------------------------------------------
 %   Collect Friction Cone Constraint
 FrictionCone = [FrictionFrontLeg;FrictionHindLeg];
