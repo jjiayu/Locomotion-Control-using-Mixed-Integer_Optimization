@@ -163,7 +163,7 @@ FrictionHindLeg = FHx_current - miu.*(TerrainNorm(1).*FHx_current + TerrainNorm(
 FrictionCone = [FrictionFrontLeg;FrictionHindLeg];
 
 c = [KineCon;FrictionCone];
-ceq = [ceq_rotation_dynamics];
+ceq = [];%[ceq_rotation_dynamics];
 %ceq = [];
 
 end
