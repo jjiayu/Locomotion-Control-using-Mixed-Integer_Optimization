@@ -67,6 +67,7 @@ elseif mod(NumKnots,NumPhases) ~= 0
     ME_NumLocalKnots = MException('Initialization:NumofLocalKnots','Number of Local Knots for Each Phase is not an Integer');
     throw(ME_NumLocalKnots)
 end
+T_end = input('Input Terminal Time (Unit: Seconds, e.g. 1): \n');
 tau_upper_limit = 1; %Upper limit of the parameter tau
 tauStepLength = tau_upper_limit/NumKnots; %Step length for tau (parameterized time)
 NumLocalKnots = NumKnots/NumPhases; %Number of local knots for each phase (All phases have the same number of Knots)
@@ -342,6 +343,14 @@ PHxIdx_init = find(names == 'PHx0');
 PHxIdx_end  = find(names == PHx_label(end));
 PHyIdx_init = find(names == 'PHy0');
 PHyIdx_end  = find(names == PHy_label(end));
+PFxdotIdx_init = find(names == 'PFxdot0');
+PFxdotIdx_end  = find(names == PFxdot_label(end));
+PFydotIdx_init = find(names == 'PFydot0');
+PFydotIdx_end  = find(names == PFydot_label(end));
+PHxdotIdx_init = find(names == 'PHxdot0');
+PHxdotIdx_end  = find(names == PHxdot_label(end));
+PHydotIdx_init = find(names == 'PHydot0');
+PHydotIdx_end  = find(names == PHydot_label(end));
 FFxIdx_init = find(names == 'FFx0');
 FFxIdx_end  = find(names == FFx_label(end));
 FFyIdx_init = find(names == 'FFy0');
@@ -350,195 +359,15 @@ FHxIdx_init = find(names == 'FHx0');
 FHxIdx_end  = find(names == FHx_label(end));
 FHyIdx_init = find(names == 'FHy0');
 FHyIdx_end  = find(names == FHy_label(end));
+SwitchingTimeIdx_init = find(names == SwitchingTime_label(1));
+SwitchingTimeIdx_end  = find(names == SwitchingTime_label(end));
 %==========================================================
 
 
 %==========================================================
 %Setup Optimization Problem
-%----------------------------------------------------------
-
-
-
-% %----------------------------------------------------------
-% %   Objective Function
-% %       minimize F^2 -> FFx(t)^2 + FFy(t)^2 + FHx(t)^2 + FHy(t)^2
-% %   Quadratic form:
-% %       minimize F'*Q*F
-% %   v = [x;   y;   theta;   xdot;   ydot;   thetadot;  PFx;   PFy;  PFxdot;  PFydot;  PHx;  PHy;  PHxdot;  PHydot;   FFx;    FFy;    FHx;    FHy;   CF;   CH]
-% %   idx: 1    2     3        4        5         6       7      8      9        10      11    12     13      14        15     16       17      18     19   20
-% %   v'*Q*v = sigma(i,j) v1*Q11*v1 + v1*Q12*v2 + .... + v2*Q21*v1 + v2*Q22*v2 ...
-% %-----------------------------------------------------------
-% %   Define Q
-% QCell = {};
-% %   Assign Q Matrix, True Code need to be activated when running optimization
-% for i = 1:varListLength
-%     for j = 1:varListLength
-%         if (varList(i) == "FFx" && varList{j} == "FFx") || (varList{i} == "FFy" && varList{j} == "FFy") || (varList{i} == "FHx" && varList{j} == "FHx") || (varList{i} == "FHy" && varList{j} == "FHy")
-%             QCell{i,j} = eye(LengthList(i),LengthList(j));
-% %         elseif varList(i) == "CF" && varList(j) == "CF"
-% %             QCell{i,j} = 10000*eye(LengthList(i),LengthList(j));
-% %         elseif varList(i) == "CH" && varList(j) == "CH"
-% %             QCell{i,j} = 50000*eye(LengthList(i),LengthList(j));
-%         else
-%             QCell{i,j} = zeros(LengthList(i),LengthList(j));
-%         end
-%     end
-% end
-% %
-% Q = cell2mat(QCell);
-% Q_backup = Q;
-% %------------------------------------------------------------
-% %Sparse Q Transformation
-% if Q_Sparsity == 1
-%     Q = sparse(Q);
-% end
-% %------------------------------------------------------------
-% 
-
-
-
 %------------------------------------------------------------
 %   Add Constraints
-%------------------------------------------------------------
-
-
-
-
-%---------------------------------------------------------------
-% %       System Dynamics (equality constraints)
-% %-------------------------------------------------------------
-% %           x-axis position dynamics
-% %               Build A matrix
-% Ax_pos_dyn = zeros(xLength-1,namesLength); 
-% for k = 0:TimeSeriesLength-2 %NOTE: minus 2, 0 to (length -1) -1
-%     Ax_pos_dyn(k+1,find(names == strcat('x',num2str(k+1)))) = 1;
-%     Ax_pos_dyn(k+1,find(names == strcat('x',num2str(k))))   = -1;
-%     %Ax_pos_dyn(k+1,find(names == strcat('xdot',num2str(k+1))))= -1/2*h;
-%     %Ax_pos_dyn(k+1,find(names == strcat('xdot',num2str(k))))= -1/2*h;
-%     Ax_pos_dyn(k+1,find(names == strcat('xdot',num2str(k))))= -h; %Euler Integration
-% end
-% %               Build b vector
-% bx_pos_dyn = zeros(size(Ax_pos_dyn,1),1);
-% %--------------------------------------------------------------
-% %           x-axis velocity dynamics
-% %               Build A matrix
-% Ax_vel_dyn = zeros(xdotLength-1,namesLength);
-% for k = 0:TimeSeriesLength-2
-%     Ax_vel_dyn(k+1,find(names == strcat('xdot',num2str(k+1)))) = 1;
-%     Ax_vel_dyn(k+1,find(names == strcat('xdot',num2str(k))))   = -1;
-% %     Ax_vel_dyn(k+1,find(names == strcat('FFx',num2str(k+1))))  = -1/2*h/m;
-% %     Ax_vel_dyn(k+1,find(names == strcat('FHx',num2str(k+1))))  = -1/2*h/m;
-% %     Ax_vel_dyn(k+1,find(names == strcat('FFx',num2str(k))))  = -1/2*h/m;
-% %     Ax_vel_dyn(k+1,find(names == strcat('FHx',num2str(k))))  = -1/2*h/m;
-%     Ax_vel_dyn(k+1,find(names == strcat('FFx',num2str(k))))  = -h/m;%Euler Integration
-%     Ax_vel_dyn(k+1,find(names == strcat('FHx',num2str(k))))  = -h/m;%Euler Integration
-% end
-% %               Build b vector
-% bx_vel_dyn = zeros(size(Ax_vel_dyn,1),1);
-% %--------------------------------------------------------------
-% %           y-axis position dynamics
-% %               Build A matrix
-% Ay_pos_dyn = zeros(yLength-1,namesLength);
-% for k = 0:TimeSeriesLength-2
-%     Ay_pos_dyn(k+1,find(names == strcat('y',num2str(k+1)))) = 1;
-%     Ay_pos_dyn(k+1,find(names == strcat('y',num2str(k))))   =-1;
-% %     Ay_pos_dyn(k+1,find(names == strcat('ydot',num2str(k+1)))) = -1/2*h;
-% %     Ay_pos_dyn(k+1,find(names == strcat('ydot',num2str(k)))) = -1/2*h;  
-%     Ay_pos_dyn(k+1,find(names == strcat('ydot',num2str(k)))) = -h; %Euler Integration
-% end
-% %               Build b vector
-% by_pos_dyn = zeros(size(Ay_pos_dyn,1),1);
-% %---------------------------------------------------------------
-% %           y-axis velocity dynamics
-% %               Build A matrix
-% Ay_vel_dyn = zeros(ydotLength-1,namesLength);
-% for k = 0:TimeSeriesLength-2
-%     Ay_vel_dyn(k+1,find(names == strcat('ydot',num2str(k+1)))) = 1;
-%     Ay_vel_dyn(k+1,find(names == strcat('ydot',num2str(k))))   =-1;
-% %     Ay_vel_dyn(k+1,find(names == strcat('FFy',num2str(k+1))))  =-1/2*h/m;
-% %     Ay_vel_dyn(k+1,find(names == strcat('FHy',num2str(k+1))))  =-1/2*h/m;
-% %     Ay_vel_dyn(k+1,find(names == strcat('FFy',num2str(k))))    =-1/2*h/m;
-% %     Ay_vel_dyn(k+1,find(names == strcat('FHy',num2str(k))))    =-1/2*h/m;
-%     Ay_vel_dyn(k+1,find(names == strcat('FFy',num2str(k))))    =-h/m; %Euler Integration
-%     Ay_vel_dyn(k+1,find(names == strcat('FHy',num2str(k))))    =-h/m; %Euler Integration
-% end
-% %               Build b vector
-% by_vel_dyn = repmat(-h*g,size(Ay_vel_dyn,1),1);
-% %---------------------------------------------------------------
-% %           theta position dynamics --> theta(k+1)- theta(k) =h*thetadot(k) --> theta(k+1) - theta(k) - h*thetadot(k) = 0
-% %               Build A matrix
-% Atheta_pos_dyn = zeros(thetadotLength-1,namesLength);
-% for k = 0:TimeSeriesLength-2
-%     Atheta_pos_dyn(k+1,find(names == strcat('theta',num2str(k+1)))) = 1;
-%     Atheta_pos_dyn(k+1,find(names == strcat('theta',num2str(k))))   = -1;
-%     Atheta_pos_dyn(k+1,find(names == strcat('thetadot',num2str(k)))) = -h;
-% end
-% %               Build b vector
-% btheta_pos_dyn = zeros(size(Atheta_pos_dyn,1),1);
-% %---------------------------------------------------------------
-% %   Foot/End-Effector Dynamics
-% %---------------------------------------------------------------
-% %       Front Leg PF
-% %           x-axis dynamics (only velocities)
-% %               Build A matrix
-% APFx_dyn = zeros(PFxLength-1, namesLength);
-% for k = 0:TimeSeriesLength - 2
-%     APFx_dyn(k+1,find(names == strcat('PFx',num2str(k+1)))) = 1;
-%     APFx_dyn(k+1,find(names == strcat('PFx',num2str(k))))   =-1;
-%     %APFx_dyn(k+1,find(names == strcat('PFxdot',num2str(k+1)))) = -1/2*h;
-%     %APFx_dyn(k+1,find(names == strcat('PFxdot',num2str(k))))   =-1/2*h;
-%     APFx_dyn(k+1,find(names == strcat('PFxdot',num2str(k))))   =-h; %euler integration
-% end
-% %               Build b vector
-% bPFx_dyn = zeros(size(APFx_dyn,1),1);
-% %---------------------------------------------------------------
-% %           y-axis dynamics (only velocities)
-% %               Build A matrix
-% APFy_dyn = zeros(PFyLength-1, namesLength);
-% for k = 0:TimeSeriesLength - 2
-%     APFy_dyn(k+1,find(names == strcat('PFy',num2str(k+1)))) = 1;
-%     APFy_dyn(k+1,find(names == strcat('PFy',num2str(k))))   =-1;
-%     %APFy_dyn(k+1,find(names == strcat('PFydot',num2str(k+1)))) = -1/2*h;
-%     %APFy_dyn(k+1,find(names == strcat('PFydot',num2str(k))))   =-1/2*h;
-%     APFy_dyn(k+1,find(names == strcat('PFydot',num2str(k))))   =-h; %Euler Integration
-% end
-% %               Build b vector
-% bPFy_dyn = zeros(size(APFy_dyn,1),1);
-% %---------------------------------------------------------------
-% %       Hind Leg PH
-% %           x-axis dynamics (only velocities)
-% %               Build A matrix
-% APHx_dyn = zeros(PHxLength-1, namesLength);
-% for k = 0:TimeSeriesLength - 2
-%     APHx_dyn(k+1,find(names == strcat('PHx',num2str(k+1)))) = 1;
-%     APHx_dyn(k+1,find(names == strcat('PHx',num2str(k))))   =-1;
-%     %APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k+1)))) = -1/2*h;
-%     %APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k))))   =-1/2*h; 
-%     APHx_dyn(k+1,find(names == strcat('PHxdot',num2str(k))))   =-h; %Euler Integration
-% end
-% %               Build b vector
-% bPHx_dyn = zeros(size(APHx_dyn,1),1);
-% %---------------------------------------------------------------
-% %           y-axis dynamics (only velocities)
-% %               Build A matrix
-% APHy_dyn = zeros(PHyLength-1, namesLength);
-% for k = 0:TimeSeriesLength - 2
-%     APHy_dyn(k+1,find(names == strcat('PHy',num2str(k+1)))) = 1;
-%     APHy_dyn(k+1,find(names == strcat('PHy',num2str(k))))   =-1;
-%     %APHy_dyn(k+1,find(names == strcat('PHydot',num2str(k+1)))) = -1/2*h;
-%     %APHy_dyn(k+1,find(names == strcat('PHydot',num2str(k))))   =-1/2*h;
-%     APHy_dyn(k+1,find(names == strcat('PHydot',num2str(k))))   =-h; %Euler Integration
-% end
-% %               Build b vector
-% bPHy_dyn = zeros(size(APHy_dyn,1),1);
-% %---------------------------------------------------------------
-% %           Collect System Dynamic Constraints (Centroidal + End-effector Dynamics)
-% %---------------------------------------------------------------
-% Adyn = [Ax_pos_dyn;Ax_vel_dyn;Ay_pos_dyn;Ay_vel_dyn;Atheta_pos_dyn;APFx_dyn;APFy_dyn;APHx_dyn;APHy_dyn];
-% bdyn = [bx_pos_dyn;bx_vel_dyn;by_pos_dyn;by_vel_dyn;btheta_pos_dyn;bPFx_dyn;bPFy_dyn;bPHx_dyn;bPHy_dyn];
-
-
-
 %---------------------------------------------------------------
 %       Complementarity Constraints
 %---------------------------------------------------------------
@@ -818,7 +647,7 @@ end
 %                       Build b vector
 bFHy_Con2 = zeros(size(AFHy_Con2,1),1);
 %                       Setup Constraint Type
-TypeFHy_Con2 = repmat(1,size(AFHy_Con2,1),1);
+TypeFHy_Con2 = repmat(1,size(AFHy_Con2,1),1);%-1 <=, 0 ==, 1 >=
 %---------------------------------------------------------------
 %           Collect Complementarity Constraints
 %           Question: Should we include velocity constraint on y-axis of
@@ -857,7 +686,24 @@ Typecomplementarity = [TypePFy_Con1;TypePFy_Con2;...
                        TypePHydot_Con1;TypePHydot_Con2;...
                        TypeFHx_Con1;TypeFHx_Con2;...
                        TypeFHy_Con1;TypeFHy_Con2
-                       ];     
+                       ];
+%---------------------------------------------------------------
+%       Switching Time Constraints
+%---------------------------------------------------------------
+%           Build A matrix
+ASwitchingTime_Con = zeros(NumPhases,namesLength);
+for k = 1:NumPhases
+    if k == 1
+        ASwitchingTime_Con(k,find(names == strcat('SwitchingTime',num2str(k)))) = -1; 
+    else
+        ASwitchingTime_Con(k,find(names == strcat('SwitchingTime',num2str(k)))) = -1;
+        ASwitchingTime_Con(k,find(names == strcat('SwitchingTime',num2str(k-1)))) = 1;
+    end  
+end
+%           Build b vector
+bSwitchingTime_Con = zeros(size(ASwitchingTime_Con,1),1);
+%           Setup Constraint Type
+TypeSwitchingTime_Con = repmat(-1,size(ASwitchingTime_Con,1),1);%-1 <=, 0 ==, 1 >=  
 %---------------------------------------------------------------
 %   Set Boundary Conditions
 %---------------------------------------------------------------
@@ -906,13 +752,15 @@ Atheta_end = zeros(1,namesLength);
 Atheta_end(find(names == theta_label(end))) = 1;
 Athetadot_end = zeros(1,namesLength);
 Athetadot_end(find(names == thetadot_label(end))) = 1;
+AT_end(find(names == SwitchingTime_label(end))) = 1;
 %               Collect in to an A matrix
 Aend = [Ax_end;
         Ay_end;
         Axdot_end;
         Aydot_end;
         Atheta_end;
-        Athetadot_end
+        Athetadot_end;
+        AT_end
        ];
 %           Build b vectors
 bend = [x_end;
@@ -920,7 +768,8 @@ bend = [x_end;
         xdot_end;
         ydot_end
         theta_end;
-        thetadot_end
+        thetadot_end;
+        T_end
        ];
 %---------------------------------------------------------------
 %===============================================================
@@ -939,105 +788,123 @@ if SoftTerminalConstraint == 0
 end
 %---------------------------------------------------------------
 %   Collect all A, b and Type for linear inequality constraints
-A = [Acomplementarity];
-b = [bcomplementarity];
-IneqType = [Typecomplementarity];
+A = [Acomplementarity;ASwitchingTime_Con];
+b = [bcomplementarity;bSwitchingTime_Con];
+IneqType = [Typecomplementarity;TypeSwitchingTime_Con];
 %------------------------------------------------------------
-% %   Variable Lower and Upper Boundaries
-% lb = [repmat(-inf,1, sum(LengthList(find(varList == "x"):find(varList == "SwitchingTime")))),repmat(0,1,CFLength + CHLength)];
-% ub = [repmat( inf,1, sum(LengthList(find(varList == "x"):find(varList == "SwitchingTime")))),repmat(1,1,CFLength + CHLength)];
-% %   Variable Type
-% vtype = [repmat('C', 1, sum(LengthList(find(varList == "x"):find(varList == "FHy")))), repmat('B',1, CFLength + CHLength)];
-% %=============================================================
-% %Call Solvers
-% %-------------------------------------------------------------
-% if solver == "knitro"
-%     %Display Info
-%     disp("Use Knitro")
-%     disp(" ")
-% %-------------------------------------------------------------
-%     %Set up problem
-% %-------------------------------------------------------------
-%         %Build Objective Function
-%     if SoftTerminalConstraint == 0 %Set Terminal Condition as hard Constraint
-%         objfunc = @(vars)cost(vars,Q); %!!!!Cost function may need quadrature as well
-%     elseif SoftTerminalConstraint == 1 %Set Terminal Condition as soft constraint, put into cost function
-%         objfunc = @(vars)cost_softconstraint(vars,...
-%                                              Q,...
-%                                              xIdx_end,...
-%                                              xdotIdx_end,...
-%                                              yIdx_end,...
-%                                              ydotIdx_end,...
-%                                              thetaIdx_end,...
-%                                              thetadotIdx_end,...
-%                                              x_end,...
-%                                              xdot_end,...   
-%                                              y_end,...
-%                                              ydot_end,...
-%                                              theta_end,...
-%                                              thetadot_end);
-%     end
-% 
-% %-------------------------------------------------------------
-%         %Nonlinear Constraints
-%     nlcon = @(vars) nlconstraint(vars,...
-%                                  h,...
-%                                  I,...
-%                                  xIdx_init,xIdx_end,...
-%                                  yIdx_init,yIdx_end,...
-%                                  thetaIdx_init,thetaIdx_end,...
-%                                  xdotIdx_init,xdotIdx_end,...
-%                                  ydotIdx_init,ydotIdx_end,...
-%                                  thetadotIdx_init,thetadotIdx_end,...
-%                                  PFxIdx_init,PFxIdx_end,...
-%                                  PFyIdx_init,PFyIdx_end,...
-%                                  PHxIdx_init,PHxIdx_end,...
-%                                  PHyIdx_init,PHyIdx_end,...
-%                                  FFxIdx_init,FFxIdx_end,...
-%                                  FFyIdx_init,FFyIdx_end,...
-%                                  FHxIdx_init,FHxIdx_end,...
-%                                  FHyIdx_init,FHyIdx_end,...
-%                                  PFcenterX,PFcenterY,...
-%                                  PHcenterX,PHcenterY,...
-%                                  BoundingBox_Width,BoundingBox_Height,...
-%                                  TerrainNorm,miu)
-% %-------------------------------------------------------------
-%     %other parameters
-%     objFnType = 0;
-%     cFnType = [];
-%     x0 = rand(namesLength,1);
-% %-------------------------------------------------------------
-%     %flip inequality constraints, Knitro only takes < constraints
-%     A(find(IneqType == 1),:) = -A(find(IneqType == 1),:);
-%     b(find(IneqType == 1)) = -b(find(IneqType == 1));
-% %-------------------------------------------------------------
-%     %Sparsify A matrix and b vectors
-%     if A_Sparsity == 1
-%         A = sparse(A);
-%         b = sparse(b);
-%         Aeq = sparse(Aeq);
-%         beq = sparse(beq);
-%     end
-% %-------------------------------------------------------------
-%     %transpose lower and upper bounds, Knitro requires
-%     lb = lb';
-%     ub = ub';
-% %-------------------------------------------------------------
-%     %reset vType vector, Knitro requires
-%     vtype = [repmat(0, sum(LengthList(find(varList == "x"):find(varList == "SwitchingTime"))), 1); repmat(2, CFLength + CHLength, 1)]; %0 -> continuous variable, 2 -> discrete variable
-% %-------------------------------------------------------------
-%     %call knitro
-%     options = optimset('Display','iter');
-%     [result.x,result.objval,result.exitflag,optInfo] = knitromatlab_mip(objfunc,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,option_file);
-% %-------------------------------------------------------------
-% else
-%     disp("Unknown solver");
-%     disp{" "}
-% end
-% 
-% %Close command line logging
-% diary off
-% %%
+%   Variable Lower and Upper Boundaries
+lb = [repmat(-inf,1, sum(LengthList(find(varList == "x"):find(varList == "SwitchingTime")))),repmat(0,1,CFLength + CHLength)];
+ub = [repmat( inf,1, sum(LengthList(find(varList == "x"):find(varList == "SwitchingTime")))),repmat(1,1,CFLength + CHLength)];
+%   Variable Type
+vtype = [repmat('C', 1, sum(LengthList(find(varList == "x"):find(varList == "SwitchingTime")))), repmat('B',1, CFLength + CHLength)];
+%=============================================================
+%Call Solvers
+%-------------------------------------------------------------
+if solver == "knitro"
+    %Display Info
+    disp("Use Knitro")
+    disp(" ")
+%-------------------------------------------------------------
+    %Set up problem
+%-------------------------------------------------------------
+        %Build Objective Function
+    if SoftTerminalConstraint == 0 %Set Terminal Condition as hard Constraint
+        objfunc = @(vars) cost(vars,...
+                               NumPhases,...
+                               NumLocalKnots,...
+                               tauStepLength,...                     
+                               FFxIdx_init,FFxIdx_end,...
+                               FFyIdx_init,FFyIdx_end,...
+                               FHxIdx_init,FHxIdx_end,...
+                               FHyIdx_init,FHyIdx_end,...
+                               SwitchingTimeIdx_init,SwitchingTimeIdx_end)
+%                               !!!!Cost function may need quadrature as well
+    elseif SoftTerminalConstraint == 1 %Set Terminal Condition as soft constraint, put into cost function
+        objfunc = @(vars)cost_softconstraint(vars,...
+                                             Q,...
+                                             xIdx_end,...
+                                             xdotIdx_end,...
+                                             yIdx_end,...
+                                             ydotIdx_end,...
+                                             thetaIdx_end,...
+                                             thetadotIdx_end,...
+                                             x_end,...
+                                             xdot_end,...   
+                                             y_end,...
+                                             ydot_end,...
+                                             theta_end,...
+                                             thetadot_end);
+    end
+
+%-------------------------------------------------------------
+        %Nonlinear Constraints
+    nlcon = @(vars)nlconstraint(vars,...
+                                NumPhases,...
+                                NumLocalKnots,...
+                                tauStepLength,...
+                                m,...
+                                g,...
+                                I,...
+                                xIdx_init,xIdx_end,...
+                                yIdx_init,yIdx_end,...
+                                thetaIdx_init,thetaIdx_end,...
+                                xdotIdx_init,xdotIdx_end,...
+                                ydotIdx_init,ydotIdx_end,...
+                                thetadotIdx_init,thetadotIdx_end,...
+                                PFxIdx_init,PFxIdx_end,...
+                                PFyIdx_init,PFyIdx_end,...
+                                PHxIdx_init,PHxIdx_end,...
+                                PHyIdx_init,PHyIdx_end,...
+                                PFxdotIdx_init,PFxdotIdx_end,...
+                                PFydotIdx_init,PFydotIdx_end,...
+                                PHxdotIdx_init,PHxdotIdx_end,...
+                                PHydotIdx_init,PHydotIdx_end,...
+                                FFxIdx_init,FFxIdx_end,...
+                                FFyIdx_init,FFyIdx_end,...
+                                FHxIdx_init,FHxIdx_end,...
+                                FHyIdx_init,FHyIdx_end,...
+                                SwitchingTimeIdx_init,SwitchingTimeIdx_end,...
+                                PFcenterX,PFcenterY,...
+                                PHcenterX,PHcenterY,...
+                                BoundingBox_Width,BoundingBox_Height,...
+                                TerrainNorm,miu)
+%-------------------------------------------------------------
+    %other parameters
+    objFnType = 0;
+    cFnType = [];
+    x0 = rand(namesLength,1);
+%-------------------------------------------------------------
+    %flip inequality constraints, Knitro only takes < constraints
+    A(find(IneqType == 1),:) = -A(find(IneqType == 1),:);
+    b(find(IneqType == 1)) = -b(find(IneqType == 1));
+%-------------------------------------------------------------
+    %Sparsify A matrix and b vectors
+    if A_Sparsity == 1
+        A = sparse(A);
+        b = sparse(b);
+        Aeq = sparse(Aeq);
+        beq = sparse(beq);
+    end
+%-------------------------------------------------------------
+    %transpose lower and upper bounds, Knitro requires
+    lb = lb';
+    ub = ub';
+%-------------------------------------------------------------
+    %reset vType vector, Knitro requires
+    vtype = [repmat(0, sum(LengthList(find(varList == "x"):find(varList == "SwitchingTime"))), 1); repmat(2, CFLength + CHLength, 1)]; %0 -> continuous variable, 2 -> discrete variable
+%-------------------------------------------------------------
+    %call knitro
+    options = optimset('Display','iter');
+    [result.x,result.objval,result.exitflag,optInfo] = knitromatlab_mip(objfunc,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,option_file);
+-------------------------------------------------------------
+else
+    disp("Unknown solver");
+    disp{" "}
+end
+
+%Close command line logging
+diary off
+%%
 % %========================================================================
 % %Extract Input Results
 % %========================================================================

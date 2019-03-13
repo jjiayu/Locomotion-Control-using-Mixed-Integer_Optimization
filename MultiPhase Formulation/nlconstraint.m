@@ -1,5 +1,9 @@
 function [c,ceq] = nlconstraint(vars,...
-                                h,...
+                                NumPhases,...
+                                NumLocalKnots,...
+                                tauStepLength,...
+                                m,...
+                                g,...
                                 I,...
                                 xIdx_init,xIdx_end,...
                                 yIdx_init,yIdx_end,...
@@ -11,10 +15,15 @@ function [c,ceq] = nlconstraint(vars,...
                                 PFyIdx_init,PFyIdx_end,...
                                 PHxIdx_init,PHxIdx_end,...
                                 PHyIdx_init,PHyIdx_end,...
+                                PFxdotIdx_init,PFxdotIdx_end,...
+                                PFydotIdx_init,PFydotIdx_end,...
+                                PHxdotIdx_init,PHxdotIdx_end,...
+                                PHydotIdx_init,PHydotIdx_end,...
                                 FFxIdx_init,FFxIdx_end,...
                                 FFyIdx_init,FFyIdx_end,...
                                 FHxIdx_init,FHxIdx_end,...
                                 FHyIdx_init,FHyIdx_end,...
+                                SwitchingTimeIdx_init,SwitchingTimeIdx_end,...
                                 PFcenterX,PFcenterY,...
                                 PHcenterX,PHcenterY,...
                                 BoundingBox_Width,BoundingBox_Height,...
@@ -39,6 +48,10 @@ PFx_current = vars(PFxIdx_init:PFxIdx_end - 1);
 PFy_current = vars(PFyIdx_init:PFyIdx_end - 1);
 PHx_current = vars(PHxIdx_init:PHxIdx_end - 1);
 PHy_current = vars(PHyIdx_init:PHyIdx_end - 1);
+PFxdot_current = vars(PFxdotIdx_init:PFxdotIdx_end - 1);
+PFydot_current = vars(PFydotIdx_init:PFydotIdx_end - 1);
+PHxdot_current = vars(PHxdotIdx_init:PHxdotIdx_end - 1);
+PHydot_current = vars(PHydotIdx_init:PHydotIdx_end - 1);
 FFx_current = vars(FFxIdx_init:FFxIdx_end - 1);
 FFy_current = vars(FFyIdx_init:FFyIdx_end - 1);
 FHx_current = vars(FHxIdx_init:FHxIdx_end - 1);
@@ -61,6 +74,12 @@ FFy_future = vars(FFyIdx_init + 1:FFyIdx_end);
 FHx_future = vars(FHxIdx_init + 1:FHxIdx_end);
 FHy_future = vars(FHyIdx_init + 1:FHyIdx_end);
 
+%   Time Step Vector
+SwitchingTimeVector = vars(SwitchingTimeIdx_init:SwitchingTimeIdx_end); %Extract Switching Time Vector
+%KnotIdxVector = 0:NumKnots-1; %Knot index vector, the last knot does not account for integration, ignore
+SlopeVector = NumPhases.*diff([0;SwitchingTimeVector]);%Slope to 
+TimeStep_vector = repelem(tauStepLength.*SlopeVector,NumLocalKnots); %time step vector in real-time scale
+
 %   Old vector definition
 % x = vars(xIdx_init:xIdx_end-1);
 % y = vars(yIdx_init:yIdx_end-1);
@@ -77,15 +96,48 @@ FHy_future = vars(FHyIdx_init + 1:FHyIdx_end);
 % FHy = vars(FHyIdx_init:FHyIdx_end-1);
 
 %=========================================================================
-%       Rotation dynamics --> I*thetadotodt = (PF - r) X FF + (PH - r) X FH
+%       System Dynamics
 %=========================================================================
-%       
+%       Robot Torso Dynamics
+%-------------------------------------------------------------------------
+%           x-axis position dynamics
+x_pos_dyn = x_future - x_current - TimeStep_vector.*xdot_current;
+%-------------------------------------------------------------------------
+%           x-axis velocity dynamics
+x_vel_dyn = xdot_future - xdot_current - TimeStep_vector./m.*FFx_current - TimeStep_vector./m.*FHx_current;
+%-------------------------------------------------------------------------
+%           y-axis position dynamics
+y_pos_dyn = y_future - y_current - TimeStep_vector.*ydot_current;
+%-------------------------------------------------------------------------
+%           y-axis velocity dynamics
+y_vel_dyn = ydot_future - ydot_current - TimeStep_vector./m.*FFy_current - TimeStep_vector./m.*FHy_current + TimeStep_vector.*g;
+%-------------------------------------------------------------------------
+%           theta position dynamics
+theta_pos_dyn = theta_future - theta_current - TimeStep_vector.*thetadot_current;
+%-------------------------------------------------------------------------
+%           theta velocity dynamics
+%           Rotation dynamics --> I*thetadotodt = (PF - r) X FF + (PH - r) X FH
+%-------------------------------------------------------------------------
+%           Build constraint
+torque = (PFx_current - x_current).*FFy_current - (PFy_current - y_current).*FFx_current + (PHx_current - x_current).*FHy_current - (PHy_current - y_current).*FHx_current;
+theta_vel_dyn = I.*thetadot_future - I.*thetadot_current - TimeStep_vector.*torque;
+%-------------------------------------------------------------------------
+%       Foot/End-Effector Dynamics
+%-------------------------------------------------------------------------
+%           Front Leg x-axis position dynamics
+%-------------------------------------------------------------------------
+PFx_pos_dyn = PFx_future - PFx_current - TimeStep_vector.*PFxdot_current;
+%-------------------------------------------------------------------------
+%           Front Leg y-axis position dynamics
+PFy_pos_dyn = PFy_future - PFy_current - TimeStep_vector.*PFydot_current;
+%-------------------------------------------------------------------------
+%           Hind Leg x-axis position dynamics
+PHx_pos_dyn = PHx_future - PHx_current - TimeStep_vector.*PHxdot_current;
+%-------------------------------------------------------------------------
+%           Hind Leg y-axis position dynamics
+PHy_pos_dyn = PHy_future - PHy_current - TimeStep_vector.*PHydot_current;
+%=========================================================================
 
-%-------------------------------------------------------------------------
-%       Build constraint
-cross_product = (PFx_current - x_current).*FFy_current - (PFy_current - y_current).*FFx_current + (PHx_current - x_current).*FHy_current - (PHy_current - y_current).*FHx_current;
-ceq_rotation_dynamics = I.*thetadot_future - I.*thetadot_current - h.*cross_product;
-%-------------------------------------------------------------------------
 
 %=========================================================================
 %       Kinematics Constraint
@@ -163,7 +215,11 @@ FrictionHindLeg = FHx_current - miu.*(TerrainNorm(1).*FHx_current + TerrainNorm(
 FrictionCone = [FrictionFrontLeg;FrictionHindLeg];
 
 c = [KineCon;FrictionCone];
-ceq = [];%[ceq_rotation_dynamics];
+ceq = [x_pos_dyn;x_vel_dyn;...
+       y_pos_dyn;y_vel_dyn;...
+       theta_pos_dyn;theta_vel_dyn;...
+       PFx_pos_dyn;PFy_pos_dyn;
+       PHx_pos_dyn;PHy_pos_dyn];%[ceq_rotation_dynamics];
 %ceq = [];
 
 end
