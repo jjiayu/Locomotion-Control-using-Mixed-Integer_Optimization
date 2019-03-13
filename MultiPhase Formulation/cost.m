@@ -11,10 +11,10 @@ function cost = cost(vars,...
 
 
 %   Extract Force Vectors
-FFx_vector = vars(FFxIdx_init:FFxIdx_end);
-FFy_vector = vars(FFyIdx_init:FFyIdx_end);
-FHx_vector = vars(FHxIdx_init:FHxIdx_end);
-FHy_vector = vars(FHyIdx_init:FHyIdx_end);
+FFx_vector = vars(FFxIdx_init:FFxIdx_end - 1);
+FFy_vector = vars(FFyIdx_init:FFyIdx_end - 1);
+FHx_vector = vars(FHxIdx_init:FHxIdx_end - 1);
+FHy_vector = vars(FHyIdx_init:FHyIdx_end - 1);
 
 %   Time Step Vector
 SwitchingTimeVector = vars(SwitchingTimeIdx_init:SwitchingTimeIdx_end); %Extract Switching Time Vector

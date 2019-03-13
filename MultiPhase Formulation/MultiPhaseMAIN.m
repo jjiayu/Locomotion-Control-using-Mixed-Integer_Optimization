@@ -752,6 +752,7 @@ Atheta_end = zeros(1,namesLength);
 Atheta_end(find(names == theta_label(end))) = 1;
 Athetadot_end = zeros(1,namesLength);
 Athetadot_end(find(names == thetadot_label(end))) = 1;
+AT_end = zeros(1,namesLength);
 AT_end(find(names == SwitchingTime_label(end))) = 1;
 %               Collect in to an A matrix
 Aend = [Ax_end;
@@ -760,8 +761,7 @@ Aend = [Ax_end;
         Aydot_end;
         Atheta_end;
         Athetadot_end;
-        AT_end
-       ];
+        AT_end];
 %           Build b vectors
 bend = [x_end;
         y_end;
@@ -769,8 +769,7 @@ bend = [x_end;
         ydot_end
         theta_end;
         thetadot_end;
-        T_end
-       ];
+        T_end];
 %---------------------------------------------------------------
 %===============================================================
 %Build Constraints
@@ -817,7 +816,7 @@ if solver == "knitro"
                                FFyIdx_init,FFyIdx_end,...
                                FHxIdx_init,FHxIdx_end,...
                                FHyIdx_init,FHyIdx_end,...
-                               SwitchingTimeIdx_init,SwitchingTimeIdx_end)
+                               SwitchingTimeIdx_init,SwitchingTimeIdx_end);
 %                               !!!!Cost function may need quadrature as well
     elseif SoftTerminalConstraint == 1 %Set Terminal Condition as soft constraint, put into cost function
         objfunc = @(vars)cost_softconstraint(vars,...
@@ -867,7 +866,7 @@ if solver == "knitro"
                                 PFcenterX,PFcenterY,...
                                 PHcenterX,PHcenterY,...
                                 BoundingBox_Width,BoundingBox_Height,...
-                                TerrainNorm,miu)
+                                TerrainNorm,miu);
 %-------------------------------------------------------------
     %other parameters
     objFnType = 0;
@@ -896,7 +895,7 @@ if solver == "knitro"
     %call knitro
     options = optimset('Display','iter');
     [result.x,result.objval,result.exitflag,optInfo] = knitromatlab_mip(objfunc,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,option_file);
--------------------------------------------------------------
+%-------------------------------------------------------------
 else
     disp("Unknown solver");
     disp{" "}

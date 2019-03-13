@@ -1,0 +1,86 @@
+Date and Time:
+   13-Mar-2019 18:59:31
+
+Correspondent Log File Name: log-20190313T185931
+ 
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+MultiPhase Formulation: Optimize over States, Control Inputs and Switching Times
+ 
+Knots/Time Parameter tau Setup:
+Good Example Setups: Number of Knots = 20 or 100 (Knot Step Length = tau_upper_limit/Number of Knots, tau_upper_limit = 1), Num of Phases: 4 or 5
+Results in uniform tau discretization length
+ 
+Input Number of Knots/Discretization of Time/parameter tau (e.g. 20): 
+20
+ 
+Input Number of Phases (e.g. 4, all phases have the same number of knots), larger the number of phases, more difficult for the solver to solve the problem (more integer variables): 
+4
+ 
+Input Terminal Time (Unit: Seconds, e.g. 1): 
+1
+Input Goal State (Travel Distance e.g. 0.5): 
+0.5
+ 
+Q matrix in the Cost Function is Sparse
+A matrix for Constraints is Sparse
+ 
+Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function 
+0
+Terminal Condition is Set as Hard Constraints
+ 
+Use Knitro
+ 
+
+objfunc =
+
+  <a href="matlab:helpPopup function_handle" style="font-weight:bold">function_handle</a> with value:
+
+    @(vars)cost(vars,NumPhases,NumLocalKnots,tauStepLength,FFxIdx_init,FFxIdx_end,FFyIdx_init,FFyIdx_end,FHxIdx_init,FHxIdx_end,FHyIdx_init,FHyIdx_end,SwitchingTimeIdx_init,SwitchingTimeIdx_end)
+
+
+nlcon =
+
+  <a href="matlab:helpPopup function_handle" style="font-weight:bold">function_handle</a> with value:
+
+    @(vars)nlconstraint(vars,NumPhases,NumLocalKnots,tauStepLength,m,g,I,xIdx_init,xIdx_end,yIdx_init,yIdx_end,thetaIdx_init,thetaIdx_end,xdotIdx_init,xdotIdx_end,ydotIdx_init,ydotIdx_end,thetadotIdx_init,thetadotIdx_end,PFxIdx_init,PFxIdx_end,PFyIdx_init,PFyIdx_end,PHxIdx_init,PHxIdx_end,PHyIdx_init,PHyIdx_end,PFxdotIdx_init,PFxdotIdx_end,PFydotIdx_init,PFydotIdx_end,PHxdotIdx_init,PHxdotIdx_end,PHydotIdx_init,PHydotIdx_end,FFxIdx_init,FFxIdx_end,FFyIdx_init,FFyIdx_end,FHxIdx_init,FHxIdx_end,FHyIdx_init,FHyIdx_end,SwitchingTimeIdx_init,SwitchingTimeIdx_end,PFcenterX,PFcenterY,PHcenterX,PHcenterY,BoundingBox_Width,BoundingBox_Height,TerrainNorm,miu)
+
+[Warning: <a href="matlab: opentoline('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab\knitromatlab_mip.p',1460,0)">File: knitromatlab_mip.p Line: 1460 Column: 0
+</a>The temporary variable workerobjHandle will be cleared at the beginning of each iteration of the
+parfor loop.
+Any value assigned to it before the loop will be lost.  If workerobjHandle is used before it is
+assigned in the parfor loop, a runtime error will occur.
+See <a href="matlab: helpview([docroot '/distcomp/distcomp_ug.map'],'PARFOR_TEMPORARY_VARIABLES')">Parallel for Loops in MATLAB, "Temporary Variables"</a>.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m', 897)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m',897,0)">line 897</a>)] 
+[Warning: <a href="matlab: opentoline('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab\knitromatlab_mip.p',1621,0)">File: knitromatlab_mip.p Line: 1621 Column: 0
+</a>The temporary variable workerconHandle will be cleared at the beginning of each iteration of the
+parfor loop.
+Any value assigned to it before the loop will be lost.  If workerconHandle is used before it is
+assigned in the parfor loop, a runtime error will occur.
+See <a href="matlab: helpview([docroot '/distcomp/distcomp_ug.map'],'PARFOR_TEMPORARY_VARIABLES')">Parallel for Loops in MATLAB, "Temporary Variables"</a>.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m', 897)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m',897,0)">line 897</a>)] 
+[Warning: <a href="matlab: opentoline('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab\knitromatlab_mip.p',1709,0)">File: knitromatlab_mip.p Line: 1709 Column: 0
+</a>The temporary variable workerconHandle will be cleared at the beginning of each iteration of the
+parfor loop.
+Any value assigned to it before the loop will be lost.  If workerconHandle is used before it is
+assigned in the parfor loop, a runtime error will occur.
+See <a href="matlab: helpview([docroot '/distcomp/distcomp_ug.map'],'PARFOR_TEMPORARY_VARIABLES')">Parallel for Loops in MATLAB, "Temporary Variables"</a>.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m', 897)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m',897,0)">line 897</a>)] 
+{Matrix dimensions must agree.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('cost', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\cost.m', 25)" style="font-weight:bold">cost</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\cost.m',25,0)">line 25</a>)
+cost = sum(TimeStep_vector.*FFx_vector.^2) +...
+
+Error in
+<a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN>@(vars)cost(vars,NumPhases,NumLocalKnots,tauStepLength,FFxIdx_init,FFxIdx_end,FFyIdx_init,FFyIdx_end,FHxIdx_init,FHxIdx_end,FHyIdx_init,FHyIdx_end,SwitchingTimeIdx_init,SwitchingTimeIdx_end)')" style="font-weight:bold">MultiPhaseMAIN>@(vars)cost(vars,NumPhases,NumLocalKnots,tauStepLength,FFxIdx_init,FFxIdx_end,FFyIdx_init,FFyIdx_end,FHxIdx_init,FHxIdx_end,FHyIdx_init,FHyIdx_end,SwitchingTimeIdx_init,SwitchingTimeIdx_end)</a>
+
+Error in knitromatlab_mip
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m', 897)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m',897,0)">line 897</a>)
+    [result.x,result.objval,result.exitflag,optInfo] =
+    knitromatlab_mip(objfunc,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,option_file);
+
+Caused by:
+    Failure in initial user-supplied objective function evaluation. knitromatlab cannot continue.
+} 
+opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\cost.m',25,0)
+MultiPhaseMAIN
