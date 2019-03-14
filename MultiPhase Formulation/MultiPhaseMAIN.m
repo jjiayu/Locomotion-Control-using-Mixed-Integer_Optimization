@@ -904,53 +904,95 @@ end
 %Close command line logging
 diary off
 %%
-% %========================================================================
-% %Extract Input Results
-% %========================================================================
-% %robot state (Position)
-% x_result = result.x(find(names == 'x0'):find(names == x_label(end)));
-% y_result = result.x(find(names == 'y0'):find(names == y_label(end)));
-% theta_result = result.x(find(names == 'theta0'):find(names == theta_label(end)));
+%========================================================================
+%Extract Input Results
+%========================================================================
+
+%switching time
+SwitchingTime_result = result.x(find(names == SwitchingTime_label(1)):find(names == SwitchingTime_label(end)));
+TimeSlope = NumPhases.*diff([0;SwitchingTime_result]) %Slope of the piecewise linear mapping from tau to time t
+TimeIntercept = [0;SwitchingTime_result(1:end-1)]
+
+for i = 1:NumPhases
+    for j = 1:NumLocalKnots
+        TimeSeries((i-1)*NumLocalKnots + j) = TimeIntercept(i) + TimeSlope(i)*j*tauStepLength;
+    end
+end
+
+TimeSeries = [0;TimeSeries'];
+
+%robot state (Position)
+x_result = result.x(find(names == 'x0'):find(names == x_label(end)));
+y_result = result.x(find(names == 'y0'):find(names == y_label(end)));
+theta_result = result.x(find(names == 'theta0'):find(names == theta_label(end)));
+
+%robot state (Velocity)
+xdot_result = result.x(find(names == 'xdot0'):find(names == xdot_label(end)));
+ydot_result = result.x(find(names == 'ydot0'):find(names == ydot_label(end)));
+thetadot_result = result.x(find(names == 'thetadot0'):find(names == thetadot_label(end)));
+
+%Contact Configuration
+CF_result = result.x(find(names == 'CF1'):find(names == CF_label(end)));
+CH_result = result.x(find(names == 'CH1'):find(names == CH_label(end)));
+
+%end-effector locations
+PFx_result = result.x(find(names == 'PFx0'):find(names == PFx_label(end)));
+PFy_result = result.x(find(names == 'PFy0'):find(names == PFy_label(end)));
+PHx_result = result.x(find(names == 'PHx0'):find(names == PHx_label(end)));
+PHy_result = result.x(find(names == 'PHy0'):find(names == PHy_label(end)));
+
+%end-effector velocities
+PFxdot_result = result.x(find(names == 'PFxdot0'):find(names == PFxdot_label(end)));
+PFydot_result = result.x(find(names == 'PFydot0'):find(names == PFydot_label(end)));
+PHxdot_result = result.x(find(names == 'PHxdot0'):find(names == PHxdot_label(end)));
+PHydot_result = result.x(find(names == 'PHydot0'):find(names == PHydot_label(end)));
+
+%contact force result
+FFx_result = result.x(find(names == 'FFx0'):find(names == FFx_label(end)));
+FFy_result = result.x(find(names == 'FFy0'):find(names == FFy_label(end)));
+FHx_result = result.x(find(names == 'FHx0'):find(names == FHx_label(end)));
+FHy_result = result.x(find(names == 'FHy0'):find(names == FHy_label(end)));
+
+NetForceX = FFx_result + FHx_result;
+NetForceY = FFy_result + FHy_result;
+
+%Torque on the body
+FrontTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_result).*FFx_result;
+HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
+
+NetTorque = FrontTorque_result + HindTorque_result;
+
+%Foot Bounding Box Result
+PFcenterX_result_world = x_result + cos(theta_result)*PFcenterX - sin(theta_result)*PFcenterY;
+PFcenterY_result_world = y_result + sin(theta_result)*PFcenterX + cos(theta_result)*PFcenterY;
+
+PHcenterX_result_world = x_result + cos(theta_result)*PHcenterX - sin(theta_result)*PHcenterY;
+PHcenterY_result_world = y_result + sin(theta_result)*PHcenterX + cos(theta_result)*PHcenterY;
+
+% %------------------------------------------------------------------
+% TimeSeries = [TimeSeries(1:6);TimeSeries(12:end)];
 % 
-% %robot state (Velocity)
-% xdot_result = result.x(find(names == 'xdot0'):find(names == xdot_label(end)));
-% ydot_result = result.x(find(names == 'ydot0'):find(names == ydot_label(end)));
-% thetadot_result = result.x(find(names == 'thetadot0'):find(names == thetadot_label(end)));
+% x_result = [x_result(1:6);x_result(12:end)];
+% y_result = [y_result(1:6);y_result(12:end)];
+% theta_result = [theta_result(1:6);theta_result(12:end)];
 % 
-% %Contact Configuration
-% CF_result = result.x(find(names == 'CF0'):find(names == CF_label(end)));
-% CH_result = result.x(find(names == 'CH0'):find(names == CH_label(end)));
+% xdot_result = [xdot_result(1:6);xdot_result(12:end)];
+% ydot_result = [ydot_result(1:6);ydot_result(12:end)];
+% thetadot_result = [thetadot_result(1:6);thetadot_result(12:end)];
 % 
-% %end-effector locations
-% PFx_result = result.x(find(names == 'PFx0'):find(names == PFx_label(end)));
-% PFy_result = result.x(find(names == 'PFy0'):find(names == PFy_label(end)));
-% PHx_result = result.x(find(names == 'PHx0'):find(names == PHx_label(end)));
-% PHy_result = result.x(find(names == 'PHy0'):find(names == PHy_label(end)));
+% PFx_result = [PFx_result(1:6);PFx_result(12:end)];
+% PFy_result = [PFy_result(1:6);PFy_result(12:end)];
+% PHx_result = [PHx_result(1:6);PHx_result(12:end)];
+% PHy_result = [PHy_result(1:6);PHy_result(12:end)];
 % 
-% %end-effector velocities
-% PFxdot_result = result.x(find(names == 'PFxdot0'):find(names == PFxdot_label(end)));
-% PFydot_result = result.x(find(names == 'PFydot0'):find(names == PFydot_label(end)));
-% PHxdot_result = result.x(find(names == 'PHxdot0'):find(names == PHxdot_label(end)));
-% PHydot_result = result.x(find(names == 'PHydot0'):find(names == PHydot_label(end)));
 % 
-% %contact force result
-% FFx_result = result.x(find(names == 'FFx0'):find(names == FFx_label(end)));
-% FFy_result = result.x(find(names == 'FFy0'):find(names == FFy_label(end)));
-% FHx_result = result.x(find(names == 'FHx0'):find(names == FHx_label(end)));
-% FHy_result = result.x(find(names == 'FHy0'):find(names == FHy_label(end)));
+% NetForceX = [NetForceX(1:6);NetForceX(12:end)];
+% NetForceY = [NetForceY(1:6);NetForceY(12:end)];
 % 
-% NetForceX = FFx_result + FHx_result;
-% NetForceY = FFy_result + FHy_result;
+% NetTorque = [NetTorque(1:6);NetTorque(12:end)];
 % 
-% %Torque on the body
-% FrontTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_result).*FFx_result;
-% HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
+% PFcenterX_result_world = [PFcenterX_result_world(1:6);PFcenterX_result_world(12:end)];
+% PFcenterY_result_world = [PFcenterY_result_world(1:6);PFcenterY_result_world(12:end)];
 % 
-% NetTorque = FrontTorque_result + HindTorque_result;
-% 
-% %Foot Bounding Box Result
-% PFcenterX_result_world = x_result + cos(theta_result)*PFcenterX - sin(theta_result)*PFcenterY;
-% PFcenterY_result_world = y_result + sin(theta_result)*PFcenterX + cos(theta_result)*PFcenterY;
-% 
-% PHcenterX_result_world = x_result + cos(theta_result)*PHcenterX - sin(theta_result)*PHcenterY;
-% PHcenterY_result_world = y_result + sin(theta_result)*PHcenterX + cos(theta_result)*PHcenterY;
+% PHcenterX_result_world = [PHcenterX_result_world(1:6);PHcenterX_result_world(12:end)];
+% PHcenterY_result_world = [PHcenterY_result_world(1:6);PHcenterY_result_world(12:end)];

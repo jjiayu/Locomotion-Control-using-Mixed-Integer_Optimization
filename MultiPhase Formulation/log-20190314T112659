@@ -1,0 +1,1165 @@
+Date and Time:
+   14-Mar-2019 11:26:59
+
+Correspondent Log File Name: log-20190314T112659
+ 
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+MultiPhase Formulation: Optimize over States, Control Inputs and Switching Times
+ 
+[Warning: Name is nonexistent or not a directory: /Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/C] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m',109,0)">line 109</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m',86,0)">line 86</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 29)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',29,0)">line 29</a>)] 
+[Warning: Name is nonexistent or not a directory: /Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/\Program
+Files\Artelys\Knitro 11.1.0\knitromatlab] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('path', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m', 109)" style="font-weight:bold">path</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/path.m',109,0)">line 109</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('addpath', '/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m', 86)" style="font-weight:bold">addpath</a> (<a href="matlab: opentoline('/Applications/MATLAB_R2018b.app/toolbox/matlab/general/addpath.m',86,0)">line 86</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 29)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',29,0)">line 29</a>)] 
+Knots/Time Parameter tau Setup:
+Good Example Setups: Number of Knots = 20 or 100 (Knot Step Length = tau_upper_limit/Number of Knots, tau_upper_limit = 1), Num of Phases: 4 or 5
+Results in uniform tau discretization length
+ 
+Input Number of Knots/Discretization of Time/parameter tau (e.g. 20): 
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 59)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',59,0)">line 59</a>)
+} 
+clear
+clc
+load('log-20190313T190042.mat')
+
+ans =
+
+  Columns 1 through 15
+
+         0    0.0211    0.0422    0.0633    0.0844    0.1055    0.1266    0.1477    0.1688    0.1899    0.2110    0.2321    0.2532    0.2743    0.2955
+         0   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000
+         0    0.0259    0.0517    0.0776    0.1035    0.1293    0.1552    0.1811    0.2069    0.2328    0.2587    0.2845    0.3104    0.3363    0.3621
+         0    0.0030    0.0061    0.0091    0.0121    0.0151    0.0182    0.0212    0.0242    0.0273    0.0303    0.0333    0.0363    0.0394    0.0424
+
+  Columns 16 through 21
+
+    0.3166    0.3377    0.3588    0.3799    0.4010    0.4221
+   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000   -0.0000
+    0.3880    0.4139    0.4397    0.4656    0.4915    0.5173
+    0.0454    0.0485    0.0515    0.0545    0.0575    0.0606
+
+
+TimeSereis =
+
+  Columns 1 through 15
+
+         0    1.0000    2.0000    3.0000    4.0000    5.0000    6.0000    7.0000    8.0000    9.0000   10.0000   11.0000   12.0000   13.0000   14.0000
+    0.4221    1.4221    2.4221    3.4221    4.4221    5.4221    6.4221    7.4221    8.4221    9.4221   10.4221   11.4221   12.4221   13.4221   14.4221
+    0.4221    1.4221    2.4221    3.4221    4.4221    5.4221    6.4221    7.4221    8.4221    9.4221   10.4221   11.4221   12.4221   13.4221   14.4221
+    0.9394    1.9394    2.9394    3.9394    4.9394    5.9394    6.9394    7.9394    8.9394    9.9394   10.9394   11.9394   12.9394   13.9394   14.9394
+
+  Columns 16 through 21
+
+   15.0000   16.0000   17.0000   18.0000   19.0000   20.0000
+   15.4221   16.4221   17.4221   18.4221   19.4221   20.4221
+   15.4221   16.4221   17.4221   18.4221   19.4221   20.4221
+   15.9394   16.9394   17.9394   18.9394   19.9394   20.9394
+
+
+TimeSlope =
+
+    0.4221
+   -0.0000
+    0.5173
+    0.0606
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+clc
+cler
+{Undefined function or variable 'cler'.
+} 
+clear
+Undefined function or variable 'names'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 912)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',912,0)">line 912</a>)
+SwitchingTime_result = result.x(find(names == SwitchingTime_label(1)):find(names == SwitchingTime_label(end)));
+
+load('log-20190313T190042.mat')
+
+TimeSlope =
+
+    0.4221
+   -0.0000
+    0.5173
+    0.0606
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+
+TimeSeries =
+
+  Columns 1 through 15
+
+         0         0         0         0         0    0.0211    0.0422    0.0633    0.0844    0.1055    0.4221    0.4221    0.4221    0.4221    0.4221
+
+  Columns 16 through 25
+
+    0.4479    0.4738    0.4997    0.5255    0.5514    0.9425    0.9455    0.9485    0.9515    0.9546
+
+clear
+clc
+load('log-20190313T190042.mat')
+
+TimeSlope =
+
+    0.4221
+   -0.0000
+    0.5173
+    0.0606
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+
+TimeSeries =
+
+  Columns 1 through 15
+
+         0         0         0         0         0    0.0211    0.0422    0.0633    0.0844    0.1055    0.4221    0.4221    0.4221    0.4221    0.4221
+
+  Columns 16 through 25
+
+    0.4479    0.4738    0.4997    0.5255    0.5514    0.9425    0.9455    0.9485    0.9515    0.9546
+
+clear
+load('log-20190313T190042.mat')
+NumPhases
+
+NumPhases =
+
+     4
+
+
+TimeSlope =
+
+    0.4221
+   -0.0000
+    0.5173
+    0.0606
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+
+i =
+
+     1
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+i =
+
+     2
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+i =
+
+     3
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+i =
+
+     4
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+TimeSeries =
+
+  Columns 1 through 15
+
+         0         0         0         0         0    0.0211    0.0422    0.0633    0.0844    0.1055    0.4221    0.4221    0.4221    0.4221    0.4221
+
+  Columns 16 through 25
+
+    0.4479    0.4738    0.4997    0.5255    0.5514    0.9425    0.9455    0.9485    0.9515    0.9546
+
+
+TimeSlope =
+
+    0.4221
+   -0.0000
+    0.5173
+    0.0606
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+
+i =
+
+     1
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+i =
+
+     2
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+i =
+
+     3
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+i =
+
+     4
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+TimeSeries =
+
+  Columns 1 through 15
+
+    0.0211    0.0422    0.0633    0.0844    0.1055    0.4221    0.4221    0.4221    0.4221    0.4221    0.4479    0.4738    0.4997    0.5255    0.5514
+
+  Columns 16 through 25
+
+    0.9425    0.9455    0.9485    0.9515    0.9546    0.9425    0.9455    0.9485    0.9515    0.9546
+
+clear
+load('log-20190313T190042.mat')
+
+TimeSlope =
+
+    0.4221
+   -0.0000
+    0.5173
+    0.0606
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+
+i =
+
+     1
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+i =
+
+     2
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+i =
+
+     3
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+i =
+
+     4
+
+
+j =
+
+     1
+
+
+j =
+
+     2
+
+
+j =
+
+     3
+
+
+j =
+
+     4
+
+
+j =
+
+     5
+
+
+TimeSeries =
+
+  Columns 1 through 15
+
+    0.0211    0.0422    0.0633    0.0844    0.1055    0.4221    0.4221    0.4221    0.4221    0.4221    0.4479    0.4738    0.4997    0.5255    0.5514
+
+  Columns 16 through 20
+
+    0.9425    0.9455    0.9485    0.9515    0.9546
+
+clear
+clc
+load('log-20190313T190042.mat')
+
+TimeSlope =
+
+    0.4221
+   -0.0000
+    0.5173
+    0.0606
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+
+TimeSeries =
+
+  Columns 1 through 15
+
+    0.0211    0.0422    0.0633    0.0844    0.1055    0.4221    0.4221    0.4221    0.4221    0.4221    0.4479    0.4738    0.4997    0.5255    0.5514
+
+  Columns 16 through 20
+
+    0.9425    0.9455    0.9485    0.9515    0.9546
+
+clear
+clc
+load('log-20190313T190042.mat')
+
+TimeSlope =
+
+    1.6883
+   -0.0000
+    2.0694
+    0.2423
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+
+TimeSeries =
+
+  Columns 1 through 15
+
+    0.0844    0.1688    0.2532    0.3377    0.4221    0.4221    0.4221    0.4221    0.4221    0.4221    0.5255    0.6290    0.7325    0.8360    0.9394
+
+  Columns 16 through 20
+
+    0.9515    0.9637    0.9758    0.9879    1.0000
+
+clera
+{Undefined function or variable 'clera'.
+} 
+clear
+load('log-20190313T190042.mat')
+
+TimeSlope =
+
+    1.6883
+   -0.0000
+    2.0694
+    0.2423
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+diff(TimeSeries)
+
+ans =
+
+    0.0844
+    0.0844
+    0.0844
+    0.0844
+    0.0844
+   -0.0000
+   -0.0000
+   -0.0000
+   -0.0000
+   -0.0000
+    0.1035
+    0.1035
+    0.1035
+    0.1035
+    0.1035
+    0.0121
+    0.0121
+    0.0121
+    0.0121
+    0.0121
+
+NetForceX(7)
+
+ans =
+
+ -110.7614
+
+NetForceX
+
+NetForceX =
+
+  161.0923
+  145.5464
+  118.8845
+   82.9106
+   39.4604
+  -62.4609
+ -110.7614
+ -112.5756
+  -87.4854
+  -18.2825
+ -111.9581
+ -133.4405
+  -89.7146
+  -51.8183
+  -29.0825
+  -20.9071
+  -36.7514
+  -52.7780
+  -68.9447
+  -85.2179
+    1.0809
+
+TimeSeries
+
+TimeSeries =
+
+         0
+    0.0844
+    0.1688
+    0.2532
+    0.3377
+    0.4221
+    0.4221
+    0.4221
+    0.4221
+    0.4221
+    0.4221
+    0.5255
+    0.6290
+    0.7325
+    0.8360
+    0.9394
+    0.9515
+    0.9637
+    0.9758
+    0.9879
+    1.0000
+
+TimeSeries(6
+ TimeSeries(6
+             ↑
+{Error: Invalid expression. When calling a function or indexing a variable, use parentheses. Otherwise, check for mismatched delimiters.
+} 
+TimeSeries(6)
+
+ans =
+
+    0.4221
+
+TimeSeries(5)
+
+ans =
+
+    0.3377
+
+TimeSeries(7)
+
+ans =
+
+    0.4221
+
+TimeSlope
+
+TimeSlope =
+
+    1.6883
+   -0.0000
+    2.0694
+    0.2423
+
+TimeSlope <= 1e-3
+
+ans =
+
+  4×1 <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a> array
+
+   0
+   1
+   0
+   0
+
+
+TimeSlope =
+
+    1.6883
+   -0.0000
+    2.0694
+    0.2423
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('vertcat')" style="font-weight:bold">vertcat</a>
+Dimensions of arrays being concatenated are not consistent.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 924)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',924,0)">line 924</a>)
+TimeSeries = [0;TimeSeries'];
+
+
+TimeSlope =
+
+    1.6883
+   -0.0000
+    2.0694
+    0.2423
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('vertcat')" style="font-weight:bold">vertcat</a>
+Dimensions of arrays being concatenated are not consistent.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 922)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',922,0)">line 922</a>)
+TimeSeries = [0;TimeSeries'];
+
+clera
+{Undefined function or variable 'clera'.
+} 
+clear
+load('log-20190313T190042.mat')
+
+TimeSlope =
+
+    1.6883
+   -0.0000
+    2.0694
+    0.2423
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+
+TimeSeries =
+
+         0
+    0.0844
+    0.1688
+    0.2532
+    0.3377
+    0.4221
+    0.4221
+    0.4221
+    0.4221
+    0.4221
+    0.4221
+    0.5255
+    0.6290
+    0.7325
+    0.8360
+    0.9394
+    0.9515
+    0.9637
+    0.9758
+    0.9879
+    1.0000
+
+clear
+Undefined function or variable 'names'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 912)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',912,0)">line 912</a>)
+SwitchingTime_result = result.x(find(names == SwitchingTime_label(1)):find(names == SwitchingTime_label(end)));
+
+load('log-20190313T190042.mat')
+
+TimeSlope =
+
+    1.6883
+   -0.0000
+    2.0694
+    0.2423
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+
+TimeSeries =
+
+         0
+    0.0844
+    0.1688
+    0.2532
+    0.3377
+    0.4221
+    0.5255
+    0.6290
+    0.7325
+    0.8360
+    0.9394
+    0.9515
+    0.9637
+    0.9758
+    0.9879
+    1.0000
+
+length(TimeSeries)
+
+ans =
+
+    16
+
+clear
+clc
+load('log-20190313T190042.mat')
+
+TimeSlope =
+
+    1.6883
+   -0.0000
+    2.0694
+    0.2423
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+length(PFx_result)
+
+ans =
+
+    16
+
+length(NetForceX)
+
+ans =
+
+    16
+
+theta_result
+
+theta_result =
+
+         0
+    0.0000
+    0.0691
+    0.1809
+    0.2515
+    0.1463
+   -0.4146
+   -0.5371
+   -0.5205
+   -0.3908
+   -0.1398
+   -0.0956
+   -0.0588
+   -0.0301
+   -0.0103
+         0
+
+CF_result
+
+CF_result =
+
+  0×1 empty <a href="matlab:helpPopup double" style="font-weight:bold">double</a> column vector
+
+CF_result
+
+CF_result =
+
+  0×1 empty <a href="matlab:helpPopup double" style="font-weight:bold">double</a> column vector
+
+CH_result
+
+CH_result =
+
+  0×1 empty <a href="matlab:helpPopup double" style="font-weight:bold">double</a> column vector
+
+
+TimeSlope =
+
+    1.6883
+   -0.0000
+    2.0694
+    0.2423
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('vertcat')" style="font-weight:bold">vertcat</a>
+Dimensions of arrays being concatenated are not consistent.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', '/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m', 922)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('/Users/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/MultiPhase Formulation/MultiPhaseMAIN.m',922,0)">line 922</a>)
+TimeSeries = [0;TimeSeries'];
+
+clear
+clc
+load('log-20190313T190042.mat')
+
+TimeSlope =
+
+    1.6883
+   -0.0000
+    2.0694
+    0.2423
+
+
+TimeIntercept =
+
+         0
+    0.4221
+    0.4221
+    0.9394
+
+CF_result
+
+CF_result =
+
+     0
+     1
+     1
+     0
+
+CH_result
+
+CH_result =
+
+     1
+     0
+     0
+     1
+
+theta_result
+
+theta_result =
+
+         0
+    0.0000
+    0.0691
+    0.1809
+    0.2515
+    0.1463
+   -0.4146
+   -0.5371
+   -0.5205
+   -0.3908
+   -0.1398
+   -0.0956
+   -0.0588
+   -0.0301
+   -0.0103
+         0
+
+NetTorque
+
+NetTorque =
+
+   20.3550
+   12.6048
+  -12.1440
+  -51.8285
+ -103.8440
+  -28.2486
+   27.2947
+   22.1919
+   23.7683
+   24.9051
+ -106.3413
+ -116.4116
+ -126.5700
+ -136.7678
+ -146.9593
+    0.4206
+
+FFy_result
+
+FFy_result =
+
+         0
+         0
+         0
+         0
+         0
+   19.7045
+   18.5430
+   19.1655
+   25.7029
+   34.1865
+  426.1663
+  421.9740
+  444.6278
+  455.4267
+  460.4255
+         0
+         0
+         0
+         0
+         0
+    0.2404
+
+FHy_result
+
+FHy_result =
+
+  454.9717
+  449.6379
+  443.2116
+  436.9134
+  432.0459
+         0
+         0
+         0
+         0
+         0
+         0
+         0
+         0
+         0
+         0
+  414.5994
+  418.9492
+  423.3191
+  427.7108
+  432.1208
+    0.8906
+
