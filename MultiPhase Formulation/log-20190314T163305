@@ -1,0 +1,127 @@
+Date and Time:
+   14-Mar-2019 16:33:05
+
+Correspondent Log File Name: log-20190314T163305
+ 
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+MultiPhase Formulation: Optimize over States, Control Inputs and Switching Times
+ 
+Knots/Time Parameter tau Setup:
+Good Example Setups: Number of Knots = 20 or 100 (Knot Step Length = tau_upper_limit/Number of Knots, tau_upper_limit = 1), Num of Phases: 4 or 5
+Results in uniform tau discretization length
+ 
+Input Number of Knots/Discretization of Time/parameter tau (e.g. 20): 
+40
+ 
+Input Number of Phases (e.g. 4, all phases have the same number of knots), larger the number of phases, more difficult for the solver to solve the problem (more integer variables): 
+4
+ 
+Input Terminal Time (Unit: Seconds, e.g. 1): 
+1
+Input Goal State (Travel Distance e.g. 0.5): 
+0.5
+ 
+Q matrix in the Cost Function is Sparse
+A matrix for Constraints is Sparse
+ 
+Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function 
+0
+Terminal Condition is Set as Hard Constraints
+ 
+Use Knitro
+ 
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.0
+=======================================
+
+algorithm:               1
+bar_initmu:              0.1
+gradopt:                 4
+hessopt:                 2
+honorbnds:               1
+outlev:                  4
+par_concurrent_evals:    0
+mip_heuristic:           0
+mip_outinterval:         1
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_branchrule from AUTO to 2.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                750
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                          8
+    fixed:                                            0
+    free:                                           742
+Number of binary variables:                           8
+Number of integer variables:                          0
+Number of constraints:                             1617
+    linear equalities:                               13
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      400
+    linear one-sided inequalities:                  804
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:          400
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:            0
+Number of nonzeros in Jacobian:                  601460
+Number of nonzeros in Hessian:                   281625
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 0 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       8   1.00e+005      1.00e+005                  34.317
+       2       1       7   1.00e+005      1.00e+005                  47.311
+       3       2       6   1.00e+005      1.00e+005                  56.428
+       4       3       5   1.00e+005      1.00e+005                  66.731
+       5       4       4   1.00e+005      1.00e+005                  75.076
+       6       5         INFEASIBLE  pr   1.00e+005                 158.345
+       7       4         INFEASIBLE       1.00e+005                 378.295
+       8       5         INFEASIBLE  pr   1.00e+005                 447.569
+       9       4         INFEASIBLE  pr   1.00e+005                 515.228
+      10       3       4   1.00e+005      1.00e+005                 552.806
+      11       4       7   1.00e+005      1.00e+005                 607.804
+      12       5       6   1.00e+005      1.00e+005                 736.845
+      13       6         INFEASIBLE  pr   1.00e+005                 851.254
+      14       5         FAILED -500      1.00e+005                1170.703
+
+EXIT: User routine for node_callback returned -504.
+
+EXIT: Termination by user.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =  1.18661579175795e+005
+Final integrality gap (abs / rel)   =   Infinity
+# of nodes processed                =       14
+# of subproblems processed          =       14
+Total program time (secs)           =    1171.103 (  1171.469 CPU time)
+Time spent in evaluations (secs)    =      89.090
+
+===========================================================================
+
+{Operation terminated by user during knitromatlab_mip
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m', 897)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m',897,0)">line 897</a>)
+    [result.x,result.objval,result.exitflag,optInfo] =
+    knitromatlab_mip(objfunc,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,option_file);} 
+MultiPhaseMAIN
