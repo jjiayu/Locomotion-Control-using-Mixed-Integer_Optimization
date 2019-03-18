@@ -980,10 +980,10 @@ xdot_result = [xdot_result(1:6);xdot_result(12:end)];
 ydot_result = [ydot_result(1:6);ydot_result(12:end)];
 thetadot_result = [thetadot_result(1:6);thetadot_result(12:end)];
 
-PFx_result = [PFx_result(1:6);PFx_result(12:end)];
-PFy_result = [PFy_result(1:6);PFy_result(12:end)];
-PHx_result = [PHx_result(1:6);PHx_result(12:end)];
-PHy_result = [PHy_result(1:6);PHy_result(12:end)];
+PFx_result = [PFx_result(1:5);PFx_result(11:end)];
+PFy_result = [PFy_result(1:5);PFy_result(11:end)];
+PHx_result = [PHx_result(1:5);PHx_result(11:end)];
+PHy_result = [PHy_result(1:5);PHy_result(11:end)];
 
 
 NetForceX = [NetForceX(1:5);NetForceX(11:end)];
