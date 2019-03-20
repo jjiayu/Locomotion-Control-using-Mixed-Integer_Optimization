@@ -1,0 +1,232 @@
+Date and Time:
+   20-Mar-2019 12:16:47
+
+Correspondent Log File Name: log-20190320T121647
+ 
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+MultiPhase Formulation: Optimize over States, Control Inputs and Switching Times
+ 
+Knots/Time Parameter tau Setup:
+Good Example Setups: Number of Knots = 20 or 100 (Knot Step Length = tau_upper_limit/Number of Knots, tau_upper_limit = 1), Num of Phases: 4 or 5
+Results in uniform tau discretization length
+ 
+Input Number of Knots/Discretization of Time/parameter tau (e.g. 20): 
+20
+ 
+Input Number of Phases (e.g. 4, all phases have the same number of knots), larger the number of phases, more difficult for the solver to solve the problem (more integer variables): 
+4
+ 
+Input Terminal Time (Unit: Seconds, e.g. 1): 
+1
+Input Goal State (Travel Distance e.g. 0.5): 
+0.5
+ 
+Q matrix in the Cost Function is Sparse
+A matrix for Constraints is Sparse
+ 
+Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function 
+0
+Terminal Condition is Set as Hard Constraints
+ 
+Use Knitro
+ 
+[Warning: <a href="matlab: opentoline('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab\knitromatlab_mip.p',1460,0)">File: knitromatlab_mip.p Line: 1460 Column: 0
+</a>The temporary variable workerobjHandle will be cleared at the beginning of each iteration of the
+parfor loop.
+Any value assigned to it before the loop will be lost.  If workerobjHandle is used before it is
+assigned in the parfor loop, a runtime error will occur.
+See <a href="matlab: helpview([docroot '/distcomp/distcomp_ug.map'],'PARFOR_TEMPORARY_VARIABLES')">Parallel for Loops in MATLAB, "Temporary Variables"</a>.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m', 897)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m',897,0)">line 897</a>)] 
+[Warning: <a href="matlab: opentoline('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab\knitromatlab_mip.p',1621,0)">File: knitromatlab_mip.p Line: 1621 Column: 0
+</a>The temporary variable workerconHandle will be cleared at the beginning of each iteration of the
+parfor loop.
+Any value assigned to it before the loop will be lost.  If workerconHandle is used before it is
+assigned in the parfor loop, a runtime error will occur.
+See <a href="matlab: helpview([docroot '/distcomp/distcomp_ug.map'],'PARFOR_TEMPORARY_VARIABLES')">Parallel for Loops in MATLAB, "Temporary Variables"</a>.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m', 897)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m',897,0)">line 897</a>)] 
+[Warning: <a href="matlab: opentoline('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab\knitromatlab_mip.p',1709,0)">File: knitromatlab_mip.p Line: 1709 Column: 0
+</a>The temporary variable workerconHandle will be cleared at the beginning of each iteration of the
+parfor loop.
+Any value assigned to it before the loop will be lost.  If workerconHandle is used before it is
+assigned in the parfor loop, a runtime error will occur.
+See <a href="matlab: helpview([docroot '/distcomp/distcomp_ug.map'],'PARFOR_TEMPORARY_VARIABLES')">Parallel for Loops in MATLAB, "Temporary Variables"</a>.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiPhaseMAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m', 897)" style="font-weight:bold">MultiPhaseMAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\MultiPhase Formulation\MultiPhaseMAIN.m',897,0)">line 897</a>)] 
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.0
+=======================================
+
+algorithm:               1
+bar_initmu:              0.1
+gradopt:                 4
+hessopt:                 2
+honorbnds:               1
+outlev:                  4
+par_concurrent_evals:    0
+mip_heuristic:           0
+mip_outinterval:         1
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_branchrule from AUTO to 2.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                390
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                          8
+    fixed:                                            0
+    free:                                           382
+Number of binary variables:                           8
+Number of integer variables:                          0
+Number of constraints:                              825
+    linear equalities:                               13
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      200
+    linear one-sided inequalities:                  404
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:          208
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:            0
+Number of nonzeros in Jacobian:                  159860
+Number of nonzeros in Hessian:                    76245
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 0 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       8   1.00e+005      1.00e+005                  12.661
+       2       1         INFEASIBLE  pr   1.00e+005                  29.180
+       3       0       7   1.00e+005      1.00e+005                  42.983
+       4       1       6   1.00e+005      1.00e+005                  69.590
+       5       2       5   1.00e+005      1.00e+005                  72.375
+       6       3       4   1.00e+005      1.00e+005                  77.953
+       7       4       3   1.00e+005      1.00e+005                  88.884
+       8       5       2   1.22e+005      1.00e+005                 162.031
+       9       6         INFEASIBLE  pr   1.00e+005                 174.324
+      10       5       1   1.38e+005      1.00e+005                 260.560
+      11       6         INFEASIBLE  pr   1.00e+005                 271.103
+*     12       5       0   1.50e+005  f   1.00e+005   1.50e+005     330.936
+      13       4       2   1.02e+005      1.00e+005   1.50e+005     396.526
+      14       5       5   1.00e+005      1.00e+005   1.50e+005     422.857
+      15       6       4   1.00e+005      1.00e+005   1.50e+005     451.496
+      16       7       3   1.00e+005      1.00e+005   1.50e+005     461.019
+      17       8       2   1.01e+005      1.00e+005   1.50e+005     464.194
+      18       9         INFEASIBLE  pr   1.00e+005   1.50e+005     474.655
+      19       8         INFEASIBLE  pr   1.00e+005   1.50e+005     484.210
+      20       7       2   1.00e+005      1.00e+005   1.50e+005     511.117
+      21       8       4   1.00e+005      1.00e+005   1.50e+005     629.793
+      22       9       4   1.00e+005      1.00e+005   1.50e+005     643.457
+      23      10       3   1.02e+005      1.00e+005   1.50e+005     674.589
+      24      11       2   1.02e+005      1.00e+005   1.50e+005     710.362
+      25      12         INFEASIBLE  pr   1.00e+005   1.50e+005     723.561
+      26      11         INFEASIBLE  pr   1.00e+005   1.50e+005     734.911
+      27      10       2   1.02e+005      1.00e+005   1.50e+005     748.530
+      28      11       3   1.01e+005      1.00e+005   1.50e+005     802.135
+      29      12       3   1.00e+005      1.00e+005   1.50e+005     806.947
+      30      13         INFEASIBLE  pr   1.00e+005   1.50e+005     859.819
+      31      12       2   1.16e+005      1.00e+005   1.50e+005     909.264
+      32      13         INFEASIBLE  pr   1.00e+005   1.50e+005     922.772
+      33      12       1   1.17e+005      1.00e+005   1.50e+005     985.582
+      34      13           1.50e+005 pr   1.00e+005   1.50e+005    1017.513
+      35      12         INFEASIBLE  pr   1.00e+005   1.50e+005    1028.510
+      36      11         INFEASIBLE  pr   1.00e+005   1.50e+005    1043.655
+      37      10         INFEASIBLE  pr   1.00e+005   1.50e+005    1064.968
+      38       9         INFEASIBLE  pr   1.00e+005   1.50e+005    1080.195
+      39       8         INFEASIBLE  pr   1.00e+005   1.50e+005    1093.092
+      40       7       3   1.00e+005      1.00e+005   1.50e+005    1134.802
+      41       8       2   1.01e+005      1.00e+005   1.50e+005    1138.070
+      42       9         INFEASIBLE  pr   1.00e+005   1.50e+005    1148.242
+      43       8         INFEASIBLE  pr   1.00e+005   1.50e+005    1161.862
+      44       7       2   1.00e+005      1.00e+005   1.50e+005    1189.623
+      45       8       3   1.00e+005      1.00e+005   1.50e+005    1199.165
+      46       9       2   1.01e+005      1.00e+005   1.50e+005    1202.255
+      47      10         INFEASIBLE  pr   1.00e+005   1.50e+005    1213.147
+      48       9         INFEASIBLE  pr   1.00e+005   1.50e+005    1229.985
+      49       8       2   1.00e+005      1.00e+005   1.50e+005    1260.819
+      50       9       6   1.00e+005      1.00e+005   1.50e+005    1267.392
+      51      10       5   1.00e+005      1.00e+005   1.50e+005    1395.087
+      52      11       4   1.00e+005      1.00e+005   1.50e+005    1399.668
+      53      12       3   1.01e+005      1.00e+005   1.50e+005    1403.150
+      54      13         INFEASIBLE  pr   1.00e+005   1.50e+005    1414.874
+      55      12         INFEASIBLE  pr   1.00e+005   1.50e+005    1428.554
+      56      11       3   1.00e+005      1.00e+005   1.50e+005    1461.178
+      57      12       4   1.00e+005      1.00e+005   1.50e+005    1466.775
+      58      13       3   1.01e+005      1.00e+005   1.50e+005    1470.528
+      59      14         INFEASIBLE  pr   1.00e+005   1.50e+005    1480.591
+      60      13       2   1.31e+005      1.00e+005   1.50e+005    1504.936
+      61      14         INFEASIBLE  pr   1.00e+005   1.50e+005    1537.221
+      62      13         INFEASIBLE  pr   1.00e+005   1.50e+005    1547.565
+      63      12       3   1.00e+005      1.00e+005   1.50e+005    1578.125
+      64      13       5   1.00e+005      1.00e+005   1.50e+005    1673.104
+      65      14       1   1.34e+005      1.00e+005   1.50e+005    1706.495
+      66      15         INFEASIBLE  pr   1.00e+005   1.50e+005    1728.895
+      67      14         INFEASIBLE  pr   1.00e+005   1.50e+005    1739.554
+      68      13       4   1.05e+005      1.00e+005   1.50e+005    1766.626
+      69      14       3   1.22e+005      1.00e+005   1.50e+005    1851.896
+      70      15         INFEASIBLE  pr   1.00e+005   1.50e+005    1864.404
+      71      14         INFEASIBLE  pr   1.00e+005   1.50e+005    1889.281
+      72      13       3   1.13e+005      1.00e+005   1.50e+005    1948.501
+      73      14         INFEASIBLE  pr   1.00e+005   1.50e+005    1960.855
+      74      13         INFEASIBLE  pr   1.00e+005   1.50e+005    1973.330
+      75      12       2   1.20e+005      1.00e+005   1.50e+005    2004.099
+      76      13       1   1.21e+005      1.00e+005   1.50e+005    2035.414
+*     77      14       0   1.35e+005  f   1.00e+005   1.35e+005    2065.093
+      78      13         INFEASIBLE  pr   1.00e+005   1.35e+005    2073.396
+      79      12       1   1.20e+005      1.00e+005   1.35e+005    2098.281
+      80      13       1   1.34e+005      1.00e+005   1.35e+005    2162.068
+      81      14           1.50e+005 pr   1.00e+005   1.35e+005    2378.495
+      82      13         INFEASIBLE  pr   1.00e+005   1.35e+005    2388.206
+      83      12           1.37e+005 pr   1.00e+005   1.35e+005    2406.630
+      84      11         INFEASIBLE  pr   1.00e+005   1.35e+005    2410.907
+      85      10         INFEASIBLE  pr   1.00e+005   1.35e+005    2443.194
+      86       9       2   1.34e+005      1.00e+005   1.35e+005    2484.557
+      87      10         INFEASIBLE  pr   1.00e+005   1.35e+005    2504.301
+      88       9         INFEASIBLE  pr   1.00e+005   1.35e+005    2507.995
+      89       8         INFEASIBLE  pr   1.00e+005   1.35e+005    2535.179
+      90       7       2   1.34e+005      1.00e+005   1.35e+005    2581.753
+      91       8         INFEASIBLE  pr   1.00e+005   1.35e+005    2609.222
+      92       7         INFEASIBLE  pr   1.00e+005   1.35e+005    2619.856
+      93       6         INFEASIBLE  pr   1.00e+005   1.35e+005    2632.321
+      94       5       1   1.21e+005      1.00e+005   1.35e+005    2677.544
+      95       6         INFEASIBLE  pr   1.00e+005   1.35e+005    2706.105
+      96       5         INFEASIBLE  pr   1.00e+005   1.35e+005    2735.134
+      97       4         INFEASIBLE  pr   1.00e+005   1.35e+005    2744.134
+      98       3       3   1.00e+005      1.00e+005   1.35e+005    2829.520
+      99       4         INFEASIBLE  pr   1.00e+005   1.35e+005    2850.147
+     100       3       2   1.02e+005      1.00e+005   1.35e+005    2886.885
+     101       4       1   1.14e+005      1.00e+005   1.35e+005    3027.518
+     102       5         INFEASIBLE  pr   1.00e+005   1.35e+005    3036.554
+     103       4         INFEASIBLE  pr   1.00e+005   1.35e+005    3045.772
+     104       3         INFEASIBLE  pr   1.00e+005   1.35e+005    3056.243
+     105       2         INFEASIBLE  pr   1.02e+005   1.35e+005    3066.990
+     106       1           1.47e+005 pr   1.02e+005   1.35e+005    3154.069
+     107       0         INFEASIBLE  pr   1.35e+005   1.35e+005    3167.844
+
+EXIT: Optimal solution found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =  1.34923849400687e+005
+Final integrality gap (abs / rel)   = 0.00e+000 /  0.00e+000 ( 0.00)
+# of nodes processed                =      107
+# of subproblems processed          =      109
+Total program time (secs)           =    3167.868 (  3178.156 CPU time)
+Time spent in evaluations (secs)    =     565.255
+
+===========================================================================
+
