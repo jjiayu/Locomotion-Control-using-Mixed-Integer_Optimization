@@ -74,6 +74,18 @@ FFy_future = vars(FFyIdx_init + 1:FFyIdx_end);
 FHx_future = vars(FHxIdx_init + 1:FHxIdx_end);
 FHy_future = vars(FHyIdx_init + 1:FHyIdx_end);
 
+%Full Vectors
+x_full = vars(xIdx_init: xIdx_end);
+y_full = vars(yIdx_init: yIdx_end);
+theta_full = vars(thetaIdx_init: thetaIdx_end);
+xdot_full = vars(xdotIdx_init:xdotIdx_end);
+ydot_full = vars(ydotIdx_init:ydotIdx_end);
+thetadot_full = vars(thetadotIdx_init:thetadotIdx_end);
+PFx_full = vars(PFxIdx_init:PFxIdx_end);
+PFy_full = vars(PFyIdx_init:PFyIdx_end);
+PHx_full = vars(PHxIdx_init:PHxIdx_end);
+PHy_full = vars(PHyIdx_init:PHyIdx_end);
+
 %   Time Step Vector
 SwitchingTimeVector = vars(SwitchingTimeIdx_init:SwitchingTimeIdx_end); %Extract Switching Time Vector
 %KnotIdxVector = 0:NumKnots-1; %Knot index vector, the last knot does not account for integration, ignore
@@ -153,8 +165,8 @@ PHy_pos_dyn = PHy_future - PHy_current - TimeStep_vector.*PHydot_current;
 %************************************************************
 %-------------------------------------------------------------------------
 %       Front Leg:
-PFx_RobotFrame = cos(theta_current).*(PFx_current - x_current) + sin(theta_current).*(PFy_current - y_current);
-PFy_RobotFrame = -sin(theta_current).*(PFx_current - x_current) + cos(theta_current).*(PFy_current - y_current);
+PFx_RobotFrame = cos(theta_full).*(PFx_full - x_full) + sin(theta_full).*(PFy_full - y_full);
+PFy_RobotFrame = -sin(theta_full).*(PFx_full - x_full) + cos(theta_full).*(PFy_full - y_full);
 %           Kinematics Constraint 1: 
 %           PFx_RobotFrame - PFcenterX <= BoundingBox_Width/2 --> 
 %           PFx_RobotFrame - PFcenterX - BoundingBox_Width/2 <= 0
@@ -173,8 +185,8 @@ FrontLegKine3 = -PFx_RobotFrame + PFcenterX - BoundingBox_Width/2;
 FrontLegKine4 = -PFy_RobotFrame + PFcenterY - BoundingBox_Height/2;
 %-------------------------------------------------------------------------
 %       Hind Leg:
-PHx_RobotFrame = cos(theta_current).*(PHx_current - x_current) + sin(theta_current).*(PHy_current - y_current);
-PHy_RobotFrame = -sin(theta_current).*(PHx_current - x_current) + cos(theta_current).*(PHy_current - y_current);
+PHx_RobotFrame = cos(theta_full).*(PHx_full - x_full) + sin(theta_full).*(PHy_full - y_full);
+PHy_RobotFrame = -sin(theta_full).*(PHx_full - x_full) + cos(theta_full).*(PHy_full - y_full);
 %           Kinematics Constraint 1:
 %           PHx_RobotFrame - PHcenterX <= BoundingBoxWidth/2
 %           PHx_RobotFrame - PHcenterX - BoundingBoxWidth/2 <= 0

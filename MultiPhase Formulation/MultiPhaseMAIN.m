@@ -919,7 +919,14 @@ for i = 1:NumPhases
     end
 end
 
-TimeSeries = [0;TimeSeries'];
+if(size(TimeSeries,1) > 1) %column vector
+    TimeSeries = [0;TimeSeries];
+elseif(size(TimeSeries,1) == 1) %row vector
+    TimeSeries = [0;TimeSeries'];
+else
+    ME_TimeSeriesResultError = MException('Initialization:TimeSeriesResultError','Time Series is neither a row vector, nor a column vector');
+    throw(ME_TimeSeriesResultError)
+end
 
 %robot state (Position)
 x_result = result.x(find(names == 'x0'):find(names == x_label(end)));
@@ -969,30 +976,61 @@ PFcenterY_result_world = y_result + sin(theta_result)*PFcenterX + cos(theta_resu
 PHcenterX_result_world = x_result + cos(theta_result)*PHcenterX - sin(theta_result)*PHcenterY;
 PHcenterY_result_world = y_result + sin(theta_result)*PHcenterX + cos(theta_result)*PHcenterY;
 
+%% Clean Up Time/Control/State Series - Remove Phases with Zero Length
+
+TimeStepDiff = diff(TimeSeries);
+
+%States, TimeStepDiff + 1
+TimeSeries(find(TimeStepDiff <= 1e-3) + 1) = [];
+x_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+y_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+theta_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+
+xdot_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+ydot_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+thetadot_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+
+PFcenterX_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
+PFcenterY_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
+
+PHcenterX_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
+PHcenterY_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
+
+%Inputs, TimeStepDiff
+PFx_result(find(TimeStepDiff <= 1e-3)) = [];
+PFy_result(find(TimeStepDiff <= 1e-3)) = [];
+PHx_result(find(TimeStepDiff <= 1e-3)) = [];
+PHy_result(find(TimeStepDiff <= 1e-3)) = [];
+
+NetForceX(find(TimeStepDiff <= 1e-3)) = [];
+NetForceY(find(TimeStepDiff <= 1e-3)) = [];
+
+NetTorque(find(TimeStepDiff <= 1e-3)) = [];
+
 %------------------------------------------------------------------
-TimeSeries = [TimeSeries(1:6);TimeSeries(12:end)];
-
-x_result = [x_result(1:6);x_result(12:end)];
-y_result = [y_result(1:6);y_result(12:end)];
-theta_result = [theta_result(1:6);theta_result(12:end)];
-
-xdot_result = [xdot_result(1:6);xdot_result(12:end)];
-ydot_result = [ydot_result(1:6);ydot_result(12:end)];
-thetadot_result = [thetadot_result(1:6);thetadot_result(12:end)];
-
-PFx_result = [PFx_result(1:5);PFx_result(11:end)];
-PFy_result = [PFy_result(1:5);PFy_result(11:end)];
-PHx_result = [PHx_result(1:5);PHx_result(11:end)];
-PHy_result = [PHy_result(1:5);PHy_result(11:end)];
-
-
-NetForceX = [NetForceX(1:5);NetForceX(11:end)];
-NetForceY = [NetForceY(1:5);NetForceY(11:end)];
-
-NetTorque = [NetTorque(1:5);NetTorque(11:end)];
-
-PFcenterX_result_world = [PFcenterX_result_world(1:5);PFcenterX_result_world(11:end)];
-PFcenterY_result_world = [PFcenterY_result_world(1:5);PFcenterY_result_world(11:end)];
-
-PHcenterX_result_world = [PHcenterX_result_world(1:5);PHcenterX_result_world(11:end)];
-PHcenterY_result_world = [PHcenterY_result_world(1:5);PHcenterY_result_world(11:end)];
+% TimeSeries = [TimeSeries(1:6);TimeSeries(12:end)];
+% 
+% x_result = [x_result(1:6);x_result(12:end)];
+% y_result = [y_result(1:6);y_result(12:end)];
+% theta_result = [theta_result(1:6);theta_result(12:end)];
+% 
+% xdot_result = [xdot_result(1:6);xdot_result(12:end)];
+% ydot_result = [ydot_result(1:6);ydot_result(12:end)];
+% thetadot_result = [thetadot_result(1:6);thetadot_result(12:end)];
+% 
+% PFx_result = [PFx_result(1:5);PFx_result(11:end)];
+% PFy_result = [PFy_result(1:5);PFy_result(11:end)];
+% PHx_result = [PHx_result(1:5);PHx_result(11:end)];
+% PHy_result = [PHy_result(1:5);PHy_result(11:end)];
+% 
+% 
+% NetForceX = [NetForceX(1:5);NetForceX(11:end)];
+% NetForceY = [NetForceY(1:5);NetForceY(11:end)];
+% 
+% NetTorque = [NetTorque(1:5);NetTorque(11:end)];
+% 
+% PFcenterX_result_world = [PFcenterX_result_world(1:5);PFcenterX_result_world(11:end)];
+% PFcenterY_result_world = [PFcenterY_result_world(1:5);PFcenterY_result_world(11:end)];
+% 
+% PHcenterX_result_world = [PHcenterX_result_world(1:5);PHcenterX_result_world(11:end)];
+% PHcenterY_result_world = [PHcenterY_result_world(1:5);PHcenterY_result_world(11:end)];
