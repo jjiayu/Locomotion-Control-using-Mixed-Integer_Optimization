@@ -56,7 +56,7 @@ g = 9.80665; %m/s^2
 %Environment Information
 TerrainHeight = 0; %terrain height
 TerrainNorm = [0,1];
-miu = 0.5; %friction coefficient
+miu = 1; %friction coefficient
 %==========================================================
 
 %==========================================================

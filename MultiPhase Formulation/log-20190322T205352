@@ -1,0 +1,169 @@
+Date and Time:
+   22-Mar-2019 20:53:52
+
+Correspondent Log File Name: log-20190322T205352
+ 
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+MultiPhase Formulation: Optimize over States, Control Inputs and Switching Times
+ 
+Select Solver first, 1: Knitro, 2: BARON 
+1
+Knots/Time Parameter tau Setup:
+Good Example Setups: Number of Knots = 20 or 100 (Knot Step Length = tau_upper_limit/Number of Knots, tau_upper_limit = 1), Num of Phases: 4 or 5
+Results in uniform tau discretization length
+ 
+Input Number of Knots/Discretization of Time/parameter tau (e.g. 20): 
+30
+ 
+Input Number of Phases (e.g. 4, all phases have the same number of knots), larger the number of phases, more difficult for the solver to solve the problem (more integer variables): 
+6
+ 
+Input Terminal Time (Unit: Seconds, e.g. 1): 
+1
+Input Goal State (Travel Distance e.g. 0.5): 
+1.5
+ 
+Q matrix in the Cost Function is Sparse
+A matrix for Constraints is Sparse
+ 
+Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function 
+0
+Terminal Condition is Set as Hard Constraints
+ 
+Use Knitro
+ 
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.0
+=======================================
+
+algorithm:               1
+bar_initmu:              0.1
+gradopt:                 4
+hessopt:                 2
+honorbnds:               1
+outlev:                  4
+par_concurrent_evals:    0
+mip_heuristic:           0
+mip_outinterval:         1
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_branchrule from AUTO to 2.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                576
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                         12
+    fixed:                                            0
+    free:                                           564
+Number of binary variables:                          12
+Number of integer variables:                          0
+Number of constraints:                             1227
+    linear equalities:                               13
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      300
+    linear one-sided inequalities:                  606
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:          308
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:            0
+Number of nonzeros in Jacobian:                  351312
+Number of nonzeros in Hessian:                   166176
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 0 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0      12  -1.80e+308     -1.80e+308                1241.493
+       2       1      11   0.00e+000     -1.80e+308                1251.951
+       3       2      10   0.00e+000     -1.80e+308                1262.259
+       4       3       9   0.00e+000     -1.80e+308                1268.837
+       5       4       8   0.00e+000     -1.80e+308                1274.464
+       6       5         INFEASIBLE  pr  -1.80e+308                1326.116
+       7       4         INFEASIBLE  pr  -1.80e+308                1369.166
+       8       3         INFEASIBLE  pr  -1.80e+308                1411.648
+       9       2       9   0.00e+000     -1.80e+308                1423.793
+      10       3      11   0.00e+000      0.00e+000                1430.155
+      11       4      10   0.00e+000      0.00e+000                1435.577
+      12       5       9   0.00e+000      0.00e+000                1441.504
+      13       6       8   0.00e+000      0.00e+000                1446.907
+      14       7         INFEASIBLE  pr   0.00e+000                1514.999
+      15       6         INFEASIBLE  pr   0.00e+000                1554.160
+      16       5       8   0.00e+000      0.00e+000                1558.689
+      17       6         INFEASIBLE  pr   0.00e+000                1610.785
+      18       5         INFEASIBLE  pr   0.00e+000                1650.051
+      19       4       9   0.00e+000      0.00e+000                1655.125
+      20       5       8   0.00e+000      0.00e+000                1661.508
+      21       6         INFEASIBLE  pr   0.00e+000                1706.094
+      22       5         INFEASIBLE  pr   0.00e+000                1766.457
+      23       4       8   0.00e+000      0.00e+000                1771.624
+      24       5         INFEASIBLE  pr   0.00e+000                1814.808
+      25       4         INFEASIBLE  pr   0.00e+000                1863.921
+      26       3      10   0.00e+000      0.00e+000                1869.940
+      27       4       9   0.00e+000      0.00e+000                1878.465
+      28       5       8   0.00e+000      0.00e+000                1883.422
+      29       6         INFEASIBLE  pr   0.00e+000                1954.085
+      30       5         INFEASIBLE  pr   0.00e+000                1994.364
+      31       4       8   0.00e+000      0.00e+000                2000.204
+      32       5         INFEASIBLE  pr   0.00e+000                2043.337
+      33       4         INFEASIBLE  pr   0.00e+000                2090.576
+      34       3       9   0.00e+000      0.00e+000                2095.563
+      35       4       8   0.00e+000      0.00e+000                2100.385
+      36       5         INFEASIBLE  pr   0.00e+000                2166.979
+      37       4         INFEASIBLE  pr   0.00e+000                2205.053
+      38       3       8   0.00e+000      0.00e+000                2210.106
+      39       4         INFEASIBLE  pr   0.00e+000                2251.250
+      40       3         INFEASIBLE  pr   0.00e+000                2312.960
+      41       2       8   0.00e+000      0.00e+000                2318.291
+      42       3       7   0.00e+000      0.00e+000                2356.363
+      43       4         INFEASIBLE  pr   0.00e+000                2400.063
+      44       3         INFEASIBLE  pr   0.00e+000                2465.676
+      45       2         INFEASIBLE  pr   0.00e+000                2505.630
+      46       1       8   0.00e+000      0.00e+000                2512.689
+      47       2         INFEASIBLE  pr   0.00e+000                2555.075
+      48       1         INFEASIBLE  pr   0.00e+000                2594.989
+      49       0      10   0.00e+000      0.00e+000                2603.437
+      50       1       9   0.00e+000      0.00e+000                2610.514
+      51       2       8   0.00e+000      0.00e+000                2619.147
+      52       3         INFEASIBLE  pr   0.00e+000                2676.249
+      53       2         INFEASIBLE  pr   0.00e+000                2716.244
+      54       1       8   0.00e+000      0.00e+000                2724.329
+      55       2         INFEASIBLE  pr   0.00e+000                2768.914
+      56       1         INFEASIBLE  pr   0.00e+000                2813.367
+      57       0       9   0.00e+000      0.00e+000                2820.708
+      58       1       8   0.00e+000      0.00e+000                2829.515
+      59       2         INFEASIBLE  pr   0.00e+000                2873.588
+      60       1         INFEASIBLE  pr   0.00e+000                2917.981
+      61       0       8   0.00e+000      0.00e+000                2926.558
+      62       1         INFEASIBLE  pr   0.00e+000                2967.111
+      63       0         INFEASIBLE  pr   1.80e+308                3007.569
+
+EXIT: All nodes have been explored. No integer feasible point found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =  0.00000000000000e+000
+Final integrality gap (abs / rel)   =   Infinity
+# of nodes processed                =       63
+# of subproblems processed          =       63
+Total program time (secs)           =    3007.686 (  3010.625 CPU time)
+Time spent in evaluations (secs)    =     236.640
+
+===========================================================================
+

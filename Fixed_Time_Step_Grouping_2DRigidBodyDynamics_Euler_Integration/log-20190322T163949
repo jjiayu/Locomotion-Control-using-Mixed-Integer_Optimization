@@ -1,0 +1,526 @@
+Date and Time:
+   22-Mar-2019 16:39:49
+
+Correspond Log File Name: log-20190322T163949
+ 
+Locomotion Control with Mixed-integer Nonlinear Optimization in 2D
+Time Step Grouping Script - All the Phases have the same Number of Time Steps
+ 
+Input Number of Time Steps (e.g. 20): 
+40
+ 
+Input Size of Time Steps (e.g. 0.05): 
+0.025
+ 
+Input Number of Phases (type the same value with number of time steps if we want to allow mode change per time step): 
+4
+ 
+Input Goal State (Travel Distance e.g. 0.5): 
+0.5
+ 
+Q matrix in the Cost Function is Sparse
+A matrix for Constraints is Sparse
+ 
+Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function 
+0
+Terminal Condition is Set as Hard Constraints
+ 
+Use Knitro
+ 
+[Warning: <a href="matlab: opentoline('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab\knitromatlab_mip.p',1460,0)">File: knitromatlab_mip.p Line: 1460 Column: 0
+</a>The temporary variable workerobjHandle will be cleared at the beginning of each iteration of the
+parfor loop.
+Any value assigned to it before the loop will be lost.  If workerobjHandle is used before it is
+assigned in the parfor loop, a runtime error will occur.
+See <a href="matlab: helpview([docroot '/distcomp/distcomp_ug.map'],'PARFOR_TEMPORARY_VARIABLES')">Parallel for Loops in MATLAB, "Temporary Variables"</a>.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\Fixed_Time_Step_Grouping_2DRigidBodyDynamics_Euler_Integration\MAIN.m', 1022)" style="font-weight:bold">MAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\Fixed_Time_Step_Grouping_2DRigidBodyDynamics_Euler_Integration\MAIN.m',1022,0)">line 1022</a>)] 
+[Warning: <a href="matlab: opentoline('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab\knitromatlab_mip.p',1621,0)">File: knitromatlab_mip.p Line: 1621 Column: 0
+</a>The temporary variable workerconHandle will be cleared at the beginning of each iteration of the
+parfor loop.
+Any value assigned to it before the loop will be lost.  If workerconHandle is used before it is
+assigned in the parfor loop, a runtime error will occur.
+See <a href="matlab: helpview([docroot '/distcomp/distcomp_ug.map'],'PARFOR_TEMPORARY_VARIABLES')">Parallel for Loops in MATLAB, "Temporary Variables"</a>.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\Fixed_Time_Step_Grouping_2DRigidBodyDynamics_Euler_Integration\MAIN.m', 1022)" style="font-weight:bold">MAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\Fixed_Time_Step_Grouping_2DRigidBodyDynamics_Euler_Integration\MAIN.m',1022,0)">line 1022</a>)] 
+[Warning: <a href="matlab: opentoline('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab\knitromatlab_mip.p',1709,0)">File: knitromatlab_mip.p Line: 1709 Column: 0
+</a>The temporary variable workerconHandle will be cleared at the beginning of each iteration of the
+parfor loop.
+Any value assigned to it before the loop will be lost.  If workerconHandle is used before it is
+assigned in the parfor loop, a runtime error will occur.
+See <a href="matlab: helpview([docroot '/distcomp/distcomp_ug.map'],'PARFOR_TEMPORARY_VARIABLES')">Parallel for Loops in MATLAB, "Temporary Variables"</a>.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\Fixed_Time_Step_Grouping_2DRigidBodyDynamics_Euler_Integration\MAIN.m', 1022)" style="font-weight:bold">MAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\Fixed_Time_Step_Grouping_2DRigidBodyDynamics_Euler_Integration\MAIN.m',1022,0)">line 1022</a>)] 
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.0
+=======================================
+
+algorithm:               1
+bar_initmu:              0.1
+gradopt:                 4
+hessopt:                 2
+honorbnds:               1
+outlev:                  4
+par_concurrent_evals:    0
+mip_heuristic:           0
+mip_outinterval:         100
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_branchrule from AUTO to 2.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                746
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                          8
+    fixed:                                            0
+    free:                                           738
+Number of binary variables:                           8
+Number of integer variables:                          0
+Number of constraints:                             1612
+    linear equalities:                              372
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                       40
+    linear one-sided inequalities:                  800
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:          400
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:            0
+Number of nonzeros in Jacobian:                  330852
+Number of nonzeros in Hessian:                   278631
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 0 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       8   4.02e+006      4.02e+006                  22.288
+
+EXIT: User routine for node_callback returned -504.
+
+EXIT: Termination by user.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =  4.71218953148122e+006
+Final integrality gap (abs / rel)   =   Infinity
+# of nodes processed                =       12
+# of subproblems processed          =       12
+Total program time (secs)           =     591.543 (   596.703 CPU time)
+Time spent in evaluations (secs)    =      40.502
+
+===========================================================================
+
+{Operation terminated by user during knitromatlab_mip
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\Fixed_Time_Step_Grouping_2DRigidBodyDynamics_Euler_Integration\MAIN.m', 1022)" style="font-weight:bold">MAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\Fixed_Time_Step_Grouping_2DRigidBodyDynamics_Euler_Integration\MAIN.m',1022,0)">line 1022</a>)
+    [result.x,result.objval,result.exitflag,optInfo] =
+    knitromatlab_mip(objfunc,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,option_file);} 
+names 
+
+names = 
+
+  1×746 <a href="matlab:helpPopup string" style="font-weight:bold">string</a> array
+
+  Columns 1 through 11
+
+    "x0"    "x1"    "x2"    "x3"    "x4"    "x5"    "x6"    "x7"    "x8"    "x9"    "x10"
+
+  Columns 12 through 21
+
+    "x11"    "x12"    "x13"    "x14"    "x15"    "x16"    "x17"    "x18"    "x19"    "x20"
+
+  Columns 22 through 31
+
+    "x21"    "x22"    "x23"    "x24"    "x25"    "x26"    "x27"    "x28"    "x29"    "x30"
+
+  Columns 32 through 41
+
+    "x31"    "x32"    "x33"    "x34"    "x35"    "x36"    "x37"    "x38"    "x39"    "x40"
+
+  Columns 42 through 52
+
+    "y0"    "y1"    "y2"    "y3"    "y4"    "y5"    "y6"    "y7"    "y8"    "y9"    "y10"
+
+  Columns 53 through 62
+
+    "y11"    "y12"    "y13"    "y14"    "y15"    "y16"    "y17"    "y18"    "y19"    "y20"
+
+  Columns 63 through 72
+
+    "y21"    "y22"    "y23"    "y24"    "y25"    "y26"    "y27"    "y28"    "y29"    "y30"
+
+  Columns 73 through 82
+
+    "y31"    "y32"    "y33"    "y34"    "y35"    "y36"    "y37"    "y38"    "y39"    "y40"
+
+  Columns 83 through 90
+
+    "theta0"    "theta1"    "theta2"    "theta3"    "theta4"    "theta5"    "theta6"    "theta7"
+
+  Columns 91 through 97
+
+    "theta8"    "theta9"    "theta10"    "theta11"    "theta12"    "theta13"    "theta14"
+
+  Columns 98 through 104
+
+    "theta15"    "theta16"    "theta17"    "theta18"    "theta19"    "theta20"    "theta21"
+
+  Columns 105 through 111
+
+    "theta22"    "theta23"    "theta24"    "theta25"    "theta26"    "theta27"    "theta28"
+
+  Columns 112 through 118
+
+    "theta29"    "theta30"    "theta31"    "theta32"    "theta33"    "theta34"    "theta35"
+
+  Columns 119 through 125
+
+    "theta36"    "theta37"    "theta38"    "theta39"    "theta40"    "xdot0"    "xdot1"
+
+  Columns 126 through 133
+
+    "xdot2"    "xdot3"    "xdot4"    "xdot5"    "xdot6"    "xdot7"    "xdot8"    "xdot9"
+
+  Columns 134 through 141
+
+    "xdot10"    "xdot11"    "xdot12"    "xdot13"    "xdot14"    "xdot15"    "xdot16"    "xdot17"
+
+  Columns 142 through 149
+
+    "xdot18"    "xdot19"    "xdot20"    "xdot21"    "xdot22"    "xdot23"    "xdot24"    "xdot25"
+
+  Columns 150 through 157
+
+    "xdot26"    "xdot27"    "xdot28"    "xdot29"    "xdot30"    "xdot31"    "xdot32"    "xdot33"
+
+  Columns 158 through 165
+
+    "xdot34"    "xdot35"    "xdot36"    "xdot37"    "xdot38"    "xdot39"    "xdot40"    "ydot0"
+
+  Columns 166 through 173
+
+    "ydot1"    "ydot2"    "ydot3"    "ydot4"    "ydot5"    "ydot6"    "ydot7"    "ydot8"
+
+  Columns 174 through 181
+
+    "ydot9"    "ydot10"    "ydot11"    "ydot12"    "ydot13"    "ydot14"    "ydot15"    "ydot16"
+
+  Columns 182 through 189
+
+    "ydot17"    "ydot18"    "ydot19"    "ydot20"    "ydot21"    "ydot22"    "ydot23"    "ydot24"
+
+  Columns 190 through 197
+
+    "ydot25"    "ydot26"    "ydot27"    "ydot28"    "ydot29"    "ydot30"    "ydot31"    "ydot32"
+
+  Columns 198 through 205
+
+    "ydot33"    "ydot34"    "ydot35"    "ydot36"    "ydot37"    "ydot38"    "ydot39"    "ydot40"
+
+  Columns 206 through 211
+
+    "thetadot0"    "thetadot1"    "thetadot2"    "thetadot3"    "thetadot4"    "thetadot5"
+
+  Columns 212 through 217
+
+    "thetadot6"    "thetadot7"    "thetadot8"    "thetadot9"    "thetadot10"    "thetadot11"
+
+  Columns 218 through 223
+
+    "thetadot12"    "thetadot13"    "thetadot14"    "thetadot15"    "thetadot16"    "thetadot17"
+
+  Columns 224 through 229
+
+    "thetadot18"    "thetadot19"    "thetadot20"    "thetadot21"    "thetadot22"    "thetadot23"
+
+  Columns 230 through 235
+
+    "thetadot24"    "thetadot25"    "thetadot26"    "thetadot27"    "thetadot28"    "thetadot29"
+
+  Columns 236 through 241
+
+    "thetadot30"    "thetadot31"    "thetadot32"    "thetadot33"    "thetadot34"    "thetadot35"
+
+  Columns 242 through 247
+
+    "thetadot36"    "thetadot37"    "thetadot38"    "thetadot39"    "thetadot40"    "PFx0"
+
+  Columns 248 through 256
+
+    "PFx1"    "PFx2"    "PFx3"    "PFx4"    "PFx5"    "PFx6"    "PFx7"    "PFx8"    "PFx9"
+
+  Columns 257 through 264
+
+    "PFx10"    "PFx11"    "PFx12"    "PFx13"    "PFx14"    "PFx15"    "PFx16"    "PFx17"
+
+  Columns 265 through 272
+
+    "PFx18"    "PFx19"    "PFx20"    "PFx21"    "PFx22"    "PFx23"    "PFx24"    "PFx25"
+
+  Columns 273 through 280
+
+    "PFx26"    "PFx27"    "PFx28"    "PFx29"    "PFx30"    "PFx31"    "PFx32"    "PFx33"
+
+  Columns 281 through 289
+
+    "PFx34"    "PFx35"    "PFx36"    "PFx37"    "PFx38"    "PFx39"    "PFx40"    "PFy0"    "PFy1"
+
+  Columns 290 through 298
+
+    "PFy2"    "PFy3"    "PFy4"    "PFy5"    "PFy6"    "PFy7"    "PFy8"    "PFy9"    "PFy10"
+
+  Columns 299 through 306
+
+    "PFy11"    "PFy12"    "PFy13"    "PFy14"    "PFy15"    "PFy16"    "PFy17"    "PFy18"
+
+  Columns 307 through 314
+
+    "PFy19"    "PFy20"    "PFy21"    "PFy22"    "PFy23"    "PFy24"    "PFy25"    "PFy26"
+
+  Columns 315 through 322
+
+    "PFy27"    "PFy28"    "PFy29"    "PFy30"    "PFy31"    "PFy32"    "PFy33"    "PFy34"
+
+  Columns 323 through 330
+
+    "PFy35"    "PFy36"    "PFy37"    "PFy38"    "PFy39"    "PFy40"    "PFxdot0"    "PFxdot1"
+
+  Columns 331 through 337
+
+    "PFxdot2"    "PFxdot3"    "PFxdot4"    "PFxdot5"    "PFxdot6"    "PFxdot7"    "PFxdot8"
+
+  Columns 338 through 344
+
+    "PFxdot9"    "PFxdot10"    "PFxdot11"    "PFxdot12"    "PFxdot13"    "PFxdot14"    "PFxdot15"
+
+  Columns 345 through 350
+
+    "PFxdot16"    "PFxdot17"    "PFxdot18"    "PFxdot19"    "PFxdot20"    "PFxdot21"
+
+  Columns 351 through 356
+
+    "PFxdot22"    "PFxdot23"    "PFxdot24"    "PFxdot25"    "PFxdot26"    "PFxdot27"
+
+  Columns 357 through 362
+
+    "PFxdot28"    "PFxdot29"    "PFxdot30"    "PFxdot31"    "PFxdot32"    "PFxdot33"
+
+  Columns 363 through 368
+
+    "PFxdot34"    "PFxdot35"    "PFxdot36"    "PFxdot37"    "PFxdot38"    "PFxdot39"
+
+  Columns 369 through 375
+
+    "PFxdot40"    "PFydot0"    "PFydot1"    "PFydot2"    "PFydot3"    "PFydot4"    "PFydot5"
+
+  Columns 376 through 382
+
+    "PFydot6"    "PFydot7"    "PFydot8"    "PFydot9"    "PFydot10"    "PFydot11"    "PFydot12"
+
+  Columns 383 through 388
+
+    "PFydot13"    "PFydot14"    "PFydot15"    "PFydot16"    "PFydot17"    "PFydot18"
+
+  Columns 389 through 394
+
+    "PFydot19"    "PFydot20"    "PFydot21"    "PFydot22"    "PFydot23"    "PFydot24"
+
+  Columns 395 through 400
+
+    "PFydot25"    "PFydot26"    "PFydot27"    "PFydot28"    "PFydot29"    "PFydot30"
+
+  Columns 401 through 406
+
+    "PFydot31"    "PFydot32"    "PFydot33"    "PFydot34"    "PFydot35"    "PFydot36"
+
+  Columns 407 through 414
+
+    "PFydot37"    "PFydot38"    "PFydot39"    "PFydot40"    "PHx0"    "PHx1"    "PHx2"    "PHx3"
+
+  Columns 415 through 423
+
+    "PHx4"    "PHx5"    "PHx6"    "PHx7"    "PHx8"    "PHx9"    "PHx10"    "PHx11"    "PHx12"
+
+  Columns 424 through 431
+
+    "PHx13"    "PHx14"    "PHx15"    "PHx16"    "PHx17"    "PHx18"    "PHx19"    "PHx20"
+
+  Columns 432 through 439
+
+    "PHx21"    "PHx22"    "PHx23"    "PHx24"    "PHx25"    "PHx26"    "PHx27"    "PHx28"
+
+  Columns 440 through 447
+
+    "PHx29"    "PHx30"    "PHx31"    "PHx32"    "PHx33"    "PHx34"    "PHx35"    "PHx36"
+
+  Columns 448 through 456
+
+    "PHx37"    "PHx38"    "PHx39"    "PHx40"    "PHy0"    "PHy1"    "PHy2"    "PHy3"    "PHy4"
+
+  Columns 457 through 465
+
+    "PHy5"    "PHy6"    "PHy7"    "PHy8"    "PHy9"    "PHy10"    "PHy11"    "PHy12"    "PHy13"
+
+  Columns 466 through 473
+
+    "PHy14"    "PHy15"    "PHy16"    "PHy17"    "PHy18"    "PHy19"    "PHy20"    "PHy21"
+
+  Columns 474 through 481
+
+    "PHy22"    "PHy23"    "PHy24"    "PHy25"    "PHy26"    "PHy27"    "PHy28"    "PHy29"
+
+  Columns 482 through 489
+
+    "PHy30"    "PHy31"    "PHy32"    "PHy33"    "PHy34"    "PHy35"    "PHy36"    "PHy37"
+
+  Columns 490 through 496
+
+    "PHy38"    "PHy39"    "PHy40"    "PHxdot0"    "PHxdot1"    "PHxdot2"    "PHxdot3"
+
+  Columns 497 through 503
+
+    "PHxdot4"    "PHxdot5"    "PHxdot6"    "PHxdot7"    "PHxdot8"    "PHxdot9"    "PHxdot10"
+
+  Columns 504 through 509
+
+    "PHxdot11"    "PHxdot12"    "PHxdot13"    "PHxdot14"    "PHxdot15"    "PHxdot16"
+
+  Columns 510 through 515
+
+    "PHxdot17"    "PHxdot18"    "PHxdot19"    "PHxdot20"    "PHxdot21"    "PHxdot22"
+
+  Columns 516 through 521
+
+    "PHxdot23"    "PHxdot24"    "PHxdot25"    "PHxdot26"    "PHxdot27"    "PHxdot28"
+
+  Columns 522 through 527
+
+    "PHxdot29"    "PHxdot30"    "PHxdot31"    "PHxdot32"    "PHxdot33"    "PHxdot34"
+
+  Columns 528 through 534
+
+    "PHxdot35"    "PHxdot36"    "PHxdot37"    "PHxdot38"    "PHxdot39"    "PHxdot40"    "PHydot0"
+
+  Columns 535 through 541
+
+    "PHydot1"    "PHydot2"    "PHydot3"    "PHydot4"    "PHydot5"    "PHydot6"    "PHydot7"
+
+  Columns 542 through 548
+
+    "PHydot8"    "PHydot9"    "PHydot10"    "PHydot11"    "PHydot12"    "PHydot13"    "PHydot14"
+
+  Columns 549 through 554
+
+    "PHydot15"    "PHydot16"    "PHydot17"    "PHydot18"    "PHydot19"    "PHydot20"
+
+  Columns 555 through 560
+
+    "PHydot21"    "PHydot22"    "PHydot23"    "PHydot24"    "PHydot25"    "PHydot26"
+
+  Columns 561 through 566
+
+    "PHydot27"    "PHydot28"    "PHydot29"    "PHydot30"    "PHydot31"    "PHydot32"
+
+  Columns 567 through 572
+
+    "PHydot33"    "PHydot34"    "PHydot35"    "PHydot36"    "PHydot37"    "PHydot38"
+
+  Columns 573 through 580
+
+    "PHydot39"    "PHydot40"    "FFx0"    "FFx1"    "FFx2"    "FFx3"    "FFx4"    "FFx5"
+
+  Columns 581 through 589
+
+    "FFx6"    "FFx7"    "FFx8"    "FFx9"    "FFx10"    "FFx11"    "FFx12"    "FFx13"    "FFx14"
+
+  Columns 590 through 597
+
+    "FFx15"    "FFx16"    "FFx17"    "FFx18"    "FFx19"    "FFx20"    "FFx21"    "FFx22"
+
+  Columns 598 through 605
+
+    "FFx23"    "FFx24"    "FFx25"    "FFx26"    "FFx27"    "FFx28"    "FFx29"    "FFx30"
+
+  Columns 606 through 613
+
+    "FFx31"    "FFx32"    "FFx33"    "FFx34"    "FFx35"    "FFx36"    "FFx37"    "FFx38"
+
+  Columns 614 through 622
+
+    "FFx39"    "FFx40"    "FFy0"    "FFy1"    "FFy2"    "FFy3"    "FFy4"    "FFy5"    "FFy6"
+
+  Columns 623 through 631
+
+    "FFy7"    "FFy8"    "FFy9"    "FFy10"    "FFy11"    "FFy12"    "FFy13"    "FFy14"    "FFy15"
+
+  Columns 632 through 639
+
+    "FFy16"    "FFy17"    "FFy18"    "FFy19"    "FFy20"    "FFy21"    "FFy22"    "FFy23"
+
+  Columns 640 through 647
+
+    "FFy24"    "FFy25"    "FFy26"    "FFy27"    "FFy28"    "FFy29"    "FFy30"    "FFy31"
+
+  Columns 648 through 655
+
+    "FFy32"    "FFy33"    "FFy34"    "FFy35"    "FFy36"    "FFy37"    "FFy38"    "FFy39"
+
+  Columns 656 through 664
+
+    "FFy40"    "FHx0"    "FHx1"    "FHx2"    "FHx3"    "FHx4"    "FHx5"    "FHx6"    "FHx7"
+
+  Columns 665 through 673
+
+    "FHx8"    "FHx9"    "FHx10"    "FHx11"    "FHx12"    "FHx13"    "FHx14"    "FHx15"    "FHx16"
+
+  Columns 674 through 681
+
+    "FHx17"    "FHx18"    "FHx19"    "FHx20"    "FHx21"    "FHx22"    "FHx23"    "FHx24"
+
+  Columns 682 through 689
+
+    "FHx25"    "FHx26"    "FHx27"    "FHx28"    "FHx29"    "FHx30"    "FHx31"    "FHx32"
+
+  Columns 690 through 697
+
+    "FHx33"    "FHx34"    "FHx35"    "FHx36"    "FHx37"    "FHx38"    "FHx39"    "FHx40"
+
+  Columns 698 through 706
+
+    "FHy0"    "FHy1"    "FHy2"    "FHy3"    "FHy4"    "FHy5"    "FHy6"    "FHy7"    "FHy8"
+
+  Columns 707 through 714
+
+    "FHy9"    "FHy10"    "FHy11"    "FHy12"    "FHy13"    "FHy14"    "FHy15"    "FHy16"
+
+  Columns 715 through 722
+
+    "FHy17"    "FHy18"    "FHy19"    "FHy20"    "FHy21"    "FHy22"    "FHy23"    "FHy24"
+
+  Columns 723 through 730
+
+    "FHy25"    "FHy26"    "FHy27"    "FHy28"    "FHy29"    "FHy30"    "FHy31"    "FHy32"
+
+  Columns 731 through 739
+
+    "FHy33"    "FHy34"    "FHy35"    "FHy36"    "FHy37"    "FHy38"    "FHy39"    "FHy40"    "CF1"
+
+  Columns 740 through 746
+
+    "CF2"    "CF3"    "CF4"    "CH1"    "CH2"    "CH3"    "CH4"
+
+MAIN

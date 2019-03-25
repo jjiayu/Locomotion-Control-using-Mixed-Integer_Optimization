@@ -1,0 +1,111 @@
+Date and Time:
+   22-Mar-2019 16:50:23
+
+Correspond Log File Name: log-20190322T165023
+ 
+Locomotion Control with Mixed-integer Nonlinear Optimization in 2D
+Time Step Grouping Script - All the Phases have the same Number of Time Steps
+ 
+Input Number of Time Steps (e.g. 20): 
+40
+ 
+Input Size of Time Steps (e.g. 0.05): 
+0.025
+ 
+Input Number of Phases (type the same value with number of time steps if we want to allow mode change per time step): 
+4
+ 
+Input Goal State (Travel Distance e.g. 0.5): 
+0.5
+ 
+Q matrix in the Cost Function is Sparse
+A matrix for Constraints is Sparse
+ 
+Set How the Terminal Conditions will be handled; 0: Hard Constraint; 1: Soft Constraint in Cost Function 
+0
+Terminal Condition is Set as Hard Constraints
+ 
+Use Knitro
+ 
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.0
+=======================================
+
+algorithm:               1
+bar_initmu:              0.1
+gradopt:                 4
+hessopt:                 2
+honorbnds:               1
+outlev:                  4
+par_concurrent_evals:    0
+mip_heuristic:           0
+mip_outinterval:         100
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_branchrule from AUTO to 2.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                746
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                          8
+    fixed:                                            0
+    free:                                           738
+Number of binary variables:                           8
+Number of integer variables:                          0
+Number of constraints:                             1612
+    linear equalities:                              372
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                       40
+    linear one-sided inequalities:                  800
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:          400
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:            0
+Number of nonzeros in Jacobian:                  330852
+Number of nonzeros in Hessian:                   278631
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 0 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       8   4.02e+006      4.02e+006                  27.559
+
+EXIT: User routine for node_callback returned -504.
+
+EXIT: Termination by user.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =  4.65461144163319e+006
+Final integrality gap (abs / rel)   =   Infinity
+# of nodes processed                =       35
+# of subproblems processed          =       35
+Total program time (secs)           =    1781.539 (  1785.719 CPU time)
+Time spent in evaluations (secs)    =     127.002
+
+===========================================================================
+
+{Operation terminated by user during knitromatlab_mip
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MAIN', 'C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\Fixed_Time_Step_Grouping_2DRigidBodyDynamics_Euler_Integration\MAIN.m', 1022)" style="font-weight:bold">MAIN</a> (<a href="matlab: opentoline('C:\Users\jiayu\Documents\Locomotion-Control-using-Mixed-Integer_Optimization\Fixed_Time_Step_Grouping_2DRigidBodyDynamics_Euler_Integration\MAIN.m',1022,0)">line 1022</a>)
+    [result.x,result.objval,result.exitflag,optInfo] =
+    knitromatlab_mip(objfunc,x0,A,b,Aeq,beq,lb,ub,nlcon,vtype,objFnType,cFnType,[],options,option_file);} 
+MAIN
