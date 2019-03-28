@@ -970,8 +970,8 @@ elseif solver == "baron"
 %-------------------------------------------------------------
 %       Generate Initial Seed
     x0 = rand(namesLength,1);
-    load('result_without_kine_constraint_at_last_timestep\log-20190315T162802.mat','result');
-    x0 = result.x;
+%    load('result_without_kine_constraint_at_last_timestep\log-20190315T162802.mat','result');
+%    x0 = result.x;
 %-------------------------------------------------------------
 %       Nonlinear Constraint
 %       Get equality and ineuqality constraint size
