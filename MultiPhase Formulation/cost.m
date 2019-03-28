@@ -33,6 +33,7 @@ cost = sum(TimeStep_vector.*FFx_vector.^2) +...
 %        + (vars(thetaIdx_end) - theta_end)' * (vars(thetaIdx_end) - theta_end)...
 %        + (vars(thetadotIdx_end) - thetadot_end)' * (vars(thetadotIdx_end) - thetadot_end);
 % 
+
 % cost = 0;
 
 end
