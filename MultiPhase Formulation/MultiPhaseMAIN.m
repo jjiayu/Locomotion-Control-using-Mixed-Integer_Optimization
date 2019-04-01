@@ -27,6 +27,7 @@ disp(' ')
 %Add solvers' Path
 %Knitro
 addpath('C:\Program Files\Artelys\Knitro 11.1.0\knitromatlab')
+%addpath('~/Desktop/knitro-11.1.2-z-MacOS-64/knitromatlab/')
 %Gurobiaddpath('C:\gurobi810')
 %==========================================================
 %Choose Solver
