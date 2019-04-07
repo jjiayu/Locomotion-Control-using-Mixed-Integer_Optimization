@@ -15,31 +15,48 @@
 - Friction Cone formulation is different in 2D and 3D case. 2D case is a linear friction cone where 3D case is nonlinear.
 
 
+## Knitro and CasADi
+
+1. Knitro and CaSADi only works well in Linux, with CasADi Matlab interface, because:
+    - In Mac, it is difficult to identify the location of dynamic libraries, due to difficulties to set DYLD_LIBRARY_DIR environemtn variable.
+    - In Windows, CasADi team does not ship interfaces for Knitro. Compiling CasADi in Windows is difficult and not recommended.
+
+2. To make CasADi and Knitro running in Matlab in Linux, we need to:
+    - Firstly, Put Path of "knitroampl" and "lib" (in Knitro installation folder) into environment variable "PATH" and "LD_LIBRARY_PATH"
+    - Secondly, Copy the "libknitroXXXX.so" in the Knitro installation folder and rename to "libknitro1030.so", since binary installation works with "libknitro1030.so".
+    - Thirdly, open Matlab from command line to ensure we load all the environment variable we have defined and use "addpath" function to add the "casadi" installation folder.
+
+3. Pending Issues
+
+    - CasAdi Python interface
+        - Always show "Segmentation Fault", no matter call Knitro from either pre-built binary CasADi Python interface or the interfaces compiled from source. 
+        - **May consider to ask for the solution in the forum or github, when matlab interface is not good enough.**
+    
+    - Knitro Dynamic Library File Name/Version
+        - Currently, due to unknown reasons, we need to rename the Knitro dynamic library "libknitroXXXX.so" to "libknitro1030.so".
+        - Recompile CasADi from source may solve the problem. It has been verified that recompilation of python interface works. **We need to try to recompile Matlab interface to verify if it works for Matlab.**
+        - **Stop investigating this issue as long as there is no weired things happen for Matlab interface.**
+        - **May need to install Knitro 1030 to adapt to the CasADi interface**
+        - **Ask solution from google forum or Github if something unexpected happened.**
+
+    - Computing Speed Issue
+        - Cross computer: Thinkpad P51 is slower than Henrique's Desktop --> Not Acceptable
+        - Cross OS: Windows is faster than Ubuntu 18, when using Bonmin to solver the example problem
+
 ## Trouble Shooting
 
 1. Solver reports the optimization problem is infeasible
 
-- Solver's problems, it accidentally identified all branches are infeasible which is wrong in most of the cases. Re-run the solver will solve the problem in most of the cases.
-- Initial and Terminal robot height violates the kinematics constraint and complementarity constraint. If the robot height is set in a way that the upper level of the boudning box cannot reach the terrain height, then the problem is infeasible. Retune the initial and terminal robot height to solve the problem.
-- The (go-to-goal) task is infeasible for the current foot-ground reaction force limits, foot swing velocity, kinematics contraint. Either change the task or tune the parameters for big-M formulation (goerns foot swing velocity and foot-ground reaction forces limits), kinematics contraint will solve the problem. 
-
-2. Knitro and CaSADi in Linux
-
-- Knitro and CaSADi works well in Linux only. In Mac, it is difficult to identify dynamic libraries. In Windows, CaSADi does not ship with Knitro interface. The only option is to compile CaSADi by ourselve, but it is quite difficult.
-
-- To run Knitro and CaSADi, we need to first put Path of "knitroampl" and "lib" (in Knitro installation folder) into environment variable "PATH" and "LD_LIBRARY_PATH"
-
-- CaSADi interface Knitro with "libknitro1030.so". Current workaround: Copy the "libknitroXXXX.so" in the Knitro installation folder and rename to "libknitro1030.so"
-
-- Call Matlab from commandline, so we load the environment variables and then use "addpath" function to add "knitromatlab" folder and "casadi" installation folder
+    - Solver's problems, it accidentally identified all branches are infeasible which is wrong in most of the cases. Re-run the solver will solve the problem in most of the cases.
+    - Initial and Terminal robot height violates the kinematics constraint and complementarity constraint. If the robot height is set in a way that the upper level of the   boudning box cannot reach the terrain height, then the problem is infeasible. Retune the initial and terminal robot height to solve the problem.
+    - The (go-to-goal) task is infeasible for the current foot-ground reaction force limits, foot swing velocity, kinematics contraint. Either change the task or tune the parameters for big-M formulation (goerns foot swing velocity and foot-ground reaction forces limits), kinematics contraint will solve the problem. 
 
 ## Future Work
 
-- Re-program the containts --> Build a big for loop whose index is based on TimeSeries
+    - Re-program the containts --> Build a big for loop whose index is based on TimeSeries
 
-- Object-Oriented Porgramming Method --> Just add limbs into robot class
+    - Object-Oriented Porgramming Method --> Just add limbs into robot class
 
-- For the kienmatics constraint, we can use tensor-based formualtion to speed up computation time and simplfy the program -->Ask Chris and Theo
-
+    - For the kienmatics constraint, we can use tensor-based formualtion to speed up computation time and simplfy the program -->Ask Chris and Theo
 
 
