@@ -24,7 +24,7 @@
 
 2. To make CasADi and Knitro running in Matlab in Linux, we need to:
     - Firstly, Put Path of "knitroampl" and "lib" (in Knitro installation folder) into environment variable "PATH" and "LD_LIBRARY_PATH"
-    - Secondly, Copy the "libknitroXXXX.so"/"libknitro.so" in the "lib" folder of the Knitro installation path and rename to "libknitro1030.so", since binary installation works with "libknitro1030.so". Alternatively, we can re-compile the interface from source (Not recommended now).
+    - Secondly, Copy the "libknitroXXXX.so"/"libknitro.so" in the "lib" folder of the Knitro installation path and rename to "libknitro1030.so", since binary installation works with "libknitro1030.so". Alternatively, we can re-compile the interface from source (Not recommended now, but indeed the re-compiled interface gets slightly faster computation speed).
     - Thirdly, open Matlab from command line to ensure we load all the environment variable we have defined and use "addpath" function to add the "casadi" installation folder.
 
 3. Pending Issues
