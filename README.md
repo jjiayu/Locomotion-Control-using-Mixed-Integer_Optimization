@@ -17,13 +17,14 @@
 
 ## Knitro and CasADi
 
-1. Knitro and CaSADi only works well in Linux, with CasADi Matlab interface, because:
+1. Knitro and CaSADi only works well in Linux, with CasADi Matlab interface:
     - In Mac, it is difficult to identify the location of dynamic libraries, due to difficulties to set DYLD_LIBRARY_DIR environemtn variable.
     - In Windows, CasADi team does not ship interfaces for Knitro. Compiling CasADi in Windows is difficult and not recommended.
+    - Due to unknown reasons, Python interface for Knitro always got "Segmentation Fault", no matter pre-built binaries or compiled from source
 
 2. To make CasADi and Knitro running in Matlab in Linux, we need to:
     - Firstly, Put Path of "knitroampl" and "lib" (in Knitro installation folder) into environment variable "PATH" and "LD_LIBRARY_PATH"
-    - Secondly, Copy the "libknitroXXXX.so" in the Knitro installation folder and rename to "libknitro1030.so", since binary installation works with "libknitro1030.so".
+    - Secondly, Copy the "libknitroXXXX.so"/"libknitro.so" in the "lib" folder of the Knitro installation path and rename to "libknitro1030.so", since binary installation works with "libknitro1030.so". Alternatively, we can re-compile the interface from source (Not recommended now).
     - Thirdly, open Matlab from command line to ensure we load all the environment variable we have defined and use "addpath" function to add the "casadi" installation folder.
 
 3. Pending Issues
@@ -33,9 +34,8 @@
         - **May consider to ask for the solution in the forum or github, when matlab interface is not good enough.**
     
     - Knitro Dynamic Library File Name/Version
-        - Currently, due to unknown reasons, we need to rename the Knitro dynamic library "libknitroXXXX.so" to "libknitro1030.so".
-        - Recompile CasADi from source may solve the problem. It has been verified that recompilation of python interface works. **We need to try to recompile Matlab interface to verify if it works for Matlab.**
-        - **Stop investigating this issue as long as there is no weired things happen for Matlab interface.**
+        - Currently, due to unknown reasons, we need to rename the Knitro dynamic library "libknitroXXXX.so"/"libknitro.so" to "libknitro1030.so".
+        - Recompile CasADi from source can solve the problem.
         - **May need to install Knitro 1030 to adapt to the CasADi interface**
         - **Ask solution from google forum or Github if something unexpected happened.**
 
