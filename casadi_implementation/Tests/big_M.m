@@ -21,7 +21,7 @@ v = [x;c];
 f = x^2;
 g = x - c*M;
 discrete = [0,1];
-nlp = struct('x', v, 'f', f', 'g', g);
+nlp = struct('x', v, 'f', f, 'g', g);
 
 % Create IPOPT solver object
 solver = nlpsol('solver', 'knitro', nlp,struct('discrete', discrete));
