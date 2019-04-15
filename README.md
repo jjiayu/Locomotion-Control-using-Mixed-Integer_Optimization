@@ -53,10 +53,8 @@
 
 ## Future Work
 
-    - Re-program the containts --> Build a big for loop whose index is based on TimeSeries
-
     - Object-Oriented Porgramming Method --> Just add limbs into robot class
 
-    - For the kienmatics constraint, we can use tensor-based formualtion to speed up computation time and simplfy the program -->Ask Chris and Theo
+    - Make a function to generate variable name lists, and another function to check the if the varibales name list match with the CasADi decision variable names
 
 
