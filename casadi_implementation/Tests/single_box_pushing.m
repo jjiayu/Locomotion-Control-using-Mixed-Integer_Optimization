@@ -66,7 +66,6 @@ sol = solver('x0',vars_init, 'lbx',lbvars ,'ubx', ubvars,...
          
 vars_opt = full(sol.x);
 
-
          
 
 
