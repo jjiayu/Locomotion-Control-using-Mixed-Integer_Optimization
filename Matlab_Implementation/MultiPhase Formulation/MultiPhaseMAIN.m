@@ -139,12 +139,12 @@ thetadot_end = 0;
 %robot height should set in a way that the highest foot position is not
 %under the terrain height, otherwise conflicts with complementarity
 %constraint
-if (y_init - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
+if (y_init - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) < 0
     ME_InitHeight = MException('Initialization:ProblematicInitialHeight','Initial Hight Error (y_init), Increase Initial Height');
     throw(ME_InitHeight)
 end
 
-if (y_end - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
+if (y_end - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) < 0
     ME_TerminalHeight = MException('Initialization:ProblematicTerminalHeight','Terminal Hight Error (y_end), Increase Terminal Height');
     throw(ME_TerminalHeight)
 end

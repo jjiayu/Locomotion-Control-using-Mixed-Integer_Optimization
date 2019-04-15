@@ -93,11 +93,13 @@ thetadot_end = 0;
 %under the terrain height, otherwise conflicts with complementarity
 %constraint
 if (y_init - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
-    disp('init robot height violates kinematics constraints')
+    ME_InitHeight = MException('Initialization:ProblematicInitialHeight','Initial Hight Error (y_init), Increase Initial Height');
+    throw(ME_InitHeight)
 end
 
 if (y_end - 1/2*BodyHeight - Default_Leg_Length + BoundingBox_Height/2) <= 0
-    disp('terminal robot height violates kinematics constraints')
+    ME_TerminalHeight = MException('Initialization:ProblematicTerminalHeight','Terminal Hight Error (y_end), Increase Terminal Height');
+    throw(ME_TerminalHeight)
 end
 
 disp(' ')
