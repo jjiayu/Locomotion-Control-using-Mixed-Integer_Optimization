@@ -99,10 +99,10 @@ BodyLength = 0.6;
 BodyHeight = 0.2;
 %       Default foot position in Local robot frame
 DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
-%           Front Foot
+%           Front Foot Default Positions (IN ROBOT FRAME)
 PFcenterX = 1/2*BodyLength;
 PFcenterY = -(1/2*BodyHeight + DefaultLegLength);
-%           Hind Foot
+%           Hind Foot Default Positions (IN ROBOT FRAME)
 PHCenterX = -1/2*BodyLength;
 PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
 %       Kinematics Bounding Box Constraint
@@ -320,7 +320,7 @@ KinematicsConstraint = Function('KinematicsConstraint',{rk, Pk, Pc},{kinematics}
 %               Fx[k] - Const_miu*(Norm*[Fx[k],Fy[k]]') <= 0
 %--------------------------------
 %   (Place Holder) Need to Change when move to 3D Case and/or Uneven
-%   Terrains
+%   Terrains (change equation and norm)
 %-------------------------------
 %       Variable Definitions
 Const_miu = SX.sym('miu');
