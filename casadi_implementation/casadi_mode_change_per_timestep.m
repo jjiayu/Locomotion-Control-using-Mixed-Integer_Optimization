@@ -297,6 +297,7 @@ Ineq_Summation  = Function('Ineq_Summation',  {vk, bigM, zk}, {ineq_sum});
 %-----------------------------------------------------------------------
 %   Kinematics Constraint -->
 %          -1/2*b (Constant Vector) <= R(theta[k])(P[k]-r[k])- Pcenter <= 1/2*b (Constant Vector)
+%           b = [bw;bh];
 %--------------------------
 %       (Place Holder) Need to Augment when moving to 3D
 %--------------------------
