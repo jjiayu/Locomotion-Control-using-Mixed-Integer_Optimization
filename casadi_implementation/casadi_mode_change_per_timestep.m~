@@ -265,7 +265,7 @@ disp('-----------------------------------------------------------')
 %=======================================================================
 
 %=======================================================================
-% (ToDo) Symbolic Functions
+% Symbolic Functions
 %=======================================================================
 %   Euler Integration: x_k+1 - x_k = h*u_k -->
 %                      x_k+1 - x_k - h*u_k = 0
@@ -297,22 +297,25 @@ Ineq_Summation  = Function('Ineq_Summation',  {vk, bigM, zk}, {ineq_sum});
 %-----------------------------------------------------------------------
 %   Kinematics Constraint -->
 %          -1/2*b (Constant Vector) <= R(theta[k])(P[k]-r[k])- Pcenter <= 1/2*b (Constant Vector)
+%           b = [bw;bh];
+%                                                                                                                                                                                                         
 %--------------------------
 %       (Place Holder) Need to Augment when moving to 3D
 %--------------------------
 %       Variable Definitions
-xk = SX.sym('x[k]');
-yk = SX.sym('y[k]');
+xk     = SX.sym('x[k]');
+yk     = SX.sym('y[k]');
 thetak = SX.sym('theta[k]');
-rk = [xk,yk,thetak];
-PcenterX = SX.sym('PcenterX');
-PcenterY = SX.sym('PcenterY');
-Pcenter = [PcenterX,PcenterY];
-Pxk = SX.sym('Px[k]');
-Pyk = SX.sym('Py[k]');
+rk     = [xk,yk,thetak];
+PcX    = SX.sym('PcenterX'); %Foot/End-Effector default x-axis position
+PcY    = SX.sym('PcenterY'); %Foot/End-Effector default y-axis position
+Pc     = [PcX,PcY]; %Foot/End-Effector default positions
+Pxk    = SX.sym('Px[k]');
+Pyk    = SX.sym('Py[k]');
+Pk     = [Pxk,Pyk];
 %       Build Function
-kinematics = [c]
-
+kinematics = [cos(thetak), -sin(thetak); sin(thetak), cos(thetak)]'*(Pk' - [xk,yk]') - Pc';
+KinematicsConstraint = Function('KinematicsConstraint',{rk, Pk, Pc},{kinematics});
 %-----------------------------------------------------------------------
 %   Friction Cones (In 2D, Flat Terrain) -->
 %               Fx[k] - Const_miu*(Norm*[Fx[k],Fy[k]]') <= 0
