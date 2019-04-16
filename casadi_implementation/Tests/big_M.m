@@ -35,7 +35,7 @@ nlp = struct('x', v, 'f', f, 'g', vertcat(g{:}));
 solver = nlpsol('solver', 'knitro', nlp,struct('discrete', discrete));
 
 % Solve the NLP
-res = solver('x0' , [2.5 1.0],... % solution guess
+res = solver('x0' , [2.5 0.0],... % solution guess
              'lbx', [-100,0],...           % lower bound on x
              'ubx', [100,1],...           % upper bound on x
              'lbg',  lbg,...           % lower bound on g
