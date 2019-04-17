@@ -49,7 +49,7 @@ disp('---------------------------------------------------')
 %Inertia Parameters(Information from MIT Cheetah 3)
 m = 45; %kg
 I = 2.1; %kg m^2 Izz
-g = 9.80665; %m/s^2
+G = 9.80665; %m/s^2
 %======================================================================
 
 %======================================================================
@@ -267,17 +267,17 @@ disp('-----------------------------------------------------------')
 %=======================================================================
 % Symbolic Functions
 %=======================================================================
-%   Euler Integration: x_k+1 - x_k = h*u_k -->
-%                      x_k+1 - x_k - h*u_k = 0
+%   Euler Integration: x_k+1 - x_k = h*fdyn_k -->
+%                      x_k+1 - x_k - h*fdyn_k = 0
 %-----------------------------------------------------------------------
 %       Variable Definitions:
-xk  = SX.sym('x[k]'); %xk, current state
+xk  = SX.sym('x[k]');                  %xk, current state
 xkk = SX.sym(['x[k+',num2str(1),']']); %xk+1 next state
-uk  = SX.sym('u[k]'); %uk, control input at current time step
-hk  = SX.sym('h[k]'); %hk, current time step length
+fdyn_k  = SX.sym('fdyn[k]');               %fdyn_k, dynamical equation value evaluated at time step k
+hk  = SX.sym('h[k]');                  %hk, current time step length
 %       Build Function
-euler = xkk - xk - hk*uk; %expression
-EulerIntegration = Function('Euler',{xkk,xk,hk,uk},{euler}); %function, can take either symbolic or numerical inputs
+euler = xkk - xk - hk*fdyn_k; %expression
+EulerIntegration = Function('Euler',{xkk,xk,hk,fdyn_k},{euler}); %function, can take either symbolic or numerical inputs
 %-----------------------------------------------------------------------
 %   Complementarity Constraint (a Set of Inequality Equations):
 %-----------------------------------------------------------------------
@@ -373,27 +373,112 @@ g   = {}; %container of constraints
 lbg = []; %Upper Bound of Constraint Functions
 ubg = []; %Lower Bound of COnstraint Functions
 J   = 0;  %Cost Function
-
 %-----------------------------------------------------------------------
-%   (ToDo) Generate Constraints and Cost Function
+% Generate Constraints and Cost Function
+%-----------------------------------------------------------------------
 for k = 1:TimeSeriesLength
     %--------------------------------------
-    % Robot Torso dynamics
+    % System dynamics
     %   Use EulerIntegration Function to Construct
+    %   EulerIntegration = x[k+1] - x[k] -h[k]*fdyn[k] = 0
+    %   Input: x[k+1], x[k], h[k], fdyn[k] (Display sequence as defined in EulerIntegration Function)
+    %   lbg = 0 (Equality constraint)
+    %   ubg = 0 (Equality constraint)
+    %   Covering Range: from k = 1 to k = TimeSeriesLength - 1
     %--------------------------------------
-    %x-axis first-order dynamics (position)
-    %   x[k+1] - x[k] - h[k]
-    %x-axis second-order dynamics (velocity)
-    %y-axis first-order dynamics (position)
-    %y-axis second-order dynamics (velocity)
-    %theta first-order dynamics (position)
-    %theta second-order dynamics (velocity)
+    %   Robot Torso Dynamics
+    %--------------------------------------
+    %   Constraint the range
+    if k <= TimeSeriesLength - 1
+        %--------------------------------------
+        % (*) x-axis first-order dynamics (position)
+        %       Equation: x[k+1] - x[k] - h*xdot[k] = 0
+        %       Input: x[k+1]  = x[k+1] (x[k+1] at rhs means x-position)
+        %              x[k]    = x[k]   (x[k] at rhs means x-position)
+        %              h[k]    = h
+        %              fdyn[k] = xodt[k]
+        %       lbg = 0
+        %       ubg = 0
+        EqTemp = EulerIntegration(x(k+1), x(k), h, xdot(k));
+        g = {g{:},EqTemp};  %Append to constraint function list
+        lbg = [lbg;0];      %Give constraint lower bound
+        ubg = [ubg;0];      %Give constraint upper bound
+        %----------------------------------------
+        %(*) x-axis second-order dynamics (velocity)
+        %       Equation: xdot[k+1] - xdot[k] - h*(1/m*FFx[k] + 1/m*FHx[k])
+        %       Input: x[k+1]  = xdot[k+1]
+        %              x[k]    = xdot[k]
+        %              h[k]    = h
+        %              fdyn[k] = 1/m*(FFx[k]+FHx[k])
+        %       lbg = 0;
+        %       ubg = 0;
+        fdyntemp  = 1/m*(FFx(k)+FHx(k)); 
+        EqTemp = EulerIntegration(xdot(k+1), xdot(k), h, fdyntemp);
+        g = {g{:},EqTemp};  %Append to constraint function list
+        lbg = [lbg;0];      %Give constraint lower bound
+        ubg = [ubg;0];      %Give constraint upper bound
+        %-----------------------------------------
+        % (*) y-axis first-order dynamics (position)
+        %       Equation: y[k+1] - y[k] - h[k]*ydot[k] = 0
+        %       Input: x[k+1]  = y[k+1]
+        %              x[k]    = y[k]
+        %              h[k]    = h
+        %              fdyn[k] = ydot[k]
+        EqTemp = EulerIntegration(y(k+1), y(k), h, ydot(k));
+        g = {g{:},EqTemp}; %Append to constraint function list
+        lbg = [lbg;0];     %Give constraint lower bound
+        ubg = [ubg;0];     %Give constraint upper bound
+        %-----------------------------------------
+        % (*) y-axis second-order dynamics (velocity)
+        %       Equation: ydot[k+1] - ydot[k] - h[k]*[1/m*(FFy[k]+FHy[k]-g)] = 0
+        %       Input: x[k+1]  = ydot[k+1]
+        %              x[k]    = ydot[k]
+        %              h[k]    = h
+        %              fdyn[k] = 1/m*(FFy[k] + FHy[k] - g)
+        %       lbg = 0
+        %       ubg = 0
+        fdyntemp = 1/m*(FFy(k) + FHy(k) - G);
+        EqTemp = EulerIntegration(ydot(k+1), ydot(k), h, fdyntemp);
+        g = {g{:},EqTemp}; %Append to constraint function list
+        lbg = [lbg;0];     %Give constraint lower bound
+        ubg = [ubg;0];     %Give constraint upper bound
+        %-----------------------------------------
+        % (*) theta first-order dynamics (position)
+        %       Equation: theta[k+1] - theta[k] - h[k]*thetadot[k] = 0
+        %       Input: x[k+1]  = theta[k+1]
+        %              x[k]    = theta[k]
+        %              h[k]    = h
+        %              fdyn[k] = thetadot[k]
+        %       lbg = 0
+        %       ubg = 0
+        EqTemp = EulerIntegration(theta(k+1), theta(k), h, thetadot(k));
+        g = {g{:},EqTemp}; %Append to constraint function list
+        lbg = [lbg;0];     %Give constraint lower bound
+        ubg = [ubg;0];     %Give constraint upper bound
+        %-----------------------------------------
+        % (*) theta second-order dynamics (velocity)
+        %       Equation: Izz*thetadot[k+1] - Izz*thetadot[k] - h[k]*[(PFx[k] - x[k])*FFy[k] - (FFy[k] - y[k])*FFx[k] + (PHx[k] - x[k])*FHy[k] - (PHy[k] - y[k])*FHx[k]]
+        %       Input: x[k+1]  = Izz*thetadot[k+1]
+        %              x[k]    = Izz*thetadot[k]
+        %              h[k]    = h
+        %              fdyn[k] = (PFx[k] - x[k])*FFy[k] - (FFy[k] - y[k])*FFx[k] + (PHx[k] - x[k])*FHy[k] - (PHy[k] - y[k])*FHx[k]
+        %       lbg = 0
+        %       ubg = 0
+        fdyntemp = (PFx(k) - x(k))*FFy(k) - (FFy(k) - y(k))*FFx(k) + (PHx(k) - x(k))*FHy(k) - (PHy(k) - y(k))*FHx(k);
+        EqTemp = EulerIntegration(thetadot(k+1), thetadot(k), h, fdyntemp);
+        g = {g{:},EqTemp}; %Append to constraint function list
+        lbg = [lbg;0];     %Give constraint lower bound
+        ubg = [ubg;0];     %Give constraint upper bound
+        %-----------------------------------------
     
-    % Footstep Location dynamics
-    % PFx (Front foot x-axis) first-order dynamics (velocity)
-    % PFy (Front foot y-axis) first-order dynamics (velocity)
-    % PHx (Hind foot x-axis) first-order dynamics (velocity)
-    % PHy (Hind foot y-axis) first-order dynamics (velocity)
+        % Footstep Location dynamics
+        % PFx (Front foot x-axis) first-order dynamics (velocity)
+        % PFy (Front foot y-axis) first-order dynamics (velocity)
+        % PHx (Hind foot x-axis) first-order dynamics (velocity)
+        % PHy (Hind foot y-axis) first-order dynamics (velocity)
+    end
+    % Euler Integration of Dynamical Equations - Done
+    %----------------------------------------------------
     
     % Complementarity Constraint
     
@@ -404,6 +489,9 @@ for k = 1:TimeSeriesLength
     % Cost Function
     
 end
+
+% Initial Condition and Terminal Condition
+
 %=======================================================================
 
 %=======================================================================

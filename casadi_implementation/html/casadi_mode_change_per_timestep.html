@@ -1,0 +1,964 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>casadi_mode_change_per_timestep</title><meta name="generator" content="MATLAB 9.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-04-17"><meta name="DC.source" content="casadi_mode_change_per_timestep.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">% Mixed-integer Nonlinear Optimization in 2D case, use auto differentiation</span>
+<span class="comment">% to compute gradients and hessians</span>
+<span class="comment">% Mode Selection at every time step</span>
+<span class="comment">% Foot-ground contact configurations are modeled as 0/1 for each foot</span>
+
+<span class="comment">% Check readme for notes ad future improvements</span>
+
+clear;
+clc;
+
+<span class="comment">%========================================================</span>
+<span class="comment">% Import CasADi related packages</span>
+import <span class="string">casadi.*</span>
+
+<span class="comment">%========================================================</span>
+<span class="comment">% Command Line Logging</span>
+diary <span class="string">off</span>
+diary_filename = strcat(<span class="string">'log-'</span>, datestr(datetime(<span class="string">'now'</span>), 30)); <span class="comment">%date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517</span>
+diary(diary_filename);
+
+<span class="comment">%=========================================================</span>
+<span class="comment">% Display Script Information</span>
+disp(<span class="string">'CasADi Implementation'</span>);
+disp(<span class="string">'2D Locomotion Control using Mixed-integer Nonlinear Optimization'</span>);
+disp(<span class="string">'Mode Configuration Change per Time Step'</span>);
+disp(<span class="string">' '</span>);
+disp(<span class="string">'Date and Time:'</span>);
+disp(datetime(<span class="string">'now'</span>));
+disp([<span class="string">'Correspondent Log File Name: '</span>, diary_filename]);
+disp(<span class="string">'---------------------------------------------------'</span>);
+<span class="comment">%=====================================================================</span>
+<span class="comment">% Add path</span>
+<span class="comment">%addpath('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5')</span>
+
+<span class="comment">%=====================================================================</span>
+<span class="comment">% Choose solver</span>
+SolverNum = input(<span class="string">'Solver Selection, 1: Knitro, 2: Bonmin \n'</span>);
+<span class="keyword">if</span> SolverNum == 1
+    SolverSelected = <span class="string">'knitro'</span>;
+<span class="keyword">elseif</span> SolverNum == 2
+    SolverSelected = <span class="string">'bonmin'</span>;
+<span class="keyword">else</span>
+    ME_SelectSolvers = MException(<span class="string">'Initialization:SelectSolvers'</span>,<span class="string">'Unknown Solver Nominated'</span>);
+    throw(ME_SelectSolvers)
+<span class="keyword">end</span>
+disp([<span class="string">'Selected Solver: '</span>, SolverSelected])
+disp(<span class="string">'---------------------------------------------------'</span>)
+<span class="comment">%======================================================================</span>
+<span class="comment">%Inertia Parameters(Information from MIT Cheetah 3)</span>
+m = 45; <span class="comment">%kg</span>
+I = 2.1; <span class="comment">%kg m^2 Izz</span>
+g = 9.80665; <span class="comment">%m/s^2</span>
+<span class="comment">%======================================================================</span>
+
+<span class="comment">%======================================================================</span>
+<span class="comment">%Environment Information</span>
+TerrainHeight = 0; <span class="comment">%terrain height</span>
+TerrainNorm = [0,1];
+miu = 0.6; <span class="comment">%friction coefficient</span>
+disp(<span class="string">'Environment Information: '</span>);
+disp(<span class="string">'Friction Cone: '</span>);
+disp(num2str(miu));
+disp(<span class="string">'---------------------------------------------------'</span>);
+<span class="comment">%======================================================================</span>
+
+<span class="comment">%======================================================================</span>
+<span class="comment">% Time Step and Discretization Parameter Settings</span>
+<span class="comment">%   Terminal time</span>
+Tend = input(<span class="string">'Input Termianl Time (e.g. 1s): \n'</span>);
+<span class="comment">%   Number of time steps</span>
+NumTimeSteps = input(<span class="string">'Input Number of Time Steps (10, 20, 30, 40): \n'</span>);
+<span class="comment">%   Time Step Length</span>
+h = Tend/NumTimeSteps;
+disp(<span class="string">'Time Step Size: '</span>);
+disp([num2str(h),<span class="string">' (s)'</span>]);
+<span class="comment">%   Time Series Generation</span>
+TimeSeries = 0:h:Tend;
+TimeSeriesLength = length(TimeSeries);
+disp([<span class="string">'Number of Knots/Discretizations (From Time '</span>,num2str(TimeSeries(1)),<span class="string">' to '</span>, num2str(TimeSeries(end)), <span class="string">'):'</span>])
+disp([num2str(TimeSeriesLength), <span class="string">' (NumTimeSteps + 1)'</span>]);
+disp(<span class="string">'---------------------------------------------------'</span>)
+<span class="comment">%======================================================================</span>
+
+<span class="comment">%======================================================================</span>
+<span class="comment">% Parameter Setting</span>
+<span class="comment">%======================================================================</span>
+<span class="comment">%   Big-M Parameters for Complementarity Constraints</span>
+<span class="comment">%----------------------------------------------------------------------</span>
+Mpos_y = 100; <span class="comment">%(meters) big-M for foot positions in y-axis</span>
+Mvel = 5; <span class="comment">%(m/s) big-M for foot velocity in both x and y axis</span>
+Mfx = 1e5; <span class="comment">%(N) big-M for foot-ground reaction forces for x-axis</span>
+Mfy = 1e5; <span class="comment">%(N) big-M for foot-ground reaction forces for y-axis</span>
+<span class="comment">%----------------------------------------------------------------------</span>
+<span class="comment">%   Kinematics Constraint Parameters</span>
+<span class="comment">%----------------------------------------------------------------------</span>
+<span class="comment">%       Body Size</span>
+BodyLength = 0.6;
+BodyHeight = 0.2;
+<span class="comment">%       Default foot position in Local robot frame</span>
+DefaultLegLength = 0.45; <span class="comment">%default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)</span>
+<span class="comment">%           Front Foot Default Positions (IN ROBOT FRAME)</span>
+PFcenterX = 1/2*BodyLength;
+PFcenterY = -(1/2*BodyHeight + DefaultLegLength);
+<span class="comment">%           Hind Foot Default Positions (IN ROBOT FRAME)</span>
+PHCenterX = -1/2*BodyLength;
+PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
+<span class="comment">%       Kinematics Bounding Box Constraint</span>
+BoundingBox_Width = 0.3;
+BoundingBox_Height = 0.3;
+<span class="comment">%======================================================================</span>
+
+<span class="comment">%======================================================================</span>
+<span class="comment">% Task Specifications</span>
+<span class="comment">%======================================================================</span>
+<span class="comment">%   Initial Conditions</span>
+<span class="comment">%----------------------------------------------------------------------</span>
+x_Init        = 0;
+y_Init        = 1/2*BodyHeight + DefaultLegLength;
+thetaInit     = 0;
+xdot_Init     = 0;
+ydot_Init     = 0;
+thetadot_Init = 0;
+<span class="comment">%----------------------------------------------------------------------</span>
+<span class="comment">%   Terminal Conditions</span>
+x_End        = input(<span class="string">'Input Travel Distance along x-axis (m): \n'</span> );
+y_End        = 1/2*BodyHeight + DefaultLegLength;
+theta_End    = 0;
+xdot_End     = 0;
+ydot_End     = 0;
+thetadot_End = 0;
+<span class="comment">%----------------------------------------------------------------------</span>
+<span class="comment">%   Test if initial and termianl conditions violates kinematics constraint</span>
+<span class="comment">%   Robot Height should set in a way that highest foot posiitons are not</span>
+<span class="comment">%   undre the terrain height, otherwise conflicting with complementarity</span>
+<span class="comment">%   constraints</span>
+<span class="keyword">if</span> (y_Init - 1/2*BodyHeight - DefaultLegLength + 1/2*BoundingBox_Height) &lt; 0
+    ME_InitHeight = MException(<span class="string">'Initialization:ProblematicInitialHeight'</span>,<span class="string">'Initial Height Error (y_init), Increase Initial Height'</span>);
+    throw(ME_InitHeight)
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> (y_End - 1/2*BodyHeight - DefaultLegLength + 1/2*BoundingBox_Height) &lt; 0
+    ME_TerminalHeight = MException(<span class="string">'Initialization:ProblematicTerminalHeight'</span>,<span class="string">'Terminal Height Error (y_end), Increase Terminal Height'</span>);
+    throw(ME_TerminalHeight)
+<span class="keyword">end</span>
+disp(<span class="string">'---------------------------------------------------'</span>)
+<span class="comment">%=======================================================================</span>
+<span class="comment">% (Place Holder): Setup of Soft constraints on Terminal Condition or not</span>
+<span class="comment">%=======================================================================</span>
+
+<span class="comment">%=======================================================================</span>
+<span class="comment">% Define/Create Modeling Variables</span>
+<span class="comment">%=======================================================================</span>
+<span class="comment">%   Display some Info</span>
+disp(<span class="string">'Generating Decision Variables Vectors/Lists'</span>)
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%   Continuous Variables</span>
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%   State Variables: r = [x, y, theta, xdot, ydot, thetadot]</span>
+<span class="comment">%       x: horizontal position</span>
+<span class="comment">%       y: vertical position</span>
+<span class="comment">%       theta: torso orientation</span>
+<span class="comment">%       xdot: horizontal velocity</span>
+<span class="comment">%       ydot: vertical velocity</span>
+<span class="comment">%       thetadot: torso angular velocity</span>
+<span class="comment">%   Foot Step Locations (IN WORLD FRAME):</span>
+<span class="comment">%       Front Leg Location and Velocities: PF = [PFx, PFy, PFxdot, PFydot]</span>
+<span class="comment">%       Hind Leg Location and Velocities : PH = [PHx, PHy, PHxdot, PHydot]</span>
+<span class="comment">%   Foot-ground Reaction Forces (IN WORLD FRAME):</span>
+<span class="comment">%       Front Leg Forces: FF = [FFx, FFy]</span>
+<span class="comment">%       Hind Leg Forces : FH = [FHx, FHy]</span>
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%   Create CasADi SX variable Lists</span>
+x = SX.sym(<span class="string">'x'</span>, TimeSeriesLength);
+y = SX.sym(<span class="string">'y'</span>, TimeSeriesLength);
+theta = SX.sym(<span class="string">'theta'</span>, TimeSeriesLength);
+xdot = SX.sym(<span class="string">'xdot'</span>, TimeSeriesLength);
+ydot = SX.sym(<span class="string">'ydot'</span>, TimeSeriesLength);
+thetadot = SX.sym(<span class="string">'thetadot'</span>, TimeSeriesLength);
+<span class="comment">%           FootStep Locations and Velocities</span>
+<span class="comment">%               Front Leg Locations</span>
+PFx = SX.sym(<span class="string">'PFx'</span>, TimeSeriesLength);
+PFy = SX.sym(<span class="string">'PFy'</span>, TimeSeriesLength);
+<span class="comment">%               Front Leg Velocities</span>
+PFxdot = SX.sym(<span class="string">'PFxdot'</span>, TimeSeriesLength);
+PFydot = SX.sym(<span class="string">'PFydot'</span>, TimeSeriesLength);
+<span class="comment">%               Hind Leg Locations</span>
+PHx = SX.sym(<span class="string">'PHx'</span>, TimeSeriesLength);
+PHy = SX.sym(<span class="string">'PHy'</span>, TimeSeriesLength);
+<span class="comment">%               Hind Leg Velocities</span>
+PHxdot = SX.sym(<span class="string">'PHxdot'</span>, TimeSeriesLength);
+PHydot = SX.sym(<span class="string">'PHydot'</span>, TimeSeriesLength);
+<span class="comment">%           Foot-Ground Reaction Forces</span>
+<span class="comment">%               Front Leg Forces</span>
+FFx = SX.sym(<span class="string">'FFx'</span>, TimeSeriesLength);
+FFy = SX.sym(<span class="string">'FFy'</span>, TimeSeriesLength);
+<span class="comment">%               Hind Leg Forces</span>
+FHx = SX.sym(<span class="string">'FHx'</span>, TimeSeriesLength);
+FHy = SX.sym(<span class="string">'FHy'</span>, TimeSeriesLength);
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%       Create Decision Variable Name Lists</span>
+<span class="comment">%           Using CreateVarsNameList(varsCasADi)</span>
+<span class="comment">%           varsCasADi is the CasADi variables</span>
+<span class="comment">%-----------------------------------------------------------------------</span>
+x_label      = CreateVarsNameList(x);       y_label      = CreateVarsNameList(y);       theta_label    = CreateVarsNameList(theta);
+xdot_label   = CreateVarsNameList(xdot);    ydot_label   = CreateVarsNameList(ydot);    thetadot_label = CreateVarsNameList(thetadot);
+PFx_label    = CreateVarsNameList(PFx);     PFy_label    = CreateVarsNameList(PFy);
+PFxdot_label = CreateVarsNameList(PFxdot);  PFydot_label = CreateVarsNameList(PFydot);
+PHx_label    = CreateVarsNameList(PHx);     PHy_label    = CreateVarsNameList(PHy);
+PHxdot_label = CreateVarsNameList(PHxdot);  PHydot_label = CreateVarsNameList(PHydot);
+FFx_label    = CreateVarsNameList(FFx);     FFy_label    = CreateVarsNameList(FFy);
+FHx_label    = CreateVarsNameList(FHx);     FHy_label    = CreateVarsNameList(FHy);
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%   Discrete Variables --&gt; Contact Configuration</span>
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%       Contact Configuration (Mode)</span>
+<span class="comment">%           Leg Contact Configurations: C = [CF, CH]; CF, CH = 0/1 (Binary Variable)</span>
+<span class="comment">%               Front Leg Contact On/Off: CF</span>
+<span class="comment">%               Hind Leg Contact On/Off : CH</span>
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%       Create CasADi SX variables</span>
+<span class="comment">%--------------------------------------------</span>
+<span class="comment">%       (Place Holder) Need to re-create to the same size with respect to</span>
+<span class="comment">%       number of phases, when moving to phase-based foprmulation</span>
+<span class="comment">%       (Place Holder) Futher, when move to phase-based formulation, first</span>
+<span class="comment">%       create contact configuration from 0 to number of phases, and</span>
+<span class="comment">%       extract the sub variable list from 1 to number of phases</span>
+<span class="comment">%--------------------------------------------</span>
+CF = SX.sym(<span class="string">'CF'</span>, TimeSeriesLength);
+CH = SX.sym(<span class="string">'CH'</span>, TimeSeriesLength);
+<span class="comment">%       Create Variable Name List</span>
+CF_label = CreateVarsNameList(CF);
+CH_label = CreateVarsNameList(CH);
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%   Assemble Lists for all decision variables</span>
+<span class="comment">%       Identifiers of all variables</span>
+varList = [<span class="string">"x"</span>,    <span class="string">"y"</span>,      <span class="string">"theta"</span>,<span class="keyword">...</span>
+           <span class="string">"xdot"</span>, <span class="string">"ydot"</span>,   <span class="string">"thetadot"</span>,<span class="keyword">...</span>
+           <span class="string">"PFx"</span>,  <span class="string">"PFy"</span>,    <span class="string">"PFxdot"</span>,      <span class="string">"PFydot"</span>,<span class="keyword">...</span>
+           <span class="string">"PHx"</span>,  <span class="string">"PHy"</span>,    <span class="string">"PHxdot"</span>,      <span class="string">"PHydot"</span>,<span class="keyword">...</span>
+           <span class="string">"FFx"</span>,  <span class="string">"FFy"</span>,<span class="keyword">...</span>
+           <span class="string">"FHx"</span>,  <span class="string">"FHy"</span>,<span class="keyword">...</span>
+           <span class="string">"CF"</span>,   <span class="string">"CH"</span>];
+
+<span class="comment">%       Variable Length List</span>
+VarLengthList = [length(x_label),     length(y_label),      length(theta_label), <span class="keyword">...</span>
+                 length(xdot_label),  length(ydot_label),   length(thetadot_label), <span class="keyword">...</span>
+                 length(PFx_label),   length(PFy_label),    length(PFxdot_label),       length(PFydot_label), <span class="keyword">...</span>
+                 length(PHx_label),   length(PHy_label),    length(PHxdot_label),       length(PHydot_label), <span class="keyword">...</span>
+                 length(FFx_label),   length(FFy_label),<span class="keyword">...</span>
+                 length(FHx_label),   length(FHy_label),<span class="keyword">...</span>
+                 length(CF_label),    length(CH_label)];
+
+<span class="comment">%       Full decision variable names list</span>
+VarNamesList = [x_label,      y_label,      theta_label,<span class="keyword">...</span>
+                xdot_label,   ydot_label,   thetadot_label,<span class="keyword">...</span>
+                PFx_label,    PFy_label,    PFxdot_label,      PFydot_label,<span class="keyword">...</span>
+                PHx_label,    PHy_label,    PHxdot_label,      PHydot_label,<span class="keyword">...</span>
+                FFx_label,    FFy_label,<span class="keyword">...</span>
+                FHx_label,    FHy_label,<span class="keyword">...</span>
+                CF_label,     CH_label];
+<span class="comment">%----------------------------------------------------------------------</span>
+<span class="comment">%   Verifications</span>
+<span class="comment">%       (Place Holder - Not Required) Check if variable names are defined</span>
+disp(<span class="string">'-----------------------------------------------------------'</span>)
+<span class="comment">%=======================================================================</span>
+
+<span class="comment">%=======================================================================</span>
+<span class="comment">% Symbolic Functions</span>
+<span class="comment">%=======================================================================</span>
+<span class="comment">%   Euler Integration: x_k+1 - x_k = h*u_k --&gt;</span>
+<span class="comment">%                      x_k+1 - x_k - h*u_k = 0</span>
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%       Variable Definitions:</span>
+xk  = SX.sym(<span class="string">'x[k]'</span>); <span class="comment">%xk, current state</span>
+xkk = SX.sym([<span class="string">'x[k+'</span>,num2str(1),<span class="string">']'</span>]); <span class="comment">%xk+1 next state</span>
+uk  = SX.sym(<span class="string">'u[k]'</span>); <span class="comment">%uk, control input at current time step</span>
+hk  = SX.sym(<span class="string">'h[k]'</span>); <span class="comment">%hk, current time step length</span>
+<span class="comment">%       Build Function</span>
+euler = xkk - xk - hk*uk; <span class="comment">%expression</span>
+EulerIntegration = Function(<span class="string">'Euler'</span>,{xkk,xk,hk,uk},{euler}); <span class="comment">%function, can take either symbolic or numerical inputs</span>
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%   Complementarity Constraint (a Set of Inequality Equations):</span>
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%       Variable Definitions:</span>
+vk   = SX.sym(<span class="string">'v[k]'</span>); <span class="comment">%vk, continuous decision variable</span>
+zk   = SX.sym(<span class="string">'z[k]'</span>); <span class="comment">%zk, integer variable</span>
+bigM = SX.sym(<span class="string">'bigM'</span>); <span class="comment">% big-M</span>
+<span class="comment">%       Build Functions</span>
+<span class="comment">%           Type 1</span>
+<span class="comment">%           Difference --&gt; v[k] - bigM*z[k] &gt;=/&lt;= Constant</span>
+ineq_diff = vk - bigM*zk;
+Ineq_Difference = Function(<span class="string">'Ineq_Difference'</span>, {vk, bigM, zk}, {ineq_diff});
+<span class="comment">%           Type 2</span>
+<span class="comment">%           Summation --&gt; v[k] + bigM*z[k] &gt;=/&lt;= Constant</span>
+ineq_sum  = vk + bigM*zk;
+Ineq_Summation  = Function(<span class="string">'Ineq_Summation'</span>,  {vk, bigM, zk}, {ineq_sum});
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%   Kinematics Constraint --&gt;</span>
+<span class="comment">%          -1/2*b (Constant Vector) &lt;= R(theta[k])(P[k]-r[k])- Pcenter &lt;= 1/2*b (Constant Vector)</span>
+<span class="comment">%                       b = [bw;bh];</span>
+<span class="comment">%--------------------------</span>
+<span class="comment">%       (Place Holder) Need to Augment when moving to 3D</span>
+<span class="comment">%--------------------------</span>
+<span class="comment">%       Variable Definitions</span>
+xk     = SX.sym(<span class="string">'x[k]'</span>);
+yk     = SX.sym(<span class="string">'y[k]'</span>);
+thetak = SX.sym(<span class="string">'theta[k]'</span>);
+rk     = [xk,yk,thetak];
+PcX    = SX.sym(<span class="string">'PcenterX'</span>); <span class="comment">%Foot/End-Effector default x-axis position</span>
+PcY    = SX.sym(<span class="string">'PcenterY'</span>); <span class="comment">%Foot/End-Effector default y-axis position</span>
+Pc     = [PcX,PcY]; <span class="comment">%Foot/End-Effector default positions</span>
+Pxk    = SX.sym(<span class="string">'Px[k]'</span>);
+Pyk    = SX.sym(<span class="string">'Py[k]'</span>);
+Pk     = [Pxk,Pyk];
+<span class="comment">%       Build Function</span>
+kinematics = [cos(thetak), -sin(thetak); sin(thetak), cos(thetak)]'*(Pk' - [xk,yk]') - Pc';
+KinematicsConstraint = Function(<span class="string">'KinematicsConstraint'</span>,{rk, Pk, Pc},{kinematics});
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%   Friction Cones (In 2D, Flat Terrain) --&gt;</span>
+<span class="comment">%               Fx[k] - Const_miu*(Norm*[Fx[k],Fy[k]]') &lt;= 0</span>
+<span class="comment">%--------------------------------</span>
+<span class="comment">%   (Place Holder) Need to Change when move to 3D Case and/or Uneven</span>
+<span class="comment">%   Terrains (change equation and norm)</span>
+<span class="comment">%-------------------------------</span>
+<span class="comment">%       Variable Definitions</span>
+Const_miu = SX.sym(<span class="string">'miu'</span>);
+NormX     = SX.sym(<span class="string">'Nx[k]'</span>);
+NormY     = SX.sym(<span class="string">'Ny[k]'</span>);
+Norm      = [NormX, NormY];
+ForceX    = SX.sym(<span class="string">'Fx[k]'</span>);
+ForceY    = SX.sym(<span class="string">'Fy[k]'</span>);
+Force     = [ForceX, ForceY];
+<span class="comment">%       Build Functions</span>
+friction = ForceX - Const_miu*(dot(Norm,Force));
+FrictionCone = Function(<span class="string">'FrictionCone'</span>,{Norm, Force, Const_miu},{friction});
+<span class="comment">%-----------------------------------------------------------------------</span>
+
+<span class="comment">%=======================================================================</span>
+<span class="comment">% Build Constraints and Objective Function</span>
+<span class="comment">%=======================================================================</span>
+<span class="comment">%   Initialize Constraints and Cost Function Constainers</span>
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%       Collect all decision varibales</span>
+DecisionVars = {x,          y,          theta,<span class="keyword">...</span>
+                xdot,       ydot,       thetadot,<span class="keyword">...</span>
+                PFx,        PFy,        PFxdot,         PFydot,<span class="keyword">...</span>
+                PHx,        PHy,        PHxdot,         PHydot,<span class="keyword">...</span>
+                FFx,        FFy,<span class="keyword">...</span>
+                FHx,        FHy,<span class="keyword">...</span>
+                CF,         CH};
+DecisionVars = vertcat(DecisionVars{:}); <span class="comment">%make a vertical vector</span>
+
+<span class="comment">%       Verify if the variable names are consistent in DecisionVars and VarNameList</span>
+<span class="keyword">if</span> length(DecisionVars) == length(VarNamesList)
+    <span class="keyword">for</span> i = 1:length(DecisionVars)
+        temp = DecisionVars(i);
+        <span class="keyword">if</span> temp.name() ~= VarNamesList(i)
+            ME_NameListInconsistent = MException(<span class="string">'Initialization:InconsistentNameList'</span>,[<span class="string">'The variable names in DecisionVars and VarNamesList are different at index '</span>, num2str(i)]);
+            throw(ME_NameListInconsistent)
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    disp(<span class="string">'Checked - Names in DecisionVars are consistent with the name labels in VarNamesList'</span>);
+<span class="keyword">else</span>
+    ME_NameListLengthInconsistent= MException(<span class="string">'Initialization:NameListInconsistent'</span>,<span class="string">'DecisionVars has different size with respect to VarNamesList'</span>);
+    throw(ME_NameListLengthInconsistent)
+<span class="keyword">end</span>
+
+<span class="comment">%       Other Important Variables</span>
+DecisionVarsInit = zeros(size(DecisionVars));       <span class="comment">%Initial Guess of Decision Varibales</span>
+lb_DecisionVars  = repmat(-inf,size(DecisionVars)); <span class="comment">%Lower Bound of Decision Variables</span>
+ub_DecisionVars  = repmat( inf,size(DecisionVars)); <span class="comment">%Upper Bound of Decision Variables</span>
+g   = {}; <span class="comment">%container of constraints</span>
+lbg = []; <span class="comment">%Upper Bound of Constraint Functions</span>
+ubg = []; <span class="comment">%Lower Bound of COnstraint Functions</span>
+J   = 0;  <span class="comment">%Cost Function</span>
+
+<span class="comment">%-----------------------------------------------------------------------</span>
+<span class="comment">%   (ToDo) Generate Constraints and Cost Function</span>
+<span class="keyword">for</span> k = 1:TimeSeriesLength
+    <span class="comment">%--------------------------------------</span>
+    <span class="comment">% Robot Torso dynamics</span>
+    <span class="comment">%   Use EulerIntegration Function to Construct</span>
+    <span class="comment">%   EulerIntegration = x[k+1] - x[k] -h[k]*u[k] = 0</span>
+    <span class="comment">%   Input: x[k+1], x[k], h[k], u[k]</span>
+    <span class="comment">%   lbg = 0 (Equality constraint)</span>
+    <span class="comment">%   ubg = 0 (Equality constraint)</span>
+    <span class="comment">%   Covering Range: from k = 1 to k = TimeSeriesLength - 1</span>
+    <span class="comment">%--------------------------------------</span>
+    <span class="comment">%   (*) x-axis first-order dynamics (position)</span>
+    <span class="comment">%       Euqation: x[k+1] - x[k] - h*xdot[k] = 0</span>
+    <span class="comment">%       Input: x[k+1] = x[k+1] (x[k+1] at rhs means x-position)</span>
+    <span class="comment">%              x[k]   = x[k]   (x[k] at rhs means x-position)</span>
+    <span class="comment">%              h[k]   = h</span>
+    <span class="comment">%              u[k]   = xodt[k]</span>
+    <span class="comment">%       lbg = 0</span>
+    <span class="comment">%       ubg = 0</span>
+    <span class="comment">%       Covering range: from k = 1 to k = TimeSeriesLength - 1</span>
+    <span class="keyword">if</span> k &lt;= TimeSeriesLength - 1
+        EqTemp = EulerIntegration(x(k+1),x(k),h,xdot(k));
+        g = {g{:},EqTemp};  <span class="comment">%Append to constraint function list</span>
+        lbg = [lbg;0];      <span class="comment">%Give constraint lower bound</span>
+        ubg = [ubg;0];      <span class="comment">%Give constraint upper bound</span>
+    <span class="keyword">end</span>
+    <span class="comment">%----------------------------------------</span>
+    <span class="comment">%   (*) x-axis second-order dynamics (velocity)</span>
+
+    <span class="comment">%y-axis first-order dynamics (position)</span>
+    <span class="comment">%y-axis second-order dynamics (velocity)</span>
+    <span class="comment">%theta first-order dynamics (position)</span>
+    <span class="comment">%theta second-order dynamics (velocity)</span>
+
+    <span class="comment">% Footstep Location dynamics</span>
+    <span class="comment">% PFx (Front foot x-axis) first-order dynamics (velocity)</span>
+    <span class="comment">% PFy (Front foot y-axis) first-order dynamics (velocity)</span>
+    <span class="comment">% PHx (Hind foot x-axis) first-order dynamics (velocity)</span>
+    <span class="comment">% PHy (Hind foot y-axis) first-order dynamics (velocity)</span>
+
+    <span class="comment">% Complementarity Constraint</span>
+
+    <span class="comment">% Kinematics Constraint</span>
+
+    <span class="comment">% Friction Cone</span>
+
+    <span class="comment">% Cost Function</span>
+
+<span class="keyword">end</span>
+<span class="comment">%=======================================================================</span>
+
+<span class="comment">%=======================================================================</span>
+<span class="comment">% (ToDo) Solve the Problem</span>
+<span class="comment">%=======================================================================</span>
+
+<span class="comment">%=======================================================================</span>
+<span class="comment">% (ToDo) Extract the Solution</span>
+<span class="comment">%=======================================================================</span>
+
+<span class="comment">%=======================================================================</span>
+<span class="comment">% Close Diary</span>
+diary <span class="string">off</span>
+</pre><pre class="codeoutput">CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Mode Configuration Change per Time Step
+ 
+Date and Time:
+   17-Apr-2019 12:56:58
+
+Correspondent Log File Name: log-20190417T125658
+---------------------------------------------------
+</pre><pre class="codeoutput error">Error using input
+Cannot call INPUT from EVALC.
+
+Error in casadi_mode_change_per_timestep (line 37)
+SolverNum = input('Solver Selection, 1: Knitro, 2: Bonmin \n');
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Mixed-integer Nonlinear Optimization in 2D case, use auto differentiation
+% to compute gradients and hessians
+% Mode Selection at every time step
+% Foot-ground contact configurations are modeled as 0/1 for each foot
+
+% Check readme for notes ad future improvements
+
+clear;
+clc;
+
+%========================================================
+% Import CasADi related packages
+import casadi.*
+
+%========================================================
+% Command Line Logging
+diary off
+diary_filename = strcat('log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+diary(diary_filename);
+
+%=========================================================
+% Display Script Information
+disp('CasADi Implementation');
+disp('2D Locomotion Control using Mixed-integer Nonlinear Optimization');
+disp('Mode Configuration Change per Time Step');
+disp(' ');
+disp('Date and Time:');
+disp(datetime('now'));
+disp(['Correspondent Log File Name: ', diary_filename]);
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-');
+%=====================================================================
+% Add path
+%addpath('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5')
+
+%=====================================================================
+% Choose solver
+SolverNum = input('Solver Selection, 1: Knitro, 2: Bonmin \n');
+if SolverNum == 1
+    SolverSelected = 'knitro';
+elseif SolverNum == 2
+    SolverSelected = 'bonmin';
+else
+    ME_SelectSolvers = MException('Initialization:SelectSolvers','Unknown Solver Nominated');
+    throw(ME_SelectSolvers)
+end
+disp(['Selected Solver: ', SolverSelected])
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-')
+%======================================================================
+%Inertia Parameters(Information from MIT Cheetah 3)
+m = 45; %kg
+I = 2.1; %kg m^2 Izz
+g = 9.80665; %m/s^2
+%======================================================================
+
+%======================================================================
+%Environment Information
+TerrainHeight = 0; %terrain height
+TerrainNorm = [0,1];
+miu = 0.6; %friction coefficient
+disp('Environment Information: ');
+disp('Friction Cone: ');
+disp(num2str(miu));
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-');
+%======================================================================
+
+%======================================================================
+% Time Step and Discretization Parameter Settings
+%   Terminal time
+Tend = input('Input Termianl Time (e.g. 1s): \n');
+%   Number of time steps
+NumTimeSteps = input('Input Number of Time Steps (10, 20, 30, 40): \n');
+%   Time Step Length
+h = Tend/NumTimeSteps;
+disp('Time Step Size: ');
+disp([num2str(h),' (s)']);
+%   Time Series Generation
+TimeSeries = 0:h:Tend;
+TimeSeriesLength = length(TimeSeries);
+disp(['Number of Knots/Discretizations (From Time ',num2str(TimeSeries(1)),' to ', num2str(TimeSeries(end)), '):'])
+disp([num2str(TimeSeriesLength), ' (NumTimeSteps + 1)']);
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-')
+%======================================================================
+
+%======================================================================
+% Parameter Setting
+%======================================================================
+%   Big-M Parameters for Complementarity Constraints
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+Mpos_y = 100; %(meters) big-M for foot positions in y-axis
+Mvel = 5; %(m/s) big-M for foot velocity in both x and y axis
+Mfx = 1e5; %(N) big-M for foot-ground reaction forces for x-axis
+Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%   Kinematics Constraint Parameters
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%       Body Size
+BodyLength = 0.6;
+BodyHeight = 0.2;
+%       Default foot position in Local robot frame
+DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
+%           Front Foot Default Positions (IN ROBOT FRAME)
+PFcenterX = 1/2*BodyLength;
+PFcenterY = -(1/2*BodyHeight + DefaultLegLength);
+%           Hind Foot Default Positions (IN ROBOT FRAME)
+PHCenterX = -1/2*BodyLength;
+PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
+%       Kinematics Bounding Box Constraint
+BoundingBox_Width = 0.3;
+BoundingBox_Height = 0.3;
+%======================================================================
+
+%======================================================================
+% Task Specifications
+%======================================================================
+%   Initial Conditions
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+x_Init        = 0;
+y_Init        = 1/2*BodyHeight + DefaultLegLength;
+thetaInit     = 0;
+xdot_Init     = 0;
+ydot_Init     = 0;
+thetadot_Init = 0;
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%   Terminal Conditions
+x_End        = input('Input Travel Distance along x-axis (m): \n' );
+y_End        = 1/2*BodyHeight + DefaultLegLength;
+theta_End    = 0;
+xdot_End     = 0;
+ydot_End     = 0;
+thetadot_End = 0;
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%   Test if initial and termianl conditions violates kinematics constraint
+%   Robot Height should set in a way that highest foot posiitons are not
+%   undre the terrain height, otherwise conflicting with complementarity
+%   constraints
+if (y_Init - 1/2*BodyHeight - DefaultLegLength + 1/2*BoundingBox_Height) < 0
+    ME_InitHeight = MException('Initialization:ProblematicInitialHeight','Initial Height Error (y_init), Increase Initial Height');
+    throw(ME_InitHeight)
+end
+
+if (y_End - 1/2*BodyHeight - DefaultLegLength + 1/2*BoundingBox_Height) < 0
+    ME_TerminalHeight = MException('Initialization:ProblematicTerminalHeight','Terminal Height Error (y_end), Increase Terminal Height');
+    throw(ME_TerminalHeight)
+end
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-')
+%=======================================================================
+% (Place Holder): Setup of Soft constraints on Terminal Condition or not
+%=======================================================================
+
+%=======================================================================
+% Define/Create Modeling Variables
+%=======================================================================
+%   Display some Info
+disp('Generating Decision Variables Vectors/Lists')
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%   Continuous Variables
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%   State Variables: r = [x, y, theta, xdot, ydot, thetadot]
+%       x: horizontal position
+%       y: vertical position
+%       theta: torso orientation
+%       xdot: horizontal velocity
+%       ydot: vertical velocity
+%       thetadot: torso angular velocity
+%   Foot Step Locations (IN WORLD FRAME):
+%       Front Leg Location and Velocities: PF = [PFx, PFy, PFxdot, PFydot]
+%       Hind Leg Location and Velocities : PH = [PHx, PHy, PHxdot, PHydot]
+%   Foot-ground Reaction Forces (IN WORLD FRAME): 
+%       Front Leg Forces: FF = [FFx, FFy]
+%       Hind Leg Forces : FH = [FHx, FHy]
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%   Create CasADi SX variable Lists
+x = SX.sym('x', TimeSeriesLength); 
+y = SX.sym('y', TimeSeriesLength); 
+theta = SX.sym('theta', TimeSeriesLength);
+xdot = SX.sym('xdot', TimeSeriesLength); 
+ydot = SX.sym('ydot', TimeSeriesLength); 
+thetadot = SX.sym('thetadot', TimeSeriesLength);
+%           FootStep Locations and Velocities
+%               Front Leg Locations
+PFx = SX.sym('PFx', TimeSeriesLength);
+PFy = SX.sym('PFy', TimeSeriesLength);
+%               Front Leg Velocities
+PFxdot = SX.sym('PFxdot', TimeSeriesLength); 
+PFydot = SX.sym('PFydot', TimeSeriesLength);
+%               Hind Leg Locations
+PHx = SX.sym('PHx', TimeSeriesLength);
+PHy = SX.sym('PHy', TimeSeriesLength);
+%               Hind Leg Velocities
+PHxdot = SX.sym('PHxdot', TimeSeriesLength);
+PHydot = SX.sym('PHydot', TimeSeriesLength);
+%           Foot-Ground Reaction Forces
+%               Front Leg Forces
+FFx = SX.sym('FFx', TimeSeriesLength);
+FFy = SX.sym('FFy', TimeSeriesLength);
+%               Hind Leg Forces
+FHx = SX.sym('FHx', TimeSeriesLength);
+FHy = SX.sym('FHy', TimeSeriesLength);
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%       Create Decision Variable Name Lists 
+%           Using CreateVarsNameList(varsCasADi)
+%           varsCasADi is the CasADi variables
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+x_label      = CreateVarsNameList(x);       y_label      = CreateVarsNameList(y);       theta_label    = CreateVarsNameList(theta);
+xdot_label   = CreateVarsNameList(xdot);    ydot_label   = CreateVarsNameList(ydot);    thetadot_label = CreateVarsNameList(thetadot);
+PFx_label    = CreateVarsNameList(PFx);     PFy_label    = CreateVarsNameList(PFy);    
+PFxdot_label = CreateVarsNameList(PFxdot);  PFydot_label = CreateVarsNameList(PFydot);
+PHx_label    = CreateVarsNameList(PHx);     PHy_label    = CreateVarsNameList(PHy);    
+PHxdot_label = CreateVarsNameList(PHxdot);  PHydot_label = CreateVarsNameList(PHydot);
+FFx_label    = CreateVarsNameList(FFx);     FFy_label    = CreateVarsNameList(FFy);
+FHx_label    = CreateVarsNameList(FHx);     FHy_label    = CreateVarsNameList(FHy);
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%   Discrete Variables REPLACE_WITH_DASH_DASH> Contact Configuration
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%       Contact Configuration (Mode)
+%           Leg Contact Configurations: C = [CF, CH]; CF, CH = 0/1 (Binary Variable)
+%               Front Leg Contact On/Off: CF
+%               Hind Leg Contact On/Off : CH
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%       Create CasADi SX variables
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%       (Place Holder) Need to re-create to the same size with respect to
+%       number of phases, when moving to phase-based foprmulation
+%       (Place Holder) Futher, when move to phase-based formulation, first
+%       create contact configuration from 0 to number of phases, and
+%       extract the sub variable list from 1 to number of phases
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+CF = SX.sym('CF', TimeSeriesLength);
+CH = SX.sym('CH', TimeSeriesLength);
+%       Create Variable Name List
+CF_label = CreateVarsNameList(CF);
+CH_label = CreateVarsNameList(CH);
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%   Assemble Lists for all decision variables
+%       Identifiers of all variables
+varList = ["x",    "y",      "theta",...
+           "xdot", "ydot",   "thetadot",...
+           "PFx",  "PFy",    "PFxdot",      "PFydot",...
+           "PHx",  "PHy",    "PHxdot",      "PHydot",...
+           "FFx",  "FFy",...
+           "FHx",  "FHy",...
+           "CF",   "CH"];
+       
+%       Variable Length List
+VarLengthList = [length(x_label),     length(y_label),      length(theta_label), ...
+                 length(xdot_label),  length(ydot_label),   length(thetadot_label), ...
+                 length(PFx_label),   length(PFy_label),    length(PFxdot_label),       length(PFydot_label), ...
+                 length(PHx_label),   length(PHy_label),    length(PHxdot_label),       length(PHydot_label), ...
+                 length(FFx_label),   length(FFy_label),...
+                 length(FHx_label),   length(FHy_label),...
+                 length(CF_label),    length(CH_label)];
+
+%       Full decision variable names list
+VarNamesList = [x_label,      y_label,      theta_label,...
+                xdot_label,   ydot_label,   thetadot_label,...
+                PFx_label,    PFy_label,    PFxdot_label,      PFydot_label,...
+                PHx_label,    PHy_label,    PHxdot_label,      PHydot_label,...
+                FFx_label,    FFy_label,...
+                FHx_label,    FHy_label,...
+                CF_label,     CH_label];
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%   Verifications
+%       (Place Holder - Not Required) Check if variable names are defined
+disp('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-')
+%=======================================================================
+
+%=======================================================================
+% Symbolic Functions
+%=======================================================================
+%   Euler Integration: x_k+1 - x_k = h*u_k REPLACE_WITH_DASH_DASH>
+%                      x_k+1 - x_k - h*u_k = 0
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%       Variable Definitions:
+xk  = SX.sym('x[k]'); %xk, current state
+xkk = SX.sym(['x[k+',num2str(1),']']); %xk+1 next state
+uk  = SX.sym('u[k]'); %uk, control input at current time step
+hk  = SX.sym('h[k]'); %hk, current time step length
+%       Build Function
+euler = xkk - xk - hk*uk; %expression
+EulerIntegration = Function('Euler',{xkk,xk,hk,uk},{euler}); %function, can take either symbolic or numerical inputs
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%   Complementarity Constraint (a Set of Inequality Equations):
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%       Variable Definitions:
+vk   = SX.sym('v[k]'); %vk, continuous decision variable
+zk   = SX.sym('z[k]'); %zk, integer variable
+bigM = SX.sym('bigM'); % big-M
+%       Build Functions
+%           Type 1
+%           Difference REPLACE_WITH_DASH_DASH> v[k] - bigM*z[k] >=/<= Constant
+ineq_diff = vk - bigM*zk;
+Ineq_Difference = Function('Ineq_Difference', {vk, bigM, zk}, {ineq_diff});
+%           Type 2
+%           Summation REPLACE_WITH_DASH_DASH> v[k] + bigM*z[k] >=/<= Constant
+ineq_sum  = vk + bigM*zk;
+Ineq_Summation  = Function('Ineq_Summation',  {vk, bigM, zk}, {ineq_sum});
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%   Kinematics Constraint REPLACE_WITH_DASH_DASH>
+%          -1/2*b (Constant Vector) <= R(theta[k])(P[k]-r[k])- Pcenter <= 1/2*b (Constant Vector)
+%                       b = [bw;bh];                                                                                                                                                                                                         
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%       (Place Holder) Need to Augment when moving to 3D
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%       Variable Definitions
+xk     = SX.sym('x[k]');
+yk     = SX.sym('y[k]');
+thetak = SX.sym('theta[k]');
+rk     = [xk,yk,thetak];
+PcX    = SX.sym('PcenterX'); %Foot/End-Effector default x-axis position
+PcY    = SX.sym('PcenterY'); %Foot/End-Effector default y-axis position
+Pc     = [PcX,PcY]; %Foot/End-Effector default positions
+Pxk    = SX.sym('Px[k]');
+Pyk    = SX.sym('Py[k]');
+Pk     = [Pxk,Pyk];
+%       Build Function
+kinematics = [cos(thetak), -sin(thetak); sin(thetak), cos(thetak)]'*(Pk' - [xk,yk]') - Pc';
+KinematicsConstraint = Function('KinematicsConstraint',{rk, Pk, Pc},{kinematics});
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%   Friction Cones (In 2D, Flat Terrain) REPLACE_WITH_DASH_DASH>
+%               Fx[k] - Const_miu*(Norm*[Fx[k],Fy[k]]') <= 0
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%   (Place Holder) Need to Change when move to 3D Case and/or Uneven
+%   Terrains (change equation and norm)
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%       Variable Definitions
+Const_miu = SX.sym('miu');
+NormX     = SX.sym('Nx[k]');
+NormY     = SX.sym('Ny[k]');
+Norm      = [NormX, NormY];
+ForceX    = SX.sym('Fx[k]');
+ForceY    = SX.sym('Fy[k]');
+Force     = [ForceX, ForceY];
+%       Build Functions
+friction = ForceX - Const_miu*(dot(Norm,Force));
+FrictionCone = Function('FrictionCone',{Norm, Force, Const_miu},{friction});
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+
+%=======================================================================
+% Build Constraints and Objective Function
+%=======================================================================   
+%   Initialize Constraints and Cost Function Constainers
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%       Collect all decision varibales
+DecisionVars = {x,          y,          theta,...
+                xdot,       ydot,       thetadot,...
+                PFx,        PFy,        PFxdot,         PFydot,...
+                PHx,        PHy,        PHxdot,         PHydot,...
+                FFx,        FFy,...
+                FHx,        FHy,...
+                CF,         CH}; 
+DecisionVars = vertcat(DecisionVars{:}); %make a vertical vector
+
+%       Verify if the variable names are consistent in DecisionVars and VarNameList 
+if length(DecisionVars) == length(VarNamesList)
+    for i = 1:length(DecisionVars)
+        temp = DecisionVars(i);
+        if temp.name() ~= VarNamesList(i)
+            ME_NameListInconsistent = MException('Initialization:InconsistentNameList',['The variable names in DecisionVars and VarNamesList are different at index ', num2str(i)]);
+            throw(ME_NameListInconsistent)
+        end
+    end
+    disp('Checked - Names in DecisionVars are consistent with the name labels in VarNamesList');
+else
+    ME_NameListLengthInconsistent= MException('Initialization:NameListInconsistent','DecisionVars has different size with respect to VarNamesList');
+    throw(ME_NameListLengthInconsistent)
+end
+
+%       Other Important Variables
+DecisionVarsInit = zeros(size(DecisionVars));       %Initial Guess of Decision Varibales
+lb_DecisionVars  = repmat(-inf,size(DecisionVars)); %Lower Bound of Decision Variables
+ub_DecisionVars  = repmat( inf,size(DecisionVars)); %Upper Bound of Decision Variables
+g   = {}; %container of constraints
+lbg = []; %Upper Bound of Constraint Functions
+ubg = []; %Lower Bound of COnstraint Functions
+J   = 0;  %Cost Function
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%   (ToDo) Generate Constraints and Cost Function
+for k = 1:TimeSeriesLength
+    %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+    % Robot Torso dynamics
+    %   Use EulerIntegration Function to Construct
+    %   EulerIntegration = x[k+1] - x[k] -h[k]*u[k] = 0
+    %   Input: x[k+1], x[k], h[k], u[k]
+    %   lbg = 0 (Equality constraint)
+    %   ubg = 0 (Equality constraint)
+    %   Covering Range: from k = 1 to k = TimeSeriesLength - 1
+    %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+    %   (*) x-axis first-order dynamics (position)
+    %       Euqation: x[k+1] - x[k] - h*xdot[k] = 0
+    %       Input: x[k+1] = x[k+1] (x[k+1] at rhs means x-position)
+    %              x[k]   = x[k]   (x[k] at rhs means x-position)
+    %              h[k]   = h
+    %              u[k]   = xodt[k]
+    %       lbg = 0
+    %       ubg = 0
+    %       Covering range: from k = 1 to k = TimeSeriesLength - 1
+    if k <= TimeSeriesLength - 1
+        EqTemp = EulerIntegration(x(k+1),x(k),h,xdot(k));
+        g = {g{:},EqTemp};  %Append to constraint function list
+        lbg = [lbg;0];      %Give constraint lower bound
+        ubg = [ubg;0];      %Give constraint upper bound
+    end
+    %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+    %   (*) x-axis second-order dynamics (velocity)
+    
+    %y-axis first-order dynamics (position)
+    %y-axis second-order dynamics (velocity)
+    %theta first-order dynamics (position)
+    %theta second-order dynamics (velocity)
+    
+    % Footstep Location dynamics
+    % PFx (Front foot x-axis) first-order dynamics (velocity)
+    % PFy (Front foot y-axis) first-order dynamics (velocity)
+    % PHx (Hind foot x-axis) first-order dynamics (velocity)
+    % PHy (Hind foot y-axis) first-order dynamics (velocity)
+    
+    % Complementarity Constraint
+    
+    % Kinematics Constraint
+    
+    % Friction Cone
+    
+    % Cost Function
+    
+end
+%=======================================================================
+
+%=======================================================================
+% (ToDo) Solve the Problem
+%=======================================================================
+
+%=======================================================================
+% (ToDo) Extract the Solution
+%=======================================================================
+
+%=======================================================================
+% Close Diary
+diary off
+##### SOURCE END #####
+--></body></html>
