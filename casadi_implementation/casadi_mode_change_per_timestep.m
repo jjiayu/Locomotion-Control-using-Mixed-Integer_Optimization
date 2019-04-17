@@ -34,7 +34,6 @@ disp('---------------------------------------------------');
 
 %=====================================================================
 % Choose solver
-
 SolverNum = input('Solver Selection, 1: Knitro, 2: Bonmin \n');
 if SolverNum == 1
     SolverSelected = 'knitro';
@@ -72,7 +71,7 @@ Tend = input('Input Termianl Time (e.g. 1s): \n');
 NumTimeSteps = input('Input Number of Time Steps (10, 20, 30, 40): \n');
 %   Time Step Length
 h = Tend/NumTimeSteps;
-disp('Time Step Length: ');
+disp('Time Step Size: ');
 disp([num2str(h),' (s)']);
 %   Time Series Generation
 TimeSeries = 0:h:Tend;
@@ -115,19 +114,19 @@ BoundingBox_Height = 0.3;
 %======================================================================
 %   Initial Conditions
 %----------------------------------------------------------------------
-x_Init = 0;
-y_Init = 1/2*BodyHeight + DefaultLegLength;
-thetaInit = 0;
-xdot_Init = 0;
-ydot_Init = 0;
+x_Init        = 0;
+y_Init        = 1/2*BodyHeight + DefaultLegLength;
+thetaInit     = 0;
+xdot_Init     = 0;
+ydot_Init     = 0;
 thetadot_Init = 0;
 %----------------------------------------------------------------------
 %   Terminal Conditions
-x_End = input('Input Travel Distance along x-axis (m): \n' );
-y_End = 1/2*BodyHeight + DefaultLegLength;
-theta_End = 0;
-xdot_End = 0;
-ydot_End = 0;
+x_End        = input('Input Travel Distance along x-axis (m): \n' );
+y_End        = 1/2*BodyHeight + DefaultLegLength;
+theta_End    = 0;
+xdot_End     = 0;
+ydot_End     = 0;
 thetadot_End = 0;
 %----------------------------------------------------------------------
 %   Test if initial and termianl conditions violates kinematics constraint
@@ -241,6 +240,7 @@ varList = ["x",    "y",      "theta",...
            "FFx",  "FFy",...
            "FHx",  "FHy",...
            "CF",   "CH"];
+       
 %       Variable Length List
 VarLengthList = [length(x_label),     length(y_label),      length(theta_label), ...
                  length(xdot_label),  length(ydot_label),   length(thetadot_label), ...
@@ -338,13 +338,51 @@ FrictionCone = Function('FrictionCone',{Norm, Force, Const_miu},{friction});
 %=======================================================================
 % Build Constraints and Objective Function
 %=======================================================================   
-%   (ToDo) Initialize Constraints and Cost Function Constainers
+%   Initialize Constraints and Cost Function Constainers
 %-----------------------------------------------------------------------
-%   (ToDo) Generate COnstraints and Cost Function
+%       Collect all decision varibales
+DecisionVars = {x,          y,          theta,...
+                xdot,       ydot,       thetadot,...
+                PFx,        PFy,        PFxdot,         PFydot,...
+                PHx,        PHy,        PHxdot,         PHydot,...
+                FFx,        FFy,...
+                FHx,        FHy,...
+                CF,         CH}; 
+DecisionVars = vertcat(DecisionVars{:}); %make a vertical vector
+
+%       Verify if the variable names are consistent in DecisionVars and VarNameList 
+if length(DecisionVars) == length(VarNamesList)
+    for i = 1:length(DecisionVars)
+        temp = DecisionVars(i);
+        if temp.name() ~= VarNamesList(i)
+            ME_NameListInconsistent = MException('Initialization:InconsistentNameList',['The variable names in DecisionVars and VarNamesList are different at index ', num2str(i)]);
+            throw(ME_NameListInconsistent)
+        end
+    end
+    disp('Checked - Names in DecisionVars are consistent with the name labels in VarNamesList');
+else
+    ME_NameListLengthInconsistent= MException('Initialization:NameListInconsistent','DecisionVars has different size with respect to VarNamesList');
+    throw(ME_NameListLengthInconsistent)
+end
+
+%       Other Important Variables
+DecisionVarsInit = zeros(size(DecisionVars));       %Initial Guess of Decision Varibales
+lb_DecisionVars  = repmat(-inf,size(DecisionVars)); %Lower Bound of Decision Variables
+ub_DecisionVars  = repmat( inf,size(DecisionVars)); %Upper Bound of Decision Variables
+g   = {}; %container of constraints
+lbg = []; %Upper Bound of Constraint Functions
+ubg = []; %Lower Bound of COnstraint Functions
+J   = 0;  %Cost Function
+
+%-----------------------------------------------------------------------
+%   (ToDo) Generate Constraints and Cost Function
 for k = 1:TimeSeriesLength
-    
+    %--------------------------------------
     % Robot Torso dynamics
+    %   Use EulerIntegration Function to Construct
+    %--------------------------------------
     %x-axis first-order dynamics (position)
+    %   x[k+1] - x[k] - h[k]
     %x-axis second-order dynamics (velocity)
     %y-axis first-order dynamics (position)
     %y-axis second-order dynamics (velocity)
