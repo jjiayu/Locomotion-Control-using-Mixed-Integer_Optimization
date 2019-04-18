@@ -846,23 +846,18 @@ disp('-------------------------------------------------')
 %   Assemble optimization problem definitions
 prob = struct('f', J, 'x', DecisionVars, 'g', vertcat(g{:}));
 %   Setup solver-dependent options
-if strcmp(SolverSelected, 'knitro')
-    solverOption = struct('mip_outinterval', 25,...
-                          'mip_outlevel',    2,...
-                          'mip_selectrule',  3,...
-                          'mip_branchrule',  1,...
-                          'mip_maxnodes',    100);
+if SolverSelected == 'Knitro'
+
+    solverOpt = struct{};
     
-elseif strcmp(SolverSelected, 'bonmin')
+elseif SolverSelected == 'bonmin'
     
-    solverOption = struct('option_file_name', 'bonmin.opt');
+    solverOpt = struct{}
     
 end
+knitroopt = struct('mip_outinterval',25,'mip_outlevel',2,'mip_selectrule',3,'mip_branchrule',1, 'mip_maxnodes', 100);
+solver = nlpsol('solver', SolverSelected, prob, struct('discrete', varstype,'knitro',knitroopt));
 
-%   Construct Nonlinear Programming Function Object
-solver = nlpsol('solver', SolverSelected, prob, struct('discrete', varstype, SolverSelected, solverOption));
-
-%   Solver the Problem
 sol = solver('x0',  DecisionVarsInit, ...
              'lbx', lb_DecisionVars,...
              'ubx', ub_DecisionVars,...

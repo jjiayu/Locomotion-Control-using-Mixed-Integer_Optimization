@@ -15,7 +15,7 @@
 - Friction Cone formulation is different in 2D and 3D case. 2D case is a linear friction cone where 3D case is nonlinear.
 
 
-## Knitro and CasADi
+## Knitro/Bonmin and CasADi
 
 1. Knitro and CaSADi only works well in Linux, with CasADi Matlab interface:
     - In Mac, it is difficult to identify the location of dynamic libraries, due to difficulties to set DYLD_LIBRARY_DIR environemtn variable.
@@ -26,6 +26,13 @@
     - Firstly, Put Path of "knitroampl" and "lib" (in Knitro installation folder) into environment variable "PATH" and "LD_LIBRARY_PATH"
     - Secondly, Copy the "libknitroXXXX.so"/"libknitro.so" in the "lib" folder of the Knitro installation path and rename to "libknitro1030.so", since binary installation works with "libknitro1030.so". Alternatively, we can re-compile the interface from source (Not recommended now, but indeed the re-compiled interface gets slightly faster computation speed).
     - Thirdly, open Matlab from command line to ensure we load all the environment variable we have defined and use "addpath" function to add the "casadi" installation folder.
+
+3. Define Solver-Dependent Options in CasADi
+    - To setup options for different solvers (i.e. Knitro and Bonmin):
+        - Make a structure first: struct('option name', option value, ...);
+        - When calling nlpsol function, append the solver-dependent options into the nlpsol options: nlpsol(..., struct('discrete', discrete (common options), SolverName, Solver-dependent Options))
+    - To check waht options are available for each solver, simply type "doc_nlpsol(SolverName)" in command line
+    - For Knitro, the option documentation is not complete, just simply try the OptionNames and values defined in Knitro Manual. Script will not continue if the option is not defined.
 
 3. Pending Issues
 
