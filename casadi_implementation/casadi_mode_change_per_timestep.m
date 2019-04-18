@@ -847,16 +847,14 @@ disp('-------------------------------------------------')
 prob = struct('f', J, 'x', DecisionVars, 'g', vertcat(g{:}));
 %   Setup solver-dependent options
 if strcmp(SolverSelected, 'knitro')
-    solverOption = struct('mip_outinterval', 25,...
-                          'mip_outlevel',    2,...
-                          'mip_selectrule',  3,...
-                          'mip_branchrule',  1,...
-                          'mip_maxnodes',    100);
+    solverOption = struct('mip_outinterval', 25,...     % (Log Output Frequency) Log Output per Nodes
+                          'mip_outlevel',    2,...      % Print accumulated time for every node.
+                          'mip_selectrule',  3,...      % The rule for selecting nodes 
+                          'mip_branchrule',  1,...      % MIP Branching rule
+                          'mip_maxnodes',    1e24);      % Max Number of Nodes wish to be explored
     
 elseif strcmp(SolverSelected, 'bonmin')
-    
-    solverOption = struct('option_file_name', 'bonmin.opt');
-    
+    solverOption = struct('option_file_name', 'bonmin.opt');  
 end
 
 %   Construct Nonlinear Programming Function Object
