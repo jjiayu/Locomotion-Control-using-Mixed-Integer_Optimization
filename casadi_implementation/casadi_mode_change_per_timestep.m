@@ -374,7 +374,7 @@ ub_DecisionVars = [repmat( inf,1,sum(VarLengthList(find(varList == 'x'):find(var
 % ub_DecisionVars  = [repmat( inf,size(DecisionVars))]; %Upper Bound of Decision Variables
 g   = {}; %container of constraints
 lbg = []; %Upper Bound of Constraint Functions
-ubg = []; %Lower Bound of COnstraint Functions
+ubg = []; %Lower Bound of Constraint Functions
 J   = 0;  %Cost Function
 varstype  = [zeros(1,sum(VarLengthList(find(varList == 'x'):find(varList == 'FHy')))),ones(1,sum(VarLengthList(find(varList == 'CF'):find(varList == 'CH'))))]; %varType, 0 means continuous, 1 means integer/binary
 %-----------------------------------------------------------------------
@@ -405,9 +405,9 @@ for k = 1:TimeSeriesLength
         %       lbg = 0
         %       ubg = 0
         EqTemp = EulerIntegration(x(k+1), x(k), h, xdot(k));
-        g = {g{:},EqTemp};  %Append to constraint function list
-        lbg = [lbg;0];      %Give constraint lower bound
-        ubg = [ubg;0];      %Give constraint upper bound
+        g   = {g{:}, EqTemp};  %Append to constraint function list
+        lbg = [lbg;  0];       %Give constraint lower bound
+        ubg = [ubg;  0];       %Give constraint upper bound
         %----------------------------------------
         %(*) x-axis second-order dynamics (velocity)
         %       Equation: xdot[k+1] - xdot[k] - h*(1/m*FFx[k] + 1/m*FHx[k])
@@ -418,10 +418,10 @@ for k = 1:TimeSeriesLength
         %       lbg = 0;
         %       ubg = 0;
         fdyntemp  = 1/m*(FFx(k)+FHx(k)); 
-        EqTemp = EulerIntegration(xdot(k+1), xdot(k), h, fdyntemp);
-        g = {g{:},EqTemp};  %Append to constraint function list
-        lbg = [lbg;0];      %Give constraint lower bound
-        ubg = [ubg;0];      %Give constraint upper bound
+        EqTemp    = EulerIntegration(xdot(k+1), xdot(k), h, fdyntemp);
+        g   = {g{:}, EqTemp};  %Append to constraint function list
+        lbg = [lbg;  0];       %Give constraint lower bound
+        ubg = [ubg;  0];       %Give constraint upper bound
         %-----------------------------------------
         % (*) y-axis first-order dynamics (position)
         %       Equation: y[k+1] - y[k] - h[k]*ydot[k] = 0
@@ -430,9 +430,9 @@ for k = 1:TimeSeriesLength
         %              h[k]    = h
         %              fdyn[k] = ydot[k]
         EqTemp = EulerIntegration(y(k+1), y(k), h, ydot(k));
-        g = {g{:},EqTemp}; %Append to constraint function list
-        lbg = [lbg;0];     %Give constraint lower bound
-        ubg = [ubg;0];     %Give constraint upper bound
+        g   = {g{:}, EqTemp};  %Append to constraint function list
+        lbg = [lbg;  0];       %Give constraint lower bound
+        ubg = [ubg;  0];       %Give constraint upper bound
         %-----------------------------------------
         % (*) y-axis second-order dynamics (velocity)
         %       Equation: ydot[k+1] - ydot[k] - h[k]*[1/m*(FFy[k]+FHy[k]-g)] = 0
@@ -442,11 +442,11 @@ for k = 1:TimeSeriesLength
         %              fdyn[k] = 1/m*(FFy[k] + FHy[k] - g)
         %       lbg = 0
         %       ubg = 0
-        fdyntemp = 1/m*(FFy(k) + FHy(k) - G);
-        EqTemp = EulerIntegration(ydot(k+1), ydot(k), h, fdyntemp);
-        g = {g{:},EqTemp}; %Append to constraint function list
-        lbg = [lbg;0];     %Give constraint lower bound
-        ubg = [ubg;0];     %Give constraint upper bound
+        fdyntemp = 1/m*(FFy(k) + FHy(k)) - G;
+        EqTemp   = EulerIntegration(ydot(k+1), ydot(k), h, fdyntemp);
+        g   = {g{:}, EqTemp};  %Append to constraint function list
+        lbg = [lbg;  0];       %Give constraint lower bound
+        ubg = [ubg;  0];       %Give constraint upper bound
         %-----------------------------------------
         % (*) theta first-order dynamics (position)
         %       Equation: theta[k+1] - theta[k] - h[k]*thetadot[k] = 0
@@ -457,9 +457,9 @@ for k = 1:TimeSeriesLength
         %       lbg = 0
         %       ubg = 0
         EqTemp = EulerIntegration(theta(k+1), theta(k), h, thetadot(k));
-        g = {g{:},EqTemp}; %Append to constraint function list
-        lbg = [lbg;0];     %Give constraint lower bound
-        ubg = [ubg;0];     %Give constraint upper bound
+        g   = {g{:}, EqTemp};   %Append to constraint function list
+        lbg = [lbg;  0];        %Give constraint lower bound
+        ubg = [ubg;  0];        %Give constraint upper bound
         %-----------------------------------------
         % (*) theta second-order dynamics (velocity)
         %       Equation: Izz*thetadot[k+1] - Izz*thetadot[k] - h[k]*[(PFx[k] - x[k])*FFy[k] - (PFy[k] - y[k])*FFx[k] + (PHx[k] - x[k])*FHy[k] - (PHy[k] - y[k])*FHx[k]]
@@ -470,10 +470,10 @@ for k = 1:TimeSeriesLength
         %       lbg = 0
         %       ubg = 0
         fdyntemp = (PFx(k) - x(k))*FFy(k) - (PFy(k) - y(k))*FFx(k) + (PHx(k) - x(k))*FHy(k) - (PHy(k) - y(k))*FHx(k);
-        EqTemp = EulerIntegration(thetadot(k+1), thetadot(k), h, fdyntemp);
-        g = {g{:},EqTemp}; %Append to constraint function list
-        lbg = [lbg;0];     %Give constraint lower bound
-        ubg = [ubg;0];     %Give constraint upper bound
+        EqTemp   = EulerIntegration(I*thetadot(k+1), I*thetadot(k), h, fdyntemp);
+        g   = {g{:}, EqTemp};  %Append to constraint function list
+        lbg = [lbg;  0];       %Give constraint lower bound
+        ubg = [ubg;  0];       %Give constraint upper bound
         %-----------------------------------------
         % Footstep Location dynamics
         %-----------------------------------------
@@ -486,9 +486,9 @@ for k = 1:TimeSeriesLength
         %       lbg = 0
         %       ubg = 0
         EqTemp = EulerIntegration(PFx(k+1), PFx(k), h, PFxdot(k));
-        g = {g{:},EqTemp}; %Append to constraint function list
-        lbg = [lbg;0];     %Give constraint lower bound
-        ubg = [ubg;0];     %Give constraint upper bound
+        g   = {g{:}, EqTemp};  %Append to constraint function list
+        lbg = [lbg;  0];       %Give constraint lower bound
+        ubg = [ubg;  0];       %Give constraint upper bound
         %-----------------------------------------
         % (*) PFy (Front foot y-axis) first-order dynamics (velocity)
         %       Euqation: PFy[k+1] - PFy[k] - h[k]*PFydot[k] = 0
@@ -499,9 +499,9 @@ for k = 1:TimeSeriesLength
         %       lbg = 0;
         %       ubg = 0;
         EqTemp = EulerIntegration(PFy(k+1), PFy(k), h, PFydot(k));
-        g = {g{:},EqTemp}; %Append to constraint function list
-        lbg = [lbg;0];     %Give constraint lower bound
-        ubg = [ubg;0];     %Give constraint upper bound
+        g   = {g{:}, EqTemp};  %Append to constraint function list
+        lbg = [lbg;  0];       %Give constraint lower bound
+        ubg = [ubg;  0];       %Give constraint upper bound
         %-----------------------------------------
         % (*) PHx (Hind foot x-axis) first-order dynamics (velocity)
         %       Equation: PHx[k+1] - PHx[k] - h[k]*PHxdot[k] = 0
@@ -512,9 +512,9 @@ for k = 1:TimeSeriesLength
         %       lbg = 0;
         %       ubg = 0;
         EqTemp = EulerIntegration(PHx(k+1), PHx(k), h, PHxdot(k));
-        g = {g{:},EqTemp}; %Append to constraint function list
-        lbg = [lbg;0];     %Give constraint lower bound
-        ubg = [ubg;0];     %Give constraint upper bound
+        g   = {g{:}, EqTemp};  %Append to constraint function list
+        lbg = [lbg;  0];       %Give constraint lower bound
+        ubg = [ubg;  0];       %Give constraint upper bound
         %-----------------------------------------
         % (*) PHy (Hind foot y-axis) first-order dynamics (velocity)
         %       Equation: PHy[k+1] - PHy[k] - h[k]*PHydot[k] = 0
@@ -525,9 +525,9 @@ for k = 1:TimeSeriesLength
         %       lbg = 0
         %       ubg = 0
         EqTemp = EulerIntegration(PHy(k+1), PHy(k), h, PHydot(k));
-        g = {g{:},EqTemp}; %Append to constraint function list
-        lbg = [lbg;0];     %Give constraint lower bound
-        ubg = [ubg;0];     %Give constraint upper bound
+        g   = {g{:}, EqTemp};  %Append to constraint function list
+        lbg = [lbg;  0];       %Give constraint lower bound
+        ubg = [ubg;  0];       %Give constraint upper bound
         %-----------------------------------------
     end
     %   Dynamical Equation Constraint Setup - Done
@@ -555,15 +555,15 @@ for k = 1:TimeSeriesLength
     %-------------------------------------------
     %           Front Leg
         EqTemp = Ineq_Summation(PFy(k),Mpos_y, CF(k));
-        g = {g{:},EqTemp};                      %Append to constraint function list
-        lbg = [lbg;-inf];                       %Give constraint lower bound
-        ubg = [ubg;TerrainHeight + Mpos_y];     %Give constraint upper bound
+        g   = {g{:}, EqTemp};                      %Append to constraint function list
+        lbg = [lbg;  -inf];                        %Give constraint lower bound
+        ubg = [ubg;  TerrainHeight + Mpos_y];      %Give constraint upper bound
         
     %           Hind Leg
         EqTemp = Ineq_Summation(PHy(k), Mpos_y, CH(k));
-        g = {g{:},EqTemp};                      %Append to constraint function list
-        lbg = [lbg;-inf];                       %Give constraint lower bound
-        ubg = [ubg;TerrainHeight + Mpos_y];     %Give constraint upper bound
+        g   = {g{:}, EqTemp};                      %Append to constraint function list
+        lbg = [lbg;  -inf];                        %Give constraint lower bound
+        ubg = [ubg;  TerrainHeight + Mpos_y];      %Give constraint upper bound
     %-------------------------------------------
     %       - Equation (2): Py >= Height -->
     %                       Height <= Py <= inf
@@ -591,61 +591,61 @@ for k = 1:TimeSeriesLength
     %----------------------------------------------------
     %           Front Leg x-axis
         EqTemp = Ineq_Summation(PFxdot(k), Mvel, CF(k));
-        g = {g{:},EqTemp};                      %Append to constraint function list
-        lbg = [lbg;-inf];                       %Give constraint lower bound
-        ubg = [ubg;Mvel];                       %Give constraint upper bound
+        g   = {g{:}, EqTemp};                      %Append to constraint function list
+        lbg = [lbg;  -inf];                        %Give constraint lower bound
+        ubg = [ubg;  Mvel];                        %Give constraint upper bound
         
     %           Front Leg y-axis
         EqTemp = Ineq_Summation(PFydot(k), Mvel, CF(k));
-        g = {g{:},EqTemp};                      %Append to constraint function list
-        lbg = [lbg;-inf];                       %Give constraint lower bound
-        ubg = [ubg;Mvel];                       %Give constraint upper bound
+        g   = {g{:}, EqTemp};                      %Append to constraint function list
+        lbg = [lbg;  -inf];                        %Give constraint lower bound
+        ubg = [ubg;  Mvel];                        %Give constraint upper bound
         
     %           Hind Leg x-axis
         EqTemp = Ineq_Summation(PHxdot(k), Mvel, CH(k));
-        g = {g{:},EqTemp};                      %Append to constraint function list
-        lbg = [lbg;-inf];                       %Give constraint lower bound
-        ubg = [ubg;Mvel];                       %Give constraint upper bound
+        g   = {g{:}, EqTemp};                      %Append to constraint function list
+        lbg = [lbg;  -inf];                        %Give constraint lower bound
+        ubg = [ubg;  Mvel];                        %Give constraint upper bound
         
     %           Hind Leg y-axis
         EqTemp = Ineq_Summation(PHydot(k), Mvel, CH(k));
-        g = {g{:},EqTemp};                      %Append to constraint function list
-        lbg = [lbg;-inf];                       %Give constraint lower bound
-        ubg = [ubg;Mvel];                       %Give constraint upper bound
+        g   = {g{:}, EqTemp};                      %Append to constraint function list
+        lbg = [lbg;  -inf];                        %Give constraint lower bound
+        ubg = [ubg;  Mvel];                        %Give constraint upper bound
     %------------------------------------------------------              
     %       - Equation (2): Pdot >= 0 - Mvel(1-C) -->
     %                       Pdot - Mvel*C >= -Mvel -->
     %                       -Mvel <= Pdot - Mvel*C
     %         Use Function Ineq_Difference
     %         Input: v[k] = P(F/H)(x/y)dot[k]
-    %                bigM = Mvel
+    %                bigM = -Mvel
     %                z[k] = C(F/H)[k]
     %         lbg = -Mvel
     %         ubg = inf
     %------------------------------------------------------
     %           Front Leg x-axis
         EqTemp = Ineq_Difference(PFxdot(k), Mvel, CF(k));
-        g = {g{:},EqTemp};                      %Append to constraint function list
-        lbg = [lbg;Mvel];                       %Give constraint lower bound
-        ubg = [ubg;inf];                        %Give constraint upper bound
+        g   = {g{:}, EqTemp};                      %Append to constraint function list
+        lbg = [lbg;  -Mvel];                       %Give constraint lower bound
+        ubg = [ubg;  inf];                         %Give constraint upper bound
         
     %           Front Leg y-axis
         EqTemp = Ineq_Difference(PFydot(k), Mvel, CF(k));
-        g = {g{:},EqTemp};                      %Append to constraint function list
-        lbg = [lbg;Mvel];                       %Give constraint lower bound
-        ubg = [ubg;inf];                        %Give constraint upper bound
+        g   = {g{:}, EqTemp};                      %Append to constraint function list
+        lbg = [lbg;  -Mvel];                       %Give constraint lower bound
+        ubg = [ubg;  inf];                         %Give constraint upper bound
         
     %           Hind Leg x-axis
         EqTemp = Ineq_Difference(PHxdot(k), Mvel, CH(k));
-        g = {g{:},EqTemp};                      %Append to constraint function list
-        lbg = [lbg;Mvel];                       %Give constraint lower bound
-        ubg = [ubg;inf];                        %Give constraint upper bound
+        g   = {g{:}, EqTemp};                      %Append to constraint function list
+        lbg = [lbg;  -Mvel];                       %Give constraint lower bound
+        ubg = [ubg;  inf];                         %Give constraint upper bound
         
     %           Hind Leg y-axis
         EqTemp = Ineq_Difference(PHydot(k), Mvel, CH(k));
-        g = {g{:},EqTemp};                      %Append to constraint function list
-        lbg = [lbg;Mvel];                       %Give constraint lower bound
-        ubg = [ubg;inf];                        %Give constraint upper bound
+        g   = {g{:}, EqTemp};                      %Append to constraint function list
+        lbg = [lbg;  -Mvel];                       %Give constraint lower bound
+        ubg = [ubg;  inf];                         %Give constraint upper bound
     %------------------------------------------------------
     %   (*) Foot/End-Effector Forces
     %------------------------------------------------------
@@ -662,15 +662,15 @@ for k = 1:TimeSeriesLength
     %-----------------------------------------------------
     %           Front Leg
         EqTemp = Ineq_Difference(FFx(k), Mfx, CF(k));
-        g = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;-inf];       %Give constraint lower bound
-        ubg = [ubg;0];          %Give constraint upper bound
+        g   = {g{:}, EqTemp};     %Append to constraint function list
+        lbg = [lbg;  -inf];       %Give constraint lower bound
+        ubg = [ubg;  0];          %Give constraint upper bound
         
     %           Hind Leg
         EqTemp = Ineq_Difference(FHx(k), Mfx, CH(k));
-        g = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;-inf];       %Give constraint lower bound
-        ubg = [ubg;0];          %Give constraint upper bound
+        g   = {g{:}, EqTemp};     %Append to constraint function list
+        lbg = [lbg;  -inf];       %Give constraint lower bound
+        ubg = [ubg;  0];          %Give constraint upper bound
     %------------------------------------------------------           
     %       - Equation (2): Fx >= 0 - Mfx*C -->
     %                       Fx + Mfx*C >= 0 -->
@@ -684,15 +684,15 @@ for k = 1:TimeSeriesLength
     %------------------------------------------------------
     %           Front Leg
         EqTemp = Ineq_Summation(FFx(k), Mfx, CF(k));
-        g = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;0];       %Give constraint lower bound
-        ubg = [ubg;inf];          %Give constraint upper bound
+        g   = {g{:}, EqTemp};     %Append to constraint function list
+        lbg = [lbg;  0];          %Give constraint lower bound
+        ubg = [ubg;  inf];        %Give constraint upper bound
         
     %           Hind Leg
         EqTemp = Ineq_Summation(FHx(k), Mfx, CH(k));
-        g = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;0];       %Give constraint lower bound
-        ubg = [ubg;inf];          %Give constraint upper bound
+        g   = {g{:}, EqTemp};     %Append to constraint function list
+        lbg = [lbg;  0];          %Give constraint lower bound
+        ubg = [ubg;  inf];        %Give constraint upper bound
     %------------------------------------------------------
     %     (-) y-axis
     %------------------------------------------------------
@@ -707,15 +707,15 @@ for k = 1:TimeSeriesLength
     %------------------------------------------------------
     %           Front Leg
         EqTemp = Ineq_Difference(FFy(k), Mfy, CF(k));
-        g = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;-inf];       %Give constraint lower bound
-        ubg = [ubg;0];          %Give constraint upper bound
+        g   = {g{:}, EqTemp};     %Append to constraint function list
+        lbg = [lbg;  -inf];       %Give constraint lower bound
+        ubg = [ubg;  0];          %Give constraint upper bound
         
     %           Hind Leg
         EqTemp = Ineq_Difference(FHy(k), Mfy, CH(k));
-        g = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;0];          %Give constraint lower bound
-        ubg = [ubg;inf];        %Give constraint upper bound
+        g   = {g{:}, EqTemp};     %Append to constraint function list
+        lbg = [lbg;  -inf];          %Give constraint lower bound
+        ubg = [ubg;  0];        %Give constraint upper bound
     %------------------------------------------------------
     %       - Equation (2): F(F/H)y >= 0 
     %           Achieve by Changing Lower Variable bounds
@@ -738,15 +738,15 @@ for k = 1:TimeSeriesLength
     %----------------------------------------------------
     %     Front Leg
         EqTemp = KinematicsConstraint([x(k), y(k), theta(k)], [PFx(k), PFy(k)], [PFcenterX, PFcenterY]);
-        g = {g{:}, EqTemp};                                              %Append to constraint function list
-        lbg = [lbg; -[BoundingBox_Width;BoundingBox_Height]/2];          %Give constraint lower bound
-        ubg = [ubg; [BoundingBox_Width;BoundingBox_Height]/2];           %Give constraint upper bound
+        g   = {g{:}, EqTemp};                                              %Append to constraint function list
+        lbg = [lbg;  -[BoundingBox_Width;BoundingBox_Height]/2];           %Give constraint lower bound
+        ubg = [ubg;  [BoundingBox_Width;BoundingBox_Height]/2];            %Give constraint upper bound
         
     %     Hind Leg
         EqTemp = KinematicsConstraint([x(k), y(k), theta(k)], [PHx(k), PHy(k)], [PHCenterX, PHCenterY]);
-        g = {g{:}, EqTemp};                                              %Append to constraint function list
-        lbg = [lbg; -[BoundingBox_Width;BoundingBox_Height]/2];          %Give constraint lower bound
-        ubg = [ubg; [BoundingBox_Width;BoundingBox_Height]/2];           %Give constraint upper bound
+        g   = {g{:}, EqTemp};                                              %Append to constraint function list
+        lbg = [lbg;  -[BoundingBox_Width;BoundingBox_Height]/2];           %Give constraint lower bound
+        ubg = [ubg;  [BoundingBox_Width;BoundingBox_Height]/2];            %Give constraint upper bound
     %----------------------------------------------------
     % Friction Cone
     %----------------------------------------------------
@@ -763,15 +763,15 @@ for k = 1:TimeSeriesLength
     %----------------------------------------------------
     %       Front Leg
         EqTemp = FrictionCone(TerrainNorm, [FFx(k),FFy(k)], miu);
-        g = {g{:}, EqTemp};         %Append to constraint function list
-        lbg = [lbg; -inf];          %Give constraint lower bound
-        ubg = [ubg; 0];             %Give constraint upper bound
+        g   = {g{:}, EqTemp};         %Append to constraint function list
+        lbg = [lbg;  -inf];           %Give constraint lower bound
+        ubg = [ubg;  0];              %Give constraint upper bound
         
     %       Hind Leg
         EqTemp = FrictionCone(TerrainNorm, [FHx(k), FHy(k)], miu);
-        g = {g{:}, EqTemp};         %Append to constraint function list
-        lbg = [lbg; -inf];          %Give constraint lower bound
-        ubg = [ubg; 0];             %Give constraint upper bound
+        g   = {g{:}, EqTemp};         %Append to constraint function list
+        lbg = [lbg;  -inf];           %Give constraint lower bound
+        ubg = [ubg;  0];              %Give constraint upper bound
     %----------------------------------------------------
     % Cost Function - Integral/Lagrangian Term
     J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h* FHy(k)^2; 
@@ -810,7 +810,7 @@ lb_DecisionVars(find(VarNamesList == ['theta_',num2str(NumTimeSteps)])) = theta_
 ub_DecisionVars(find(VarNamesList == ['theta_',num2str(NumTimeSteps)])) = theta_End;
 %       xdot_End
 lb_DecisionVars(find(VarNamesList == ['xdot_',num2str(NumTimeSteps)])) = xdot_End;
-ub_DecisionVars(find(VarNamesList == ['xodt_',num2str(NumTimeSteps)])) = xdot_End;
+ub_DecisionVars(find(VarNamesList == ['xdot_',num2str(NumTimeSteps)])) = xdot_End;
 %       ydot_End
 lb_DecisionVars(find(VarNamesList == ['ydot_',num2str(NumTimeSteps)])) = ydot_End;
 ub_DecisionVars(find(VarNamesList == ['ydot_',num2str(NumTimeSteps)])) = ydot_End;
@@ -826,7 +826,8 @@ disp('-------------------------------------------------')
 % Solve the Problem
 %=======================================================================
 prob = struct('f', J, 'x', DecisionVars, 'g', vertcat(g{:}));
-solver = nlpsol('solver', SolverSelected, prob, struct('discrete', varstype));
+knitroopt = struct('mip_outinterval',25,'mip_outlevel',2,'mip_selectrule',3,'mip_branchrule',1, 'mip_maxnodes', 4^20);
+solver = nlpsol('solver', SolverSelected, prob, struct('discrete', varstype,'knitro',knitroopt));
 
 sol = solver('x0',  DecisionVarsInit, ...
              'lbx', lb_DecisionVars,...
