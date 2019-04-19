@@ -1,0 +1,176 @@
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Mode Configuration Change per Time Step
+ 
+Date and Time:
+   19-Apr-2019 18:43:23
+
+Correspondent Log File Name: log-20190419T184323
+---------------------------------------------------
+Solver Selection, 1: Knitro, 2: Bonmin 
+1
+Selected Solver: knitro
+---------------------------------------------------
+Environment Information: 
+Friction Cone: 
+0.6
+---------------------------------------------------
+Input Termianl Time (e.g. 1s): 
+1
+Input Number of Time Steps (10, 20, 30, 40): 
+20
+Time Step Size: 
+0.05 (s)
+Number of Knots/Discretizations (From Time 0 to 1):
+21 (NumTimeSteps + 1)
+---------------------------------------------------
+Input Travel Distance along x-axis (m): 
+0
+---------------------------------------------------
+Select the Case for big-M value for Foot/End-Effector Velocity for x-axis: 1--> Default Value (5m/s); 2--> N time of average task speed (in x-axis); 3--> User Specified 
+1
+Generating Decision Variables Vectors/Lists
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+-------------------------------------------------
+Define Number of Max Nodes to be Explored: 1--> Worst Case Scenario; 2 --> User Specified 
+1
+Selected Worst-case Scenarios to Explore 4398046511104 Nodes
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (12 variables).
+hessopt:                 1
+mip_branchrule:          1
+mip_maxnodes:            0
+mip_outinterval:         100
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                420
+    bounded below only:                              84
+    bounded above only:                               0
+    bounded below and above:                         42
+    fixed:                                           12
+    free:                                           282
+Number of binary variables:                          42
+Number of integer variables:                          0
+Number of constraints:                              662
+    linear equalities:                              180
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                       20
+    linear one-sided inequalities:                  378
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:           84
+Number of nonzeros in Jacobian:                    1996
+Number of nonzeros in Hessian:                      391
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 84 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+   iter =      1: Iinf =      2, FeasError =   2.904e-02
+*  iter =      2: Iinf =      0, FeasError =   1.000e-10, Obj =   4.161e+05
+Knitro found integer feasible point in 2 heuristic iterations
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0      42    9.74e+04       9.74e+04    4.16e+05       0.160
+*     53      32       0    4.16e+05  f    9.74e+04    4.16e+05       0.600
+     100      65            4.46e+05 pr    9.74e+04    4.16e+05       0.873
+*    105      64       0    3.90e+05  f    9.74e+04    3.90e+05       0.921
+*    156      95       0    3.69e+05  f    9.74e+04    3.69e+05       1.992
+     200     125       3    3.57e+05       9.74e+04    3.69e+05       2.216
+*    206     125       0    3.57e+05  f    9.74e+04    3.57e+05       2.241
+*    255     154       0    3.52e+05  f    9.74e+04    3.52e+05       2.492
+     300     185            3.62e+05 pr    9.74e+04    3.52e+05       2.721
+*    301     184       0    3.45e+05  f    9.74e+04    3.45e+05       2.730
+*    386     243       0    3.28e+05  f    9.74e+04    3.28e+05       3.641
+     400     255      22    1.31e+05       9.74e+04    3.28e+05       3.730
+*    428     271       0    3.23e+05  f    9.74e+04    3.23e+05       4.497
+*    468     299       0    3.18e+05  f    9.74e+04    3.18e+05       5.187
+     500     325       3    3.09e+05       9.74e+04    3.18e+05       5.627
+*    506     325       0    3.18e+05  f    9.74e+04    3.18e+05       5.740
+*    546     353       0    3.12e+05  f    9.74e+04    3.12e+05       6.700
+*    584     379       0    3.11e+05  f    9.74e+04    3.11e+05       7.257
+     600     393      16    1.52e+05       9.74e+04    3.11e+05       7.352
+*    654     431       0    2.81e+05  f    9.74e+04    2.81e+05       8.350
+*    687     456       0    2.65e+05  f    9.74e+04    2.65e+05       8.755
+     700     467      16    1.34e+05       9.74e+04    2.65e+05       8.840
+*    722     477       0    2.60e+05  f    9.74e+04    2.60e+05       9.332
+*    753     500       0    2.38e+05  f    9.74e+04    2.38e+05       9.837
+     800     539       7    1.77e+05       9.74e+04    2.38e+05      10.247
+*    810     543       0    2.21e+05  f    9.74e+04    2.21e+05      10.500
+     900     607       5    1.75e+05       9.74e+04    2.21e+05      12.368
+*    907     610       0    2.10e+05  f    9.74e+04    2.10e+05      12.582
+*    930     627       0    2.04e+05  f    9.74e+04    2.04e+05      12.777
+*    952     643       0    1.90e+05  f    9.74e+04    1.90e+05      12.951
+*    973     658       0    1.87e+05  f    9.74e+04    1.87e+05      13.138
+*    974     657       0    1.73e+05  f    9.74e+04    1.73e+05      13.147
+    1000     677       4    1.43e+05       9.74e+04    1.73e+05      13.518
+*   1006     679       0    1.71e+05  f    9.74e+04    1.71e+05      13.707
+*   1021     692       0    1.70e+05  f    9.74e+04    1.70e+05      13.843
+*   1022     691       0    1.64e+05  f    9.74e+04    1.64e+05      13.854
+*   1038     701       0    1.45e+05  f    9.74e+04    1.45e+05      14.189
+*   1039     700       0    1.40e+05  f    9.74e+04    1.40e+05      14.200
+*   1053     710       0    1.39e+05  f    9.74e+04    1.39e+05      14.271
+*   1054     709       0    1.35e+05  f    9.74e+04    1.35e+05      14.279
+*   1067     718       0    1.33e+05  f    9.74e+04    1.33e+05      14.336
+*   1068     717       0    1.29e+05  f    9.74e+04    1.29e+05      14.341
+*   1080     725       0    1.28e+05  f    9.74e+04    1.28e+05      14.407
+*   1081     724       0    1.24e+05  f    9.74e+04    1.24e+05      14.421
+*   1092     731       0    1.24e+05  f    9.74e+04    1.24e+05      14.477
+    1100     737       1    1.18e+05       9.74e+04    1.24e+05      14.508
+*   1101     738       0    1.21e+05  f    9.74e+04    1.21e+05      14.516
+*   1102     737       0    1.18e+05  f    9.74e+04    1.18e+05      14.521
+*   1110     743       0    1.18e+05  f    9.74e+04    1.18e+05      14.560
+*   1111     742       0    1.13e+05  f    9.74e+04    1.13e+05      14.564
+*   1119     746       0    1.10e+05  f    9.74e+04    1.10e+05      14.594
+*   1125     750       0    1.10e+05  f    9.74e+04    1.10e+05      14.619
+*   1126     749       0    1.06e+05  f    9.74e+04    1.06e+05      14.623
+*   1132     751       0    1.03e+05  f    9.74e+04    1.03e+05      14.653
+*   1137     752       0    1.00e+05  f    9.74e+04    1.00e+05      14.682
+*   1139     752       0    1.00e+05  f    9.74e+04    1.00e+05      14.692
+*   1140     751       0    9.74e+04  f    9.74e+04    9.74e+04      14.694
+  WARNING -- integrality gap is negative
+*   1140     751       0    9.74e+04       9.74e+04    9.74e+04      14.703
+  WARNING -- integrality gap is negative
+
+EXIT: Optimal solution found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   9.73725140252812e+04
+Final integrality gap (abs / rel)   = -8.18e-06 /  -8.40e-11 (-0.00%)
+# of nodes processed                =     1140
+# of subproblems processed          =     1188
+Total program time (secs)           =      14.74226 (    15.210 CPU time)
+Time spent in evaluations (secs)    =       1.75954
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg        0.692        0.676     22596
+   nlp_gf_jg        0.573        0.566     19146
+  nlp_hess_l        0.363        0.354     15935
+      solver         15.2         14.8         1

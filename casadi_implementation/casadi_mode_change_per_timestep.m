@@ -82,17 +82,8 @@ disp('---------------------------------------------------')
 %======================================================================
 
 %======================================================================
-% Parameter Setting
-%======================================================================
-%   Big-M Parameters for Complementarity Constraints
-%----------------------------------------------------------------------
-Mpos_y = 100; %(meters) big-M for foot positions in y-axis
-Mvel = 5; %(m/s) big-M for foot velocity in both x and y axis
-Mfx = 1e5; %(N) big-M for foot-ground reaction forces for x-axis
-Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
-%----------------------------------------------------------------------
 %   Kinematics Constraint Parameters
-%----------------------------------------------------------------------
+%======================================================================
 %       Body Size
 BodyLength = 0.6;
 BodyHeight = 0.2;
@@ -146,6 +137,34 @@ disp('---------------------------------------------------')
 %=======================================================================
 % (Place Holder): Setup of Soft constraints on Terminal Condition or not
 %=======================================================================
+
+%======================================================================
+%   Big-M Parameters for Complementarity Constraints
+%======================================================================
+Mpos_y = 100; %(meters) big-M for foot positions in y-axis
+%   Determine big-M for foot velocity
+%-------------------------------
+%   (Place Holder) big-M for all x, y, z axis velocities need to respecify
+%   when move to 3D
+%-------------------------------
+MvelxCase = input('Select the Case for big-M value for Foot/End-Effector Velocity for x-axis: 1--> Default Value (5m/s); 2--> N time of average task speed (in x-axis); 3--> User Specified \n');
+if MvelxCase == 1
+    Mvelx = 5; %Default Mvel Value
+elseif MvelxCase == 2
+    MvelxScaling = input('Input the Number of Scales of the Average Task Speed(in x-axis) (i.e. 1, 2, 3, etc...): \n');
+    Mvelx = x_End/Tend*MvelxScaling;
+elseif MvelxCase == 3
+    Mvelx = input('Input Big-M value for foot/end-effector Velocity for x-axis: \n');
+else
+    ME_MvelxCase = MException('Initialization:MvelxCase','Unexpected Case for big-M for x-axis foot/End-effector Velocity');
+    throw(ME_MvelxCase)
+end
+Mvely = 5; %big-M for foot velocity in y axis
+%Mvel = 5; %(m/s) big-M for foot velocity in both x and y axis
+Mfx = 1e5; %(N) big-M for foot-ground reaction forces for x-axis
+Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
+%======================================================================
+
 
 %=======================================================================
 % Define/Create Modeling Variables
@@ -608,28 +627,28 @@ for k = 1:TimeSeriesLength
     %         ubg = Mvel
     %----------------------------------------------------
     %           Front Leg x-axis
-        EqTemp = Ineq_Summation(PFxdot(k), Mvel, CF(k));
+        EqTemp = Ineq_Summation(PFxdot(k), Mvelx, CF(k));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
         lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvel];                        %Give constraint upper bound
+        ubg = [ubg;  Mvelx];                        %Give constraint upper bound
         
     %           Front Leg y-axis
-        EqTemp = Ineq_Summation(PFydot(k), Mvel, CF(k));
+        EqTemp = Ineq_Summation(PFydot(k), Mvely, CF(k));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
         lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvel];                        %Give constraint upper bound
+        ubg = [ubg;  Mvely];                        %Give constraint upper bound
         
     %           Hind Leg x-axis
-        EqTemp = Ineq_Summation(PHxdot(k), Mvel, CH(k));
+        EqTemp = Ineq_Summation(PHxdot(k), Mvelx, CH(k));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
         lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvel];                        %Give constraint upper bound
+        ubg = [ubg;  Mvelx];                        %Give constraint upper bound
         
     %           Hind Leg y-axis
-        EqTemp = Ineq_Summation(PHydot(k), Mvel, CH(k));
+        EqTemp = Ineq_Summation(PHydot(k), Mvely, CH(k));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
         lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvel];                        %Give constraint upper bound
+        ubg = [ubg;  Mvely];                        %Give constraint upper bound
     %------------------------------------------------------              
     %       - Equation (2): Pdot >= 0 - Mvel(1-C) -->
     %                       Pdot - Mvel*C >= -Mvel -->
@@ -642,27 +661,27 @@ for k = 1:TimeSeriesLength
     %         ubg = inf
     %------------------------------------------------------
     %           Front Leg x-axis
-        EqTemp = Ineq_Difference(PFxdot(k), Mvel, CF(k));
+        EqTemp = Ineq_Difference(PFxdot(k), Mvelx, CF(k));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvel];                       %Give constraint lower bound
+        lbg = [lbg;  -Mvelx];                       %Give constraint lower bound
         ubg = [ubg;  inf];                         %Give constraint upper bound
         
     %           Front Leg y-axis
-        EqTemp = Ineq_Difference(PFydot(k), Mvel, CF(k));
+        EqTemp = Ineq_Difference(PFydot(k), Mvely, CF(k));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvel];                       %Give constraint lower bound
+        lbg = [lbg;  -Mvely];                       %Give constraint lower bound
         ubg = [ubg;  inf];                         %Give constraint upper bound
         
     %           Hind Leg x-axis
-        EqTemp = Ineq_Difference(PHxdot(k), Mvel, CH(k));
+        EqTemp = Ineq_Difference(PHxdot(k), Mvelx, CH(k));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvel];                       %Give constraint lower bound
+        lbg = [lbg;  -Mvelx];                       %Give constraint lower bound
         ubg = [ubg;  inf];                         %Give constraint upper bound
         
     %           Hind Leg y-axis
-        EqTemp = Ineq_Difference(PHydot(k), Mvel, CH(k));
+        EqTemp = Ineq_Difference(PHydot(k), Mvely, CH(k));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvel];                       %Give constraint lower bound
+        lbg = [lbg;  -Mvely];                       %Give constraint lower bound
         ubg = [ubg;  inf];                         %Give constraint upper bound
     %------------------------------------------------------
     %   (*) Foot/End-Effector Forces
@@ -846,12 +865,26 @@ disp('-------------------------------------------------')
 %   Assemble optimization problem definitions
 prob = struct('f', J, 'x', DecisionVars, 'g', vertcat(g{:}));
 %   Setup solver-dependent options
+%       Define maximum nodes to be explored
+NumMaxNodesCases = input('Define Number of Max Nodes to be Explored: 1--> Worst Case Scenario; 2 --> User Specified \n');
+if NumMaxNodesCases == 1  %Worst-case Scenario
+    NumMaxNodes = (2*sum(contains(varList,'C')))^(NumTimeSteps+1);
+    disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
+elseif NumMaxNodesCases == 2 %Default Value
+    NumMaxNodes = 1e5;
+    disp(['Selected Default Case to Explore ', num2str(NumMaxNodes), ' Nodes'])
+else
+    ME_NumMaxNodes = MException('Initialization:NumMaxNodes','Unexpected Settings of Max Number of Nodes');
+    throw(ME_NumMaxNodes)
+end
+
+%       Build Solver Option Structure
 if strcmp(SolverSelected, 'knitro')
-    solverOption = struct('mip_outinterval', 25,...     % (Log Output Frequency) Log Output per Nodes
+    solverOption = struct('mip_outinterval', 100,...     % (Log Output Frequency) Log Output per Nodes
                           'mip_outlevel',    2,...      % Print accumulated time for every node.
                           'mip_selectrule',  3,...      % The rule for selecting nodes 
                           'mip_branchrule',  1,...      % MIP Branching rule
-                          'mip_maxnodes',    1e24);      % Max Number of Nodes wish to be explored
+                          'mip_maxnodes',    NumMaxNodes);      % Max Number of Nodes wish to be explored
     
 elseif strcmp(SolverSelected, 'bonmin')
     solverOption = struct('option_file_name', 'bonmin.opt');  
@@ -868,8 +901,51 @@ sol = solver('x0',  DecisionVarsInit, ...
              'ubg', ubg);
 
 %=======================================================================
-% (ToDo) Extract the Solution
+% Extract the Solution and Visualization
+%=======================================================================
+%   Recoer the full solution
 res = full(sol.x);
+
+%   Extract Solutions
+x_result     = res(find(VarNamesList == 'x_0'):find(VarNamesList == x_label(end)));
+y_result     = res(find(VarNamesList == 'y_0'):find(VarNamesList == y_label(end)));
+theta_result = res(find(VarNamesList == 'theta_0'):find(VarNamesList == theta_label(end)));
+
+%robot state (Velocity)
+xdot_result = res(find(VarNamesList == 'xdot_0'):find(VarNamesList == xdot_label(end)));
+ydot_result = res(find(VarNamesList == 'ydot_0'):find(VarNamesList == ydot_label(end)));
+thetadot_result = res(find(VarNamesList == 'thetadot_0'):find(VarNamesList == thetadot_label(end)));
+
+%Contact Configuration
+CF_result = res(find(VarNamesList == 'CF_0'):find(VarNamesList == CF_label(end)));
+CH_result = res(find(VarNamesList == 'CH_0'):find(VarNamesList == CH_label(end)));
+
+%end-effector locations
+PFx_result = res(find(VarNamesList == 'PFx_0'):find(VarNamesList == PFx_label(end)));
+PFy_result = res(find(VarNamesList == 'PFy_0'):find(VarNamesList == PFy_label(end)));
+PHx_result = res(find(VarNamesList == 'PHx_0'):find(VarNamesList == PHx_label(end)));
+PHy_result = res(find(VarNamesList == 'PHy_0'):find(VarNamesList == PHy_label(end)));
+
+%end-effector velocities
+PFxdot_result = res(find(VarNamesList == 'PFxdot_0'):find(VarNamesList == PFxdot_label(end)));
+PFydot_result = res(find(VarNamesList == 'PFydot_0'):find(VarNamesList == PFydot_label(end)));
+PHxdot_result = res(find(VarNamesList == 'PHxdot_0'):find(VarNamesList == PHxdot_label(end)));
+PHydot_result = res(find(VarNamesList == 'PHydot_0'):find(VarNamesList == PHydot_label(end)));
+
+%contact force result
+FFx_result = res(find(VarNamesList == 'FFx_0'):find(VarNamesList == FFx_label(end)));
+FFy_result = res(find(VarNamesList == 'FFy_0'):find(VarNamesList == FFy_label(end)));
+FHx_result = res(find(VarNamesList == 'FHx_0'):find(VarNamesList == FHx_label(end)));
+FHy_result = res(find(VarNamesList == 'FHy_0'):find(VarNamesList == FHy_label(end)));
+
+NetForceX = FFx_result + FHx_result;
+NetForceY = FFy_result + FHy_result;
+
+%Torque on the body
+FrontTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_result).*FFx_result;
+HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
+
+NetTorque = FrontTorque_result + HindTorque_result;
 %=======================================================================
 
 %=======================================================================
