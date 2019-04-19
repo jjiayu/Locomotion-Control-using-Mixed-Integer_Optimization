@@ -90,8 +90,8 @@ BodyHeight = 0.2;
 %       Default foot position in Local robot frame
 DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
 %           Front Foot Default Positions (IN ROBOT FRAME)
-PFcenterX = 1/2*BodyLength;
-PFcenterY = -(1/2*BodyHeight + DefaultLegLength);
+PFCenterX = 1/2*BodyLength;
+PFCenterY = -(1/2*BodyHeight + DefaultLegLength);
 %           Hind Foot Default Positions (IN ROBOT FRAME)
 PHCenterX = -1/2*BodyLength;
 PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
@@ -774,7 +774,7 @@ for k = 1:TimeSeriesLength
     %       ubg = [bw/bh]/2   --> bw is bounding box width, bh is boungding box height
     %----------------------------------------------------
     %     Front Leg
-        EqTemp = KinematicsConstraint([x(k), y(k), theta(k)], [PFx(k), PFy(k)], [PFcenterX, PFcenterY]);
+        EqTemp = KinematicsConstraint([x(k), y(k), theta(k)], [PFx(k), PFy(k)], [PFCenterX, PFCenterY]);
         g   = {g{:}, EqTemp};                                              %Append to constraint function list
         lbg = [lbg;  -[BoundingBox_Width;BoundingBox_Height]/2];           %Give constraint lower bound
         ubg = [ubg;  [BoundingBox_Width;BoundingBox_Height]/2];            %Give constraint upper bound
@@ -866,11 +866,13 @@ disp('-------------------------------------------------')
 prob = struct('f', J, 'x', DecisionVars, 'g', vertcat(g{:}));
 %   Setup solver-dependent options
 %       Define maximum nodes to be explored
-NumMaxNodesCases = input('Define Number of Max Nodes to be Explored: 1--> Worst Case Scenario; 2 --> User Specified \n');
+NumMaxNodesCases = input('Define Number of Max Nodes to be Explored: 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value \n');
 if NumMaxNodesCases == 1  %Worst-case Scenario
     NumMaxNodes = (2*sum(contains(varList,'C')))^(NumTimeSteps+1);
     disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
-elseif NumMaxNodesCases == 2 %Default Value
+elseif NumMaxNodesCases == 2 %User-specified
+    NumMaxNodes = input('Input number of maximum node to be explored\n');
+elseif NumMaxNodesCases == 3 %Default Value
     NumMaxNodes = 1e5;
     disp(['Selected Default Case to Explore ', num2str(NumMaxNodes), ' Nodes'])
 else
@@ -917,8 +919,8 @@ ydot_result = res(find(VarNamesList == 'ydot_0'):find(VarNamesList == ydot_label
 thetadot_result = res(find(VarNamesList == 'thetadot_0'):find(VarNamesList == thetadot_label(end)));
 
 %Contact Configuration
-CF_result = res(find(VarNamesList == 'CF_0'):find(VarNamesList == CF_label(end)));
-CH_result = res(find(VarNamesList == 'CH_0'):find(VarNamesList == CH_label(end)));
+CF_result = res(find(VarNamesList == 'CF_0'):find(VarNamesList == CF_label(end-1)));
+CH_result = res(find(VarNamesList == 'CH_0'):find(VarNamesList == CH_label(end-1)));
 
 %end-effector locations
 PFx_result = res(find(VarNamesList == 'PFx_0'):find(VarNamesList == PFx_label(end)));
@@ -946,6 +948,13 @@ FrontTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_resul
 HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
 
 NetTorque = FrontTorque_result + HindTorque_result;
+
+%Foot Bounding Box Result
+PFcenterX_result_world = x_result + cos(theta_result)*PFCenterX - sin(theta_result)*PFCenterY;
+PFcenterY_result_world = y_result + sin(theta_result)*PFCenterX + cos(theta_result)*PFCenterY;
+
+PHcenterX_result_world = x_result + cos(theta_result)*PHCenterX - sin(theta_result)*PHCenterY;
+PHcenterY_result_world = y_result + sin(theta_result)*PHCenterX + cos(theta_result)*PHCenterY;
 %=======================================================================
 
 %=======================================================================
