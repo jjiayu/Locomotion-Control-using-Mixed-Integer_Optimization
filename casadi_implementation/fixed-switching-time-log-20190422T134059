@@ -1,0 +1,82 @@
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Fixed Switching Time
+ 
+Date and Time:
+   22-Apr-2019 13:40:59
+
+Correspondent Log File Name: fixed-switching-time-log-20190422T134059
+---------------------------------------------------
+Solver Selection, 1: Knitro, 2: Bonmin 
+1
+Selected Solver: knitro
+---------------------------------------------------
+Environment Information: 
+Friction Cone: 
+0.6
+---------------------------------------------------
+Input Termianl Time (e.g. 1s): 
+1
+Input Number of Phases: 
+4
+Time Horizon of Each Phase: 0.25 (s)
+Input Number of Time Steps for Each Phase: 
+5
+Time Step Size: 
+0.05 (s)
+Number of Knots/Discretizations (From Time 0 to 1):
+21 (Number of Time Steps in Each Phase * Number of Phases + 1)
+---------------------------------------------------
+Input Travel Distance along x-axis (m): 
+0.5
+---------------------------------------------------
+Select the Case for big-M value for Foot/End-Effector Velocity for x-axis: 1--> Default Value (5m/s); 2--> N time of average task speed (in x-axis); 3--> User Specified 
+2
+Input the Number of Scales of the Average Task Speed(in x-axis) (i.e. 1, 2, 3, etc...): 
+2
+Generating Decision Variables Vectors/Lists
+Checked - Contact Configuration Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.SX/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/SX.m', 553)" style="font-weight:bold">casadi.SX/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/SX.m',553,0)">line 553</a>)
+.../casadi/core/slice.cpp:70: Assertion "stop<=len" failed:
+Slice (start=4, stop=5, step=1) out of bounds with supplied length of 4
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.GenericMatrixCommon/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/GenericMatrixCommon.m', 30)" style="font-weight:bold">casadi.GenericMatrixCommon/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/GenericMatrixCommon.m',30,0)">line 30</a>)
+        [varargout{1}] = paren(self, s.subs{:});
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_fixed_switching_time', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_fixed_switching_time.m', 619)" style="font-weight:bold">casadi_fixed_switching_time</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_fixed_switching_time.m',619,0)">line 619</a>)
+        EqTemp = Ineq_Summation(PFy(k),Mpos_y, CF(ContactConfigIdx));
+} 
+opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_fixed_switching_time.m',619,0)
+ContactConfigIdx
+
+ContactConfigIdx =
+
+     5
+
+1/NumLocalTimeSteps
+
+ans =
+
+    0.2000
+
+floor(1/NumLocalTimeSteps)
+
+ans =
+
+     0
+
+floor(20/NumLocalTimeSteps)
+
+ans =
+
+     4
+
+floor(19/NumLocalTimeSteps)
+
+ans =
+
+     3
+
+casadi_fixed_switching_time
