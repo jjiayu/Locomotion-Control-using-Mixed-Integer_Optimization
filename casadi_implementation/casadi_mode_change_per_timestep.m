@@ -17,7 +17,7 @@ import casadi.*
 %========================================================
 % Command Line Logging
 diary off
-diary_filename = strcat('log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+diary_filename = strcat('mode-change-per-timestep-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
 diary(diary_filename);
 
 %=========================================================

@@ -897,7 +897,7 @@ prob = struct('f', J, 'x', DecisionVars, 'g', vertcat(g{:}));
 %       Define maximum nodes to be explored
 NumMaxNodesCases = input('Define Number of Max Nodes to be Explored: 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value \n');
 if NumMaxNodesCases == 1  %Worst-case Scenario
-    NumMaxNodes = (2*sum(contains(varList,'C')))^(NumTimeSteps+1);
+    NumMaxNodes = (2*sum(contains(varList,'C')))^(NumPhases);
     disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
 elseif NumMaxNodesCases == 2 %User-specified
     NumMaxNodes = input('Input number of maximum node to be explored\n');
