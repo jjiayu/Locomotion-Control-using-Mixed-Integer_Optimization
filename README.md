@@ -57,6 +57,11 @@
     - Solver's problems, it accidentally identified all branches are infeasible which is wrong in most of the cases. Re-run the solver will solve the problem in most of the cases.
     - Initial and Terminal robot height violates the kinematics constraint and complementarity constraint. If the robot height is set in a way that the upper level of the   boudning box cannot reach the terrain height, then the problem is infeasible. Retune the initial and terminal robot height to solve the problem.
     - The (go-to-goal) task is infeasible for the current foot-ground reaction force limits, foot swing velocity, kinematics contraint. Either change the task or tune the parameters for big-M formulation (goerns foot swing velocity and foot-ground reaction forces limits), kinematics contraint will solve the problem. 
+    - May need to enlarge the big-M for foot/end-effetor verlcoity, which is lower/upper boundary of foot/end-effector velocities --> Too Slow foot/end-effector velocity makes the robot unable to place their foot/end-effectors in a timely manner.
+
+2. Simscape Cannot Reproduce the Motion Generated from Multiphase Formulation
+
+    - Due to the vanishing phases (optimizer favors to vanshi some phases), ununiformly distributed phases, optimizer may output large timesteps and large forces. These forces will drive the dynamic simulation away. The solution is to add more knots in each phases (i.e. 20)
 
 ## Future Work
 
