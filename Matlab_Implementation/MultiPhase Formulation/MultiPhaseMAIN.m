@@ -1132,6 +1132,24 @@ PFcenterY_result_world = y_result + sin(theta_result)*PFcenterX + cos(theta_resu
 PHcenterX_result_world = x_result + cos(theta_result)*PHcenterX - sin(theta_result)*PHcenterY;
 PHcenterY_result_world = y_result + sin(theta_result)*PHcenterX + cos(theta_result)*PHcenterY;
 
+%---------------------------------------------------------------------
+% Backup Original Results
+%---------------------------------------------------------------------
+TimeSeries_origin  = TimeSeries;
+x_result_origin    = x_result;       y_result_origin    = y_result;      theta_result_origin    = theta_result;
+xdot_result_origin = xdot_result;    ydot_result_origin = ydot_result;   thetadot_result_origin = thetadot_result;
+PFx_result_origin  = PFx_result;     PFy_result_origin  = PFy_result;    PFxdot_result_origin   = PFxdot_result;      PFydot_result_origin = PFydot_result;
+PHx_result_origin  = PHx_result;     PHy_result_origin  = PHy_result;    PHxdot_result_origin   = PHxdot_result;      PHydot_result_origin = PHydot_result;
+CF_result_origin   = CF_result;      CH_result_origin   = CH_result;
+FFx_result_origin  = FFx_result;     FFy_result_origin  = FFy_result;    
+FHx_result_origin  = FHx_result;     FHy_result_origin  = FHy_result;
+NetForceX_origin   = NetForceX;      NetForceY_origin   = NetForceY;
+FrontTorque_result_origin = FrontTorque_result;      HindTorque_result_origin = HindTorque_result;
+NetTorque_origin   = NetTorque;
+PFcenterX_result_world_origin = PFcenterX_result_world;      PFcenterY_result_world_origin = PFcenterY_result_world;
+PHcenterX_result_world_origin = PHcenterX_result_world;      PHcenterY_result_world_origin = PHcenterY_result_world;
+%-----------------------------------------------------------------------
+
 %% Clean Up Time/Control/State Series - Remove Phases with Zero Length
 
 TimeStepDiff = diff(TimeSeries);

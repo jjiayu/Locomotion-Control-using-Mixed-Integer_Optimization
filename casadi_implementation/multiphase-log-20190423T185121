@@ -1,0 +1,170 @@
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Multi-Phase Formulation:
+Optimize over Control, Gait Sequence, and Switching Time
+ 
+Date and Time:
+   23-Apr-2019 18:51:21
+
+Correspondent Log File Name: multiphase-log-20190423T185121
+---------------------------------------------------
+Solver Selection, 1: Knitro, 2: Bonmin 
+1
+Selected Solver: knitro
+---------------------------------------------------
+Environment Information: 
+Friction Cone: 
+0.6
+---------------------------------------------------
+Input Termianl Time (e.g. 1s): 
+1
+Input Number of Phases: 
+4
+Input Number of Knots for Each Phase: 
+5
+Knot/Discretization Step Size of tau: 0.05
+Number of Knots/Discretization of tau (from 0 to 1: 21) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+Input Travel Distance along x-axis (m): 
+0.5
+---------------------------------------------------
+Select the Case for big-M value for Foot/End-Effector Velocity for x-axis: 1--> Default Value (5m/s); 
+ 2--> N time of average task speed (in x-axis); 
+ 3--> User Specified: 
+ 2
+Input the Number of Scales of the Average Task Speed(in x-axis) (i.e. 1, 2, 3, etc...): 
+ (NOTE: For Fixed Switching Time Formulation, Big-M for Foot/End-Effector needs to be bigger (e.g. 4-5+ times)) 
+4
+Generating Decision Variables Vectors/Lists
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+-------------------------------------------------
+Define Number of Max Nodes to be Explored: 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value 
+1
+Selected Worst-case Scenarios to Explore 256 Nodes
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (13 variables).
+hessopt:                 1
+mip_branchrule:          1
+mip_maxnodes:            256
+mip_outinterval:         100
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                390
+    bounded below only:                              80
+    bounded above only:                               0
+    bounded below and above:                          8
+    fixed:                                           13
+    free:                                           289
+Number of binary variables:                           8
+Number of integer variables:                          0
+Number of constraints:                              650
+    linear equalities:                                0
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      200
+    linear one-sided inequalities:                  366
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:           84
+Number of nonzeros in Jacobian:                    2321
+Number of nonzeros in Hessian:                      994
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 80 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+   iter =      1: Iinf =      2, FeasError =   4.413e-03
+   iter =      2: Iinf =      2, FeasError =   7.596e-04
+   iter =      3: Iinf =      2, FeasError =   4.413e-03
+   iter =      4: Iinf =      8, FeasError =   8.154e-04
+   iter =      5: Iinf =      2, FeasError =   4.413e-03
+   iter =      6: Iinf =      2, FeasError =   2.500e-01
+   iter =      7: Iinf =      8, FeasError =   3.171e-03
+   iter =      8: Iinf =      2, FeasError =   4.413e-03
+   iter =      9: Iinf =      8, FeasError =   3.072e-03
+   iter =     10: Iinf =      2, FeasError =   4.413e-03
+   iter =     11: Iinf =      8, FeasError =   4.466e-03
+   iter =     12: Iinf =      8, FeasError =   6.444e-04
+   iter =     13: Iinf =      2, FeasError =   4.413e-03
+   iter =     14: Iinf =      2, FeasError =   2.500e-01
+   iter =     15: Iinf =      8, FeasError =   3.075e-03
+   iter =     16: Iinf =      1, FeasError =   7.589e-04
+   iter =     17: Iinf =      2, FeasError =   4.413e-03
+   iter =     18: Iinf =      8, FeasError =   7.615e-04
+   iter =     19: Iinf =      8, FeasError =   4.414e-03
+   iter =     20: Iinf =      2, FeasError =   2.500e-01
+   iter =     21: Iinf =      8, FeasError =   4.415e-03
+   iter =     22: Iinf =      8, FeasError =   4.468e-03
+   iter =     23: Iinf =      8, FeasError =   3.074e-03
+   iter =     24: Iinf =      2, FeasError =   4.413e-03
+   iter =     25: Iinf =      2, FeasError =   4.413e-03
+   iter =     26: Iinf =      2, FeasError =   2.500e-01
+   iter =     27: Iinf =      2, FeasError =   4.413e-03
+   iter =     28: Iinf =      2, FeasError =   2.500e-01
+   iter =     29: Iinf =      2, FeasError =   4.413e-03
+   iter =     30: Iinf =      8, FeasError =   4.474e-03
+   iter =     31: Iinf =      2, FeasError =   3.071e-03
+   iter =     32: Iinf =      8, FeasError =   4.413e-03
+   iter =     33: Iinf =      8, FeasError =   3.074e-03
+   iter =     34: Iinf =      2, FeasError =   4.413e-03
+   iter =     35: Iinf =      5, FeasError =   4.418e-03
+   iter =     36: Iinf =      2, FeasError =   4.413e-03
+   iter =     37: Iinf =      8, Infeasible
+   iter =     38: Iinf =      2, FeasError =   2.500e-01
+   iter =     39: Iinf =      8, Infeasible
+   iter =     40: Iinf =      8, FeasError =   4.416e-03
+*  iter =     41: Iinf =      0, FeasError =   8.437e-08, Obj =   1.650e+05
+Knitro found integer feasible point in 41 heuristic iterations
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       8    1.01e+05       1.01e+05    1.65e+05      14.622
+     100       7         INFEASIBLE  pr    1.01e+05    1.65e+05      32.739
+*    107       6       0    1.51e+05  f    1.01e+05    1.51e+05      34.739
+     143       0            5.03e+10       1.51e+05    1.51e+05      41.497
+
+EXIT: Optimal solution found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   1.50989247031766e+05
+Final integrality gap (abs / rel)   =  0.00e+00 /   0.00e+00 ( 0.00%)
+# of nodes processed                =      143
+# of subproblems processed          =      186
+Total program time (secs)           =      41.50085 (    41.921 CPU time)
+Time spent in evaluations (secs)    =       3.05986
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg         1.08         1.06     36285
+   nlp_gf_jg        0.902        0.882     20524
+  nlp_hess_l        0.849        0.839     20382
+      solver         41.9         41.5         1
+{Matrix index is out of range for deletion.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 1094)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',1094,0)">line 1094</a>)
+PFx_result(find(TimeStepDiff <= 1e-5) + 2) = [];
+} 

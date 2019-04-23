@@ -80,7 +80,7 @@ Tend = input('Input Termianl Time (e.g. 1s): \n');
 NumPhases = input('Input Number of Phases: \n');
 %   Number of timesteps for each phase
 NumLocalKnots = input('Input Number of Knots for Each Phase: \n');
-%   Total Number of TimeSteps
+%   Total Number of TimeSteps exclude time step 0
 NumKnots = NumPhases*NumLocalKnots;
 %   Parameter tau
 tau_upper_limit = 1; %upper limit of tau --> tau \in [0,1]
@@ -88,9 +88,9 @@ tauStepLength = tau_upper_limit/NumKnots; %discritization step size of tau
 %   Discretization of tau
 tauSeries = 0:tauStepLength:tau_upper_limit;
 tauSeriesLength = length(tauSeries);
-%   Print some results
+%   Print some Info
 disp(['Knot/Discretization Step Size of tau: ', num2str(tauStepLength)]);
-disp(['Number of Knots/Discretization of tau (from 0 to ', num2str(tau_upper_limit), ': ', num2str(tauSeriesLength), ') (Number of Knots/Discretization in Each Phase * Number of Phases + 1)']);
+disp(['Number of Knots/Discretization of tau (from 0 to ', num2str(tau_upper_limit), ': ', num2str(tauSeriesLength), ') (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)']);
 %======================================================================
 %   Kinematics Constraint Parameters
 %======================================================================
@@ -996,36 +996,54 @@ sol = solver('x0',  DecisionVarsInit, ...
 %=======================================================================
 % Extract the Solution and Visualization
 %=======================================================================
-%   Recoer the full solution
+%-----------------------------------------------------------------------
+%   Recover the full solution
+%-----------------------------------------------------------------------
 res = full(sol.x);
 
-%   Extract Solutions
+%   Extract Switching Time
+PhaseSwitchingTime = [0;res(find(VarNamesList == Ts_label(1)):find(VarNamesList == Ts_label(end)))]; %include initial time 0
+TimeSlope = NumPhases.*diff(PhaseSwitchingTime);
+TimeIntercept = [PhaseSwitchingTime(1:end-1)];
+
+TimeSeries = zeros(NumKnots + 1,1); %with starting time 0
+for i = 1:NumPhases
+    for j = 1:NumLocalKnots
+        TimeSeries((i-1)*NumLocalKnots + j + 1) = TimeIntercept(i) + TimeSlope(i)*j*tauStepLength; %start from index 2, index 1 is time 0
+    end
+end
+%------------------------------------------------------------------------
+
+%------------------------------------------------------------------------
+%   Extract Original Solutions/Variables
+%------------------------------------------------------------------------
+% Robot state (position)
 x_result     = res(find(VarNamesList == 'x_0'):find(VarNamesList == x_label(end)));
 y_result     = res(find(VarNamesList == 'y_0'):find(VarNamesList == y_label(end)));
 theta_result = res(find(VarNamesList == 'theta_0'):find(VarNamesList == theta_label(end)));
 
-%robot state (Velocity)
+% Robot state (Velocity)
 xdot_result = res(find(VarNamesList == 'xdot_0'):find(VarNamesList == xdot_label(end)));
 ydot_result = res(find(VarNamesList == 'ydot_0'):find(VarNamesList == ydot_label(end)));
 thetadot_result = res(find(VarNamesList == 'thetadot_0'):find(VarNamesList == thetadot_label(end)));
 
-%Contact Configuration
-CF_result = res(find(VarNamesList == CF_label(1)):find(VarNamesList == CF_label(end)));
-CH_result = res(find(VarNamesList == CH_label(1)):find(VarNamesList == CH_label(end)));
-
-%end-effector locations
+% End-effector locations
 PFx_result = res(find(VarNamesList == 'PFx_0'):find(VarNamesList == PFx_label(end)));
 PFy_result = res(find(VarNamesList == 'PFy_0'):find(VarNamesList == PFy_label(end)));
 PHx_result = res(find(VarNamesList == 'PHx_0'):find(VarNamesList == PHx_label(end)));
 PHy_result = res(find(VarNamesList == 'PHy_0'):find(VarNamesList == PHy_label(end)));
 
-%end-effector velocities
+% End-effector velocities
 PFxdot_result = res(find(VarNamesList == 'PFxdot_0'):find(VarNamesList == PFxdot_label(end)));
 PFydot_result = res(find(VarNamesList == 'PFydot_0'):find(VarNamesList == PFydot_label(end)));
 PHxdot_result = res(find(VarNamesList == 'PHxdot_0'):find(VarNamesList == PHxdot_label(end)));
 PHydot_result = res(find(VarNamesList == 'PHydot_0'):find(VarNamesList == PHydot_label(end)));
 
-%contact force result
+% Contact Configuration
+CF_result = res(find(VarNamesList == CF_label(1)):find(VarNamesList == CF_label(end)));
+CH_result = res(find(VarNamesList == CH_label(1)):find(VarNamesList == CH_label(end)));
+
+% Contact force result
 FFx_result = res(find(VarNamesList == 'FFx_0'):find(VarNamesList == FFx_label(end)));
 FFy_result = res(find(VarNamesList == 'FFy_0'):find(VarNamesList == FFy_label(end)));
 FHx_result = res(find(VarNamesList == 'FHx_0'):find(VarNamesList == FHx_label(end)));
@@ -1034,18 +1052,72 @@ FHy_result = res(find(VarNamesList == 'FHy_0'):find(VarNamesList == FHy_label(en
 NetForceX = FFx_result + FHx_result;
 NetForceY = FFy_result + FHy_result;
 
-%Torque on the body
+% Torque on the body
 FrontTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_result).*FFx_result;
 HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
 
 NetTorque = FrontTorque_result + HindTorque_result;
 
-%Foot Bounding Box Result
+% Foot Bounding Box Result
 PFcenterX_result_world = x_result + cos(theta_result)*PFCenterX - sin(theta_result)*PFCenterY;
 PFcenterY_result_world = y_result + sin(theta_result)*PFCenterX + cos(theta_result)*PFCenterY;
 
 PHcenterX_result_world = x_result + cos(theta_result)*PHCenterX - sin(theta_result)*PHCenterY;
 PHcenterY_result_world = y_result + sin(theta_result)*PHCenterX + cos(theta_result)*PHCenterY;
+
+%---------------------------------------------------------------------
+% Backup Original Results
+%---------------------------------------------------------------------
+TimeSeries_origin  = TimeSeries;
+x_result_origin    = x_result;       y_result_origin    = y_result;      theta_result_origin    = theta_result;
+xdot_result_origin = xdot_result;    ydot_result_origin = ydot_result;   thetadot_result_origin = thetadot_result;
+PFx_result_origin  = PFx_result;     PFy_result_origin  = PFy_result;    PFxdot_result_origin   = PFxdot_result;      PFydot_result_origin = PFydot_result;
+PHx_result_origin  = PHx_result;     PHy_result_origin  = PHy_result;    PHxdot_result_origin   = PHxdot_result;      PHydot_result_origin = PHydot_result;
+CF_result_origin   = CF_result;      CH_result_origin   = CH_result;
+FFx_result_origin  = FFx_result;     FFy_result_origin  = FFy_result;    
+FHx_result_origin  = FHx_result;     FHy_result_origin  = FHy_result;
+NetForceX_origin   = NetForceX;      NetForceY_origin   = NetForceY;
+FrontTorque_result_origin = FrontTorque_result;      HindTorque_result_origin = HindTorque_result;
+NetTorque_origin   = NetTorque;
+PFcenterX_result_world_origin = PFcenterX_result_world;      PFcenterY_result_world_origin = PFcenterY_result_world;
+PHcenterX_result_world_origin = PHcenterX_result_world;      PHcenterY_result_world_origin = PHcenterY_result_world;
+%-----------------------------------------------------------------------
+
+%-----------------------------------------------------------------------
+% Clean Up Time/Control/State Lists - Remove Phases with Zero Length  
+%-----------------------------------------------------------------------
+TimeStepDiff = diff(TimeSeries);
+
+%States, TimeStepDiff + 1
+TimeSeries(find(TimeStepDiff <= 1e-5) + 1) = [];
+x_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+y_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+theta_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+
+xdot_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+ydot_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+thetadot_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+
+PFcenterX_result_world(find(TimeStepDiff <= 1e-5) + 1) = [];
+PFcenterY_result_world(find(TimeStepDiff <= 1e-5) + 1) = [];
+
+PHcenterX_result_world(find(TimeStepDiff <= 1e-5) + 1) = [];
+PHcenterY_result_world(find(TimeStepDiff <= 1e-5) + 1) = [];
+
+%Inputs, TimeStepDiff due to euler integration
+PFx_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+PFy_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+PHx_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+PHy_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+
+NetForceX(find(TimeStepDiff <= 1e-5) + 1) = [];
+NetForceY(find(TimeStepDiff <= 1e-5) + 1) = [];
+
+NetTorque(find(TimeStepDiff <= 1e-5) + 1) = [];
+
+NetForceX(end) = NetForceX(end - 1);
+NetForceY(end) = NetForceY(end - 1);
+NetTorque(end) = NetTorque(end - 1);
 %=======================================================================
 
 %=======================================================================
