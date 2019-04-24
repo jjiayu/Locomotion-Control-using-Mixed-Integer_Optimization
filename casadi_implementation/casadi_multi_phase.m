@@ -234,8 +234,8 @@ disp(['Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: ', num2
 disp('----------------------------------------------------');
 %----------------------------------------------------------------------
 %   Big-M for Foot-Ground Reaction Forces
-Mfx = 1e5; %(N) big-M for foot-ground reaction forces for x-axis
-Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
+Mfx = 1e3; %(N) big-M for foot-ground reaction forces for x-axis
+Mfy = 1e3; %(N) big-M for foot-ground reaction forces for y-axis
 disp('====================================================');
 %=======================================================================
 
