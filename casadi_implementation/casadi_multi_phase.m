@@ -25,32 +25,24 @@ diary(diary_filename);
 
 %=========================================================
 % Display Script Information
+disp('====================================================');
+disp('Genearl Information:')
+disp('====================================================');
 disp('CasADi Implementation');
 disp('2D Locomotion Control using Mixed-integer Nonlinear Optimization');
 disp('Multi-Phase Formulation:');
 disp('Optimize over Control, Gait Sequence, and Switching Time')
-disp(' ');
+disp('----------------------------------------------------');
 disp('Date and Time:');
 disp(datetime('now'));
+disp('----------------------------------------------------');
 disp(['Correspondent Log File Name: ', diary_filename]);
-disp('---------------------------------------------------');
+disp('====================================================');
+disp(' ');
 %=====================================================================
 % Add path
 %addpath('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5')
 
-%=====================================================================
-% Choose solver
-SolverNum = input('Solver Selection, 1: Knitro, 2: Bonmin \n');
-if SolverNum == 1
-    SolverSelected = 'knitro';
-elseif SolverNum == 2
-    SolverSelected = 'bonmin';
-else
-    ME_SelectSolvers = MException('Initialization:SelectSolvers','Unknown Solver Nominated');
-    throw(ME_SelectSolvers)
-end
-disp(['Selected Solver: ', SolverSelected])
-disp('---------------------------------------------------')
 %======================================================================
 %Inertia Parameters(Information from MIT Cheetah 3)
 m = 45; %kg
@@ -60,26 +52,46 @@ G = 9.80665; %m/s^2
 
 %======================================================================
 %Environment Information
+%----------------------------------------------------------------------
+disp('====================================================');
 TerrainHeight = 0; %terrain height
 TerrainNorm = [0,1];
 miu = 0.6; %friction coefficient
 disp('Environment Information: ');
-disp('Friction Cone: ');
-disp(num2str(miu));
-disp('---------------------------------------------------');
+disp('----------------------------------------------------');
+disp(['Friction Cone: ', num2str(miu)]);
+disp('====================================================');
+disp(' ')
 %======================================================================
 
 %======================================================================
 % Time Step and Discretization Parameter Settings
+%----------------------------------------------------------------------
+%   Display Info
+%----------------------------------------------------------------------
+disp('====================================================');
+disp('Temporal Setup:');
+disp('----------------------------------------------------');
+%----------------------------------------------------------------------
 %   Terminal time
-%--------------------------------------------------
-%   (Place Holder) Set-up to allow free terminal time
-%--------------------------------------------------
-Tend = input('Input Termianl Time (e.g. 1s): \n');
+%----------------------------------------------------------------------
+disp('Terminal Time:')
+Tend_flag = input('Optimization of Terminal Time (Tend): \n1 -> Optimize, 2 -> Left as Free Variable \n');
+if Tend_flag == 1 %Optimize Terminal Time
+    Tend = input('Input Termianl Time (e.g. 1s): \n');
+elseif Tend_flag == 2
+    disp('Terminal Time (Tend) is Set as Free Variables')
+elseif Tend_flag ~= 1 && Tend_flag ~= 2
+    ME_Tend = MException('Initialization:Tend_flag','Unknown Indicator for Determining the on/off of Terminal Time Optimization');
+    throw(ME_Tend)
+end
+disp('----------------------------------------------------');
 %   Number of Phases
 NumPhases = input('Input Number of Phases: \n');
+disp('----------------------------------------------------');
 %   Number of timesteps for each phase
 NumLocalKnots = input('Input Number of Knots for Each Phase: \n');
+disp('----------------------------------------------------');
 %   Total Number of TimeSteps exclude time step 0
 NumKnots = NumPhases*NumLocalKnots;
 %   Parameter tau
@@ -89,8 +101,11 @@ tauStepLength = tau_upper_limit/NumKnots; %discritization step size of tau
 tauSeries = 0:tauStepLength:tau_upper_limit;
 tauSeriesLength = length(tauSeries);
 %   Print some Info
+disp('Resultant Discretization:')
 disp(['Knot/Discretization Step Size of tau: ', num2str(tauStepLength)]);
 disp(['Number of Knots/Discretization of tau (from 0 to ', num2str(tau_upper_limit), ': ', num2str(tauSeriesLength), ') (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)']);
+disp('====================================================');
+disp(' ')
 %======================================================================
 %   Kinematics Constraint Parameters
 %======================================================================
@@ -113,6 +128,12 @@ BoundingBox_Height = 0.3;
 %======================================================================
 % Task Specifications
 %======================================================================
+%   Display Information
+%----------------------------------------------------------------------
+disp('====================================================');
+disp('Task Specification:')
+disp('----------------------------------------------------');
+%----------------------------------------------------------------------
 %   Initial Conditions
 %----------------------------------------------------------------------
 x_Init         = 0;
@@ -143,43 +164,129 @@ if (y_End - 1/2*BodyHeight - DefaultLegLength + 1/2*BoundingBox_Height) < 0
     ME_TerminalHeight = MException('Initialization:ProblematicTerminalHeight','Terminal Height Error (y_end), Increase Terminal Height');
     throw(ME_TerminalHeight)
 end
-disp('---------------------------------------------------')
+disp('====================================================');
+disp(' ')
 %=======================================================================
 % (Place Holder): Setup of Soft constraints on Terminal Condition or not
 %=======================================================================
 
 %======================================================================
-%   Big-M Parameters for Complementarity Constraints
+% Big-M Parameters for Complementarity Constraints
 %======================================================================
-Mpos_y = 100; %(meters) big-M for foot positions in y-axis
+%   Display Information
+%----------------------------------------------------------------------
+disp('====================================================');
+disp('Big-M Setup')
+disp('====================================================');
+%----------------------------------------------------------------------
+%   Big-M for foot positions in y-axis (meters)
+Mpos_y = 100; 
+%----------------------------------------------------------------------
 %   Determine big-M for foot velocity
 %-------------------------------
 %   (Place Holder) big-M for all x, y, z axis velocities need to respecify
 %   when move to 3D
-%-------------------------------
-MvelxCase = input('Select the Case for big-M value for Foot/End-Effector Velocity for x-axis: 1--> Default Value (5m/s); \n 2--> N time of average task speed (in x-axis); \n 3--> User Specified: \n ');
+%------------------------------------------------------------------------
+%       big-M for X-axis Foot/End-Effector Velocity
+%-------------------------------------------------------------------------
+disp('Big-M for Foot/End-Effector in X-axis:')
+MvelxCase = input('Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: \n1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: \n');
 if MvelxCase == 1
     Mvelx = 5; %Default Mvel Value
+%    disp(['Selected Default Value for Big-M value for Foot/End-Effector Valocity in X-axis: ', num2str(Mvelx)]);
 elseif MvelxCase == 2
-    MvelxScaling = input('Input the Number of Scales of the Average Task Speed(in x-axis) (i.e. 1, 2, 3, etc...): \n (NOTE: For Fixed Switching Time Formulation, Big-M for Foot/End-Effector needs to be bigger (e.g. 4-5+ times)) \n');
-    Mvelx = x_End/Tend*MvelxScaling;
+    if exist('Tend', 'var')
+        disp(['Current Averate Task Speed in X-axis: ', num2str(x_End/Tend)]);
+        MvelxScaling = input('Input the Scaling Factor of the Average Task Speed (in X-axis) (i.e. 1, 2, 3, etc...): \n');
+        Mvelx = x_End/Tend*MvelxScaling;
+    else
+        warning('Terminal Time is Undefined -> Unable to Compute Average Task Speed in X-axis');
+        Mvelx = input('Manually Specify a Big-M value for Foot/End-Effector Velocity in X-axis: \n');
+    end
 elseif MvelxCase == 3
-    Mvelx = input('Input Big-M value for foot/end-effector Velocity for x-axis: \n (NOTE: For Fixed Switching Time Formulation, Big-M for Foot/End-Effector needs to be bigger (e.g. 4-5+ times)) \n');
+    Mvelx = input('Input Big-M value for foot/end-effector Velocity for X-axis: \n');
 else
-    ME_MvelxCase = MException('Initialization:MvelxCase','Unexpected Case for big-M for x-axis foot/End-effector Velocity');
+    ME_MvelxCase = MException('Initialization:MvelxCase','Unexpected Case for big-M for X-axis foot/End-effector Velocity');
     throw(ME_MvelxCase)
 end
-Mvely = 5; %big-M for foot velocity in y axis
-%Mvel = 5; %(m/s) big-M for foot velocity in both x and y axis
+disp(['Configured Big-M Value for Foot/End-Effector Velocity for X-axis: ', num2str(Mvelx), ' m/s']);
+disp('----------------------------------------------------');
+%---------------------------------------------------------------------
+%       big-M for Y-axis Foot/End-Effector Velocity
+%---------------------------------------------------------------------
+disp('Big-M for Foot/End-Effector in Y-axis:')
+MvelyCase = input('Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: \n1 -> Default Value (5m/s); 2 -> User Specified: \n');
+if MvelyCase == 1
+    Mvely = 5; %Default Mvely Value
+%    disp(['Selected Default Value for Big-M value for Foot/End-Effector Valocity in Y-axis: ', num2str(Mvely), ' m/s']);
+elseif MvelyCase == 2
+    Mvely = input('Input Big-M value for foot/end-effector Velocity for Y-axis (e.g. 1-5+ m/s): \nNOTE: Can Write the Value as the Kinematics Bounding Box Height (BoundingBox_Height)/Desired Time to Travel the Entire Bounding Box Height\n');
+%    disp(['Big-M value for Foot/End-Effector Velocity in Y-axis set as: ', num2str(Mvely), ' m/s']);
+else
+    ME_MvelyCase = MException('Initialization:MvelyCase','Unexpected Case for big-M for Y-axis foot/End-effector Velocity');
+    throw(ME_MvelyCase)
+end 
+disp(['Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: ', num2str(Mvely), ' m/s']);
+disp('----------------------------------------------------');
+%----------------------------------------------------------------------
+%   Big-M for Foot-Ground Reaction Forces
 Mfx = 1e5; %(N) big-M for foot-ground reaction forces for x-axis
 Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
+disp('====================================================');
 %=======================================================================
+
+%=====================================================================
+% Solver SetUp
+%=====================================================================
+%   Choose Solver
+%---------------------------------------------------------------------
+disp('====================================================');
+disp('Solver Setups:')
+disp('====================================================');
+disp('Solver Selection: ')
+SolverNum = input('1 -> Knitro; 2 -> Bonmin \n');
+if SolverNum == 1
+    SolverSelected = 'knitro';
+elseif SolverNum == 2
+    SolverSelected = 'bonmin';
+else
+    ME_SelectSolvers = MException('Initialization:SelectSolvers','Unknown Solver Nominated');
+    throw(ME_SelectSolvers)
+end
+disp(['Selected Solver: ', SolverSelected])
+disp('----------------------------------------------------');
+%   Solver Dependent Options
+disp('Solver Dependent Options:')
+disp('----------------------------------------------------');
+%       Define maximum nodes to be explored
+NumMaxNodesCases = input('Define Number of Max Nodes to be Explored: \n 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value\n');
+if NumMaxNodesCases == 1  %Worst-case Scenario
+    %-------------------------------------------
+    %   (Place Holder) Need to change the exponential base when have more
+    %   legs in 3D
+    %-------------------------------------------
+    NumMaxNodes = (2*2*(NumKnots+1))^(NumPhases);
+    disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
+elseif NumMaxNodesCases == 2 %User-specified
+    NumMaxNodes = input('Input number of maximum node to be explored: \n');
+elseif NumMaxNodesCases == 3 %Default Value
+    NumMaxNodes = 1e5;
+    disp(['Selected Default Case to Explore ', num2str(NumMaxNodes), ' Nodes'])
+else
+    ME_NumMaxNodes = MException('Initialization:NumMaxNodes','Unexpected Settings of Max Number of Nodes');
+    throw(ME_NumMaxNodes)
+end
+disp('====================================================');
+disp(' ')
+%======================================================================
 
 %=======================================================================
 % Define/Create Modeling Variables
 %=======================================================================
 %   Display some Info
-disp('Generating Decision Variables Vectors/Lists')
+disp('====================================================');
+disp('Generate Decision Variables Vectors/Lists:')
+disp('----------------------------------------------------');
 %-----------------------------------------------------------------------
 %   Continuous Variables
 %-----------------------------------------------------------------------
@@ -940,40 +1047,30 @@ lb_DecisionVars(find(VarNamesList == ['thetadot_',num2str(NumKnots)])) = thetado
 ub_DecisionVars(find(VarNamesList == ['thetadot_',num2str(NumKnots)])) = thetadot_End;
 %       Terminal Time
 %-----------------------------------------
-%       (Place Holder) May remove if there is not constraint on Terminal
-%       time
-%-----------------------------------------
-lb_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = Tend;
-ub_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = Tend;
+if Tend_flag == 1 %only constrain terminal time when user specifies that
+    lb_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = Tend;
+    ub_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = Tend;
+elseif Tend_flag == 2
+    disp('Terminal Time is Set as an Free Variables')
+end
 %-----------------------------------------------------------------------
 disp('Constraints and Objetive Function Constructed')
-disp('-------------------------------------------------')
+disp('===================================================')
+disp(' ')
 %=======================================================================
 
 %=======================================================================
 % Solve the Problem
 %=======================================================================
+%   Display some Info
+disp('===================================================')
+disp('Optimization Started')
 %   Assemble optimization problem definitions
 prob = struct('f', J, 'x', DecisionVars, 'g', vertcat(g{:}));
-%   Setup solver-dependent options
-%       Define maximum nodes to be explored
-NumMaxNodesCases = input('Define Number of Max Nodes to be Explored: 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value \n');
-if NumMaxNodesCases == 1  %Worst-case Scenario
-    NumMaxNodes = (2*sum(contains(varList,'C')))^(NumPhases);
-    disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
-elseif NumMaxNodesCases == 2 %User-specified
-    NumMaxNodes = input('Input number of maximum node to be explored\n');
-elseif NumMaxNodesCases == 3 %Default Value
-    NumMaxNodes = 1e5;
-    disp(['Selected Default Case to Explore ', num2str(NumMaxNodes), ' Nodes'])
-else
-    ME_NumMaxNodes = MException('Initialization:NumMaxNodes','Unexpected Settings of Max Number of Nodes');
-    throw(ME_NumMaxNodes)
-end
 
 %       Build Solver Option Structure
 if strcmp(SolverSelected, 'knitro')
-    solverOption = struct('mip_outinterval', 100,...     % (Log Output Frequency) Log Output per Nodes
+    solverOption = struct('mip_outinterval', 10,...     % (Log Output Frequency) Log Output per Nodes
                           'mip_outlevel',    2,...      % Print accumulated time for every node.
                           'mip_selectrule',  3,...      % The rule for selecting nodes 
                           'mip_branchrule',  1,...      % MIP Branching rule
@@ -992,10 +1089,15 @@ sol = solver('x0',  DecisionVarsInit, ...
              'ubx', ub_DecisionVars,...
              'lbg', lbg,...
              'ubg', ubg);
-
+disp('===================================================')
+disp(' ')
 %=======================================================================
 % Extract the Solution and Visualization
 %=======================================================================
+%   Display some info
+disp('===================================================');
+disp('Result Extraction:');
+disp('---------------------------------------------------');
 %-----------------------------------------------------------------------
 %   Recover the full solution
 %-----------------------------------------------------------------------
@@ -1065,6 +1167,7 @@ PFcenterY_result_world = y_result + sin(theta_result)*PFCenterX + cos(theta_resu
 PHcenterX_result_world = x_result + cos(theta_result)*PHCenterX - sin(theta_result)*PHCenterY;
 PHcenterY_result_world = y_result + sin(theta_result)*PHCenterX + cos(theta_result)*PHCenterY;
 
+disp('Result Variables Extracted')
 %---------------------------------------------------------------------
 % Backup Original Results
 %---------------------------------------------------------------------
@@ -1081,6 +1184,7 @@ FrontTorque_result_origin = FrontTorque_result;      HindTorque_result_origin = 
 NetTorque_origin   = NetTorque;
 PFcenterX_result_world_origin = PFcenterX_result_world;      PFcenterY_result_world_origin = PFcenterY_result_world;
 PHcenterX_result_world_origin = PHcenterX_result_world;      PHcenterY_result_world_origin = PHcenterY_result_world;
+disp('Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"');
 %-----------------------------------------------------------------------
 
 %-----------------------------------------------------------------------
@@ -1110,14 +1214,18 @@ PFy_result(find(TimeStepDiff <= 1e-5) + 1) = [];
 PHx_result(find(TimeStepDiff <= 1e-5) + 1) = [];
 PHy_result(find(TimeStepDiff <= 1e-5) + 1) = [];
 
-NetForceX(find(TimeStepDiff <= 1e-5) + 1) = [];
-NetForceY(find(TimeStepDiff <= 1e-5) + 1) = [];
+NetForceX(find(TimeStepDiff <= 1e-5)) = [];
+NetForceY(find(TimeStepDiff <= 1e-5)) = [];
 
-NetTorque(find(TimeStepDiff <= 1e-5) + 1) = [];
+NetTorque(find(TimeStepDiff <= 1e-5)) = [];
 
 NetForceX(end) = NetForceX(end - 1);
 NetForceY(end) = NetForceY(end - 1);
 NetTorque(end) = NetTorque(end - 1);
+
+disp('Removed Variables within Vanished Phases');
+disp('===================================================');
+disp(' ');
 %=======================================================================
 
 %=======================================================================

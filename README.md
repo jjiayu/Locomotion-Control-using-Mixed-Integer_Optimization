@@ -61,7 +61,12 @@
 
 2. Simscape Cannot Reproduce the Motion Generated from Multiphase Formulation
 
-    - Due to the vanishing phases (optimizer favors to vanshi some phases), ununiformly distributed phases, optimizer may output large timesteps and large forces. These forces will drive the dynamic simulation away. The solution is to add more knots in each phases (i.e. 20)
+    - Input Signal Extraction Program Problems --> Check if we get large froce/torque input from vanished phases;
+    - (Maybe Not the Case)Due to the vanishing phases (optimizer favors to vanshi some phases), ununiformly distributed phases, optimizer may output large timesteps and large forces. These forces will drive the dynamic simulation away. The solution is to add more knots in each phases (i.e. 20)
+
+3. Simscape Cannot Reach the Goal State (with Small Errors)
+
+    - Reasonable due to numerical error.
 
 ## Future Work
 

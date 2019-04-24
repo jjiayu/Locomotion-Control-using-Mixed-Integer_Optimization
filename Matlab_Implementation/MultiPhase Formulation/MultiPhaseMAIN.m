@@ -1171,10 +1171,10 @@ PHcenterX_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
 PHcenterY_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
 
 %Inputs, TimeStepDiff
-PFx_result(find(TimeStepDiff <= 1e-3)) = [];
-PFy_result(find(TimeStepDiff <= 1e-3)) = [];
-PHx_result(find(TimeStepDiff <= 1e-3)) = [];
-PHy_result(find(TimeStepDiff <= 1e-3)) = [];
+PFx_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+PFy_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+PHx_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+PHy_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 
 NetForceX(find(TimeStepDiff <= 1e-3)) = [];
 NetForceY(find(TimeStepDiff <= 1e-3)) = [];
