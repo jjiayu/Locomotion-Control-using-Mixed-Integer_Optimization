@@ -191,6 +191,7 @@ Mpos_y = 100;
 %-------------------------------------------------------------------------
 disp('Big-M for Foot/End-Effector in X-axis:')
 MvelxCase = input('Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: \n1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: \n');
+disp(' ')
 if MvelxCase == 1
     Mvelx = 5; %Default Mvel Value
 %    disp(['Selected Default Value for Big-M value for Foot/End-Effector Valocity in X-axis: ', num2str(Mvelx)]);
@@ -209,6 +210,7 @@ else
     ME_MvelxCase = MException('Initialization:MvelxCase','Unexpected Case for big-M for X-axis foot/End-effector Velocity');
     throw(ME_MvelxCase)
 end
+disp(' ')
 disp(['Configured Big-M Value for Foot/End-Effector Velocity for X-axis: ', num2str(Mvelx), ' m/s']);
 disp('----------------------------------------------------');
 %---------------------------------------------------------------------
@@ -216,6 +218,7 @@ disp('----------------------------------------------------');
 %---------------------------------------------------------------------
 disp('Big-M for Foot/End-Effector in Y-axis:')
 MvelyCase = input('Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: \n1 -> Default Value (5m/s); 2 -> User Specified: \n');
+disp(' ')
 if MvelyCase == 1
     Mvely = 5; %Default Mvely Value
 %    disp(['Selected Default Value for Big-M value for Foot/End-Effector Valocity in Y-axis: ', num2str(Mvely), ' m/s']);
@@ -225,7 +228,8 @@ elseif MvelyCase == 2
 else
     ME_MvelyCase = MException('Initialization:MvelyCase','Unexpected Case for big-M for Y-axis foot/End-effector Velocity');
     throw(ME_MvelyCase)
-end 
+end
+disp(' ')
 disp(['Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: ', num2str(Mvely), ' m/s']);
 disp('----------------------------------------------------');
 %----------------------------------------------------------------------
@@ -265,7 +269,7 @@ if NumMaxNodesCases == 1  %Worst-case Scenario
     %   (Place Holder) Need to change the exponential base when have more
     %   legs in 3D
     %-------------------------------------------
-    NumMaxNodes = (2*2*(NumKnots+1))^(NumPhases);
+    NumMaxNodes = (2*2)^(NumPhases);
     disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
 elseif NumMaxNodesCases == 2 %User-specified
     NumMaxNodes = input('Input number of maximum node to be explored: \n');

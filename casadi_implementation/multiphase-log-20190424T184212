@@ -1,0 +1,287 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Multi-Phase Formulation:
+Optimize over Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   24-Apr-2019 18:42:12
+
+----------------------------------------------------
+Correspondent Log File Name: multiphase-log-20190424T184212
+====================================================
+ 
+====================================================
+Environment Information: 
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Temporal Setup:
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+1
+Input Termianl Time (e.g. 1s): 
+1
+----------------------------------------------------
+Input Number of Phases: 
+4
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+10
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.025
+Number of Knots/Discretization of tau (from 0 to 1: 41) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Input Travel Distance along x-axis (m): 
+1
+====================================================
+ 
+====================================================
+Big-M Setup
+====================================================
+Big-M for Foot/End-Effector in X-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: 
+1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
+2
+ 
+Current Averate Task Speed in X-axis: 1
+Input the Scaling Factor of the Average Task Speed (in X-axis) (i.e. 1, 2, 3, etc...): 
+1
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 1 m/s
+----------------------------------------------------
+Big-M for Foot/End-Effector in Y-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: 
+1 -> Default Value (5m/s); 2 -> User Specified: 
+1
+ 
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: 5 m/s
+----------------------------------------------------
+====================================================
+====================================================
+Solver Setups:
+====================================================
+Solver Selection: 
+1 -> Knitro; 2 -> Bonmin 
+1
+Selected Solver: knitro
+----------------------------------------------------
+Solver Dependent Options:
+----------------------------------------------------
+Define Number of Max Nodes to be Explored: 
+ 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value
+1
+Selected Worst-case Scenarios to Explore 256 Nodes
+====================================================
+ 
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (13 variables).
+hessopt:                 1
+mip_branchrule:          1
+mip_maxnodes:            256
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                750
+    bounded below only:                             160
+    bounded above only:                               0
+    bounded below and above:                          8
+    fixed:                                           13
+    free:                                           569
+Number of binary variables:                           8
+Number of integer variables:                          0
+Number of constraints:                             1290
+    linear equalities:                                0
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      400
+    linear one-sided inequalities:                  726
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          164
+Number of nonzeros in Jacobian:                    4611
+Number of nonzeros in Hessian:                     1969
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 160 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+   iter =      1: Iinf =      2, FeasError =   5.715e-03
+   iter =      2: Iinf =      8, FeasError =   1.556e+00
+   iter =      3: Iinf =      8, FeasError =   4.634e-03
+   iter =      4: Iinf =      8, FeasError =   4.479e-03
+   iter =      5: Iinf =      8, FeasError =   4.429e-03
+   iter =      6: Iinf =      8, FeasError =   4.529e-03
+   iter =      7: Iinf =      8, FeasError =   4.582e-03
+   iter =      8: Iinf =      8, FeasError =   4.770e-03
+   iter =      9: Iinf =      8, FeasError =   4.406e-03
+   iter =     10: Iinf =      8, FeasError =   4.780e-03
+   iter =     11: Iinf =      2, FeasError =   4.390e-03
+   iter =     12: Iinf =      6, FeasError =   1.680e+00
+   iter =     13: Iinf =      8, FeasError =   8.825e-03
+   iter =     14: Iinf =      2, FeasError =   1.556e+00
+   iter =     15: Iinf =      8, FeasError =   4.501e-03
+   iter =     16: Iinf =      8, FeasError =   8.172e-03
+   iter =     17: Iinf =      8, FeasError =   4.356e-03
+   iter =     18: Iinf =      2, FeasError =   4.621e-03
+   iter =     19: Iinf =      8, FeasError =   4.481e-03
+   iter =     20: Iinf =      8, FeasError =   1.556e+00
+   iter =     21: Iinf =      8, FeasError =   5.739e-03
+   iter =     22: Iinf =      2, FeasError =   1.556e+00
+   iter =     23: Iinf =      2, FeasError =   5.730e-03
+   iter =     24: Iinf =      8, FeasError =   4.349e-03
+   iter =     25: Iinf =      8, FeasError =   4.495e-03
+   iter =     26: Iinf =      8, FeasError =   4.349e-03
+   iter =     27: Iinf =      8, FeasError =   4.467e-03
+   iter =     28: Iinf =      8, FeasError =   4.352e-03
+   iter =     29: Iinf =      8, FeasError =   4.552e-03
+   iter =     30: Iinf =      8, FeasError =   4.354e-03
+   iter =     31: Iinf =      8, FeasError =   4.602e-03
+   iter =     32: Iinf =      2, FeasError =   4.425e-03
+   iter =     33: Iinf =      8, FeasError =   4.464e-03
+   iter =     34: Iinf =      4, FeasError =   4.619e-03
+   iter =     35: Iinf =      8, FeasError =   4.484e-03
+   iter =     36: Iinf =      8, FeasError =   4.349e-03
+   iter =     37: Iinf =      8, FeasError =   4.475e-03
+   iter =     38: Iinf =      8, FeasError =   4.627e-03
+   iter =     39: Iinf =      2, FeasError =   4.430e-03
+   iter =     40: Iinf =      8, FeasError =   4.625e-03
+   iter =     41: Iinf =      8, FeasError =   4.511e-03
+   iter =     42: Iinf =      2, FeasError =   4.347e-03
+   iter =     43: Iinf =      8, FeasError =   4.511e-03
+   iter =     44: Iinf =      8, FeasError =   4.403e-03
+   iter =     45: Iinf =      8, FeasError =   4.467e-03
+   iter =     46: Iinf =      8, FeasError =   4.327e-03
+   iter =     47: Iinf =      8, FeasError =   4.465e-03
+   iter =     48: Iinf =      2, FeasError =   4.618e-03
+   iter =     49: Iinf =      8, FeasError =   4.375e-03
+   iter =     50: Iinf =      8, FeasError =   4.360e-03
+   iter =     51: Iinf =      8, FeasError =   4.757e-03
+   iter =     52: Iinf =      3, FeasError =   4.775e-03
+   iter =     53: Iinf =      8, FeasError =   4.527e-03
+   iter =     54: Iinf =      4, FeasError =   4.555e-03
+   iter =     55: Iinf =      8, FeasError =   5.000e-03
+   iter =     56: Iinf =      8, FeasError =   4.621e-03
+   iter =     57: Iinf =      8, FeasError =   4.469e-03
+   iter =     58: Iinf =      8, FeasError =   4.353e-03
+   iter =     59: Iinf =      8, FeasError =   4.374e-03
+   iter =     60: Iinf =      8, FeasError =   6.077e-03
+   iter =     61: Iinf =      2, FeasError =   4.530e-03
+   iter =     62: Iinf =      8, FeasError =   4.607e-03
+   iter =     63: Iinf =      8, FeasError =   4.554e-03
+   iter =     64: Iinf =      8, FeasError =   4.584e-03
+   iter =     65: Iinf =      2, FeasError =   4.351e-03
+   iter =     66: Iinf =      2, FeasError =   4.368e-03
+   iter =     67: Iinf =      8, FeasError =   4.463e-03
+   iter =     68: Iinf =      8, FeasError =   4.594e-03
+   iter =     69: Iinf =      8, FeasError =   4.466e-03
+   iter =     70: Iinf =      8, FeasError =   4.869e-03
+   iter =     71: Iinf =      8, FeasError =   4.467e-03
+   iter =     72: Iinf =      2, FeasError =   4.389e-03
+   iter =     73: Iinf =      3, FeasError =   1.410e+00
+   iter =     74: Iinf =      8, Infeasible
+   iter =     75: Iinf =      8, Infeasible
+   iter =     76: Iinf =      8, Infeasible
+   iter =     77: Iinf =      8, Infeasible
+   iter =     78: Iinf =      8, Infeasible
+   iter =     79: Iinf =      8, Infeasible
+   iter =     80: Iinf =      8, Infeasible
+   iter =     81: Iinf =      8, Infeasible
+   iter =     82: Iinf =      8, Infeasible
+   iter =     83: Iinf =      8, Infeasible
+   iter =     84: Iinf =      8, Infeasible
+   iter =     85: Iinf =      8, Infeasible
+   iter =     86: Iinf =      8, Infeasible
+   iter =     87: Iinf =      8, Infeasible
+   iter =     88: Iinf =      8, Infeasible
+   iter =     89: Iinf =      8, Infeasible
+   iter =     90: Iinf =      8, Infeasible
+   iter =     91: Iinf =      8, Infeasible
+   iter =     92: Iinf =      8, Infeasible
+   iter =     93: Iinf =      8, Infeasible
+   iter =     94: Iinf =      8, Infeasible
+   iter =     95: Iinf =      8, Infeasible
+   iter =     96: Iinf =      8, Infeasible
+   iter =     97: Iinf =      8, Infeasible
+   iter =     98: Iinf =      8, Infeasible
+   iter =     99: Iinf =      8, Infeasible
+   iter =    100: Iinf =      8, Infeasible
+   iter =    101: Iinf =      8, Infeasible
+Knitro heuristic terminating at iteration limit.
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       8    1.31e+05       1.31e+05                 137.507
+      10       5         INFEASIBLE  pr    1.31e+05                 139.065
+      20       5         INFEASIBLE  pr    1.32e+05                 146.714
+
+EXIT: All nodes have been explored. No integer feasible point found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   6.17551793963420e+06
+Final integrality gap (abs / rel)   =   Infinity
+# of nodes processed                =       27
+# of subproblems processed          =      128
+Total program time (secs)           =     151.73672 (   152.901 CPU time)
+Time spent in evaluations (secs)    =      10.01231
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg         3.16         3.06     54558
+   nlp_gf_jg         3.29         3.24     38496
+  nlp_hess_l         3.12         3.09     38476
+      solver          153          152         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+Removed Variables within Vanished Phases
+===================================================
+ 

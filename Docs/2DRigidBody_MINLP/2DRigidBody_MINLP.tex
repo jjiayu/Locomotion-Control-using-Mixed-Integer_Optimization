@@ -561,6 +561,26 @@ $\dot{\theta}_T = \dot{\theta}(T)$
 
 \vspace{3mm}
 
+\subsubsection{Switching Time}
+
+Introduce a variable $\tau \in [0,1]$, the upper bound of $\tau$ can be larger but better take it normalised.
+
+Cut $\tau$ into N phases.
+
+Switching Time Vector (Terminal Time of Each Phase)
+$Ts = [Ts_1, Ts_2, ... , Tend]$
+
+Integration Step for each Phase:
+
+$h = N*(Ts_{i+1}-Ts_{i})*\tau_h$
+
+Switching Time Follow the Constraint:
+
+(1) $0 \leq Ts_1 \leq Ts_2 ... \leq Tend$
+
+where $\tau_h = $ 1/Number of Knots
+
+
 \section{To-Do List}
 \begin{enumerate}
 	\item Add testing functions, checking by verifying matrix dimensionality.
