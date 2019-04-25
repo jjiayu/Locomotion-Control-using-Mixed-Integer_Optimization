@@ -1,0 +1,225 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Multi-Phase Formulation:
+Optimize over Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   25-Apr-2019 20:36:17
+
+----------------------------------------------------
+Correspondent Log File Name: multiphase-log-20190425T203617
+====================================================
+ 
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify Number of Stairs (Terrain Elevation Change) of the Terrain Model (0 -> Flat Terrain, 1,2..10 --> 1,2..10 Stairs; Maximum Number of Stairs can take, 10):
+0
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+1
+----------------------------------------------------
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Temporal Setup:
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+1
+Input Termianl Time (e.g. 1s): 
+1
+----------------------------------------------------
+Input Number of Phases: 
+4
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+10
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.025
+Number of Knots/Discretization of tau (from 0 to 1: 41) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Define Travel Distance along X-axis: 
+Flat Terrain --> Specify Any Distance along X-axis (m):
+0.5
+====================================================
+ 
+====================================================
+Big-M Setup
+====================================================
+Big-M for Foot/End-Effector in X-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: 
+1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
+2
+ 
+Current Averate Task Speed in X-axis: 0.5
+Input the Scaling Factor of the Average Task Speed (in X-axis) (i.e. 1, 2, 3, etc...): 
+4
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 2 m/s
+----------------------------------------------------
+Big-M for Foot/End-Effector in Y-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: 
+1 -> Default Value (5m/s); 2 -> User Specified: 
+2
+ 
+Input Big-M value for foot/end-effector Velocity for Y-axis (e.g. 1-5+ m/s): 
+NOTE: Can Write the Value as the Kinematics Bounding Box Height (BoundingBox_Height)/Desired Time to Travel the Entire Bounding Box Height
+2
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: 2 m/s
+----------------------------------------------------
+====================================================
+====================================================
+Solver Setups:
+====================================================
+Solver Selection: 
+1 -> Knitro; 2 -> Bonmin 
+1
+Selected Solver: knitro
+----------------------------------------------------
+Solver Dependent Options:
+----------------------------------------------------
+Define Number of Max Nodes to be Explored: 
+ 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value
+1
+Selected Worst-case Scenarios to Explore 256 Nodes
+====================================================
+ 
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (13 variables).
+hessopt:                 1
+mip_branchrule:          1
+mip_maxnodes:            256
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                750
+    bounded below only:                              80
+    bounded above only:                               0
+    bounded below and above:                          8
+    fixed:                                           13
+    free:                                           649
+Number of binary variables:                           8
+Number of integer variables:                          0
+Number of constraints:                             1370
+    linear equalities:                                0
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      400
+    linear one-sided inequalities:                  806
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          164
+Number of nonzeros in Jacobian:                    4691
+Number of nonzeros in Hessian:                     1969
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 80 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+   iter =      1: Iinf =      2, FeasError =   4.413e-01
+*  iter =      2: Iinf =      0, FeasError =   4.016e-10, Obj =   1.321e+05
+Knitro found integer feasible point in 2 heuristic iterations
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       8    1.00e+05       1.00e+05    1.32e+05       0.984
+      10       7         INFEASIBLE  pr    1.00e+05    1.32e+05       1.776
+*     20       9       0    1.27e+05  f    1.00e+05    1.27e+05       3.284
+      30      11         INFEASIBLE  pr    1.00e+05    1.27e+05       5.466
+*     38      11       0    1.26e+05  f    1.00e+05    1.26e+05       6.498
+      40       9       2    1.00e+05       1.00e+05    1.26e+05       6.860
+      50       7       1    1.07e+05       1.00e+05    1.26e+05       9.891
+      60      11         INFEASIBLE  pr    1.00e+05    1.26e+05      11.461
+      70      11            2.01e+05 pr    1.00e+05    1.26e+05      13.183
+      80       7       1    1.01e+05       1.00e+05    1.26e+05      15.227
+      90       3       1    1.03e+05       1.00e+05    1.26e+05      18.191
+*     92       3       0    4.79e+06  f    1.00e+05    1.26e+05      18.524
+     100       5       2    1.00e+05       1.00e+05    1.26e+05      20.082
+     110       9            2.00e+05 pr    1.00e+05    1.26e+05      21.334
+     120       9       2    1.00e+05       1.00e+05    1.26e+05      24.545
+     130       7       3    1.00e+05       1.00e+05    1.26e+05      27.732
+     140       9       1    1.02e+05       1.00e+05    1.26e+05      28.906
+     150       5       2    1.00e+05       1.00e+05    1.26e+05      32.409
+     160       5            1.27e+05 pr    1.00e+05    1.26e+05      34.690
+     170       1       4    1.00e+05       1.00e+05    1.26e+05      36.409
+     180       3         INFEASIBLE  pr    1.00e+05    1.26e+05      38.969
+     190       3       6    1.00e+05       1.00e+05    1.26e+05      40.390
+     200       7       6    1.00e+05       1.00e+05    1.26e+05      41.221
+     210      11       3    1.00e+05       1.00e+05    1.26e+05      42.326
+     220      11            1.32e+05 pr    1.00e+05    1.26e+05      47.437
+     230       7       2    1.00e+05       1.00e+05    1.26e+05      50.472
+     240       9         INFEASIBLE  pr    1.00e+05    1.26e+05      53.278
+     250       7       1    1.01e+05       1.00e+05    1.26e+05      55.338
+
+EXIT: Node limit reached. Integer feasible point found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   1.25672764634823e+05
+Final integrality gap (abs / rel)   =  2.52e+04 /   2.01e-01 (20.08%)
+# of nodes processed                =      256
+# of subproblems processed          =      262
+Total program time (secs)           =      56.96345 (    57.288 CPU time)
+Time spent in evaluations (secs)    =       3.65985
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg         1.18         1.16     21519
+   nlp_gf_jg         1.22         1.21     15047
+  nlp_hess_l         1.12         1.11     14594
+      solver         57.5         57.2         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+Removed Variables within Vanished Phases
+===================================================
+ 

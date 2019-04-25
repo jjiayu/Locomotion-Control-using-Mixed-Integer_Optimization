@@ -1,0 +1,48 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Multi-Phase Formulation:
+Optimize over Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   25-Apr-2019 20:45:51
+
+----------------------------------------------------
+Correspondent Log File Name: multiphase-log-20190425T204551
+====================================================
+ 
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify Number of Stairs (Terrain Elevation Change) of the Terrain Model (0 -> Flat Terrain, 1,2..10 --> 1,2..10 Stairs; Maximum Number of Stairs can take, 10):
+3
+Selected 3-Stair Terrain
+----------------------------------------------------
+Define the Slope of the Sigmoid Transition (e.g. 50-100):
+75
+----------------------------------------------------
+Define Length of Each Stair -> Use a Row Vector to Define (i.e. [1, 1.5, 0.5,...]), Can use repmat(StairLength,1,NumStairs) for Stairs with Uniform Length:
+[1,1,1]
+----------------------------------------------------
+Define Terrain Height Change of Each Stair -> Use a Row Vector to Define (i.e. [0.3, 0.2, -0.1,...]), Can use repmat(StairHeightChange,1,NumStairs) for Stairs with Same Height Change:
+[0.5,0.5,0.5]
+Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 119)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',119,0)">line 119</a>)
+Size Mismatch between Height Changing Places Vector and Level Change Vector
+
+opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',119,0)
+opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',119,0)
+opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',119,0)
+length(LevelChanges)
+
+ans =
+
+    10
+
+length(HeightChangingPlaces)
+
+ans =
+
+    10
+

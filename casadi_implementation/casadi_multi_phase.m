@@ -73,53 +73,76 @@ BoundingBox_Height = 0.4;
 %Environment Information
 %----------------------------------------------------------------------
 %   Display some info
+%----------------------------------------------------------------------
 disp('====================================================');
 disp('Setup Terrain Model: ')
 disp('----------------------------------------------------');
 %----------------------------------------------------------------------
-%   Define CasADi variables
-h_terrain = SX.sym('h_terrain',1); %SX variable denotes Terrain Height
-x_query   = SX.sym('x_query',  1); %SX variable denotes robot position
+%   Setup the Terrain Model
 %----------------------------------------------------------------------
-%   Select Terrain Type
-TerrainType = input('Select Terrain Type: 1 -> Flat Terrain; 2 -> Stair (Only one Stair) \n');
-if TerrainType == 1 %Selected Flat Terrain
-    h_terrain = 0;
-    TerrainModel = Function('TerrainModel',{x_query},{h_terrain});
-    %TerrainHeightFlat = 0; %Flat Terrain Height
-    %parameter set for visualization program
-    x_change = 0;
-    h_change = 0;
+%       Maximum Number of Stairs can handle
+MaxNumStairs = 10;
+%----------------------------------------------------------------------
+%       Build CasADi sigmoid function
+%           Define Symbolic Variables
+sigSlopeFactor = SX.sym('a',1);
+sigCenter      = SX.sym('c',1);
+sigLevelChange = SX.sym('m',1);
+sig_x          = SX.sym('sig_x',1);
+sig_y          = SX.sym('sig_y',1);
+%           Build CasADi Sigmoid Function
+sig_y = sigLevelChange/(1 + exp(-sigSlopeFactor*(sig_x-sigCenter)));
+Sigmoid = Function('Sigmoid', {sig_x, sigSlopeFactor, sigCenter, sigLevelChange}, {sig_y});
+%----------------------------------------------------------------------
+%       Define Terrain Model Parameters
+NumStairs = input(['Specify Number of Stairs (Terrain Elevation Change) of the Terrain Model (0 -> Flat Terrain, 1,2..10 --> 1,2..10 Stairs; Maximum Number of Stairs can take, ', num2str(MaxNumStairs),'):\n']);
+
+if NumStairs == 0 %Flat Terrain
     disp('Selected Flat Terrain');
-elseif TerrainType == 2 % Selected Uneven Terrain --> Stairs (Only One Stair)
-    disp('Selected Stairs Terrain (Only One Stair)');
+    SlopeFactor    = zeros(1,MaxNumStairs);
+    HeightChangingPlaces = zeros(1,MaxNumStairs);
+    LevelChanges   = zeros(1,MaxNumStairs);
+
+elseif NumStairs > 0 && NumStairs <= 10 % Stairs
+    disp(['Selected ', num2str(NumStairs), '-Stair Terrain']);
     disp('----------------------------------------------------');
-    %-------------------------------------------------
-    %   Define Terran Parameters
-    SlopeFactor = input('Use Sigmoid Function to Achieve Stair Terrain Model -> Define the Slope of the Transition (e.g. 500-1000):\n');
+    SlopeFactor = input('Define the Slope of the Sigmoid Transition (e.g. 50-100):\n');
     disp('----------------------------------------------------');
-    x_change_delta = input(['Define Terrain Elevation Change Location (X-axis) after Half Robot Body Length (',num2str(BodyLength/2),'); Robot Always start fronm x = 0 :\n']);
-    x_change = BodyLength/2 + x_change_delta;
-    disp(['Terrain Elevation Change Location is x = ',num2str(x_change)]);
+    HeightChangingPlaces = input('Define Length of Each Stair -> Use a Row Vector to Define (i.e. [1, 1.5, 0.5,...]), Can use repmat(StairLength,1,NumStairs) for Stairs with Uniform Length:\n');        
+    HeightChangingPlaces_vis = [HeightChangingPlaces, repmat(5 ,1, MaxNumStairs - NumStairs)]; %Expand for Visualization Program
     disp('----------------------------------------------------');
-    h_change = input('Input Terrain Elevation Change Value (Vertical Terrain Elevation Change Value) (e.g. +N means Up-Stair; -N means Down-Stair:)\n');
-    disp('----------------------------------------------------');
-    %-----------------------------------------------------------
-    %   Build CasAdi Model Function for Terrain Model
-    h_terrain = h_change/(1 + exp(-SlopeFactor.*(x_query-x_change)));
-    TerrainModel = Function('TerrainMode',{x_query},{h_terrain});
-else
-    ME_TerrainType = MException('Initialization:TerrainType','Unknown Terrain Type Indicator');
-    throw(ME_TerrainType)
+    LevelChanges = input('Define Terrain Height Change of Each Stair -> Use a Row Vector to Define (i.e. [0.3, 0.2, -0.1,...]), Can use repmat(StairHeightChange,1,NumStairs) for Stairs with Same Height Change:\n');
+    LevelChanges_vis = [LevelChanges, zeros(1, MaxNumStairs - NumStairs)]; %Expand for Visualization Program
+    %   Check Vector Length with respect to Number of Stairs
+    if length(HeightChangingPlaces) ~= NumStairs || length(LevelChanges) ~= NumStairs
+        ME_VectorSize = MException('Initialization:VectorSize', 'Size Mismatch between Height Changing Places Vector and Level Change Vector');
+        throw(ME_VectorSize)
+    end
+    
+else %Unknown Scenario
+    ME_NumStairs = MException('Initialization:TerrainType',['Number of Stairs Exceeds the Limit (', num2str(MaxNumStairs),') or Negative']);
+    throw(ME_NumStairs)
 end
+
+%       Build Terrain Model Function
+%           Define CasADi symbolic variables
+%h_terrain = SX.sym('h_terrain',1);
+h_terrain = 0;
+x_query   = SX.sym('x_query',  1);
+for i = 1:NumStairs
+    h_terrain = h_terrain + Sigmoid(x_query, SlopeFactor, sum(HeightChangingPlaces(1:i)), LevelChanges(i));
+end
+%           Build Terrain Model CasAdi Function
+TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
+disp('----------------------------------------------------');
 %-----------------------------------------------------------------------
 %   Plot Terrain Model
-PlotTerrainFlag = input('Plot the Terrain Model? 1 -> yes; 2 -> no\n');
+PlotTerrainFlag = input('Plot the Terrain Model? 1 -> Yes; 2 -> No\n');
 if PlotTerrainFlag == 1 %Yes, Plot the terrain model    
-    terrainx = linspace(-3,3,1e4);
+    terrainx = linspace(-2, sum(HeightChangingPlaces)+3, 1e4);
     terrainy = full(TerrainModel(terrainx));
     plot(terrainx,terrainy)
-    ylim([-5,5])
+    ylim([min(terrainy)-1,max(terrainy)+1])
     disp('----------------------------------------------------');
 end
 %-----------------------------------------------------------------------
@@ -131,7 +154,7 @@ disp(['Friction Cone: ', num2str(miu)]);
 disp('====================================================');
 disp(' ')
 %======================================================================
-
+%%
 %======================================================================
 % Time Step and Discretization Parameter Settings
 %----------------------------------------------------------------------
@@ -196,12 +219,13 @@ thetadot_Init  = 0;
 %----------------------------------------------------------------------
 %       Terminal X-axis distance
 disp('Define Travel Distance along X-axis: ')
-if TerrainType == 1 %Flat Terrain
+if NumStairs == 0 %Flat Terrain
     x_End = input('Flat Terrain --> Specify Any Distance along X-axis (m):\n');
-elseif TerrainType == 2 %Stairs
-    x_End = input(['Stairs --> Specify Any Distance larger than the Terrain Elevation Change Point with Half of the Body Length More, at Least (', num2str(x_change + BodyLength/2), ':\n']);
-else
-    throw(ME_TerrainType)
+elseif NumStairs > 0 && NumStairs <= 10 % Stairs
+    x_End = input(['Stairs --> Specify any Location or Specify Any Distance larger than the Final Terrain Elevation Change Point with Half of the Body Length More, at Least (', num2str(sum(HeightChangingPlaces) + BodyLength/2), ':\n']);
+else %Unknown Scenario
+    ME_NumStairs = MException('Initialization:TerrainType',['Number of Stairs Exceeds the Limit (', num2str(MaxNumStairs),') or Negative']);
+    throw(ME_NumStairs)
 end
 %x_End        = input('Input Travel Distance along x-axis (m): \n' );
 y_End        = 1/2*BodyHeight + DefaultLegLength + full(TerrainModel(x_End));
@@ -838,14 +862,7 @@ for k = 1:tauSeriesLength
         %                        Change to complementarity form when
         %                        introducing uneven terrain
         %----------------------------------------------------
-%         if TerrainType == 1 %flat terrain
-%         %   Front Leg
-%             lb_DecisionVars(find(VarNamesList == ['PFy_',num2str(k-1)])) = 0;
-%         %   Hind Leg
-%             lb_DecisionVars(find(VarNamesList == ['PHy_',num2str(k-1)])) = 0;
-%             
-%         elseif TerrainType == 2 %Stairs
-%       %   Front Leg
+        %   Front Leg
         EqTemp = PFy(k) - TerrainModel(PFx(k));
         g   = {g{:}, EqTemp};
         lbg = [lbg;  0];
@@ -855,9 +872,6 @@ for k = 1:tauSeriesLength
         g   = {g{:}, EqTemp};
         lbg = [lbg;  0];
         ubg = [ubg;  inf];
-%         else
-%             throw(ME_TerrainType)
-%         end
 
         %----------------------------------------------------
         %   (*) Foot/End-Effector Velocity (for both x-axis and y-axis)
