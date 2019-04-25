@@ -1,0 +1,1489 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Multi-Phase Formulation:
+Optimize over Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   25-Apr-2019 17:35:14
+
+----------------------------------------------------
+Correspondent Log File Name: multiphase-log-20190425T173514
+====================================================
+ 
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Select Terrain Type: 1 -> Flat Terrain; 2 -> Stair (Only one Stair) 
+2
+Selected Stairs Terrain (Only One Stair)
+----------------------------------------------------
+Use Sigmoid Function to Achieve Stair Terrain Model -> Define the Slope of the Transition (e.g. 500-1000):
+75
+----------------------------------------------------
+Define Terrain Elevation Change Location (X-axis) after Half Robot Body Length (0.3); Robot Always start fronm x = 0 :
+0.2
+Terrain Elevation Change Location is x = 0.5
+----------------------------------------------------
+Input Terrain Elevation Change Value (Vertical Terrain Elevation Change Value) (e.g. +N means Up-Stair; -N means Down-Stair:)
+0.25
+----------------------------------------------------
+Plot the Terrain Model? 1 -> yes; 2 -> no
+1
+----------------------------------------------------
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Temporal Setup:
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+2
+Terminal Time (Tend) is Set as Free Variables
+----------------------------------------------------
+Input Number of Phases: 
+6
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+10
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.016667
+Number of Knots/Discretization of tau (from 0 to 1: 61) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Define Travel Distance along X-axis: 
+Stairs --> Specify Any Distance larger than the Terrain Elevation Change Point with Half of the Body Length More, at Least (0.8:
+1
+====================================================
+ 
+====================================================
+Big-M Setup
+====================================================
+Big-M for Foot/End-Effector in X-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: 
+1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
+2
+ 
+[Warning: Terminal Time is Undefined -> Unable to Compute Average Task Speed in X-axis] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 260)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',260,0)">line 260</a>)] 
+Manually Specify a Big-M value for Foot/End-Effector Velocity in X-axis: 
+4
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 4 m/s
+----------------------------------------------------
+Big-M for Foot/End-Effector in Y-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: 
+1 -> Default Value (5m/s); 2 -> User Specified: 
+2
+ 
+Input Big-M value for foot/end-effector Velocity for Y-axis (e.g. 1-5+ m/s): 
+NOTE: Can Write the Value as the Kinematics Bounding Box Height (BoundingBox_Height)/Desired Time to Travel the Entire Bounding Box Height
+4
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: 4 m/s
+----------------------------------------------------
+====================================================
+====================================================
+Solver Setups:
+====================================================
+Solver Selection: 
+1 -> Knitro; 2 -> Bonmin 
+1
+Selected Solver: knitro
+----------------------------------------------------
+Solver Dependent Options:
+----------------------------------------------------
+Define Number of Max Nodes to be Explored: 
+ 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value
+1
+Selected Worst-case Scenarios to Explore 4096 Nodes
+====================================================
+ 
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Terminal Time is Set as an Free Variables
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (12 variables).
+hessopt:                 1
+mip_branchrule:          1
+mip_maxnodes:            4096
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                               1116
+    bounded below only:                             120
+    bounded above only:                               0
+    bounded below and above:                         12
+    fixed:                                           12
+    free:                                           972
+Number of binary variables:                          12
+Number of integer variables:                          0
+Number of constraints:                             2052
+    linear equalities:                                0
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      600
+    linear one-sided inequalities:                  968
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:          240
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          244
+Number of nonzeros in Jacobian:                    7315
+Number of nonzeros in Hessian:                     3149
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 120 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =      1: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =      2: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =      3: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =      4: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =      5: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =      6: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =      7: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =      8: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =      9: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     10: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     11: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     12: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     13: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     14: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     15: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     16: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     17: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     18: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     19: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     20: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     21: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     22: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     23: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     24: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     25: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     26: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     27: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     28: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     29: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     30: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     31: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     32: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     33: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     34: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     35: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     36: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     37: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     38: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     39: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     40: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:55 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     41: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     42: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     43: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     44: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     45: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     46: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     47: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     48: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     49: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     50: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     51: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     52: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     53: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     54: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     55: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     56: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     57: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     58: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     59: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     60: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     61: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     62: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     63: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     64: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     65: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     66: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     67: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     68: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     69: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     70: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     71: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     72: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     73: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     74: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     75: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     76: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     77: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     78: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     79: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     80: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     81: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     82: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     83: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     84: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     85: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     86: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     87: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     88: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     89: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     90: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     91: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     92: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     93: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     94: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     95: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     96: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     97: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     98: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =     99: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =    100: Iinf =     12, Infeasible
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:35:56 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3134 (row 862, col 636).") [.../casadi/core/oracle_function.cpp:249]
+   iter =    101: Iinf =     12, Infeasible
+Knitro heuristic terminating at iteration limit.
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0      12    1.04e+05       1.04e+05                   1.651
+      10       9       3    1.04e+05       1.04e+05                   2.613
+      20       9         INFEASIBLE  pr    1.04e+05                   6.827
+      30      13         INFEASIBLE  pr    1.04e+05                   9.668
+      40      13      10    1.04e+05       1.04e+05                  13.586
+      50      23         INFEASIBLE  pr    1.04e+05                  14.531
+      60      27       2    1.04e+05       1.04e+05                  16.819
+      70      25       3    1.04e+05       1.04e+05                  20.535
+      80      27         INFEASIBLE  pr    1.04e+05                  25.804
+      90      29       4    1.04e+05       1.04e+05                  29.500
+*     94      33       0    2.47e+05  f    1.04e+05    2.47e+05      32.781
+     100      31         INFEASIBLE  pr    1.04e+05    2.47e+05      53.192
+     110      31       2    1.04e+05       1.04e+05    2.47e+05      58.946
+     120      33         INFEASIBLE  pr    1.04e+05    2.47e+05      64.770
+     130      33       3    1.04e+05       1.04e+05    2.47e+05      71.462
+     140      35         INFEASIBLE  pr    1.04e+05    2.47e+05      76.531
+     150      33            2.47e+05 pr    1.04e+05    2.47e+05      81.548
+     160      27       2    1.04e+05       1.04e+05    2.47e+05      90.059
+     170      25         INFEASIBLE  pr    1.04e+05    2.47e+05      99.567
+     180      27       3    1.05e+05       1.04e+05    2.47e+05     101.566
+     190      33       5    1.04e+05       1.04e+05    2.47e+05     104.435
+     200      37       5    1.04e+05       1.04e+05    2.47e+05     106.420
+CasADi - 2019-04-25 17:37:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1909 (row 759, col 389).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:37:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1909 (row 759, col 389).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:37:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1909 (row 759, col 389).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:37:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1909 (row 759, col 389).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:37:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1909 (row 759, col 389).") [.../casadi/core/oracle_function.cpp:249]
+     210      39         FAILED -502       1.04e+05    2.47e+05     117.504
+     220      41         INFEASIBLE  pr    1.04e+05    2.47e+05     120.073
+     230      43         INFEASIBLE  pr    1.04e+05    2.47e+05     124.307
+     240      41         INFEASIBLE  pr    1.04e+05    2.47e+05     130.750
+     250      43       1    2.26e+05       1.04e+05    2.47e+05     136.757
+     260      43         INFEASIBLE  pr    1.04e+05    2.47e+05     145.082
+     270      41       3    1.04e+05       1.04e+05    2.47e+05     150.305
+     280      45         INFEASIBLE  pr    1.04e+05    2.47e+05     153.161
+     290      43       2    1.04e+05       1.04e+05    2.47e+05     158.531
+CasADi - 2019-04-25 17:38:37 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1958 (row 997, col 396).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:38:37 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1958 (row 997, col 396).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:38:37 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1958 (row 997, col 396).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:38:37 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1958 (row 997, col 396).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:38:37 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1958 (row 997, col 396).") [.../casadi/core/oracle_function.cpp:249]
+     300      39       5    1.04e+05       1.04e+05    2.47e+05     163.169
+*    310      43       0    1.97e+05  f    1.04e+05    1.97e+05     173.788
+     320      43         INFEASIBLE  pr    1.04e+05    1.97e+05     186.847
+     330      43            3.39e+05 pr    1.04e+05    1.97e+05     192.381
+     340      39         INFEASIBLE  pr    1.04e+05    1.97e+05     198.173
+     350      45       3    1.04e+05       1.04e+05    1.97e+05     201.502
+     360      45       7    1.04e+05       1.04e+05    1.97e+05     209.251
+     370      49         INFEASIBLE  pr    1.04e+05    1.97e+05     217.271
+     380      47       6    1.04e+05       1.04e+05    1.97e+05     221.304
+     390      53         INFEASIBLE  pr    1.04e+05    1.97e+05     227.651
+     400      55         INFEASIBLE  pr    1.04e+05    1.97e+05     242.440
+     410      57         INFEASIBLE  pr    1.04e+05    1.97e+05     249.099
+     420      55         INFEASIBLE  pr    1.04e+05    1.97e+05     258.920
+CasADi - 2019-04-25 17:40:20 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3099 (row 692, col 631).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:20 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3099 (row 692, col 631).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:20 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3099 (row 692, col 631).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:20 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3099 (row 692, col 631).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:20 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3099 (row 692, col 631).") [.../casadi/core/oracle_function.cpp:249]
+     430      55         INFEASIBLE  pr    1.04e+05    1.97e+05     266.373
+     440      51         INFEASIBLE  pr    1.04e+05    1.97e+05     274.419
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+     450      51         FAILED -502       1.04e+05    1.97e+05     274.892
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+     460      53         FAILED -502       1.04e+05    1.97e+05     274.915
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+     470      51         FAILED -502       1.04e+05    1.97e+05     274.937
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:40:29 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+     480      53       4    1.04e+05       1.04e+05    1.97e+05     276.768
+     490      55       2    1.04e+05       1.04e+05    1.97e+05     283.258
+     500      53         INFEASIBLE  pr    1.04e+05    1.97e+05     289.463
+     510      47         INFEASIBLE  pr    1.04e+05    1.97e+05     300.630
+     520      49         INFEASIBLE  pr    1.04e+05    1.97e+05     316.171
+     530      47         INFEASIBLE  pr    1.04e+05    1.97e+05     322.982
+     540      49         INFEASIBLE  pr    1.04e+05    1.97e+05     326.739
+     550      47         INFEASIBLE  pr    1.04e+05    1.97e+05     331.183
+     560      47         INFEASIBLE  pr    1.04e+05    1.97e+05     343.017
+     570      43       3    1.04e+05       1.04e+05    1.97e+05     349.536
+CasADi - 2019-04-25 17:41:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+     580      45         FAILED -502       1.04e+05    1.97e+05     358.329
+CasADi - 2019-04-25 17:41:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:41:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:41:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:41:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+     590      45         INFEASIBLE  pr    1.04e+05    1.97e+05     364.487
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+     600      45         FAILED -502       1.04e+05    1.97e+05     369.617
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+     610      43         FAILED -502       1.04e+05    1.97e+05     369.640
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+     620      43         FAILED -502       1.04e+05    1.97e+05     369.663
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:04 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2959 (row 12, col 611).") [.../casadi/core/oracle_function.cpp:249]
+     630      43       2    1.04e+05       1.04e+05    1.97e+05     369.889
+     640      41       2    1.04e+05       1.04e+05    1.97e+05     373.729
+     650      41         INFEASIBLE  pr    1.04e+05    1.97e+05     379.781
+     660      39       2    1.04e+05       1.04e+05    1.97e+05     384.110
+     670      37       6    1.04e+05       1.04e+05    1.97e+05     392.509
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+     680      39         FAILED -502       1.04e+05    1.97e+05     400.158
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+     690      39         FAILED -502       1.04e+05    1.97e+05     400.182
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+     700      39         FAILED -502       1.04e+05    1.97e+05     400.206
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:34 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1965 (row 1031, col 397).") [.../casadi/core/oracle_function.cpp:249]
+     710      37       3    1.04e+05       1.04e+05    1.97e+05     400.397
+     720      37         INFEASIBLE  pr    1.04e+05    1.97e+05     404.435
+CasADi - 2019-04-25 17:42:41 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3127 (row 828, col 635).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:41 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3127 (row 828, col 635).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:41 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3127 (row 828, col 635).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:41 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3127 (row 828, col 635).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:42:41 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3127 (row 828, col 635).") [.../casadi/core/oracle_function.cpp:249]
+     730      37         INFEASIBLE        1.04e+05    1.97e+05     429.073
+     740      35         INFEASIBLE  pr    1.04e+05    1.97e+05     433.916
+     750      39       3    1.04e+05       1.04e+05    1.97e+05     436.899
+     760      39       2    1.04e+05       1.04e+05    1.97e+05     441.010
+     770      37         INFEASIBLE  pr    1.04e+05    1.97e+05     446.308
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:22 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3106 (row 726, col 632).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+     780      37         FAILED -502       1.04e+05    1.97e+05     449.030
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+     790      37         FAILED -502       1.04e+05    1.97e+05     449.054
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+     800      37         FAILED -502       1.04e+05    1.97e+05     449.078
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:23 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+     810      33         FAILED -502       1.04e+05    1.97e+05     450.418
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+     820      35         FAILED -502       1.04e+05    1.97e+05     450.441
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+     830      35         FAILED -502       1.04e+05    1.97e+05     450.465
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:25 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1902 (row 725, col 388).") [.../casadi/core/oracle_function.cpp:249]
+     840      33         FAILED -502       1.04e+05    1.97e+05     450.487
+     850      35         INFEASIBLE  pr    1.04e+05    1.97e+05     456.678
+     860      35       2    1.04e+05       1.04e+05    1.97e+05     459.881
+     870      33            2.36e+05 pr    1.04e+05    1.97e+05     469.902
+     880      31         INFEASIBLE  pr    1.04e+05    1.97e+05     477.001
+     890      31         INFEASIBLE  pr    1.04e+05    1.97e+05     480.794
+CasADi - 2019-04-25 17:43:57 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1986 (row 1133, col 400).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:57 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1986 (row 1133, col 400).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:57 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1986 (row 1133, col 400).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:57 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1986 (row 1133, col 400).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:43:57 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1986 (row 1133, col 400).") [.../casadi/core/oracle_function.cpp:249]
+     900      31            2.26e+05 pr    1.04e+05    1.97e+05     483.686
+     910      33       2    1.04e+05       1.04e+05    1.97e+05     486.701
+     920      27       3    1.04e+05       1.04e+05    1.97e+05     496.708
+     930      25         INFEASIBLE  pr    1.04e+05    1.97e+05     501.452
+     940      27       3    1.04e+05       1.04e+05    1.97e+05     504.801
+     950      33       2    1.04e+05       1.04e+05    1.97e+05     506.622
+     960      31         INFEASIBLE  pr    1.04e+05    1.97e+05     512.244
+     970      29       2    1.04e+05       1.04e+05    1.97e+05     517.765
+     980      27         INFEASIBLE  pr    1.04e+05    1.97e+05     524.669
+     990      35            2.52e+05 pr    1.04e+05    1.97e+05     528.152
+    1000      41       2    1.04e+05       1.04e+05    1.97e+05     529.372
+    1010      43       2    1.04e+05       1.04e+05    1.97e+05     533.124
+    1020      45         INFEASIBLE  pr    1.04e+05    1.97e+05     537.475
+    1030      47         INFEASIBLE  pr    1.04e+05    1.97e+05     546.428
+*   1034      47       0    1.90e+05  f    1.04e+05    1.90e+05     556.403
+    1040      45         INFEASIBLE  pr    1.04e+05    1.90e+05     569.206
+    1050      43            2.52e+05 pr    1.04e+05    1.90e+05     587.602
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1060      41         FAILED -502       1.04e+05    1.90e+05     591.654
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1070      43         FAILED -502       1.04e+05    1.90e+05     591.677
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1080      43         FAILED -502       1.04e+05    1.90e+05     591.700
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1090      41         FAILED -502       1.04e+05    1.90e+05     591.723
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1100      41         FAILED -502       1.04e+05    1.90e+05     591.746
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1110      43         FAILED -502       1.04e+05    1.90e+05     591.769
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1120      41         FAILED -502       1.04e+05    1.90e+05     591.792
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1130      43         FAILED -502       1.04e+05    1.90e+05     591.816
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1140      41         FAILED -502       1.04e+05    1.90e+05     591.839
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1150      41         FAILED -502       1.04e+05    1.90e+05     591.864
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1160      41         FAILED -502       1.04e+05    1.90e+05     591.888
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1170      39         FAILED -502       1.04e+05    1.90e+05     591.912
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1180      41         FAILED -502       1.04e+05    1.90e+05     591.935
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:45:46 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1190      39       2    1.04e+05       1.04e+05    1.90e+05     593.601
+    1200      41       2    1.04e+05       1.04e+05    1.90e+05     606.141
+    1210      43       2    1.04e+05       1.04e+05    1.90e+05     611.269
+CasADi - 2019-04-25 17:46:17 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:17 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:17 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:17 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:17 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 3113 (row 760, col 633).") [.../casadi/core/oracle_function.cpp:249]
+    1220      37       2    1.04e+05       1.04e+05    1.90e+05     623.854
+    1230      43            2.04e+05 pr    1.04e+05    1.90e+05     630.760
+    1240      41       4    1.04e+05       1.04e+05    1.90e+05     636.382
+    1250      43       2    1.04e+05       1.04e+05    1.90e+05     642.738
+    1260      43         INFEASIBLE  pr    1.04e+05    1.90e+05     645.372
+    1270      41         INFEASIBLE  pr    1.04e+05    1.90e+05     650.393
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+    1280      41         FAILED -502       1.04e+05    1.90e+05     656.935
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:46:51 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2154 (row 1949, col 424).") [.../casadi/core/oracle_function.cpp:249]
+    1290      43       3    1.04e+05       1.04e+05    1.90e+05     657.899
+    1300      47            2.27e+05 pr    1.04e+05    1.90e+05     663.591
+    1310      43       2    1.04e+05       1.04e+05    1.90e+05     668.763
+    1320      39         INFEASIBLE        1.04e+05    1.90e+05     682.412
+    1330      31         INFEASIBLE  pr    1.04e+05    1.90e+05     692.309
+    1340      35       3    1.04e+05       1.04e+05    1.90e+05     697.052
+    1350      35       2    1.04e+05       1.04e+05    1.90e+05     716.072
+    1360      37       3    1.04e+05       1.04e+05    1.90e+05     722.702
+    1370      41       4    1.04e+05       1.04e+05    1.90e+05     736.512
+    1380      39         INFEASIBLE  pr    1.04e+05    1.90e+05     746.516
+    1390      41         INFEASIBLE  pr    1.04e+05    1.90e+05     749.497
+    1400      37         INFEASIBLE  pr    1.04e+05    1.90e+05     759.436
+    1410      35            5.27e+05 pr    1.04e+05    1.90e+05     772.592
+CasADi - 2019-04-25 17:48:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1839 (row 419, col 379).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:48:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1839 (row 419, col 379).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:48:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1839 (row 419, col 379).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:48:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1839 (row 419, col 379).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:48:52 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1839 (row 419, col 379).") [.../casadi/core/oracle_function.cpp:249]
+    1420      33         INFEASIBLE  pr    1.04e+05    1.90e+05     784.995
+    1430      27       2    1.04e+05       1.04e+05    1.90e+05     795.823
+CasADi - 2019-04-25 17:49:11 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2161 (row 1983, col 425).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:49:11 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2161 (row 1983, col 425).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:49:11 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2161 (row 1983, col 425).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:49:11 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2161 (row 1983, col 425).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:49:11 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 2161 (row 1983, col 425).") [.../casadi/core/oracle_function.cpp:249]
+    1440      27       9    1.04e+05       1.04e+05    1.90e+05     799.626
+    1450      33       2    1.04e+05       1.04e+05    1.90e+05     801.158
+    1460      39         INFEASIBLE  pr    1.04e+05    1.90e+05     803.765
+    1470      41       6    1.03e+05       1.04e+05    1.90e+05     805.565
+CasADi - 2019-04-25 17:49:21 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1951 (row 963, col 395).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:49:21 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1951 (row 963, col 395).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:49:21 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1951 (row 963, col 395).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:49:21 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1951 (row 963, col 395).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:49:21 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1951 (row 963, col 395).") [.../casadi/core/oracle_function.cpp:249]
+    1480      45       4    1.04e+05       1.04e+05    1.90e+05     807.338
+    1490      51       6    1.04e+05       1.04e+05    1.90e+05     810.933
+    1500      61       2    1.04e+05       1.04e+05    1.90e+05     811.548
+    1510      63       5    1.04e+05       1.04e+05    1.90e+05     814.083
+    1520      69            2.81e+05 pr    1.04e+05    1.90e+05     816.139
+    1530      71       5    1.04e+05       1.04e+05    1.90e+05     818.122
+    1540      77       4    1.04e+05       1.04e+05    1.90e+05     819.956
+    1550      79       5    1.04e+05       1.04e+05    1.90e+05     822.478
+    1560      81         INFEASIBLE  pr    1.04e+05    1.90e+05     826.197
+    1570      79       4    1.04e+05       1.04e+05    1.90e+05     829.637
+    1580      83         INFEASIBLE  pr    1.04e+05    1.90e+05     832.062
+    1590      81            3.45e+05 pr    1.04e+05    1.90e+05     835.686
+    1600      81       6    1.04e+05       1.04e+05    1.90e+05     837.767
+    1610      87       5    1.04e+05       1.04e+05    1.90e+05     838.979
+    1620      93       4    1.04e+05       1.04e+05    1.90e+05     840.443
+    1630     103       5    1.01e+05       1.04e+05    1.90e+05     841.067
+    1640     109       3    1.04e+05       1.04e+05    1.90e+05     842.671
+    1650     111       3    1.05e+05       1.04e+05    1.90e+05     844.933
+    1660     117       2    1.04e+05       1.04e+05    1.90e+05     846.932
+    1670     119       3    1.05e+05       1.04e+05    1.90e+05     850.897
+    1680     125         INFEASIBLE  pr    1.04e+05    1.90e+05     852.556
+    1690     125         INFEASIBLE  pr    1.04e+05    1.90e+05     858.568
+    1700     125       4    1.05e+05       1.04e+05    1.90e+05     860.878
+    1710     129         INFEASIBLE  pr    1.04e+05    1.90e+05     863.436
+    1720     129       6    1.03e+05       1.04e+05    1.90e+05     866.656
+    1730     135       2    1.02e+05       1.04e+05    1.90e+05     871.526
+    1740     137       2    1.04e+05       1.04e+05    1.90e+05     873.787
+    1750     135            2.47e+05 pr    1.04e+05    1.90e+05     877.391
+    1760     131         INFEASIBLE  pr    1.04e+05    1.90e+05     881.362
+    1770     133            2.91e+05 pr    1.04e+05    1.90e+05     884.086
+    1780     125       3    1.05e+05       1.04e+05    1.90e+05     888.603
+    1790     123       4    1.10e+05       1.04e+05    1.90e+05     892.128
+    1800     127            4.38e+05 pr    1.04e+05    1.90e+05     896.792
+    1810     127       3    1.04e+05       1.04e+05    1.90e+05     899.283
+    1820     131       2    1.05e+05       1.04e+05    1.90e+05     901.092
+    1830     131            3.02e+05 pr    1.04e+05    1.90e+05     904.291
+    1840     131       2    1.04e+05       1.04e+05    1.90e+05     906.567
+    1850     131       3    1.04e+05       1.04e+05    1.90e+05     909.424
+    1860     135         INFEASIBLE  pr    1.04e+05    1.90e+05     912.135
+    1870     133         INFEASIBLE  pr    1.04e+05    1.90e+05     915.526
+    1880     129       3    1.04e+05       1.04e+05    1.90e+05     919.653
+    1890     127       2    1.07e+05       1.04e+05    1.90e+05     923.334
+    1900     125         INFEASIBLE  pr    1.04e+05    1.90e+05     930.286
+    1910     127       3    1.05e+05       1.04e+05    1.90e+05     933.167
+    1920     123         INFEASIBLE  pr    1.04e+05    1.90e+05     941.023
+    1930     123         INFEASIBLE  pr    1.04e+05    1.90e+05     944.804
+    1940     121       5    1.04e+05       1.04e+05    1.90e+05     947.288
+    1950     127       3    1.04e+05       1.04e+05    1.90e+05     948.877
+    1960     129       3    1.04e+05       1.04e+05    1.90e+05     951.331
+    1970     125         INFEASIBLE  pr    1.04e+05    1.90e+05     954.954
+    1980     123         INFEASIBLE  pr    1.04e+05    1.90e+05     958.746
+    1990     119       2    1.04e+05       1.04e+05    1.90e+05     963.004
+    2000     119         INFEASIBLE  pr    1.04e+05    1.90e+05     967.805
+    2010     119       2    1.05e+05       1.04e+05    1.90e+05     970.054
+    2020     125       3    1.04e+05       1.04e+05    1.90e+05     971.659
+    2030     131       3    1.04e+05       1.04e+05    1.90e+05     974.306
+    2040     133       5    1.04e+05       1.04e+05    1.90e+05     977.115
+    2050     139       4    1.04e+05       1.04e+05    1.90e+05     978.548
+    2060     141       2    1.04e+05       1.04e+05    1.90e+05     980.423
+    2070     137         INFEASIBLE  pr    1.04e+05    1.90e+05     987.818
+    2080     143         INFEASIBLE  pr    1.04e+05    1.90e+05     989.069
+    2090     145            2.83e+05 pr    1.04e+05    1.90e+05     990.995
+    2100     145         INFEASIBLE  pr    1.04e+05    1.90e+05     994.296
+    2110     143       2    1.06e+05       1.04e+05    1.90e+05     997.255
+    2120     149       3    1.04e+05       1.04e+05    1.90e+05     999.183
+    2130     153         INFEASIBLE  pr    1.04e+05    1.90e+05    1002.238
+    2140     151       2    1.10e+05       1.04e+05    1.90e+05    1004.809
+    2150     149         INFEASIBLE  pr    1.04e+05    1.90e+05    1007.730
+    2160     145       4    1.04e+05       1.04e+05    1.90e+05    1011.754
+    2170     145       2    1.04e+05       1.04e+05    1.90e+05    1015.484
+    2180     145         INFEASIBLE  pr    1.04e+05    1.90e+05    1018.968
+    2190     143         INFEASIBLE  pr    1.04e+05    1.90e+05    1024.055
+    2200     141       3    1.04e+05       1.04e+05    1.90e+05    1027.071
+    2210     143         INFEASIBLE  pr    1.04e+05    1.90e+05    1031.066
+    2220     139       2    1.05e+05       1.04e+05    1.90e+05    1035.130
+    2230     135       2    1.04e+05       1.04e+05    1.90e+05    1038.796
+    2240     137       3    1.04e+05       1.04e+05    1.90e+05    1041.376
+    2250     139       2    1.04e+05       1.04e+05    1.90e+05    1044.157
+    2260     135         INFEASIBLE  pr    1.04e+05    1.90e+05    1049.016
+    2270     129         INFEASIBLE  pr    1.04e+05    1.90e+05    1055.895
+    2280     125       2    1.02e+05       1.04e+05    1.90e+05    1064.492
+    2290     123       2    9.78e+04       1.04e+05    1.90e+05    1068.015
+    2300     125       3    1.04e+05       1.04e+05    1.90e+05    1070.577
+    2310     127            2.88e+05 pr    1.04e+05    1.90e+05    1074.926
+    2320     123         INFEASIBLE  pr    1.04e+05    1.90e+05    1078.368
+    2330     115       2    1.05e+05       1.04e+05    1.90e+05    1083.072
+    2340     113         INFEASIBLE  pr    1.04e+05    1.90e+05    1088.165
+    2350     111       4    1.04e+05       1.04e+05    1.90e+05    1091.031
+    2360     109       3    1.05e+05       1.04e+05    1.90e+05    1094.867
+    2370     113         INFEASIBLE  pr    1.04e+05    1.90e+05    1098.590
+    2380     111         INFEASIBLE  pr    1.04e+05    1.90e+05    1102.252
+    2390     111       2    1.04e+05       1.04e+05    1.90e+05    1105.240
+    2400     109            6.82e+05 pr    1.04e+05    1.90e+05    1109.591
+    2410     103       4    1.04e+05       1.04e+05    1.90e+05    1113.934
+    2420     105         INFEASIBLE  pr    1.04e+05    1.90e+05    1116.639
+    2430     103         INFEASIBLE  pr    1.04e+05    1.90e+05    1123.194
+    2440     101            2.66e+05 pr    1.04e+05    1.90e+05    1134.129
+    2450      99         INFEASIBLE  pr    1.04e+05    1.90e+05    1139.937
+    2460      97       3    1.05e+05       1.04e+05    1.90e+05    1143.060
+    2470      95         INFEASIBLE  pr    1.04e+05    1.90e+05    1146.810
+    2480      97       3    1.05e+05       1.04e+05    1.90e+05    1148.640
+    2490     101       3    1.05e+05       1.04e+05    1.90e+05    1150.436
+    2500     101            4.31e+05 pr    1.04e+05    1.90e+05    1153.907
+    2510     101         INFEASIBLE  pr    1.04e+05    1.90e+05    1157.309
+    2520     103       2    1.05e+05       1.04e+05    1.90e+05    1159.205
+    2530     103       2    1.05e+05       1.04e+05    1.90e+05    1162.680
+    2540     105       4    1.04e+05       1.04e+05    1.90e+05    1165.369
+    2550     111            2.80e+05 pr    1.04e+05    1.90e+05    1167.089
+    2560     113       2    1.04e+05       1.04e+05    1.90e+05    1169.216
+    2570     115       4    1.05e+05       1.04e+05    1.90e+05    1172.130
+    2580     117       3    1.04e+05       1.04e+05    1.90e+05    1177.632
+    2590     115       3    1.05e+05       1.04e+05    1.90e+05    1182.551
+    2600     117       2    1.04e+05       1.04e+05    1.90e+05    1185.896
+    2610     123       3    1.05e+05       1.04e+05    1.90e+05    1187.618
+    2620     121       3    1.08e+05       1.04e+05    1.90e+05    1192.606
+    2630     119       3    1.05e+05       1.04e+05    1.90e+05    1196.252
+    2640     121       2    1.05e+05       1.04e+05    1.90e+05    1199.306
+    2650     123       2    1.04e+05       1.04e+05    1.90e+05    1202.244
+    2660     125       4    1.13e+05       1.04e+05    1.90e+05    1204.262
+    2670     123       3    1.06e+05       1.04e+05    1.90e+05    1207.212
+    2680     121       3    1.06e+05       1.04e+05    1.90e+05    1211.950
+    2690     127       2    1.10e+05       1.04e+05    1.90e+05    1217.882
+    2700     127            2.78e+05 pr    1.04e+05    1.90e+05    1221.800
+    2710     121         INFEASIBLE  pr    1.04e+05    1.90e+05    1225.940
+    2720     117         INFEASIBLE  pr    1.04e+05    1.90e+05    1229.812
+CasADi - 2019-04-25 17:56:26 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:56:26 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:56:26 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:56:26 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:56:26 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1944 (row 929, col 394).") [.../casadi/core/oracle_function.cpp:249]
+    2730     115         INFEASIBLE  pr    1.04e+05    1.90e+05    1232.539
+    2740     111       3    1.05e+05       1.04e+05    1.90e+05    1236.317
+    2750     111       2    1.05e+05       1.04e+05    1.90e+05    1240.041
+    2760     111         INFEASIBLE  pr    1.04e+05    1.90e+05    1243.566
+    2770     111       3    1.05e+05       1.04e+05    1.90e+05    1246.424
+    2780     107         INFEASIBLE  pr    1.04e+05    1.90e+05    1249.976
+    2790     103         INFEASIBLE  pr    1.04e+05    1.90e+05    1253.686
+    2800     101         INFEASIBLE  pr    1.04e+05    1.90e+05    1258.832
+    2810      97       2    1.05e+05       1.04e+05    1.90e+05    1262.368
+    2820      95         INFEASIBLE  pr    1.04e+05    1.90e+05    1270.608
+    2830      95       4    1.05e+05       1.04e+05    1.90e+05    1273.337
+    2840      95       3    1.05e+05       1.04e+05    1.90e+05    1276.865
+    2850      93         INFEASIBLE  pr    1.04e+05    1.90e+05    1280.359
+    2860      91       3    1.05e+05       1.04e+05    1.90e+05    1283.199
+    2870      97       5    1.07e+05       1.04e+05    1.90e+05    1284.566
+    2880      97         INFEASIBLE  pr    1.04e+05    1.90e+05    1288.575
+    2890      97       3    1.05e+05       1.04e+05    1.90e+05    1290.780
+    2900      97       2    1.04e+05       1.04e+05    1.90e+05    1295.096
+    2910      91         INFEASIBLE  pr    1.04e+05    1.90e+05    1301.423
+CasADi - 2019-04-25 17:57:38 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1909 (row 759, col 389).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:57:38 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1909 (row 759, col 389).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:57:38 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1909 (row 759, col 389).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:57:38 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1909 (row 759, col 389).") [.../casadi/core/oracle_function.cpp:249]
+CasADi - 2019-04-25 17:57:38 WARNING("solver:nlp_gf_jg failed: NaN detected for output jac_g_x, at nonzero index 1909 (row 759, col 389).") [.../casadi/core/oracle_function.cpp:249]
+    2920      89            2.93e+05 pr    1.04e+05    1.90e+05    1304.540
+    2930      89         INFEASIBLE  pr    1.04e+05    1.90e+05    1307.548
+    2940      85       2    1.08e+05       1.04e+05    1.90e+05    1311.393
+    2950      81            8.81e+05 pr    1.04e+05    1.90e+05    1315.856
+    2960      75         INFEASIBLE  pr    1.04e+05    1.90e+05    1319.978
+    2970      73         INFEASIBLE  pr    1.04e+05    1.90e+05    1323.515
+    2980      69            2.86e+05 pr    1.04e+05    1.90e+05    1327.652
+    2990      67       3    1.05e+05       1.04e+05    1.90e+05    1330.280
+    3000      71         INFEASIBLE  pr    1.04e+05    1.90e+05    1332.744
+    3010      67       4    1.06e+05       1.04e+05    1.90e+05    1336.224
+    3020      65       3    1.06e+05       1.04e+05    1.90e+05    1338.991
+    3030      61         INFEASIBLE  pr    1.04e+05    1.90e+05    1343.505
+    3040      63         INFEASIBLE  pr    1.04e+05    1.90e+05    1345.795
+    3050      59       2    1.09e+05       1.04e+05    1.90e+05    1350.830
+    3060      57       4    1.05e+05       1.04e+05    1.90e+05    1355.964
+    3070      57         INFEASIBLE  pr    1.04e+05    1.90e+05    1359.776
+    3080      55         INFEASIBLE  pr    1.04e+05    1.90e+05    1362.906
+    3090      55            3.50e+05 pr    1.04e+05    1.90e+05    1367.224
+    3100      51       3    1.05e+05       1.04e+05    1.90e+05    1369.595
+    3110      51         INFEASIBLE  pr    1.04e+05    1.90e+05    1372.615
+    3120      45       3    1.07e+05       1.04e+05    1.90e+05    1375.756
+    3130      43       3    1.07e+05       1.04e+05    1.90e+05    1380.297
+    3140      45       3    1.06e+05       1.04e+05    1.90e+05    1382.896
+    3150      49         INFEASIBLE  pr    1.04e+05    1.90e+05    1384.864
+    3160      45       2    1.05e+05       1.04e+05    1.90e+05    1388.776
+    3170      47       3    1.06e+05       1.04e+05    1.90e+05    1391.265
+    3180      45       2    1.08e+05       1.04e+05    1.90e+05    1393.947
+    3190      49         INFEASIBLE  pr    1.04e+05    1.90e+05    1397.766
+    3200      43         INFEASIBLE  pr    1.04e+05    1.90e+05    1403.229
+    3210      43       2    1.07e+05       1.04e+05    1.90e+05    1407.381
+    3220      49         INFEASIBLE  pr    1.04e+05    1.90e+05    1410.414
+    3230      47            2.59e+05 pr    1.04e+05    1.90e+05    1413.463
+    3240      41         INFEASIBLE  pr    1.04e+05    1.90e+05    1419.932
+    3250      39            7.24e+05 pr    1.04e+05    1.90e+05    1423.024
+    3260      33       3    1.06e+05       1.04e+05    1.90e+05    1427.050
+    3270      33         INFEASIBLE  pr    1.04e+05    1.90e+05    1430.785
+    3280      25            2.68e+05 pr    1.04e+05    1.90e+05    1436.622
+    3290      27       2    1.06e+05       1.04e+05    1.90e+05    1439.917
+    3300      27       2    1.12e+05       1.04e+05    1.90e+05    1442.381
+    3310      25         INFEASIBLE  pr    1.04e+05    1.90e+05    1446.162
+    3320      19         INFEASIBLE  pr    1.04e+05    1.90e+05    1450.678
+    3330      19         INFEASIBLE  pr    1.04e+05    1.90e+05    1454.047
+    3340      19         INFEASIBLE  pr    1.04e+05    1.90e+05    1457.375
+    3350      13         INFEASIBLE  pr    1.04e+05    1.90e+05    1462.028
+    3360       7         INFEASIBLE  pr    1.04e+05    1.90e+05    1468.985
+
+EXIT: All nodes have been explored. Integer feasible point found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   1.89857941032078e+05
+Final integrality gap (abs / rel)   =  8.63e+04 /   4.55e-01 (45.47%)
+# of nodes processed                =     3367
+# of subproblems processed          =     3472
+Total program time (secs)           =    1473.11011 (  1482.410 CPU time)
+Time spent in evaluations (secs)    =     127.46998
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg         43.2         42.2    413969
+   nlp_gf_jg         38.8         38.5    255194
+  nlp_hess_l         41.5         41.2    251340
+      solver     1.48e+03     1.47e+03         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+Removed Variables within Vanished Phases
+===================================================
+ 

@@ -1,0 +1,626 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Multi-Phase Formulation:
+Optimize over Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   25-Apr-2019 18:49:31
+
+----------------------------------------------------
+Correspondent Log File Name: multiphase-log-20190425T184931
+====================================================
+ 
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Select Terrain Type: 1 -> Flat Terrain; 2 -> Stair (Only one Stair) 
+1
+Selected Flat Terrain
+Plot the Terrain Model? 1 -> yes; 2 -> no
+1
+----------------------------------------------------
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Temporal Setup:
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+2
+Terminal Time (Tend) is Set as Free Variables
+----------------------------------------------------
+Input Number of Phases: 
+8
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+10
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.0125
+Number of Knots/Discretization of tau (from 0 to 1: 81) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Define Travel Distance along X-axis: 
+Flat Terrain --> Specify Any Distance along X-axis (m):
+2
+====================================================
+ 
+====================================================
+Big-M Setup
+====================================================
+Big-M for Foot/End-Effector in X-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: 
+1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
+2
+ 
+[Warning: Terminal Time is Undefined -> Unable to Compute Average Task Speed in X-axis] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 263)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',263,0)">line 263</a>)] 
+Manually Specify a Big-M value for Foot/End-Effector Velocity in X-axis: 
+4
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 4 m/s
+----------------------------------------------------
+Big-M for Foot/End-Effector in Y-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: 
+1 -> Default Value (5m/s); 2 -> User Specified: 
+2
+ 
+Input Big-M value for foot/end-effector Velocity for Y-axis (e.g. 1-5+ m/s): 
+NOTE: Can Write the Value as the Kinematics Bounding Box Height (BoundingBox_Height)/Desired Time to Travel the Entire Bounding Box Height
+4
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: 4 m/s
+----------------------------------------------------
+====================================================
+====================================================
+Solver Setups:
+====================================================
+Solver Selection: 
+1 -> Knitro; 2 -> Bonmin 
+1
+Selected Solver: knitro
+----------------------------------------------------
+Solver Dependent Options:
+----------------------------------------------------
+Define Number of Max Nodes to be Explored: 
+ 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value
+1
+Selected Worst-case Scenarios to Explore 65536 Nodes
+====================================================
+ 
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Terminal Time is Set as an Free Variables
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (12 variables).
+hessopt:                 1
+mip_branchrule:          1
+mip_maxnodes:            65536
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                               1482
+    bounded below only:                             160
+    bounded above only:                               0
+    bounded below and above:                         16
+    fixed:                                           12
+    free:                                          1294
+Number of binary variables:                          16
+Number of integer variables:                          0
+Number of constraints:                             2734
+    linear equalities:                                0
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      800
+    linear one-sided inequalities:                 1610
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          324
+Number of nonzeros in Jacobian:                    9459
+Number of nonzeros in Hessian:                     4089
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 160 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+   iter =      1: Iinf =      2, FeasError =   4.413e-01
+   iter =      2: Iinf =      2, FeasError =   9.195e-04
+   iter =      3: Iinf =      2, FeasError =   4.413e-01
+   iter =      4: Iinf =      2, FeasError =   8.079e-04
+   iter =      5: Iinf =     16, FeasError =   4.413e-01
+   iter =      6: Iinf =     16, FeasError =   9.387e-04
+   iter =      7: Iinf =     16, FeasError =   4.413e-01
+   iter =      8: Iinf =      2, FeasError =   3.659e-04
+   iter =      9: Iinf =     16, FeasError =   4.781e-01
+   iter =     10: Iinf =     16, FeasError =   1.960e-04
+   iter =     11: Iinf =     16, FeasError =   4.413e-01
+   iter =     12: Iinf =      2, FeasError =   1.042e-04
+   iter =     13: Iinf =     16, FeasError =   4.413e-01
+   iter =     15: Iinf =      2, FeasError =   4.413e-01
+   iter =     17: Iinf =      2, FeasError =   4.413e-01
+   iter =     19: Iinf =     16, FeasError =   4.415e-01
+   iter =     21: Iinf =     16, FeasError =   4.415e-01
+   iter =     23: Iinf =     16, FeasError =   4.415e-01
+   iter =     25: Iinf =      2, FeasError =   4.415e-01
+   iter =     27: Iinf =      3, Infeasible
+   iter =     29: Iinf =     16, FeasError =   4.413e-01
+   iter =     30: Iinf =      2, FeasError =   4.039e-04
+   iter =     31: Iinf =     16, FeasError =   4.413e-01
+   iter =     32: Iinf =      2, FeasError =   1.133e-04
+   iter =     33: Iinf =     16, FeasError =   4.413e-01
+   iter =     34: Iinf =      2, FeasError =   1.133e-04
+   iter =     35: Iinf =     16, FeasError =   4.413e-01
+   iter =     36: Iinf =      2, FeasError =   1.133e-04
+   iter =     37: Iinf =     16, FeasError =   4.413e-01
+   iter =     38: Iinf =      2, FeasError =   1.133e-04
+   iter =     39: Iinf =      2, FeasError =   4.413e-01
+   iter =     40: Iinf =      3, FeasError =   1.660e-04
+   iter =     41: Iinf =      2, FeasError =   4.413e-01
+   iter =     42: Iinf =      3, FeasError =   3.607e-02
+   iter =     43: Iinf =     16, FeasError =   4.415e-01
+   iter =     44: Iinf =      3, FeasError =   3.607e-02
+   iter =     45: Iinf =      2, FeasError =   4.414e-01
+   iter =     46: Iinf =      8, FeasError =   3.631e-02
+   iter =     47: Iinf =      2, FeasError =   4.414e-01
+   iter =     48: Iinf =     16, FeasError =   3.607e-02
+   iter =     49: Iinf =      2, FeasError =   4.415e-01
+   iter =     50: Iinf =     16, FeasError =   3.607e-02
+   iter =     51: Iinf =     16, FeasError =   4.415e-01
+   iter =     52: Iinf =     11, FeasError =   3.607e-02
+   iter =     53: Iinf =     16, FeasError =   4.415e-01
+   iter =     54: Iinf =     11, FeasError =   3.607e-02
+   iter =     55: Iinf =      2, FeasError =   4.415e-01
+   iter =     57: Iinf =     16, FeasError =   4.416e-01
+   iter =     59: Iinf =     16, FeasError =   4.414e-01
+   iter =     60: Iinf =      2, FeasError =   1.054e-04
+   iter =     61: Iinf =     16, FeasError =   4.417e-01
+   iter =     63: Iinf =     16, FeasError =   8.828e-01
+   iter =     65: Iinf =      2, FeasError =   4.413e-01
+   iter =     67: Iinf =     16, FeasError =   4.419e-01
+   iter =     69: Iinf =      2, FeasError =   4.413e-01
+   iter =     71: Iinf =      4, FeasError =   8.827e-01
+   iter =     73: Iinf =     16, FeasError =   4.414e-01
+   iter =     74: Iinf =      3, FeasError =   3.642e-02
+   iter =     75: Iinf =      2, FeasError =   4.413e-01
+   iter =     76: Iinf =      3, FeasError =   3.642e-02
+   iter =     77: Iinf =     16, FeasError =   4.413e-01
+   iter =     78: Iinf =     16, FeasError =   3.646e-02
+   iter =     79: Iinf =     16, FeasError =   4.413e-01
+   iter =     80: Iinf =      3, FeasError =   4.782e-01
+   iter =     81: Iinf =      2, FeasError =   4.413e-01
+   iter =     82: Iinf =      3, FeasError =   4.782e-01
+   iter =     83: Iinf =     16, FeasError =   4.413e-01
+   iter =     85: Iinf =      2, FeasError =   4.413e-01
+   iter =     86: Iinf =      2, FeasError =   2.204e-04
+   iter =     87: Iinf =     16, FeasError =   4.413e-01
+   iter =     88: Iinf =      2, FeasError =   2.204e-04
+   iter =     89: Iinf =     16, FeasError =   4.413e-01
+   iter =     90: Iinf =     16, FeasError =   3.914e-04
+   iter =     91: Iinf =      2, FeasError =   4.413e-01
+   iter =     92: Iinf =     16, FeasError =   3.914e-04
+   iter =     93: Iinf =     16, FeasError =   4.413e-01
+   iter =     94: Iinf =     16, FeasError =   4.981e-04
+   iter =     95: Iinf =     16, FeasError =   4.413e-01
+   iter =     97: Iinf =     16, FeasError =   4.413e-01
+   iter =     99: Iinf =     16, FeasError =   8.825e-01
+   iter =    101: Iinf =      5, FeasError =   4.413e-01
+Knitro heuristic terminating at iteration limit.
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0      16    1.45e+05       1.45e+05                 181.819
+      10       9       7    1.45e+05       1.45e+05                 182.524
+      20      13       2    1.45e+05       1.45e+05                 185.139
+      30      17       2    1.45e+05       1.45e+05                 187.976
+*     33      18       0    4.38e+05  f    1.45e+05    4.38e+05     192.609
+      40      15         INFEASIBLE  pr    1.45e+05    4.38e+05     199.226
+      50      13         INFEASIBLE  pr    1.45e+05    4.38e+05     204.351
+      60      15       1    2.90e+05       1.45e+05    4.38e+05     209.220
+*     62      15       0    4.37e+05  f    1.45e+05    4.37e+05     210.134
+      70      17         INFEASIBLE  pr    1.45e+05    4.37e+05     221.201
+      80      19       1    2.95e+05       1.45e+05    4.37e+05     225.156
+*     86      19       0    4.36e+05  f    1.45e+05    4.36e+05     229.083
+*     87      18       0    3.80e+05  f    1.45e+05    3.80e+05     230.385
+      90      17            3.48e+07 pr    1.45e+05    3.80e+05     232.530
+     100      17         INFEASIBLE  pr    1.45e+05    3.80e+05     241.338
+*    107      16       0    3.46e+05  f    1.45e+05    3.46e+05     244.960
+     110      15         INFEASIBLE  pr    1.45e+05    3.46e+05     246.347
+     120      13       7    1.45e+05       1.45e+05    3.46e+05     252.542
+     130      17       2    1.45e+05       1.45e+05    3.46e+05     255.005
+     140      23       1    2.90e+05       1.45e+05    3.46e+05     259.114
+     150      23       1    3.05e+05       1.45e+05    3.46e+05     264.712
+     160      19       3    1.45e+05       1.45e+05    3.46e+05     270.957
+     170      23       3    1.45e+05       1.45e+05    3.46e+05     274.075
+     180      27         INFEASIBLE  pr    1.45e+05    3.46e+05     279.243
+*    185      28       0    3.42e+05  f    1.45e+05    3.42e+05     282.829
+     190      27            3.43e+05 pr    1.45e+05    3.42e+05     287.257
+     200      23         INFEASIBLE  pr    1.45e+05    3.42e+05     296.836
+     210      25         INFEASIBLE  pr    1.45e+05    3.42e+05     300.669
+     220      27       3    1.45e+05       1.45e+05    3.42e+05     304.445
+     230      31         INFEASIBLE  pr    1.45e+05    3.42e+05     307.852
+     240      33         INFEASIBLE  pr    1.45e+05    3.42e+05     311.242
+     250      29       2    1.45e+05       1.45e+05    3.42e+05     316.447
+     260      27       4    1.45e+05       1.45e+05    3.42e+05     322.046
+     270      29       2    1.45e+05       1.45e+05    3.42e+05     326.069
+     280      27         INFEASIBLE  pr    1.45e+05    3.42e+05     331.379
+     290      25         INFEASIBLE  pr    1.45e+05    3.42e+05     336.224
+     300      27       2    1.45e+05       1.45e+05    3.42e+05     340.920
+     310      31         INFEASIBLE  pr    1.45e+05    3.42e+05     349.931
+     320      27         INFEASIBLE  pr    1.45e+05    3.42e+05     367.027
+     330      21         INFEASIBLE  pr    1.45e+05    3.42e+05     378.286
+     340      21         INFEASIBLE  pr    1.45e+05    3.42e+05     386.011
+     350      15       2    1.45e+05       1.45e+05    3.42e+05     391.480
+     360      13       3    1.45e+05       1.45e+05    3.42e+05     399.448
+     370      13       5    1.45e+05       1.45e+05    3.42e+05     409.757
+     380      17       3    1.45e+05       1.45e+05    3.42e+05     412.815
+     390      19         INFEASIBLE  pr    1.45e+05    3.42e+05     417.716
+     400      15       1    3.05e+05       1.45e+05    3.42e+05     423.291
+     410      19            3.46e+05 pr    1.45e+05    3.42e+05     428.449
+     420      19         INFEASIBLE  pr    1.45e+05    3.42e+05     433.740
+     430      23       2    1.45e+05       1.45e+05    3.42e+05     438.355
+     440      27       1    3.11e+05       1.45e+05    3.42e+05     444.315
+     450      29       2    1.45e+05       1.45e+05    3.42e+05     449.340
+     460      29         INFEASIBLE  pr    1.45e+05    3.42e+05     457.984
+     470      33       5    1.96e+05       1.45e+05    3.42e+05     466.601
+     480      39       2    1.45e+05       1.45e+05    3.42e+05     469.979
+     490      43       7    1.45e+05       1.45e+05    3.42e+05     472.853
+     500      47       2    1.45e+05       1.45e+05    3.42e+05     475.935
+     510      51       2    1.45e+05       1.45e+05    3.42e+05     478.235
+     520      51         INFEASIBLE  pr    1.45e+05    3.42e+05     483.826
+     530      57       6    1.45e+05       1.45e+05    3.42e+05     485.455
+     540      61       4    1.45e+05       1.45e+05    3.42e+05     488.703
+     550      63       2    1.45e+05       1.45e+05    3.42e+05     494.441
+     560      61         INFEASIBLE  pr    1.45e+05    3.42e+05     501.699
+     570      63       2    1.45e+05       1.45e+05    3.42e+05     504.631
+     580      63       2    1.45e+05       1.45e+05    3.42e+05     509.726
+     590      61       3    1.45e+05       1.45e+05    3.42e+05     514.228
+     600      65         INFEASIBLE  pr    1.45e+05    3.42e+05     519.024
+     610      67            4.38e+05 pr    1.45e+05    3.42e+05     525.750
+     620      73       1    3.05e+05       1.45e+05    3.42e+05     527.407
+     630      71       2    1.45e+05       1.45e+05    3.42e+05     533.154
+     640      71       3    1.45e+05       1.45e+05    3.42e+05     537.356
+*    648      73       0    3.32e+05  f    1.45e+05    3.32e+05     547.386
+*    649      72       0    3.14e+05  f    1.45e+05    3.14e+05     549.018
+     650      71         INFEASIBLE  pr    1.45e+05    3.14e+05     549.890
+     660      73       3    1.45e+05       1.45e+05    3.14e+05     552.802
+     670      77       4    1.45e+05       1.45e+05    3.14e+05     555.910
+     680      81       1    3.05e+05       1.45e+05    3.14e+05     559.006
+*    687      82       0    3.14e+05  f    1.45e+05    3.14e+05     572.414
+     690      81       1    3.05e+05       1.45e+05    3.14e+05     573.513
+*    698      81       0    3.12e+05  f    1.45e+05    3.12e+05     580.574
+     700      79         INFEASIBLE  pr    1.45e+05    3.12e+05     586.826
+     710      87         INFEASIBLE  pr    1.45e+05    3.12e+05     588.413
+     720      87       2    1.45e+05       1.45e+05    3.12e+05     593.180
+     730      87       4    1.45e+05       1.45e+05    3.12e+05     597.770
+     740      89         INFEASIBLE  pr    1.45e+05    3.12e+05     602.331
+     750      85         INFEASIBLE  pr    1.45e+05    3.12e+05     615.050
+     760      83       1    3.05e+05       1.45e+05    3.12e+05     619.643
+     770      85       3    1.45e+05       1.45e+05    3.12e+05     623.234
+     780      89       3    1.45e+05       1.45e+05    3.12e+05     626.034
+*    788      93       0    2.84e+05  f    1.45e+05    2.84e+05     632.961
+     790      91       3    1.45e+05       1.45e+05    2.84e+05     633.752
+     800      91         INFEASIBLE  pr    1.45e+05    2.84e+05     639.012
+     810      89            3.05e+05 pr    1.45e+05    2.84e+05     646.979
+     820      95       4    1.45e+05       1.45e+05    2.84e+05     648.460
+     830     101       2    1.45e+05       1.45e+05    2.84e+05     651.000
+     840     101         INFEASIBLE  pr    1.45e+05    2.84e+05     659.883
+     850      99       2    1.45e+05       1.45e+05    2.84e+05     664.634
+     860      99       2    1.45e+05       1.45e+05    2.84e+05     670.060
+     870     103       4    1.45e+05       1.45e+05    2.84e+05     673.467
+     880     105       2    1.45e+05       1.45e+05    2.84e+05     678.127
+     890     109         INFEASIBLE  pr    1.45e+05    2.84e+05     683.085
+     900     111         INFEASIBLE  pr    1.45e+05    2.84e+05     686.775
+     910     111       2    1.45e+05       1.45e+05    2.84e+05     692.291
+     920     113            3.05e+05 pr    1.45e+05    2.84e+05     696.927
+     930     109         INFEASIBLE  pr    1.45e+05    2.84e+05     703.235
+     940     113       4    1.45e+05       1.45e+05    2.84e+05     705.166
+     950     117         INFEASIBLE  pr    1.45e+05    2.84e+05     710.264
+     960     117       3    1.45e+05       1.45e+05    2.84e+05     716.057
+     970     121         INFEASIBLE  pr    1.45e+05    2.84e+05     719.924
+     980     115         INFEASIBLE  pr    1.45e+05    2.84e+05     726.576
+     990     117            3.05e+05 pr    1.45e+05    2.84e+05     730.181
+    1000     111       2    1.45e+05       1.45e+05    2.84e+05     735.472
+    1010     109       2    1.45e+05       1.45e+05    2.84e+05     742.469
+    1020     103         INFEASIBLE  pr    1.45e+05    2.84e+05     751.237
+    1030     101         INFEASIBLE  pr    1.45e+05    2.84e+05     755.130
+    1040     105      11    1.45e+05       1.45e+05    2.84e+05     757.202
+    1050     113       2    1.45e+05       1.45e+05    2.84e+05     763.784
+    1060     111         INFEASIBLE  pr    1.45e+05    2.84e+05     771.622
+    1070     115            3.05e+05 pr    1.45e+05    2.84e+05     776.567
+    1080     117         INFEASIBLE  pr    1.45e+05    2.84e+05     782.366
+    1090     115       7    1.45e+05       1.45e+05    2.84e+05     792.416
+    1100     121      10    1.45e+05       1.45e+05    2.84e+05     794.068
+    1110     131            3.05e+05 pr    1.45e+05    2.84e+05     795.396
+    1120     133       6    1.45e+05       1.45e+05    2.84e+05     797.802
+    1130     139       4    1.45e+05       1.45e+05    2.84e+05     801.108
+    1140     145       5    1.45e+05       1.45e+05    2.84e+05     803.302
+    1150     151       6    1.45e+05       1.45e+05    2.84e+05     806.036
+    1160     153         INFEASIBLE  pr    1.45e+05    2.84e+05     810.333
+    1170     161            2.90e+05 pr    1.45e+05    2.84e+05     812.337
+    1180     163       3    1.45e+05       1.45e+05    2.84e+05     815.899
+    1190     159         INFEASIBLE  pr    1.45e+05    2.84e+05     820.812
+    1200     161            2.95e+05 pr    1.45e+05    2.84e+05     827.766
+    1210     159       2    1.45e+05       1.45e+05    2.84e+05     834.638
+    1220     161       4    1.45e+05       1.45e+05    2.84e+05     837.523
+    1230     167            3.05e+05 pr    1.45e+05    2.84e+05     843.385
+    1240     165       2    1.45e+05       1.45e+05    2.84e+05     848.463
+    1250     171       4    1.45e+05       1.45e+05    2.84e+05     850.116
+    1260     177       5    1.45e+05       1.45e+05    2.84e+05     852.044
+    1270     183       5    1.45e+05       1.45e+05    2.84e+05     857.244
+    1280     189       3    1.45e+05       1.45e+05    2.84e+05     864.576
+    1290     191       2    1.45e+05       1.45e+05    2.84e+05     868.130
+    1300     189            3.05e+05 pr    1.45e+05    2.84e+05     873.796
+    1310     189         INFEASIBLE  pr    1.45e+05    2.84e+05     885.263
+    1320     187       2    1.45e+05       1.45e+05    2.84e+05     894.340
+    1330     187         INFEASIBLE  pr    1.45e+05    2.84e+05     898.296
+    1340     185         INFEASIBLE  pr    1.45e+05    2.84e+05     902.861
+    1350     187         INFEASIBLE  pr    1.45e+05    2.84e+05     906.883
+    1360     185       2    1.45e+05       1.45e+05    2.84e+05     911.498
+    1370     189       2    1.45e+05       1.45e+05    2.84e+05     915.309
+    1380     193         INFEASIBLE  pr    1.45e+05    2.84e+05     918.949
+    1390     195         INFEASIBLE  pr    1.45e+05    2.84e+05     923.478
+    1400     199       2    1.45e+05       1.45e+05    2.84e+05     925.414
+    1410     201       7    1.45e+05       1.45e+05    2.84e+05     927.916
+    1420     207       5    1.45e+05       1.45e+05    2.84e+05     929.634
+    1430     213       3    1.45e+05       1.45e+05    2.84e+05     931.355
+    1440     213         INFEASIBLE  pr    1.45e+05    2.84e+05     935.608
+    1450     215       1    2.53e+05       1.45e+05    2.84e+05     943.510
+    1460     211       1    2.53e+05       1.45e+05    2.84e+05     950.881
+    1470     209       3    1.45e+05       1.45e+05    2.84e+05     958.469
+    1480     209         INFEASIBLE  pr    1.45e+05    2.84e+05     966.037
+    1490     209            3.05e+05 pr    1.45e+05    2.84e+05     975.839
+    1500     209       5    1.45e+05       1.45e+05    2.84e+05     982.318
+    1510     215       4    1.45e+05       1.45e+05    2.84e+05     985.573
+    1520     219       3    1.45e+05       1.45e+05    2.84e+05     987.962
+    1530     219         INFEASIBLE  pr    1.45e+05    2.84e+05     994.781
+    1540     225       2    1.45e+05       1.45e+05    2.84e+05     996.375
+    1550     231       3    1.45e+05       1.45e+05    2.84e+05     998.105
+    1560     233         INFEASIBLE  pr    1.45e+05    2.84e+05    1005.847
+    1570     235       2    1.45e+05       1.45e+05    2.84e+05    1014.059
+    1580     239         INFEASIBLE  pr    1.45e+05    2.84e+05    1017.254
+    1590     239       2    1.45e+05       1.45e+05    2.84e+05    1022.664
+    1600     239         INFEASIBLE  pr    1.45e+05    2.84e+05    1034.054
+    1610     235         INFEASIBLE  pr    1.45e+05    2.84e+05    1049.556
+    1620     241         INFEASIBLE  pr    1.45e+05    2.84e+05    1051.415
+    1630     245       1    2.53e+05       1.45e+05    2.84e+05    1060.437
+    1640     243       2    1.45e+05       1.45e+05    2.84e+05    1071.304
+    1650     245            2.88e+05 pr    1.45e+05    2.84e+05    1076.640
+    1660     241         INFEASIBLE  pr    1.45e+05    2.84e+05    1082.967
+    1670     243       3    1.45e+05       1.45e+05    2.84e+05    1088.011
+    1680     249            3.43e+05 pr    1.45e+05    2.84e+05    1097.048
+    1690     247            3.05e+05 pr    1.45e+05    2.84e+05    1107.089
+*   1699     246       0    2.80e+05  f    1.45e+05    2.80e+05    1113.746
+    1700     245         INFEASIBLE  pr    1.45e+05    2.80e+05    1114.618
+    1710     241       2    1.45e+05       1.45e+05    2.80e+05    1127.084
+    1720     235       3    1.45e+05       1.45e+05    2.80e+05    1135.509
+    1730     233            2.85e+05 pr    1.45e+05    2.80e+05    1143.667
+    1740     229       4    1.45e+05       1.45e+05    2.80e+05    1155.525
+    1750     231            3.05e+05 pr    1.45e+05    2.80e+05    1162.640
+    1760     229       2    1.45e+05       1.45e+05    2.80e+05    1166.266
+    1770     229         INFEASIBLE  pr    1.45e+05    2.80e+05    1172.917
+    1780     233       6    1.45e+05       1.45e+05    2.80e+05    1179.103
+    1790     237       4    1.45e+05       1.45e+05    2.80e+05    1183.087
+    1800     239       2    1.45e+05       1.45e+05    2.80e+05    1186.816
+    1810     237       9    1.45e+05       1.45e+05    2.80e+05    1194.169
+    1820     243       2    1.45e+05       1.45e+05    2.80e+05    1196.830
+    1830     247         INFEASIBLE  pr    1.45e+05    2.80e+05    1202.224
+    1840     251       2    1.45e+05       1.45e+05    2.80e+05    1204.014
+    1850     251         INFEASIBLE  pr    1.45e+05    2.80e+05    1211.627
+    1860     247         INFEASIBLE  pr    1.45e+05    2.80e+05    1216.987
+    1870     247       3    1.45e+05       1.45e+05    2.80e+05    1220.154
+    1880     249         INFEASIBLE  pr    1.45e+05    2.80e+05    1230.496
+    1890     247       5    1.45e+05       1.45e+05    2.80e+05    1236.220
+    1900     251         INFEASIBLE  pr    1.45e+05    2.80e+05    1240.365
+    1910     249         INFEASIBLE  pr    1.45e+05    2.80e+05    1245.375
+    1920     249         INFEASIBLE  pr    1.45e+05    2.80e+05    1252.427
+    1930     251            3.05e+05 pr    1.45e+05    2.80e+05    1255.614
+    1940     249         INFEASIBLE  pr    1.45e+05    2.80e+05    1261.870
+    1950     251       2    1.45e+05       1.45e+05    2.80e+05    1267.525
+    1960     247       6    1.45e+05       1.45e+05    2.80e+05    1293.900
+    1970     251       2    1.45e+05       1.45e+05    2.80e+05    1295.960
+    1980     251       3    1.45e+05       1.45e+05    2.80e+05    1300.242
+    1990     251         INFEASIBLE  pr    1.45e+05    2.80e+05    1310.441
+    2000     251       3    1.45e+05       1.45e+05    2.80e+05    1312.744
+    2010     249         INFEASIBLE  pr    1.45e+05    2.80e+05    1318.254
+    2020     249       2    1.45e+05       1.45e+05    2.80e+05    1321.072
+    2030     249       2    1.45e+05       1.45e+05    2.80e+05    1328.475
+    2040     247       2    1.45e+05       1.45e+05    2.80e+05    1333.638
+    2050     245       3    1.45e+05       1.45e+05    2.80e+05    1339.194
+    2060     253         INFEASIBLE  pr    1.45e+05    2.80e+05    1341.096
+    2070     255       2    1.45e+05       1.45e+05    2.80e+05    1349.109
+    2080     249       5    1.45e+05       1.45e+05    2.80e+05    1356.164
+    2090     251         INFEASIBLE  pr    1.45e+05    2.80e+05    1365.656
+    2100     253            2.95e+05 pr    1.45e+05    2.80e+05    1369.932
+    2110     251            3.37e+05 pr    1.45e+05    2.80e+05    1375.643
+    2120     255         INFEASIBLE  pr    1.45e+05    2.80e+05    1378.564
+    2130     261         INFEASIBLE  pr    1.45e+05    2.80e+05    1380.572
+    2140     265         INFEASIBLE  pr    1.45e+05    2.80e+05    1383.095
+    2150     265       4    1.45e+05       1.45e+05    2.80e+05    1387.048
+    2160     265         INFEASIBLE  pr    1.45e+05    2.80e+05    1397.209
+    2170     273       2    1.45e+05       1.45e+05    2.80e+05    1398.125
+    2180     279       3    1.45e+05       1.45e+05    2.80e+05    1400.246
+    2190     285         INFEASIBLE  pr    1.45e+05    2.80e+05    1405.468
+    2200     283         INFEASIBLE  pr    1.45e+05    2.80e+05    1414.735
+    2210     283            2.87e+05 pr    1.45e+05    2.80e+05    1424.731
+    2220     279       4    1.45e+05       1.45e+05    2.80e+05    1430.396
+    2230     279         INFEASIBLE  pr    1.45e+05    2.80e+05    1434.966
+    2240     279       4    1.45e+05       1.45e+05    2.80e+05    1441.301
+    2250     279         INFEASIBLE  pr    1.45e+05    2.80e+05    1448.314
+    2260     275       4    1.45e+05       1.45e+05    2.80e+05    1452.981
+    2270     277       2    2.36e+05       1.45e+05    2.80e+05    1461.737
+    2280     279       1    2.09e+05       1.45e+05    2.80e+05    1484.981
+*   2285     276       0    2.79e+05  f    1.45e+05    2.79e+05    1489.718
+    2290     275         INFEASIBLE  pr    1.45e+05    2.79e+05    1493.041
+    2300     275       3    1.45e+05       1.45e+05    2.79e+05    1497.480
+*   2308     275       0    2.68e+05  f    1.45e+05    2.68e+05    1505.248
+    2310     273         INFEASIBLE  pr    1.45e+05    2.68e+05    1506.555
+    2320     277       8    1.45e+05       1.45e+05    2.68e+05    1509.048
+    2330     281       3    1.45e+05       1.45e+05    2.68e+05    1512.315
+    2340     287      10    1.45e+05       1.45e+05    2.68e+05    1514.322
+    2350     291         INFEASIBLE  pr    1.45e+05    2.68e+05    1527.914
+    2360     295       9    1.45e+05       1.45e+05    2.68e+05    1533.928
+    2370     297       4    1.45e+05       1.45e+05    2.68e+05    1540.727
+    2380     297         INFEASIBLE  pr    1.45e+05    2.68e+05    1549.422
+    2390     295       5    1.43e+05       1.45e+05    2.68e+05    1556.580
+    2400     299         INFEASIBLE  pr    1.45e+05    2.68e+05    1560.971
+    2410     301       3    1.45e+05       1.45e+05    2.68e+05    1566.069
+    2420     297       5    1.45e+05       1.45e+05    2.68e+05    1578.065
+    2430     297       2    1.45e+05       1.45e+05    2.68e+05    1582.743
+    2440     305         INFEASIBLE  pr    1.45e+05    2.68e+05    1586.283
+    2450     309         INFEASIBLE  pr    1.45e+05    2.68e+05    1592.779
+    2460     307       1    2.63e+05       1.45e+05    2.68e+05    1601.429
+    2470     309       1    2.09e+05       1.45e+05    2.68e+05    1608.222
+    2480     307            3.05e+05 pr    1.45e+05    2.68e+05    1613.112
+    2490     311         INFEASIBLE  pr    1.45e+05    2.68e+05    1616.054
+    2500     317         INFEASIBLE  pr    1.45e+05    2.68e+05    1618.835
+    2510     319         INFEASIBLE  pr    1.45e+05    2.68e+05    1623.366
+    2520     319         INFEASIBLE  pr    1.45e+05    2.68e+05    1635.622
+    2530     315         INFEASIBLE  pr    1.45e+05    2.68e+05    1659.903
+    2540     313       2    1.45e+05       1.45e+05    2.68e+05    1664.410
+    2550     311       1    2.53e+05       1.45e+05    2.68e+05    1671.234
+    2560     309         INFEASIBLE  pr    1.45e+05    2.68e+05    1677.364
+    2570     307            5.01e+05 pr    1.45e+05    2.68e+05    1682.390
+    2580     301       4    1.45e+05       1.45e+05    2.68e+05    1689.036
+    2590     305         INFEASIBLE  pr    1.45e+05    2.68e+05    1692.030
+    2600     303         INFEASIBLE  pr    1.45e+05    2.68e+05    1696.017
+    2610     303       8    1.45e+05       1.45e+05    2.68e+05    1699.833
+    2620     309       3    1.45e+05       1.45e+05    2.68e+05    1702.224
+    2630     307       3    1.45e+05       1.45e+05    2.68e+05    1707.593
+    2640     309            3.05e+05 pr    1.45e+05    2.68e+05    1713.228
+    2650     307       2    1.45e+05       1.45e+05    2.68e+05    1719.969
+    2660     307         INFEASIBLE  pr    1.45e+05    2.68e+05    1726.145
+    2670     311       4    1.45e+05       1.45e+05    2.68e+05    1727.739
+    2680     313       5    1.45e+05       1.45e+05    2.68e+05    1730.056
+    2690     315         INFEASIBLE  pr    1.45e+05    2.68e+05    1739.207
+    2700     315       2    1.45e+05       1.45e+05    2.68e+05    1752.985
+    2710     313       4    1.45e+05       1.45e+05    2.68e+05    1757.915
+    2720     319       3    1.45e+05       1.45e+05    2.68e+05    1760.083
+    2730     319       6    1.45e+05       1.45e+05    2.68e+05    1768.610
+    2740     325       2    1.45e+05       1.45e+05    2.68e+05    1770.123
+    2750     327         INFEASIBLE  pr    1.45e+05    2.68e+05    1776.182
+    2760     329            3.05e+05 pr    1.45e+05    2.68e+05    1786.878
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 1171)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',1171,0)">line 1171</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+} 
+       Could not evaluate first derivatives at the current point.
+    2770     327         FAILED -500       1.45e+05    2.68e+05    1794.659
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 1171)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',1171,0)">line 1171</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 1171)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',1171,0)">line 1171</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 1171)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',1171,0)">line 1171</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 1171)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',1171,0)">line 1171</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 1171)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',1171,0)">line 1171</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+} 
+       Could not evaluate first derivatives at the current point.
+    2780     327       2    1.45e+05       1.45e+05    2.68e+05    1798.598
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.

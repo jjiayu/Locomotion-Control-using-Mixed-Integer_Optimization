@@ -51,13 +51,81 @@ G = 9.80665; %m/s^2
 %======================================================================
 
 %======================================================================
+%   Kinematics Constraint Parameters
+%======================================================================
+%       Body Size
+BodyLength = 0.6;
+BodyHeight = 0.2;
+%       Default foot position in Local robot frame
+DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
+%           Front Foot Default Positions (IN ROBOT FRAME)
+PFCenterX = 1/2*BodyLength;
+PFCenterY = -(1/2*BodyHeight + DefaultLegLength);
+%           Hind Foot Default Positions (IN ROBOT FRAME)
+PHCenterX = -1/2*BodyLength;
+PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
+%       Kinematics Bounding Box Constraint
+BoundingBox_Width = 0.8;
+BoundingBox_Height = 0.4;
+%======================================================================
+
+%======================================================================
 %Environment Information
 %----------------------------------------------------------------------
+%   Display some info
 disp('====================================================');
-TerrainHeight = 0; %terrain height
+disp('Setup Terrain Model: ')
+disp('----------------------------------------------------');
+%----------------------------------------------------------------------
+%   Define CasADi variables
+h_terrain = SX.sym('h_terrain',1); %SX variable denotes Terrain Height
+x_query   = SX.sym('x_query',  1); %SX variable denotes robot position
+%----------------------------------------------------------------------
+%   Select Terrain Type
+TerrainType = input('Select Terrain Type: 1 -> Flat Terrain; 2 -> Stair (Only one Stair) \n');
+if TerrainType == 1 %Selected Flat Terrain
+    h_terrain = 0;
+    TerrainModel = Function('TerrainModel',{x_query},{h_terrain});
+    %TerrainHeightFlat = 0; %Flat Terrain Height
+    %parameter set for visualization program
+    x_change = 0;
+    h_change = 0;
+    disp('Selected Flat Terrain');
+elseif TerrainType == 2 % Selected Uneven Terrain --> Stairs (Only One Stair)
+    disp('Selected Stairs Terrain (Only One Stair)');
+    disp('----------------------------------------------------');
+    %-------------------------------------------------
+    %   Define Terran Parameters
+    SlopeFactor = input('Use Sigmoid Function to Achieve Stair Terrain Model -> Define the Slope of the Transition (e.g. 500-1000):\n');
+    disp('----------------------------------------------------');
+    x_change_delta = input(['Define Terrain Elevation Change Location (X-axis) after Half Robot Body Length (',num2str(BodyLength/2),'); Robot Always start fronm x = 0 :\n']);
+    x_change = BodyLength/2 + x_change_delta;
+    disp(['Terrain Elevation Change Location is x = ',num2str(x_change)]);
+    disp('----------------------------------------------------');
+    h_change = input('Input Terrain Elevation Change Value (Vertical Terrain Elevation Change Value) (e.g. +N means Up-Stair; -N means Down-Stair:)\n');
+    disp('----------------------------------------------------');
+    %-----------------------------------------------------------
+    %   Build CasAdi Model Function for Terrain Model
+    h_terrain = h_change/(1 + exp(-SlopeFactor.*(x_query-x_change)));
+    TerrainModel = Function('TerrainMode',{x_query},{h_terrain});
+else
+    ME_TerrainType = MException('Initialization:TerrainType','Unknown Terrain Type Indicator');
+    throw(ME_TerrainType)
+end
+%-----------------------------------------------------------------------
+%   Plot Terrain Model
+PlotTerrainFlag = input('Plot the Terrain Model? 1 -> yes; 2 -> no\n');
+if PlotTerrainFlag == 1 %Yes, Plot the terrain model    
+    terrainx = linspace(-3,3,1e4);
+    terrainy = full(TerrainModel(terrainx));
+    plot(terrainx,terrainy)
+    ylim([-5,5])
+    disp('----------------------------------------------------');
+end
+%-----------------------------------------------------------------------
+%Other Parameters
 TerrainNorm = [0,1];
 miu = 0.6; %friction coefficient
-disp('Environment Information: ');
 disp('----------------------------------------------------');
 disp(['Friction Cone: ', num2str(miu)]);
 disp('====================================================');
@@ -107,25 +175,6 @@ disp(['Number of Knots/Discretization of tau (from 0 to ', num2str(tau_upper_lim
 disp('====================================================');
 disp(' ')
 %======================================================================
-%   Kinematics Constraint Parameters
-%======================================================================
-%       Body Size
-BodyLength = 0.6;
-BodyHeight = 0.2;
-%       Default foot position in Local robot frame
-DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
-%           Front Foot Default Positions (IN ROBOT FRAME)
-PFCenterX = 1/2*BodyLength;
-PFCenterY = -(1/2*BodyHeight + DefaultLegLength);
-%           Hind Foot Default Positions (IN ROBOT FRAME)
-PHCenterX = -1/2*BodyLength;
-PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
-%       Kinematics Bounding Box Constraint
-BoundingBox_Width = 0.3;
-BoundingBox_Height = 0.3;
-%======================================================================
-
-%======================================================================
 % Task Specifications
 %======================================================================
 %   Display Information
@@ -137,15 +186,25 @@ disp('----------------------------------------------------');
 %   Initial Conditions
 %----------------------------------------------------------------------
 x_Init         = 0;
-y_Init         = 1/2*BodyHeight + DefaultLegLength;
+y_Init         = 1/2*BodyHeight + DefaultLegLength + full(TerrainModel(x_Init));
 theta_Init     = 0;
 xdot_Init      = 0;
 ydot_Init      = 0;
 thetadot_Init  = 0;
 %----------------------------------------------------------------------
 %   Terminal Conditions
-x_End        = input('Input Travel Distance along x-axis (m): \n' );
-y_End        = 1/2*BodyHeight + DefaultLegLength;
+%----------------------------------------------------------------------
+%       Terminal X-axis distance
+disp('Define Travel Distance along X-axis: ')
+if TerrainType == 1 %Flat Terrain
+    x_End = input('Flat Terrain --> Specify Any Distance along X-axis (m):\n');
+elseif TerrainType == 2 %Stairs
+    x_End = input(['Stairs --> Specify Any Distance larger than the Terrain Elevation Change Point with Half of the Body Length More, at Least (', num2str(x_change + BodyLength/2), ':\n']);
+else
+    throw(ME_TerrainType)
+end
+%x_End        = input('Input Travel Distance along x-axis (m): \n' );
+y_End        = 1/2*BodyHeight + DefaultLegLength + full(TerrainModel(x_End));
 theta_End    = 0;
 xdot_End     = 0;
 ydot_End     = 0;
@@ -573,6 +632,7 @@ for k = 1:tauSeriesLength
     %--------------------------------------
     % Extract Phase Index
     PhaseIdx = floor((k-1)/NumLocalKnots) + 1; % k-1 is the time step enumeration
+    %--------------------------------------
     
     %--------------------------------------
     % System dynamics
@@ -747,38 +807,58 @@ for k = 1:tauSeriesLength
         %       function ifr we go for uneven terrain
         %--------------------------------------------------
         %       - Equation (1): Py <= Height + Mpos(1-C) -->
-        %                       Py + Mpos*C <= Height + Mpos
+        %                       Py + Mpos*C <= Height + Mpos -->
+        %                       Py + Mpos*C - Height(x) <= Mpos
         %         Use Ineq_Summation
         %         Input: v[k] = P(F/H)y[k]
         %                bigM = Mpos_y
         %                z[k] = C(F/H)[k]
+        %                Additionally: - TerrainHeight
         %         lbg = -inf 
-        %         ubg = Height + Mpos_y
+        %         ubg = Mpos_y
         %-------------------------------------------    
         %           Front Leg
-            EqTemp = Ineq_Summation(PFy(k),Mpos_y, CF(PhaseIdx));
+            EqTemp = Ineq_Summation(PFy(k),Mpos_y, CF(PhaseIdx)) - TerrainModel(PFx(k));
             g   = {g{:}, EqTemp};                      %Append to constraint function list
             lbg = [lbg;  -inf];                        %Give constraint lower bound
-            ubg = [ubg;  TerrainHeight + Mpos_y];      %Give constraint upper bound
+            ubg = [ubg;  Mpos_y];      %Give constraint upper bound
 
         %           Hind Leg
-            EqTemp = Ineq_Summation(PHy(k), Mpos_y, CH(PhaseIdx));
+            EqTemp = Ineq_Summation(PHy(k), Mpos_y, CH(PhaseIdx)) - TerrainModel(PHx(k));
             g   = {g{:}, EqTemp};                      %Append to constraint function list
             lbg = [lbg;  -inf];                        %Give constraint lower bound
-            ubg = [ubg;  TerrainHeight + Mpos_y];      %Give constraint upper bound
+            ubg = [ubg;  Mpos_y];      %Give constraint upper bound
         %-------------------------------------------
         %       - Equation (2): Py >= Height -->
-        %                       Height <= Py <= inf
+        %                       Height <= Py <= inf -->
+        %       For Uneven Terrain: 0 <= Py -Height(x) <= inf
+        %
         %----------------------------------------------------
         %         (Place Holder) For even terrain, achieve this constraint by changing variable lower bounds
         %                        Change to complementarity form when
         %                        introducing uneven terrain
         %----------------------------------------------------
-        %           Front Leg
-            lb_DecisionVars(find(VarNamesList == ['PFy_',num2str(k-1)])) = TerrainHeight;
+%         if TerrainType == 1 %flat terrain
+%         %   Front Leg
+%             lb_DecisionVars(find(VarNamesList == ['PFy_',num2str(k-1)])) = 0;
+%         %   Hind Leg
+%             lb_DecisionVars(find(VarNamesList == ['PHy_',num2str(k-1)])) = 0;
+%             
+%         elseif TerrainType == 2 %Stairs
+%       %   Front Leg
+        EqTemp = PFy(k) - TerrainModel(PFx(k));
+        g   = {g{:}, EqTemp};
+        lbg = [lbg;  0];
+        ubg = [ubg;  inf];
+        %   Hind Leg
+        EqTemp = PHy(k) - TerrainModel(PHx(k));
+        g   = {g{:}, EqTemp};
+        lbg = [lbg;  0];
+        ubg = [ubg;  inf];
+%         else
+%             throw(ME_TerrainType)
+%         end
 
-        %           Hind Leg
-            lb_DecisionVars(find(VarNamesList == ['PHy_',num2str(k-1)])) = TerrainHeight;
         %----------------------------------------------------
         %   (*) Foot/End-Effector Velocity (for both x-axis and y-axis)
         %----------------------------------------------------
