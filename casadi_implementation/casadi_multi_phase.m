@@ -65,8 +65,11 @@ PFCenterY = -(1/2*BodyHeight + DefaultLegLength);
 PHCenterX = -1/2*BodyLength;
 PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
 %       Kinematics Bounding Box Constraint
-BoundingBox_Width = 0.8;
-BoundingBox_Height = 0.4;
+disp('====================================================');
+disp('Setup Robot Kinematics Properties: ')
+disp('----------------------------------------------------');
+BoundingBox_Width = 0.6;
+BoundingBox_Height = 0.6;
 %======================================================================
 
 %======================================================================
@@ -102,12 +105,14 @@ if NumStairs == 0 %Flat Terrain
     SlopeFactor    = zeros(1,MaxNumStairs);
     HeightChangingPlaces = zeros(1,MaxNumStairs);
     LevelChanges   = zeros(1,MaxNumStairs);
-
+    %For Visualization program
+    HeightChangingPlaces_vis = ones(1,MaxNumStairs);
+    LevelChanges_vis = LevelChanges;
 elseif NumStairs > 0 && NumStairs <= 10 % Stairs
     disp(['Selected ', num2str(NumStairs), '-Stair Terrain']);
     disp('----------------------------------------------------');
-    SlopeFactor = input('Define the Slope of the Sigmoid Transition (e.g. 50-100):\n');
-    disp('----------------------------------------------------');
+%     SlopeFactor = input('Define the Slope of the Sigmoid Transition (e.g. 50-100):\n');
+%     disp('----------------------------------------------------');
     HeightChangingPlaces = input('Define Length of Each Stair -> Use a Row Vector to Define (i.e. [1, 1.5, 0.5,...]), Can use repmat(StairLength,1,NumStairs) for Stairs with Uniform Length:\n');        
     HeightChangingPlaces_vis = [HeightChangingPlaces, repmat(5 ,1, MaxNumStairs - NumStairs)]; %Expand for Visualization Program
     disp('----------------------------------------------------');
@@ -124,17 +129,29 @@ else %Unknown Scenario
     throw(ME_NumStairs)
 end
 
-%       Build Terrain Model Function
+%         Build Terrain Model Function --> CasADi If-Else implementation
 %           Define CasADi symbolic variables
-%h_terrain = SX.sym('h_terrain',1);
 h_terrain = 0;
-x_query   = SX.sym('x_query',  1);
+x_query   = SX.sym('x_query', 1);
 for i = 1:NumStairs
-    h_terrain = h_terrain + Sigmoid(x_query, SlopeFactor, sum(HeightChangingPlaces(1:i)), LevelChanges(i));
+    h_terrain = h_terrain + if_else(x_query < sum(HeightChangingPlaces(1:i)), 0, LevelChanges(i));
 end
-%           Build Terrain Model CasAdi Function
 TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
 disp('----------------------------------------------------');
+
+
+% %       Build Terrain Model Function --> Sigmoid Implementation
+% %           Define CasADi symbolic variables
+% %h_terrain = SX.sym('h_terrain',1);
+% h_terrain = 0;
+% x_query   = SX.sym('x_query',  1);
+% for i = 1:NumStairs
+%     h_terrain = h_terrain + Sigmoid(x_query, SlopeFactor, sum(HeightChangingPlaces(1:i)), LevelChanges(i));
+% end
+% %           Build Terrain Model CasAdi Function
+% TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
+% disp('----------------------------------------------------');
+
 %-----------------------------------------------------------------------
 %   Plot Terrain Model
 PlotTerrainFlag = input('Plot the Terrain Model? 1 -> Yes; 2 -> No\n');
@@ -154,7 +171,7 @@ disp(['Friction Cone: ', num2str(miu)]);
 disp('====================================================');
 disp(' ')
 %======================================================================
-%%
+
 %======================================================================
 % Time Step and Discretization Parameter Settings
 %----------------------------------------------------------------------
@@ -317,8 +334,12 @@ disp(['Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: ', num2
 disp('----------------------------------------------------');
 %----------------------------------------------------------------------
 %   Big-M for Foot-Ground Reaction Forces
-Mfx = 1e3; %(N) big-M for foot-ground reaction forces for x-axis
-Mfy = 1e3; %(N) big-M for foot-ground reaction forces for y-axis
+disp('Big-M for Contact Forces')
+Mfx = input('Input Big-M for Foot-Ground Reaction Forces along X-axis (e.g. 200,300,1000,1e5):\n');
+disp('----------------------------------------------------');
+Mfy = input('Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3, 1e5, better larger than Mfx):\n');
+%Mfx = 1e2; %(N) big-M for foot-ground reaction forces for x-axis
+%Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
 disp('====================================================');
 %=======================================================================
 
@@ -614,7 +635,8 @@ end
 
 %       Other Important Setups
 %           Initial Guess of Decision Variables
-DecisionVarsInit = rand(size(DecisionVars));
+DecisionVarsInit = rand(size(DecisionVars)); %Random Initial Guess
+%DecisionVarsInit = zeros(size(DecisionVars)); %Zero Initial guess
 %           Lower and upper bounds, variable type
 lb_DecisionVars = [];  %Variable Lower Bound 
 ub_DecisionVars = [];  %Variable Upper Bound
@@ -1317,9 +1339,14 @@ NetForceY(find(TimeStepDiff <= 1e-5)) = [];
 
 NetTorque(find(TimeStepDiff <= 1e-5)) = [];
 
-NetForceX(end) = NetForceX(end - 1);
-NetForceY(end) = NetForceY(end - 1);
-NetTorque(end) = NetTorque(end - 1);
+% NetForceX(end) = NetForceX(end - 1);
+% NetForceY(end) = NetForceY(end - 1);
+% NetTorque(end) = NetTorque(end - 1);
+
+%Clear the Input at last time step, for simulation
+NetForceX(end) = 0;
+NetForceY(end) = 0;
+NetTorque(end) = 0;
 
 disp('Removed Variables within Vanished Phases');
 disp('===================================================');
