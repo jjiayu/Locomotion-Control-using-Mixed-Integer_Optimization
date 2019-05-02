@@ -1,0 +1,82 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Multi-Phase Formulation:
+Optimize over Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   02-May-2019 13:27:00
+
+----------------------------------------------------
+Correspondent Log File Name: multiphase-log-20190502T132700
+====================================================
+ 
+====================================================
+Setup Robot Kinematics Properties: 
+----------------------------------------------------
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify Number of Stairs (Terrain Elevation Change) of the Terrain Model (0 -> Flat Terrain, 1,2..10 --> 1,2..10 Stairs; Maximum Number of Stairs can take, 10):
+0
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+2
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Temporal Setup:
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+2
+Terminal Time (Tend) is Set as Free Variables
+Specify Upper Bound of Terminal Time (i.e. 1,2..(s)):
+1
+----------------------------------------------------
+Input Number of Phases: 
+12
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+5
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.016667
+Number of Knots/Discretization of tau (from 0 to 1: 61) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Define Travel Distance along X-axis: 
+Flat Terrain --> Specify Any Distance along X-axis (m):
+2
+====================================================
+ 
+====================================================
+Big-M Setup
+====================================================
+Big-M for Foot/End-Effector in X-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: 
+1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
+2
+ 
+[Warning: Terminal Time is Undefined -> Unable to Compute Average Task Speed in X-axis] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 311)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',311,0)">line 311</a>)] 
+Manually Specify a Big-M value for Foot/End-Effector Velocity in X-axis: 
+2
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 2 m/s
+----------------------------------------------------
+Big-M for Foot/End-Effector in Y-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: 
+1 -> Default Value (5m/s); 2 -> User Specified: 
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 327)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',327,0)">line 327</a>)
+} 
+casadi_multi_phase

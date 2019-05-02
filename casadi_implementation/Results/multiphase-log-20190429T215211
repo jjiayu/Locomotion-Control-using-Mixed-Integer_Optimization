@@ -1,0 +1,222 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Multi-Phase Formulation:
+Optimize over Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   29-Apr-2019 21:52:11
+
+----------------------------------------------------
+Correspondent Log File Name: multiphase-log-20190429T215211
+====================================================
+ 
+====================================================
+Setup Robot Kinematics Properties: 
+----------------------------------------------------
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify Number of Stairs (Terrain Elevation Change) of the Terrain Model (0 -> Flat Terrain, 1,2..10 --> 1,2..10 Stairs; Maximum Number of Stairs can take, 10):
+0
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+1
+----------------------------------------------------
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Temporal Setup:
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+2
+Terminal Time (Tend) is Set as Free Variables
+Specify Upper Bound of Terminal Time (i.e. 1,2..(s)):
+10
+----------------------------------------------------
+Input Number of Phases: 
+8
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+5
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.025
+Number of Knots/Discretization of tau (from 0 to 1: 41) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Define Travel Distance along X-axis: 
+Flat Terrain --> Specify Any Distance along X-axis (m):
+3
+====================================================
+ 
+====================================================
+Big-M Setup
+====================================================
+Big-M for Foot/End-Effector in X-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: 
+1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
+2
+ 
+[Warning: Terminal Time is Undefined -> Unable to Compute Average Task Speed in X-axis] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 305)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',305,0)">line 305</a>)] 
+Manually Specify a Big-M value for Foot/End-Effector Velocity in X-axis: 
+15
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 15 m/s
+----------------------------------------------------
+Big-M for Foot/End-Effector in Y-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: 
+1 -> Default Value (5m/s); 2 -> User Specified: 
+2
+ 
+Input Big-M value for foot/end-effector Velocity for Y-axis (e.g. 1-5+ m/s): 
+NOTE: Can Write the Value as the Kinematics Bounding Box Height (BoundingBox_Height)/Desired Time to Travel the Entire Bounding Box Height
+15
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: 15 m/s
+----------------------------------------------------
+Big-M for Contact Forces
+Input Big-M for Foot-Ground Reaction Forces along X-axis (e.g. 200,300,1000,1e5):
+1000
+----------------------------------------------------
+Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3, 1e5, better larger than Mfx):
+1000
+====================================================
+====================================================
+Solver Setups:
+====================================================
+Solver Selection: 
+1 -> Knitro; 2 -> Bonmin 
+1
+Selected Solver: knitro
+----------------------------------------------------
+Solver Dependent Options:
+----------------------------------------------------
+Define Number of Max Nodes to be Explored: 
+ 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value
+1
+Selected Worst-case Scenarios to Explore 65536 Nodes
+====================================================
+ 
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (12 variables).
+hessopt:                 1
+mip_branchrule:          2
+mip_heuristic:           0
+mip_maxnodes:            65536
+mip_outinterval:         50
+mip_outlevel:            2
+mip_selectrule:          2
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                762
+    bounded below only:                              80
+    bounded above only:                               1
+    bounded below and above:                         55
+    fixed:                                           12
+    free:                                           614
+Number of binary variables:                          16
+Number of integer variables:                          0
+Number of constraints:                             1374
+    linear equalities:                                0
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      400
+    linear one-sided inequalities:                  810
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          164
+Number of nonzeros in Jacobian:                    4749
+Number of nonzeros in Hessian:                     2054
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 80 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0      16  -1.80e+308     -1.80e+308                   0.962
+      50      31       6    1.41e+05       1.41e+05                  44.734
+     100      47       9    1.41e+05       1.41e+05                  88.498
+     150      71      12    1.41e+05       1.41e+05                 130.167
+     200      95       7    2.81e+05       1.41e+05                 152.090
+     250     101       8    1.41e+05       1.41e+05                 188.447
+     300     121       7    1.41e+05       1.41e+05                 274.134
+     350     137       4    1.89e+05       1.63e+05                 373.687
+     400     171         INFEASIBLE  pr    1.80e+05                 480.510
+*    414     173       0    2.77e+05  f    1.82e+05    2.77e+05     502.589
+     450     189       3    1.96e+05       1.82e+05    2.77e+05     562.639
+     500     201       2    1.76e+05       1.82e+05    2.77e+05     633.846
+*    504     203       0    2.53e+05  f    1.82e+05    2.53e+05     634.185
+     550     203         INFEASIBLE  pr    1.82e+05    2.53e+05     686.918
+     600     191       3    2.24e+05       1.82e+05    2.53e+05     723.300
+     650     189       2    2.48e+05       1.82e+05    2.53e+05     760.182
+*    676     193       0    2.25e+05  f    1.82e+05    2.25e+05     817.591
+
+EXIT: All nodes have been explored. Integer feasible point found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   2.25199560656491e+05
+Final integrality gap (abs / rel)   =  4.32e+04 /   1.92e-01 (19.18%)
+# of nodes processed                =      676
+# of subproblems processed          =      679
+Total program time (secs)           =     817.59918 (   823.544 CPU time)
+Time spent in evaluations (secs)    =      49.73473
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg         19.8         19.3    336648
+   nlp_gf_jg         14.1           14    161500
+  nlp_hess_l         13.6         13.5    162137
+      solver          824          818         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+Removed Variables within Vanished Phases
+===================================================
+ 
