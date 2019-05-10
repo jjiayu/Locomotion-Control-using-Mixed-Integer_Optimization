@@ -1373,31 +1373,31 @@ disp('Original Result Variables Backuped - Result Include Vanishing Phases - End
 TimeStepDiff = diff(TimeSeries);
 
 %States, TimeStepDiff + 1
-TimeSeries(find(TimeStepDiff <= 1e-5) + 1) = [];
-x_result(find(TimeStepDiff <= 1e-5) + 1) = [];
-y_result(find(TimeStepDiff <= 1e-5) + 1) = [];
-theta_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+TimeSeries(find(TimeStepDiff <= 1e-3) + 1) = [];
+x_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+y_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+theta_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 
-xdot_result(find(TimeStepDiff <= 1e-5) + 1) = [];
-ydot_result(find(TimeStepDiff <= 1e-5) + 1) = [];
-thetadot_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+xdot_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+ydot_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+thetadot_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 
-PFcenterX_result_world(find(TimeStepDiff <= 1e-5) + 1) = [];
-PFcenterY_result_world(find(TimeStepDiff <= 1e-5) + 1) = [];
+PFcenterX_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
+PFcenterY_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
 
-PHcenterX_result_world(find(TimeStepDiff <= 1e-5) + 1) = [];
-PHcenterY_result_world(find(TimeStepDiff <= 1e-5) + 1) = [];
+PHcenterX_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
+PHcenterY_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
 
 %Inputs, TimeStepDiff due to euler integration
-PFx_result(find(TimeStepDiff <= 1e-5) + 1) = [];
-PFy_result(find(TimeStepDiff <= 1e-5) + 1) = [];
-PHx_result(find(TimeStepDiff <= 1e-5) + 1) = [];
-PHy_result(find(TimeStepDiff <= 1e-5) + 1) = [];
+PFx_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+PFy_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+PHx_result(find(TimeStepDiff <= 1e-3) + 1) = [];
+PHy_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 
-NetForceX(find(TimeStepDiff <= 1e-5)) = [];
-NetForceY(find(TimeStepDiff <= 1e-5)) = [];
+NetForceX(find(TimeStepDiff <= 1e-3)) = [];
+NetForceY(find(TimeStepDiff <= 1e-3)) = [];
 
-NetTorque(find(TimeStepDiff <= 1e-5)) = [];
+NetTorque(find(TimeStepDiff <= 1e-3)) = [];
 
 % NetForceX(end) = NetForceX(end - 1);
 % NetForceY(end) = NetForceY(end - 1);

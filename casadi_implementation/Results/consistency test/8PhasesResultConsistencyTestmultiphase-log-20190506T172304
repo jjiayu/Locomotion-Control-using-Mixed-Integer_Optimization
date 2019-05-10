@@ -7,10 +7,10 @@ Multi-Phase Formulation:
 Optimize over Control, Gait Sequence, and Switching Time
 ----------------------------------------------------
 Date and Time:
-   02-May-2019 13:14:36
+   06-May-2019 17:23:04
 
 ----------------------------------------------------
-Correspondent Log File Name: multiphase-log-20190502T131436
+Correspondent Log File Name: multiphase-log-20190506T172304
 ====================================================
  
 ====================================================
@@ -35,20 +35,19 @@ Temporal Setup:
 Terminal Time:
 Optimization of Terminal Time (Tend): 
 1 -> Optimize, 2 -> Left as Free Variable 
-2
-Terminal Time (Tend) is Set as Free Variables
-Specify Upper Bound of Terminal Time (i.e. 1,2..(s)):
+1
+Input Termianl Time (e.g. 1s): 
 1
 ----------------------------------------------------
 Input Number of Phases: 
-12
+8
 ----------------------------------------------------
 Input Number of Knots for Each Phase: 
 5
 ----------------------------------------------------
 Resultant Discretization:
-Knot/Discretization Step Size of tau: 0.016667
-Number of Knots/Discretization of tau (from 0 to 1: 61) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+Knot/Discretization Step Size of tau: 0.025
+Number of Knots/Discretization of tau (from 0 to 1: 41) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
 ====================================================
  
 ====================================================
@@ -67,9 +66,8 @@ Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis:
 1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
 2
  
-[Warning: Terminal Time is Undefined -> Unable to Compute Average Task Speed in X-axis] 
-[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m', 311)" style="font-weight:bold">casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/casadi_multi_phase.m',311,0)">line 311</a>)] 
-Manually Specify a Big-M value for Foot/End-Effector Velocity in X-axis: 
+Current Averate Task Speed in X-axis: 1
+Input the Scaling Factor of the Average Task Speed (in X-axis) (i.e. 1, 2, 3, etc...): 
 25
  
 Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 25 m/s
@@ -87,10 +85,10 @@ Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: 25 m/s
 ----------------------------------------------------
 Big-M for Contact Forces
 Input Big-M for Foot-Ground Reaction Forces along X-axis (e.g. 200,300,1000,1e5):
-350
+200
 ----------------------------------------------------
 Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3, 1e5, better larger than Mfx):
-750
+400
 ====================================================
 ====================================================
 Solver Setups:
@@ -105,7 +103,7 @@ Solver Dependent Options:
 Define Number of Max Nodes to be Explored: 
  1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value
 1
-Selected Worst-case Scenarios to Explore 16777216 Nodes
+Selected Worst-case Scenarios to Explore 65536 Nodes
 ====================================================
  
 ====================================================
@@ -126,11 +124,11 @@ Optimization Started
          Artelys Knitro 11.1.2
 =======================================
 
-MINLP solver shifted start point to satisfy bounds (13 variables).
+MINLP solver shifted start point to satisfy bounds (19 variables).
 hessopt:                 1
 mip_branchrule:          2
 mip_heuristic:           0
-mip_maxnodes:            16777216
+mip_maxnodes:            65536
 mip_outinterval:         50
 mip_outlevel:            2
 mip_selectrule:          3
@@ -144,55 +142,98 @@ Problem Characteristics
 -----------------------
 Objective goal:  Minimize
 Objective type:  general
-Number of variables:                               1134
-    bounded below only:                             122
+Number of variables:                                762
+    bounded below only:                              82
     bounded above only:                               0
-    bounded below and above:                         83
-    fixed:                                           13
-    free:                                           916
-Number of binary variables:                          22
+    bounded below and above:                         53
+    fixed:                                           19
+    free:                                           608
+Number of binary variables:                          14
 Number of integer variables:                          2
-Number of constraints:                             2076
+Number of constraints:                             1392
     linear equalities:                                0
     quadratic equalities:                             0
-    gen. nonlinear equalities:                      600
-    linear one-sided inequalities:                 1232
+    gen. nonlinear equalities:                      400
+    linear one-sided inequalities:                  828
     quadratic one-sided inequalities:                 0
     gen. nonlinear one-sided inequalities:            0
     linear two-sided inequalities:                    0
     quadratic two-sided inequalities:                 0
-    gen. nonlinear two-sided inequalities:          244
-Number of nonzeros in Jacobian:                    7171
-Number of nonzeros in Hessian:                     3114
+    gen. nonlinear two-sided inequalities:          164
+Number of nonzeros in Jacobian:                    4783
+Number of nonzeros in Hessian:                     2054
 
 Knitro detected 0 GUB constraints
-Knitro derived 0 knapsack covers after examining 112 constraints
+Knitro derived 0 knapsack covers after examining 72 constraints
 Knitro solving root node relaxation
 Knitro MIP using Branch and Bound method
 
                                             Best        Best     Cumulative
    Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
   ------  ------  ------  ----------     ----------  ----------  ----------
-       1       0      22  -1.80e+308     -1.80e+308                   1.084
+       1       0      14  -1.80e+308     -1.80e+308                   2.228
+*     18      11       0    1.43e+05  f  -1.80e+308    1.43e+05       6.384
+      50      25       5    1.09e+05       1.09e+05    1.43e+05      15.324
+     100      41         INFEASIBLE  pr    1.09e+05    1.43e+05      31.937
+*    106      43       0    1.32e+05  f    1.09e+05    1.32e+05      34.054
+     150      55       2    1.29e+05       1.09e+05    1.32e+05      48.705
+*    199      66       0    1.31e+05  f    1.09e+05    1.31e+05      68.773
+     200      65            1.50e+05 pr    1.09e+05    1.31e+05      69.258
+*    244      77       0    1.28e+05  f    1.09e+05    1.28e+05      86.715
+     250      81       4    1.09e+05       1.09e+05    1.28e+05      89.551
+*    294      77       0    1.21e+05  f    1.09e+05    1.21e+05     107.434
+     300      79       5    1.09e+05       1.09e+05    1.21e+05     108.461
+     350      87            1.38e+05 pr    1.09e+05    1.21e+05     133.463
+     400     107       7    1.11e+05       1.09e+05    1.21e+05     163.840
+     450     121         INFEASIBLE  pr    1.09e+05    1.21e+05     182.216
+     500     129       6    1.11e+05       1.09e+05    1.21e+05     216.413
+     550     137         INFEASIBLE  pr    1.09e+05    1.21e+05     236.471
+     600     133       4    1.11e+05       1.09e+05    1.21e+05     263.619
+     650     147       3    1.10e+05       1.09e+05    1.21e+05     292.175
+     700     153       4    1.11e+05       1.09e+05    1.21e+05     312.869
+     750     153         INFEASIBLE  pr    1.09e+05    1.21e+05     353.025
+     800     163       3    1.09e+05       1.09e+05    1.21e+05     376.305
+     850     157         INFEASIBLE  pr    1.09e+05    1.21e+05     396.141
+*    886     167       0    1.20e+05  f    1.09e+05    1.20e+05     411.840
+     900     173         INFEASIBLE  pr    1.09e+05    1.20e+05     414.233
+     950     171            1.28e+05 pr    1.10e+05    1.20e+05     433.680
+*    957     172       0    1.19e+05  f    1.10e+05    1.19e+05     435.966
+    1000     165         INFEASIBLE  pr    1.10e+05    1.19e+05     455.748
+*   1023     156       0    1.17e+05  f    1.10e+05    1.17e+05     463.653
+    1050     149            1.31e+05 pr    1.10e+05    1.17e+05     473.017
+    1100     133            1.26e+05 pr    1.10e+05    1.17e+05     487.769
+    1150     119         INFEASIBLE  pr    1.10e+05    1.17e+05     508.424
+    1200     107         INFEASIBLE  pr    1.10e+05    1.17e+05     536.277
+    1250      91            1.22e+05 pr    1.10e+05    1.17e+05     561.491
+    1300      73         INFEASIBLE  pr    1.10e+05    1.17e+05     586.645
+    1350      61         INFEASIBLE  pr    1.10e+05    1.17e+05     610.079
+    1400      59            1.41e+05 pr    1.11e+05    1.17e+05     640.227
+    1450      43       4    1.12e+05       1.11e+05    1.17e+05     660.282
+    1500      43            1.23e+05 pr    1.11e+05    1.17e+05     696.361
+    1550      33            1.17e+05 pr    1.11e+05    1.17e+05     716.724
+    1600      23            1.63e+05 pr    1.12e+05    1.17e+05     733.897
+    1650      21         INFEASIBLE  pr    1.12e+05    1.17e+05     749.566
+    1700      15            1.29e+05 pr    1.15e+05    1.17e+05     763.299
+    1718       0            1.27e+05       1.17e+05    1.17e+05     767.460
 
-EXIT: All nodes have been explored. No integer feasible point found.
+EXIT: Optimal solution found.
 
 Final Statistics for MIP
 ------------------------
-Final objective value               =   2.43195891206767e+05
-Final integrality gap (abs / rel)   =   Infinity
-# of nodes processed                =        3
-# of subproblems processed          =        3
-Total program time (secs)           =       4.21154 (     4.205 CPU time)
-Time spent in evaluations (secs)    =       0.29696
+Final objective value               =   1.17227243078947e+05
+Final integrality gap (abs / rel)   =  0.00e+00 /   0.00e+00 ( 0.00%)
+# of nodes processed                =     1718
+# of subproblems processed          =     1726
+Total program time (secs)           =     767.46259 (   775.247 CPU time)
+Time spent in evaluations (secs)    =      64.89969
 
 ===========================================================================
 
                t_proc [s]   t_wall [s]    n_eval
-      nlp_fg        0.102          0.1      1220
-   nlp_gf_jg        0.073       0.0721       575
-  nlp_hess_l       0.0702       0.0697       573
-      solver         4.21         4.24         1
+      nlp_fg         21.4           21    370527
+   nlp_gf_jg           21         20.7    245834
+  nlp_hess_l         20.1         19.9    244473
+      solver          775          767         1
 ===================================================
  
 ===================================================

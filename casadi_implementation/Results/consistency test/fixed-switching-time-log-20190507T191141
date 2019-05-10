@@ -1,0 +1,160 @@
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+Fixed Switching Time
+ 
+Date and Time:
+   07-May-2019 19:11:41
+
+Correspondent Log File Name: fixed-switching-time-log-20190507T191141
+---------------------------------------------------
+Solver Selection, 1: Knitro, 2: Bonmin 
+1
+Selected Solver: knitro
+---------------------------------------------------
+Environment Information: 
+Friction Cone: 
+0.6
+---------------------------------------------------
+Input Termianl Time (e.g. 1s): 
+1
+Input Number of Phases: 
+8
+Time Horizon of Each Phase: 0.125 (s)
+Input Number of Time Steps for Each Phase: 
+5
+Time Step Size: 
+0.025 (s)
+Number of Knots/Discretizations (From Time 0 to 1):
+41 (Number of Time Steps in Each Phase * Number of Phases + 1)
+---------------------------------------------------
+Input Travel Distance along x-axis (m): 
+1
+---------------------------------------------------
+Select the Case for big-M value for Foot/End-Effector Velocity for x-axis: 1--> Default Value (5m/s); 
+ 2--> N time of average task speed (in x-axis); 
+ 3--> User Specified: 
+ 2
+Input the Number of Scales of the Average Task Speed(in x-axis) (i.e. 1, 2, 3, etc...): 
+ (NOTE: For Fixed Switching Time Formulation, Big-M for Foot/End-Effector needs to be bigger (e.g. 4-5+ times)) 
+25
+Generating Decision Variables Vectors/Lists
+Checked - Contact Configuration Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+-------------------------------------------------
+Define Number of Max Nodes to be Explored: 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value 
+1
+Selected Worst-case Scenarios to Explore 65536 Nodes
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (12 variables).
+hessopt:                 1
+mip_branchrule:          1
+mip_maxnodes:            65536
+mip_outinterval:         100
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                754
+    bounded below only:                             160
+    bounded above only:                               0
+    bounded below and above:                         16
+    fixed:                                           12
+    free:                                           566
+Number of binary variables:                          16
+Number of integer variables:                          0
+Number of constraints:                             1286
+    linear equalities:                              360
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                       40
+    linear one-sided inequalities:                  722
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          164
+Number of nonzeros in Jacobian:                    3904
+Number of nonzeros in Hessian:                      771
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 160 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+   iter =      1: Iinf =     16, FeasError =   3.530e-02
+   iter =      2: Iinf =     14, FeasError =   4.480e-01
+   iter =      3: Iinf =     16, FeasError =   3.530e-02
+   iter =      4: Iinf =     13, FeasError =   2.461e-01
+   iter =      5: Iinf =      3, FeasError =   1.492e-02
+   iter =      6: Iinf =     15, FeasError =   2.461e-01
+   iter =      7: Iinf =      4, FeasError =   1.884e-02
+   iter =      8: Iinf =     14, FeasError =   2.979e-01
+   iter =      9: Iinf =      4, FeasError =   1.884e-02
+   iter =     10: Iinf =     16, FeasError =   3.138e-03
+   iter =     11: Iinf =      2, FeasError =   7.492e-03
+   iter =     12: Iinf =      1, FeasError =   3.120e-03
+   iter =     13: Iinf =      3, FeasError =   1.577e-02
+   iter =     14: Iinf =     16, FeasError =   2.240e-01
+   iter =     15: Iinf =      3, FeasError =   1.577e-02
+*  iter =     16: Iinf =      0, FeasError =   7.105e-15, Obj =   1.868e+05
+Knitro found integer feasible point in 16 heuristic iterations
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0      16    1.10e+05       1.10e+05    1.87e+05       2.994
+     100      31         INFEASIBLE  pr    1.17e+05    1.87e+05      13.060
+     200      45         INFEASIBLE  pr    1.20e+05    1.87e+05      26.919
+     300      49      12    1.29e+05       1.28e+05    1.87e+05      41.417
+     400      61       7    1.62e+05       1.30e+05    1.87e+05      62.607
+     500      65       7    1.70e+05       1.34e+05    1.87e+05      80.055
+     600      65       7    1.43e+05       1.36e+05    1.87e+05      97.232
+     700      75            1.97e+05 pr    1.37e+05    1.87e+05     108.017
+*    730      77       0    1.83e+05  f    1.38e+05    1.83e+05     113.039
+     800      91         INFEASIBLE  pr    1.39e+05    1.83e+05     122.409
+*    812      85       0    1.78e+05  f    1.39e+05    1.78e+05     124.474
+     900      77       5    1.64e+05       1.42e+05    1.78e+05     137.713
+    1000      61       5    1.70e+05       1.47e+05    1.78e+05     155.934
+    1100      53            1.83e+05 pr    1.48e+05    1.78e+05     170.080
+    1200      55            1.98e+05 pr    1.49e+05    1.78e+05     181.145
+*   1276      47       0    1.77e+05  f    1.50e+05    1.77e+05     190.809
+    1300      47       6    1.74e+05       1.50e+05    1.77e+05     193.029
+    1400      35       9    1.54e+05       1.54e+05    1.77e+05     204.852
+    1500      19         INFEASIBLE  pr    1.60e+05    1.77e+05     217.092
+    1597       0            1.66e+05       1.77e+05    1.77e+05     227.401
+  WARNING -- integrality gap is negative
+
+EXIT: Optimal solution found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   1.77231926861168e+05
+Final integrality gap (abs / rel)   = -4.54e-06 /  -2.56e-11 (-0.00%)
+# of nodes processed                =     1597
+# of subproblems processed          =     1617
+Total program time (secs)           =     227.40343 (   228.542 CPU time)
+Time spent in evaluations (secs)    =      17.15554
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg          6.4         6.31    113510
+   nlp_gf_jg         5.69         5.65     99701
+  nlp_hess_l         4.09         4.07     96421
+      solver          229          227         1
