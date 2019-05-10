@@ -20,18 +20,19 @@ import casadi.*
 %========================================================
 % Command Line Logging
 diary off
-diary_filename = strcat('multiphase-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+diary_filename = strcat('Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
 diary(diary_filename);
 
 %=========================================================
 % Display Script Information
 disp('====================================================');
-disp('Genearl Information:')
+disp('Genearl Information:');
 disp('====================================================');
 disp('CasADi Implementation');
 disp('2D Locomotion Control using Mixed-integer Nonlinear Optimization');
+disp('With a Particular Emphasis on Periodical Gait Discovery');
 disp('Multi-Phase Formulation:');
-disp('Optimize over Control, Gait Sequence, and Switching Time')
+disp('Optimize over State, Control, Gait Sequence, and Switching Time');
 disp('----------------------------------------------------');
 disp('Date and Time:');
 disp(datetime('now'));
@@ -68,8 +69,8 @@ PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
 disp('====================================================');
 disp('Setup Robot Kinematics Properties: ')
 disp('----------------------------------------------------');
-BoundingBox_Width = 0.8;
-BoundingBox_Height = 0.4;
+BoundingBox_Width = 0.6;
+BoundingBox_Height = 0.6;
 %======================================================================
 
 %======================================================================
@@ -83,82 +84,43 @@ disp('----------------------------------------------------');
 %----------------------------------------------------------------------
 %   Setup the Terrain Model
 %----------------------------------------------------------------------
-%       Maximum Number of Stairs can handle
-MaxNumStairs = 10;
-%----------------------------------------------------------------------
-%       Build CasADi sigmoid function
-%           Define Symbolic Variables
-sigSlopeFactor = SX.sym('a',1);
-sigCenter      = SX.sym('c',1);
-sigLevelChange = SX.sym('m',1);
-sig_x          = SX.sym('sig_x',1);
-sig_y          = SX.sym('sig_y',1);
-%           Build CasADi Sigmoid Function
-sig_y = sigLevelChange/(1 + exp(-sigSlopeFactor*(sig_x-sigCenter)));
-Sigmoid = Function('Sigmoid', {sig_x, sigSlopeFactor, sigCenter, sigLevelChange}, {sig_y});
-%----------------------------------------------------------------------
-%       Define Terrain Model Parameters
-NumStairs = input(['Specify Number of Stairs (Terrain Elevation Change) of the Terrain Model (0 -> Flat Terrain, 1,2..10 --> 1,2..10 Stairs; Maximum Number of Stairs can take, ', num2str(MaxNumStairs),'):\n']);
+TerrainType = input('Specify the Terrain Type: 1 -> Flat Terrain; 2 -> Slopes\n');
 
-if NumStairs == 0 %Flat Terrain
+if TerrainType == 1 %Flat Terrain
     disp('Selected Flat Terrain');
-    SlopeFactor    = zeros(1,MaxNumStairs);
+    %Use Lagecy Implementation
+    %       Maximum Number of Stairs can handle
+    MaxNumStairs = 10;
+    NumStairs = MaxNumStairs; %May remove
     HeightChangingPlaces = zeros(1,MaxNumStairs);
     LevelChanges   = zeros(1,MaxNumStairs);
     %For Visualization program
     HeightChangingPlaces_vis = ones(1,MaxNumStairs);
     LevelChanges_vis = LevelChanges;
-elseif NumStairs > 0 && NumStairs <= 10 % Stairs
-    disp(['Selected ', num2str(NumStairs), '-Stair Terrain']);
-    disp('----------------------------------------------------');
-%     SlopeFactor = input('Define the Slope of the Sigmoid Transition (e.g. 50-100):\n');
-%     disp('----------------------------------------------------');
-    HeightChangingPlaces = input('Define Length of Each Stair -> Use a Row Vector to Define (i.e. [1, 1.5, 0.5,...]), Can use repmat(StairLength,1,NumStairs) for Stairs with Uniform Length:\n');        
-    HeightChangingPlaces_vis = [HeightChangingPlaces, repmat(5 ,1, MaxNumStairs - NumStairs)]; %Expand for Visualization Program
-    disp('----------------------------------------------------');
-    LevelChanges = input('Define Terrain Height Change of Each Stair -> Use a Row Vector to Define (i.e. [0.3, 0.2, -0.1,...]), Can use repmat(StairHeightChange,1,NumStairs) for Stairs with Same Height Change:\n');
-    LevelChanges_vis = [LevelChanges, zeros(1, MaxNumStairs - NumStairs)]; %Expand for Visualization Program
-    %   Check Vector Length with respect to Number of Stairs
-    if length(HeightChangingPlaces) ~= NumStairs || length(LevelChanges) ~= NumStairs
-        ME_VectorSize = MException('Initialization:VectorSize', 'Size Mismatch between Height Changing Places Vector and Level Change Vector');
-        throw(ME_VectorSize)
-    end
-    
+elseif TerrainType == 2 %Slope
+    disp('Selected Slope Terrain');
+    ME_SlopeUnavailable = MException('Initialization:SlopeUnavailable',['Slope Terrain Un-implemented']);
 else %Unknown Scenario
-    ME_NumStairs = MException('Initialization:TerrainType',['Number of Stairs Exceeds the Limit (', num2str(MaxNumStairs),') or Negative']);
-    throw(ME_NumStairs)
+    ME_TerrainType = MException('Initialization:TerrainType',['Unknown Terrain Type']);
+    throw(ME_TerrainType)
 end
 
 %         Build Terrain Model Function --> CasADi If-Else implementation
 %           Define CasADi symbolic variables
 h_terrain = 0;
 x_query   = SX.sym('x_query', 1);
-for i = 1:NumStairs
+for i = 1:MaxNumStairs
     h_terrain = h_terrain + if_else(x_query < sum(HeightChangingPlaces(1:i)), 0, LevelChanges(i));
 end
 TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
 disp('----------------------------------------------------');
-
-
-% %       Build Terrain Model Function --> Sigmoid Implementation
-% %           Define CasADi symbolic variables
-% %h_terrain = SX.sym('h_terrain',1);
-% h_terrain = 0;
-% x_query   = SX.sym('x_query',  1);
-% for i = 1:NumStairs
-%     h_terrain = h_terrain + Sigmoid(x_query, SlopeFactor, sum(HeightChangingPlaces(1:i)), LevelChanges(i));
-% end
-% %           Build Terrain Model CasAdi Function
-% TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
-% disp('----------------------------------------------------');
-
 %-----------------------------------------------------------------------
 %   Plot Terrain Model
 PlotTerrainFlag = input('Plot the Terrain Model? 1 -> Yes; 2 -> No\n');
 if PlotTerrainFlag == 1 %Yes, Plot the terrain model    
     terrainx = linspace(-2, sum(HeightChangingPlaces)+3, 1e4);
     terrainy = full(TerrainModel(terrainx));
-    plot(terrainx,terrainy)
+    plot(terrainx,terrainy,'LineWidth',2)
     ylim([min(terrainy)-1,max(terrainy)+1])
     disp('----------------------------------------------------');
 end
@@ -173,12 +135,17 @@ disp(' ')
 %======================================================================
 
 %======================================================================
-% Time Step and Discretization Parameter Settings
-%----------------------------------------------------------------------
-%   Display Info
+% Task Specifications
+%======================================================================
+%   Display Information
 %----------------------------------------------------------------------
 disp('====================================================');
-disp('Temporal Setup:');
+disp('Task Specification:')
+disp('----------------------------------------------------');
+%----------------------------------------------------------------------
+%   Specify Desired Speed
+%----------------------------------------------------------------------
+speed = input('Specify Travel Speed along X-axis (m/s): \n');
 disp('----------------------------------------------------');
 %----------------------------------------------------------------------
 %   Terminal time
@@ -190,10 +157,21 @@ if Tend_flag == 1 %Optimize Terminal Time
 elseif Tend_flag == 2
     disp('Terminal Time (Tend) is Set as Free Variables')
     Tend_Bound = input('Specify Upper Bound of Terminal Time (i.e. 1,2..(s)):\n');
-elseif Tend_flag ~= 1 && Tend_flag ~= 2
+else
     ME_Tend = MException('Initialization:Tend_flag','Unknown Indicator for Determining the on/off of Terminal Time Optimization');
     throw(ME_Tend)
 end
+disp('----------------------------------------------------');
+disp(' ')
+%======================================================================
+
+%======================================================================
+% Time Step and Discretization Parameter Settings
+%----------------------------------------------------------------------
+%   Display Info
+%----------------------------------------------------------------------
+disp('====================================================');
+disp('Temporal and Discretization Setup:');
 disp('----------------------------------------------------');
 %   Number of Phases
 NumPhases = input('Input Number of Phases: \n');
@@ -216,63 +194,8 @@ disp(['Number of Knots/Discretization of tau (from 0 to ', num2str(tau_upper_lim
 disp('====================================================');
 disp(' ')
 %======================================================================
-% Task Specifications
-%======================================================================
-%   Display Information
-%----------------------------------------------------------------------
-disp('====================================================');
-disp('Task Specification:')
-disp('----------------------------------------------------');
-%----------------------------------------------------------------------
-%   Initial Conditions
-%----------------------------------------------------------------------
-x_Init         = 0;
-y_Init         = 1/2*BodyHeight + DefaultLegLength + full(TerrainModel(x_Init));
-theta_Init     = 0;
-xdot_Init      = 0;
-ydot_Init      = 0;
-thetadot_Init  = 0;
-PFx_Init       =  PFCenterX + x_Init;
-PFy_Init       =  full(TerrainModel(PFx_Init));
-PHx_Init       =  PHCenterX + x_Init;
-PHy_Init       =  full(TerrainModel(PHx_Init));
-CF_Init        =  1;
-CH_Init        =  1;
-%----------------------------------------------------------------------
-%   Terminal Conditions
-%----------------------------------------------------------------------
-%       Terminal X-axis distance
-disp('Define Travel Distance along X-axis: ')
-if NumStairs == 0 %Flat Terrain
-    x_End = input('Flat Terrain --> Specify Any Distance along X-axis (m):\n');
-elseif NumStairs > 0 && NumStairs <= 10 % Stairs
-    x_End = input(['Stairs --> Specify any Location or Specify Any Distance larger than the Final Terrain Elevation Change Point with Half of the Body Length More, at Least (', num2str(sum(HeightChangingPlaces) + BoundingBox_Width/2), '):\n']);
-else %Unknown Scenario
-    ME_NumStairs = MException('Initialization:TerrainType',['Number of Stairs Exceeds the Limit (', num2str(MaxNumStairs),') or Negative']);
-    throw(ME_NumStairs)
-end
-%x_End        = input('Input Travel Distance along x-axis (m): \n' );
-y_End        = 1/2*BodyHeight + DefaultLegLength + full(TerrainModel(x_End));
-theta_End    = 0;
-xdot_End     = 0;
-ydot_End     = 0;
-thetadot_End = 0;
-%----------------------------------------------------------------------
-%   Test if initial and termianl conditions violates kinematics constraint
-%   Robot Height should set in a way that highest foot posiitons are not
-%   undre the terrain height, otherwise conflicting with complementarity
-%   constraints
-if (y_Init - 1/2*BodyHeight - DefaultLegLength + 1/2*BoundingBox_Height) < 0
-    ME_InitHeight = MException('Initialization:ProblematicInitialHeight','Initial Height Error (y_init), Increase Initial Height');
-    throw(ME_InitHeight)
-end
 
-if (y_End - 1/2*BodyHeight - DefaultLegLength + 1/2*BoundingBox_Height) < 0
-    ME_TerminalHeight = MException('Initialization:ProblematicTerminalHeight','Terminal Height Error (y_end), Increase Terminal Height');
-    throw(ME_TerminalHeight)
-end
-disp('====================================================');
-disp(' ')
+
 %=======================================================================
 % (Place Holder): Setup of Soft constraints on Terminal Condition or not
 %=======================================================================
@@ -595,7 +518,7 @@ KinematicsConstraint = Function('KinematicsConstraint',{rk, Pk, Pc},{kinematics}
 %--------------------------------
 %   (Place Holder) Need to Change when move to 3D Case and/or Uneven
 %   Terrains (change equation and norm)
-%-------------------------------
+%--------------------------------
 %       Variable Definitions
 Const_miu = SX.sym('miu');
 NormX     = SX.sym('Nx[k]');
@@ -662,8 +585,7 @@ for i = 1:length(varList)
             lb_DecisionVars = [lb_DecisionVars, repmat(-inf, 1, VarLengthList(i))];    
             ub_DecisionVars = [ub_DecisionVars, repmat( inf, 1, VarLengthList(i))];
         end
-        %lb_DecisionVars = [lb_DecisionVars, repmat(-inf, 1, VarLengthList(i))];    
-        %ub_DecisionVars = [ub_DecisionVars, repmat( inf, 1, VarLengthList(i))];
+        
         varstype        = [varstype,        zeros(1, VarLengthList(i))];           %0 (use zeros) -> Continuous Variable/ 1 (use ones) -> Binary Variable
     end
 end
@@ -730,7 +652,7 @@ for k = 1:tauSeriesLength
         lbg = [lbg;  0];       %Give constraint lower bound
         ubg = [ubg;  0];       %Give constraint upper bound
         %----------------------------------------
-        %(*) x-axis second-order dynamics (velocity)
+        % (*) x-axis second-order dynamics (velocity)
         %       Equation: xdot[k+1] - xdot[k] - h*(1/m*FFx[k] + 1/m*FHx[k])
         %       Input: x[k+1]  = xdot[k+1]
         %              x[k]    = xdot[k]
@@ -738,7 +660,7 @@ for k = 1:tauSeriesLength
         %              fdyn[k] = 1/m*(FFx[k]+FHx[k])
         %       lbg = 0;
         %       ubg = 0;
-        fdyntemp  = 1/m*(FFx(k)+FHx(k)); 
+        fdyntemp  = 1/m*(FFx(k)+FHx(k));
         EqTemp    = EulerIntegration(xdot(k+1), xdot(k), h, fdyntemp);
         g   = {g{:}, EqTemp};  %Append to constraint function list
         lbg = [lbg;  0];       %Give constraint lower bound
@@ -870,7 +792,7 @@ for k = 1:tauSeriesLength
     %   (*) Foot/End-effector Position (y-axis only)
     %---------------------------------------------------
     %       (Place Holder) Need to Change Height into loop-up table
-    %       function ifr we go for uneven terrain
+    %       function if we go for uneven terrain
     %--------------------------------------------------
     %       - Equation (1): Py <= Height + Mpos(1-C) -->
     %                       Py + Mpos*C <= Height + Mpos -->
@@ -931,25 +853,25 @@ for k = 1:tauSeriesLength
         EqTemp = Ineq_Summation(PFxdot(k), Mvelx, CF(PhaseIdx));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
         lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvelx];                        %Give constraint upper bound
+        ubg = [ubg;  Mvelx];                       %Give constraint upper bound
 
     %           Front Leg y-axis
         EqTemp = Ineq_Summation(PFydot(k), Mvely, CF(PhaseIdx));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
         lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvely];                        %Give constraint upper bound
+        ubg = [ubg;  Mvely];                       %Give constraint upper bound
 
     %           Hind Leg x-axis
         EqTemp = Ineq_Summation(PHxdot(k), Mvelx, CH(PhaseIdx));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
         lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvelx];                        %Give constraint upper bound
+        ubg = [ubg;  Mvelx];                       %Give constraint upper bound
 
     %           Hind Leg y-axis
         EqTemp = Ineq_Summation(PHydot(k), Mvely, CH(PhaseIdx));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
         lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvely];                        %Give constraint upper bound
+        ubg = [ubg;  Mvely];                       %Give constraint upper bound
     %------------------------------------------------------              
     %       - Equation (2): Pdot >= 0 - Mvel(1-C) -->
     %                       Pdot - Mvel*C >= -Mvel -->
@@ -964,25 +886,25 @@ for k = 1:tauSeriesLength
     %           Front Leg x-axis
         EqTemp = Ineq_Difference(PFxdot(k), Mvelx, CF(PhaseIdx));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvelx];                       %Give constraint lower bound
+        lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
         ubg = [ubg;  inf];                         %Give constraint upper bound
 
     %           Front Leg y-axis
         EqTemp = Ineq_Difference(PFydot(k), Mvely, CF(PhaseIdx));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvely];                       %Give constraint lower bound
+        lbg = [lbg;  -Mvely];                      %Give constraint lower bound
         ubg = [ubg;  inf];                         %Give constraint upper bound
 
     %           Hind Leg x-axis
         EqTemp = Ineq_Difference(PHxdot(k), Mvelx, CH(PhaseIdx));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvelx];                       %Give constraint lower bound
+        lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
         ubg = [ubg;  inf];                         %Give constraint upper bound
 
     %           Hind Leg y-axis
         EqTemp = Ineq_Difference(PHydot(k), Mvely, CH(PhaseIdx));
         g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvely];                       %Give constraint lower bound
+        lbg = [lbg;  -Mvely];                      %Give constraint lower bound
         ubg = [ubg;  inf];                         %Give constraint upper bound
     %------------------------------------------------------
     %   (*) Foot/End-Effector Forces
@@ -1057,6 +979,9 @@ for k = 1:tauSeriesLength
     %------------------------------------------------------
     %       - Equation (2): F(F/H)y >= 0 
     %           Achieve by Changing Lower Variable bounds
+    %-------------------------------------------------------
+    %       (Place Holder) May need to consider the terrain direction when
+    %       having slope terrain (Do not pull from the ground surface)
     %------------------------------------------------------
     %           Front Leg
         lb_DecisionVars(find(VarNamesList == ['FFy_',num2str(k-1)])) = 0;
@@ -1159,71 +1084,8 @@ for i = 1:NumPhases
         ubg = [ubg; inf]; 
     end
 end
-%-----------------------------------------------------------------------
-
-%-----------------------------------------------------------------------
-%   Initial Condition and Terminal Condition
-%----------------------------------------------------------------------
-%   Constrain Initial Conditions
-%----------------------------------------------------------------------
-%       x_Init
-lb_DecisionVars(find(VarNamesList == ['x_',num2str(0)])) = x_Init;
-ub_DecisionVars(find(VarNamesList == ['x_',num2str(0)])) = x_Init;
-%       y_Init
-lb_DecisionVars(find(VarNamesList == ['y_',num2str(0)])) = y_Init;
-ub_DecisionVars(find(VarNamesList == ['y_',num2str(0)])) = y_Init;
-%       theta_Init
-lb_DecisionVars(find(VarNamesList == ['theta_',num2str(0)])) = theta_Init;
-ub_DecisionVars(find(VarNamesList == ['theta_',num2str(0)])) = theta_Init;
-%       xdot_Init
-lb_DecisionVars(find(VarNamesList == ['xdot_',num2str(0)])) = xdot_Init;
-ub_DecisionVars(find(VarNamesList == ['xdot_',num2str(0)])) = xdot_Init;
-%       ydot_Init
-lb_DecisionVars(find(VarNamesList == ['ydot_',num2str(0)])) = ydot_Init;
-ub_DecisionVars(find(VarNamesList == ['ydot_',num2str(0)])) = ydot_Init;
-%       thetadot_Init
-lb_DecisionVars(find(VarNamesList == ['thetadot_',num2str(0)])) = thetadot_Init;
-ub_DecisionVars(find(VarNamesList == ['thetadot_',num2str(0)])) = thetadot_Init;
-%       PFx_Init
-lb_DecisionVars(find(VarNamesList == ['PFx_',num2str(0)])) = PFx_Init;
-ub_DecisionVars(find(VarNamesList == ['PFx_',num2str(0)])) = PFx_Init;
-%       PFy_Init
-lb_DecisionVars(find(VarNamesList == ['PFy_',num2str(0)])) = PFy_Init;
-ub_DecisionVars(find(VarNamesList == ['PFy_',num2str(0)])) = PFy_Init;
-%       PHx_Init
-lb_DecisionVars(find(VarNamesList == ['PHx_',num2str(0)])) = PHx_Init;
-ub_DecisionVars(find(VarNamesList == ['PHx_',num2str(0)])) = PHx_Init;
-%       PHy_Init
-lb_DecisionVars(find(VarNamesList == ['PHy_',num2str(0)])) = PHy_Init;
-ub_DecisionVars(find(VarNamesList == ['PHy_',num2str(0)])) = PHy_Init;
-%       CF_Init
-lb_DecisionVars(find(VarNamesList == ['CF_',num2str(1)]))  = CF_Init;
-ub_DecisionVars(find(VarNamesList == ['CF_',num2str(1)]))  = CF_Init;
-%       CH_Init
-lb_DecisionVars(find(VarNamesList == ['CH_',num2str(1)]))  = CH_Init;
-ub_DecisionVars(find(VarNamesList == ['CH_',num2str(1)]))  = CH_Init;
-%-------------------------------------------------------------------------
-%   Constrain End Condition
-%-------------------------------------------------------------------------
-%       x_End
-lb_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = x_End;
-ub_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = x_End;
-%       y_End
-lb_DecisionVars(find(VarNamesList == ['y_',num2str(NumKnots)])) = y_End;
-ub_DecisionVars(find(VarNamesList == ['y_',num2str(NumKnots)])) = y_End;
-%       theta_End
-lb_DecisionVars(find(VarNamesList == ['theta_',num2str(NumKnots)])) = theta_End;
-ub_DecisionVars(find(VarNamesList == ['theta_',num2str(NumKnots)])) = theta_End;
-%       xdot_End
-lb_DecisionVars(find(VarNamesList == ['xdot_',num2str(NumKnots)])) = xdot_End;
-ub_DecisionVars(find(VarNamesList == ['xdot_',num2str(NumKnots)])) = xdot_End;
-%       ydot_End
-lb_DecisionVars(find(VarNamesList == ['ydot_',num2str(NumKnots)])) = ydot_End;
-ub_DecisionVars(find(VarNamesList == ['ydot_',num2str(NumKnots)])) = ydot_End;
-%       thetadot_End
-lb_DecisionVars(find(VarNamesList == ['thetadot_',num2str(NumKnots)])) = thetadot_End;
-ub_DecisionVars(find(VarNamesList == ['thetadot_',num2str(NumKnots)])) = thetadot_End;
-%       Terminal Time
+%-----------------------------------------
+%    Terminal Time Constraint
 %-----------------------------------------
 if Tend_flag == 1 %only constrain terminal time when user specifies that
     lb_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = Tend;
@@ -1233,6 +1095,106 @@ elseif Tend_flag == 2 %Bounded Terminal Time
     ub_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = Tend_Bound;
 end
 %-----------------------------------------------------------------------
+
+%-----------------------------------------------------------------------
+%   Periodical Motion Constraints
+%       Equation (Except X-axis positions): State_Init - State_End = 0
+%       lbg = 0
+%       ubg = 0
+%-----------------------------------------------------------------------
+%       X-axis positions
+%-----------------------------------------------------------------------
+%           Initial X-axis Position -> always = 0
+lb_DecisionVars(find(VarNamesList == ['x_',num2str(0)])) = 0;
+ub_DecisionVars(find(VarNamesList == ['x_',num2str(0)])) = 0;
+%           Terminal X-axis Position
+if Tend_flag == 1 %specified Tend
+   lb_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = speed*Tend;
+   ub_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = speed*Tend; 
+elseif Tend_flag == 2 %Bounded Terminal Time -> x_end = speed*Tend -> x_end - speed*Tend = 0
+    EqTemp = x(end) - speed*Ts(end);
+    g = {g{:}, EqTemp};
+    lbg = [lbg; 0];
+    ubg = [ubg; 0];
+end
+%-----------------------------------------------------------------------
+%       Y-axis Positions
+%-----------------------------------------------------------------------
+EqTemp = y(1) - y(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%-----------------------------------------------------------------------
+%       Theta Positions
+%-----------------------------------------------------------------------
+EqTemp = theta(1) - theta(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%-----------------------------------------------------------------------
+%       X-axis Velocities
+%-----------------------------------------------------------------------
+EqTemp = xdot(1) - xdot(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%-----------------------------------------------------------------------
+%       Y-axis Velocities
+%-----------------------------------------------------------------------
+EqTemp = ydot(1) - ydot(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%-----------------------------------------------------------------------
+%       Angular Velocity
+%-----------------------------------------------------------------------
+EqTemp = thetadot(1) - thetadot(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%-----------------------------------------------------------------------
+%   Front Leg X-axis Positions
+%-----------------------------------------------------------------------
+EqTemp = PFx(1) - PFx(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%-----------------------------------------------------------------------
+%   Front Leg Y-axis Positions
+%-----------------------------------------------------------------------
+EqTemp = PFy(1) - PFy(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%-----------------------------------------------------------------------
+%   Hind Leg X-axis Positions
+%-----------------------------------------------------------------------
+EqTemp = PHx(1) - PHx(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%-----------------------------------------------------------------------
+%   Hind Leg Y-axis Positions
+%-----------------------------------------------------------------------
+EqTemp = PHy(1) -PHy(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%-----------------------------------------------------------------------
+%   Front Leg Contact Configuration
+%-----------------------------------------------------------------------
+EqTemp = CF(1) - CF(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%-----------------------------------------------------------------------
+%   Hind Leg Contact Configuration
+%-----------------------------------------------------------------------
+EqTemp = CH(1) - CH(end);
+g = {g{:}, EqTemp};
+lbg = [lbg; 0];
+ubg = [ubg; 0];
+%------------------------------------------------------------------------
 disp('Constraints and Objetive Function Constructed')
 disp('===================================================')
 disp(' ')
