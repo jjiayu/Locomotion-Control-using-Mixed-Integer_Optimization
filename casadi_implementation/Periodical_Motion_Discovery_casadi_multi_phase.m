@@ -227,9 +227,9 @@ if MvelxCase == 1
 %    disp(['Selected Default Value for Big-M value for Foot/End-Effector Valocity in X-axis: ', num2str(Mvelx)]);
 elseif MvelxCase == 2
     if exist('Tend', 'var')
-        disp(['Current Averate Task Speed in X-axis: ', num2str(x_End/Tend)]);
+        disp(['Current Averate Task Speed in X-axis: ', num2str(speed)]);
         MvelxScaling = input('Input the Scaling Factor of the Average Task Speed (in X-axis) (i.e. 1, 2, 3, etc...): \n');
-        Mvelx = x_End/Tend*MvelxScaling;
+        Mvelx = speed*MvelxScaling;
     else
         warning('Terminal Time is Undefined -> Unable to Compute Average Task Speed in X-axis');
         Mvelx = input('Manually Specify a Big-M value for Foot/End-Effector Velocity in X-axis: \n');
@@ -1153,48 +1153,20 @@ g = {g{:}, EqTemp};
 lbg = [lbg; 0];
 ubg = [ubg; 0];
 %-----------------------------------------------------------------------
-%   Front Leg X-axis Positions
+%   Front Leg Positions (Convert to Robot Local Frame)
 %-----------------------------------------------------------------------
-EqTemp = PFx(1) - PFx(end);
+EqTemp = [cos(theta(1)), -sin(theta(1)); sin(theta(1)), cos(theta(1))]'*([PFx(1),PFy(1)]' - [x(1),y(1)]') - [cos(theta(end)), -sin(theta(end)); sin(theta(end)), cos(theta(end))]'*([PFx(end),PFy(end)]' - [x(end),y(end)]');
 g = {g{:}, EqTemp};
-lbg = [lbg; 0];
-ubg = [ubg; 0];
+lbg = [lbg; 0; 0];
+ubg = [ubg; 0; 0];
 %-----------------------------------------------------------------------
-%   Front Leg Y-axis Positions
+%   Hind Leg Positions (Convert to Robot Local Frame)
 %-----------------------------------------------------------------------
-EqTemp = PFy(1) - PFy(end);
+EqTemp = [cos(theta(1)), -sin(theta(1)); sin(theta(1)), cos(theta(1))]'*([PHx(1),PHy(1)]' - [x(1),y(1)]') - [cos(theta(end)), -sin(theta(end)); sin(theta(end)), cos(theta(end))]'*([PHx(end),PHy(end)]' - [x(end),y(end)]');
 g = {g{:}, EqTemp};
-lbg = [lbg; 0];
-ubg = [ubg; 0];
+lbg = [lbg; 0; 0];
+ubg = [ubg; 0; 0];
 %-----------------------------------------------------------------------
-%   Hind Leg X-axis Positions
-%-----------------------------------------------------------------------
-EqTemp = PHx(1) - PHx(end);
-g = {g{:}, EqTemp};
-lbg = [lbg; 0];
-ubg = [ubg; 0];
-%-----------------------------------------------------------------------
-%   Hind Leg Y-axis Positions
-%-----------------------------------------------------------------------
-EqTemp = PHy(1) -PHy(end);
-g = {g{:}, EqTemp};
-lbg = [lbg; 0];
-ubg = [ubg; 0];
-%-----------------------------------------------------------------------
-%   Front Leg Contact Configuration
-%-----------------------------------------------------------------------
-EqTemp = CF(1) - CF(end);
-g = {g{:}, EqTemp};
-lbg = [lbg; 0];
-ubg = [ubg; 0];
-%-----------------------------------------------------------------------
-%   Hind Leg Contact Configuration
-%-----------------------------------------------------------------------
-EqTemp = CH(1) - CH(end);
-g = {g{:}, EqTemp};
-lbg = [lbg; 0];
-ubg = [ubg; 0];
-%------------------------------------------------------------------------
 disp('Constraints and Objetive Function Constructed')
 disp('===================================================')
 disp(' ')

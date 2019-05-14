@@ -1,0 +1,271 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+With a Particular Emphasis on Periodical Gait Discovery
+Multi-Phase Formulation:
+Optimize over State, Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   14-May-2019 16:26:22
+
+----------------------------------------------------
+Correspondent Log File Name: Periodical-Loco-log-20190514T162622
+====================================================
+ 
+====================================================
+Setup Robot Kinematics Properties: 
+----------------------------------------------------
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify the Terrain Type: 1 -> Flat Terrain; 2 -> Slopes
+1
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+1
+[Warning: MATLAB has disabled some advanced graphics rendering features by switching to software OpenGL. For more information,
+click <a href="matlab:opengl('problems')">here</a>.] 
+----------------------------------------------------
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Specify Travel Speed along X-axis (m/s): 
+0.3
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+1
+Input Termianl Time (e.g. 1s): 
+1
+----------------------------------------------------
+ 
+====================================================
+Temporal and Discretization Setup:
+----------------------------------------------------
+Input Number of Phases: 
+6
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+5
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.033333
+Number of Knots/Discretization of tau (from 0 to 1: 31) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+====================================================
+ 
+====================================================
+Big-M Setup
+====================================================
+Big-M for Foot/End-Effector in X-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: 
+1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
+3
+ 
+Input Big-M value for foot/end-effector Velocity for X-axis: 
+1.5
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 1.5 m/s
+----------------------------------------------------
+Big-M for Foot/End-Effector in Y-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: 
+1 -> Default Value (5m/s); 2 -> User Specified: 
+2
+ 
+Input Big-M value for foot/end-effector Velocity for Y-axis (e.g. 1-5+ m/s): 
+NOTE: Can Write the Value as the Kinematics Bounding Box Height (BoundingBox_Height)/Desired Time to Travel the Entire Bounding Box Height
+1.5
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: 1.5 m/s
+----------------------------------------------------
+Big-M for Contact Forces
+Input Big-M for Foot-Ground Reaction Forces along X-axis (e.g. 200,300,1000,1e5):
+300
+----------------------------------------------------
+Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3, 1e5, better larger than Mfx):
+1200
+====================================================
+====================================================
+Solver Setups:
+====================================================
+Solver Selection: 
+1 -> Knitro; 2 -> Bonmin 
+1
+Selected Solver: knitro
+----------------------------------------------------
+Solver Dependent Options:
+----------------------------------------------------
+Define Number of Max Nodes to be Explored: 
+ 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value
+1
+Selected Worst-case Scenarios to Explore 4096 Nodes
+====================================================
+ 
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (3 variables).
+hessopt:                 1
+mip_branchrule:          2
+mip_heuristic:           0
+mip_maxnodes:            4096
+mip_outinterval:         50
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                576
+    bounded below only:                              62
+    bounded above only:                               0
+    bounded below and above:                         43
+    fixed:                                            3
+    free:                                           468
+Number of binary variables:                          12
+Number of integer variables:                          0
+Number of constraints:                             1059
+    linear equalities:                                5
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      304
+    linear one-sided inequalities:                  626
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          124
+Number of nonzeros in Jacobian:                    3639
+Number of nonzeros in Hessian:                     1524
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 62 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0      12  -1.80e+308     -1.80e+308                   1.271
+*     14      11       0    2.43e+05  f  -1.80e+308    2.43e+05       2.098
+*     36      27       0    2.43e+05  f    9.74e+04    2.43e+05       7.656
+*     49      30       0    1.22e+05  f    9.74e+04    1.22e+05      12.135
+      50      29       1    1.08e+05       9.74e+04    1.22e+05      12.172
+     100      55            1.95e+05 pr    9.74e+04    1.22e+05      38.813
+     150      77            1.22e+05 pr    9.74e+04    1.22e+05      66.415
+     200      99       1    1.22e+05       9.74e+04    1.22e+05     108.582
+*    242     113       0    1.22e+05  f    9.74e+04    1.22e+05     137.182
+     250     119       2    1.08e+05       9.74e+04    1.22e+05     140.133
+     300     139       2    1.08e+05       9.74e+04    1.22e+05     168.110
+     350     163         INFEASIBLE  pr    9.74e+04    1.22e+05     191.876
+     400     167            1.22e+05 pr    9.74e+04    1.22e+05     224.616
+     450     179            1.22e+05 pr    9.74e+04    1.22e+05     248.429
+     500     189            1.22e+05 pr    9.74e+04    1.22e+05     278.829
+     550     207       1    1.11e+05       9.74e+04    1.22e+05     306.616
+     600     217       3    1.08e+05       9.74e+04    1.22e+05     328.942
+     650     219            1.22e+05 pr    9.74e+04    1.22e+05     368.490
+     700     211            1.22e+05 pr    9.74e+04    1.22e+05     428.328
+     750     223       3    1.08e+05       9.74e+04    1.22e+05     464.169
+     800     229       1    1.08e+05       9.74e+04    1.22e+05     512.037
+     850     225       6    9.74e+04       9.74e+04    1.22e+05     542.255
+     900     237         INFEASIBLE  pr    9.74e+04    1.22e+05     585.817
+     950     243         INFEASIBLE  pr    9.74e+04    1.22e+05     619.401
+    1000     233       1    1.11e+05       9.74e+04    1.22e+05     653.691
+    1050     221       4    9.74e+04       9.74e+04    1.22e+05     687.350
+    1100     217       3    9.74e+04       9.74e+04    1.22e+05     736.130
+    1150     211       2    1.08e+05       9.74e+04    1.22e+05     786.337
+    1200     207            1.95e+05 pr    9.74e+04    1.22e+05     816.166
+    1250     211       2    9.74e+04       9.74e+04    1.22e+05     852.468
+    1300     213            1.23e+05 pr    9.74e+04    1.22e+05     893.896
+    1350     229       4    9.74e+04       9.74e+04    1.22e+05     912.812
+    1400     225            1.22e+05 pr    9.74e+04    1.22e+05     965.269
+    1450     215       1    1.11e+05       9.74e+04    1.22e+05     991.593
+    1500     227       4    1.08e+05       9.74e+04    1.22e+05    1016.789
+    1550     237       2    1.11e+05       9.74e+04    1.22e+05    1055.802
+    1600     237            1.22e+05 pr    9.74e+04    1.22e+05    1093.820
+    1650     243         INFEASIBLE  pr    9.74e+04    1.22e+05    1115.154
+    1700     261       5    9.74e+04       9.74e+04    1.22e+05    1157.554
+    1750     269         INFEASIBLE  pr    9.74e+04    1.22e+05    1178.243
+    1800     265       1    1.08e+05       9.74e+04    1.22e+05    1209.045
+    1850     261       1    1.11e+05       9.74e+04    1.22e+05    1245.988
+    1900     261       1    1.08e+05       1.08e+05    1.22e+05    1290.399
+    1950     251         INFEASIBLE  pr    1.08e+05    1.22e+05    1328.122
+    2000     237            1.22e+05 pr    1.08e+05    1.22e+05    1358.811
+    2050     229         INFEASIBLE  pr    1.08e+05    1.22e+05    1392.981
+    2100     225            1.22e+05 pr    1.08e+05    1.22e+05    1410.566
+    2150     223       2    1.08e+05       1.08e+05    1.22e+05    1431.347
+    2200     233            1.22e+05 pr    1.08e+05    1.22e+05    1462.197
+    2250     235       2    1.11e+05       1.08e+05    1.22e+05    1509.944
+    2300     231       3    1.08e+05       1.08e+05    1.22e+05    1527.890
+    2350     219       1    1.08e+05       1.08e+05    1.22e+05    1568.951
+    2400     209            1.95e+05 pr    1.08e+05    1.22e+05    1590.971
+    2450     191            1.95e+05 pr    1.08e+05    1.22e+05    1628.745
+    2500     175            1.22e+05 pr    1.08e+05    1.22e+05    1664.528
+    2550     161       1    1.08e+05       1.08e+05    1.22e+05    1699.088
+    2600     149            1.22e+05 pr    1.08e+05    1.22e+05    1735.978
+    2650     133       2    1.08e+05       1.08e+05    1.22e+05    1762.216
+    2700     133       3    1.08e+05       1.08e+05    1.22e+05    1792.560
+    2750     117            1.22e+05 pr    1.08e+05    1.22e+05    1822.062
+    2800     113            1.22e+05 pr    1.08e+05    1.22e+05    1857.698
+    2850     101            2.41e+05 pr    1.08e+05    1.22e+05    1900.848
+    2900      81            1.22e+05 pr    1.08e+05    1.22e+05    1934.141
+    2950      65            1.22e+05 pr    1.08e+05    1.22e+05    1967.001
+    3000      55       1    1.08e+05       1.08e+05    1.22e+05    1998.913
+    3050      33            1.22e+05 pr    1.08e+05    1.22e+05    2032.601
+    3100      19       1    1.11e+05       1.08e+05    1.22e+05    2059.117
+
+EXIT: All nodes have been explored. Integer feasible point found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   1.21715643850387e+05
+Final integrality gap (abs / rel)   =  1.35e+04 /   1.11e-01 (11.11%)
+# of nodes processed                =     3134
+# of subproblems processed          =     3138
+Total program time (secs)           =    2075.09448 (  2086.903 CPU time)
+Time spent in evaluations (secs)    =     102.37126
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg         35.9         32.6   1035964
+   nlp_gf_jg         28.2         27.9    656715
+  nlp_hess_l         26.6         26.4    656441
+      solver     2.09e+03     2.08e+03         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+Removed Variables within Vanished Phases
+===================================================
+ 
