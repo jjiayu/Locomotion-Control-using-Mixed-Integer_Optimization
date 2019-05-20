@@ -69,8 +69,12 @@ PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
 disp('====================================================');
 disp('Setup Robot Kinematics Properties: ')
 disp('----------------------------------------------------');
-BoundingBox_Width = 0.6;
-BoundingBox_Height = 0.6;
+BoundingBox_Width  = input('Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):\n');
+disp('----------------------------------------------------');
+BoundingBox_Height = input('Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):\n');
+disp('----------------------------------------------------');
+%BoundingBox_Width = 0.6;
+%BoundingBox_Height = 0.6;
 %======================================================================
 
 %======================================================================
@@ -580,7 +584,30 @@ for i = 1:length(varList)
         if strcmp(varList(i),'theta') == 1
             lb_DecisionVars = [lb_DecisionVars, repmat(-pi/2, 1, VarLengthList(i))];    
             ub_DecisionVars = [ub_DecisionVars, repmat( pi/2, 1, VarLengthList(i))];
-            
+        elseif strcmp(varList(i),'FFx') == 1
+            lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx, 1, VarLengthList(i))];    
+            ub_DecisionVars = [ub_DecisionVars, repmat( Mfx, 1, VarLengthList(i))];
+        elseif strcmp(varList(i),'FHx') == 1
+            lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx, 1, VarLengthList(i))];    
+            ub_DecisionVars = [ub_DecisionVars, repmat( Mfx, 1, VarLengthList(i))];
+        elseif strcmp(varList(i),'FFy') == 1
+            lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy, 1, VarLengthList(i))];    
+            ub_DecisionVars = [ub_DecisionVars, repmat( Mfy, 1, VarLengthList(i))];
+        elseif strcmp(varList(i),'FHy') == 1
+            lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy, 1, VarLengthList(i))];    
+            ub_DecisionVars = [ub_DecisionVars, repmat( Mfy, 1, VarLengthList(i))];
+        elseif strcmp(varList(i),'PFxdot') == 1
+            lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx, 1, VarLengthList(i))];    
+            ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx, 1, VarLengthList(i))];
+        elseif strcmp(varList(i),'PFydot') == 1
+            lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely, 1, VarLengthList(i))];    
+            ub_DecisionVars = [ub_DecisionVars, repmat( Mvely, 1, VarLengthList(i))];
+        elseif strcmp(varList(i),'PHxdot') == 1
+            lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx, 1, VarLengthList(i))];    
+            ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx, 1, VarLengthList(i))];
+        elseif strcmp(varList(i),'PHydot') == 1
+            lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely, 1, VarLengthList(i))];    
+            ub_DecisionVars = [ub_DecisionVars, repmat( Mvely, 1, VarLengthList(i))];
         else %other unbounded variables
             lb_DecisionVars = [lb_DecisionVars, repmat(-inf, 1, VarLengthList(i))];    
             ub_DecisionVars = [ub_DecisionVars, repmat( inf, 1, VarLengthList(i))];
@@ -621,6 +648,10 @@ for k = 1:tauSeriesLength
     end
     %--------------------------------------
     
+    %----------------------------------
+    % Get time step
+    h = hVector(PhaseIdx);
+    
     %--------------------------------------
     % System dynamics
     %   Use EulerIntegration Function to Construct
@@ -633,9 +664,6 @@ for k = 1:tauSeriesLength
     %   Constraint the range
     %--------------------------------------
     if k <= tauSeriesLength - 1
-        %----------------------------------
-        % Get time step
-        h = hVector(PhaseIdx);
         %----------------------------------
         % Robot Torso Dynamics
         %--------------------------------------
@@ -773,222 +801,223 @@ for k = 1:tauSeriesLength
         ubg = [ubg;  0];       %Give constraint upper bound
         %-----------------------------------------
         %   Dynamical Equation Constraint Setup - Done
+    
+        %----------------------------------------------------
+        % Complementarity Constraint
+        %   Use Functions: Ineq_Difference --> v[k] - bigM*z[k]
+        %                  Ineq_Summation  --> v[k] + bigM*z[k]
+        %   Input: v[k] --> Continuous Variables at time step k
+        %          bigM --> bigM constant
+        %          z[k] --> Integer/Binary Variable at time step k
+        %----------------------------------------------------
+    %         %   (*) Extract Index for Identifying Contact Configuration for
+    %         %--------------------------------------------------------------
+    %         %   Governing Current Time Step
+    % 
+    %             ContactConfigIdx = floor((k-1)/NumLocalTimeSteps) + 1; % k-1 is the time step enumeration
+
+        %----------------------------------------------------
+        %   (*) Foot/End-effector Position (y-axis only)
+        %---------------------------------------------------
+        %       (Place Holder) Need to Change Height into loop-up table
+        %       function if we go for uneven terrain
+        %--------------------------------------------------
+        %       - Equation (1): Py <= Height + Mpos(1-C) -->
+        %                       Py + Mpos*C <= Height + Mpos -->
+        %                       Py + Mpos*C - Height(x) <= Mpos
+        %         Use Ineq_Summation
+        %         Input: v[k] = P(F/H)y[k]
+        %                bigM = Mpos_y
+        %                z[k] = C(F/H)[k]
+        %                Additionally: - TerrainHeight
+        %         lbg = -inf 
+        %         ubg = Mpos_y
+        %-------------------------------------------    
+        %           Front Leg
+            EqTemp = Ineq_Summation(PFy(k),Mpos_y, CF(PhaseIdx)) - TerrainModel(PFx(k));
+            g   = {g{:}, EqTemp};                      %Append to constraint function list
+            lbg = [lbg;  -inf];                        %Give constraint lower bound
+            ubg = [ubg;  Mpos_y];      %Give constraint upper bound
+
+        %           Hind Leg
+            EqTemp = Ineq_Summation(PHy(k), Mpos_y, CH(PhaseIdx)) - TerrainModel(PHx(k));
+            g   = {g{:}, EqTemp};                      %Append to constraint function list
+            lbg = [lbg;  -inf];                        %Give constraint lower bound
+            ubg = [ubg;  Mpos_y];      %Give constraint upper bound
+        %-------------------------------------------
+        %       - Equation (2): Py >= Height -->
+        %                       Height <= Py <= inf -->
+        %       For Uneven Terrain: 0 <= Py -Height(x) <= inf
+        %
+        %----------------------------------------------------
+        %         (Place Holder) For even terrain, achieve this constraint by changing variable lower bounds
+        %                        Change to complementarity form when
+        %                        introducing uneven terrain
+        %----------------------------------------------------
+        %   Front Leg
+        EqTemp = PFy(k) - TerrainModel(PFx(k));
+        g   = {g{:}, EqTemp};
+        lbg = [lbg;  0];
+        ubg = [ubg;  inf];
+        %   Hind Leg
+        EqTemp = PHy(k) - TerrainModel(PHx(k));
+        g   = {g{:}, EqTemp};
+        lbg = [lbg;  0];
+        ubg = [ubg;  inf];
+
+        %----------------------------------------------------
+        %   (*) Foot/End-Effector Velocity (for both x-axis and y-axis)
+        %----------------------------------------------------
+        %       - Equation (1): Pdot <= 0 + Mvel(1-C) -->
+        %                       Pdot + Mvel*C <= Mvel -->
+        %         Use Ineq_Summation
+        %         Input: v[k] = P(F/H)(x/y)dot[k]
+        %                bigM = Mvel
+        %                z[k] = C(F/H)[k]
+        %         lbg = -inf
+        %         ubg = Mvel
+        %----------------------------------------------------
+        %           Front Leg x-axis
+            EqTemp = Ineq_Summation(PFxdot(k), Mvelx, CF(PhaseIdx));
+            g   = {g{:}, EqTemp};                      %Append to constraint function list
+            lbg = [lbg;  -inf];                        %Give constraint lower bound
+            ubg = [ubg;  Mvelx];                       %Give constraint upper bound
+
+        %           Front Leg y-axis
+            EqTemp = Ineq_Summation(PFydot(k), Mvely, CF(PhaseIdx));
+            g   = {g{:}, EqTemp};                      %Append to constraint function list
+            lbg = [lbg;  -inf];                        %Give constraint lower bound
+            ubg = [ubg;  Mvely];                       %Give constraint upper bound
+
+        %           Hind Leg x-axis
+            EqTemp = Ineq_Summation(PHxdot(k), Mvelx, CH(PhaseIdx));
+            g   = {g{:}, EqTemp};                      %Append to constraint function list
+            lbg = [lbg;  -inf];                        %Give constraint lower bound
+            ubg = [ubg;  Mvelx];                       %Give constraint upper bound
+
+        %           Hind Leg y-axis
+            EqTemp = Ineq_Summation(PHydot(k), Mvely, CH(PhaseIdx));
+            g   = {g{:}, EqTemp};                      %Append to constraint function list
+            lbg = [lbg;  -inf];                        %Give constraint lower bound
+            ubg = [ubg;  Mvely];                       %Give constraint upper bound
+        %------------------------------------------------------              
+        %       - Equation (2): Pdot >= 0 - Mvel(1-C) -->
+        %                       Pdot - Mvel*C >= -Mvel -->
+        %                       -Mvel <= Pdot - Mvel*C
+        %         Use Function Ineq_Difference
+        %         Input: v[k] = P(F/H)(x/y)dot[k]
+        %                bigM = -Mvel
+        %                z[k] = C(F/H)[k]
+        %         lbg = -Mvel
+        %         ubg = inf
+        %------------------------------------------------------
+        %           Front Leg x-axis
+            EqTemp = Ineq_Difference(PFxdot(k), Mvelx, CF(PhaseIdx));
+            g   = {g{:}, EqTemp};                      %Append to constraint function list
+            lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
+            ubg = [ubg;  inf];                         %Give constraint upper bound
+
+        %           Front Leg y-axis
+            EqTemp = Ineq_Difference(PFydot(k), Mvely, CF(PhaseIdx));
+            g   = {g{:}, EqTemp};                      %Append to constraint function list
+            lbg = [lbg;  -Mvely];                      %Give constraint lower bound
+            ubg = [ubg;  inf];                         %Give constraint upper bound
+
+        %           Hind Leg x-axis
+            EqTemp = Ineq_Difference(PHxdot(k), Mvelx, CH(PhaseIdx));
+            g   = {g{:}, EqTemp};                      %Append to constraint function list
+            lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
+            ubg = [ubg;  inf];                         %Give constraint upper bound
+
+        %           Hind Leg y-axis
+            EqTemp = Ineq_Difference(PHydot(k), Mvely, CH(PhaseIdx));
+            g   = {g{:}, EqTemp};                      %Append to constraint function list
+            lbg = [lbg;  -Mvely];                      %Give constraint lower bound
+            ubg = [ubg;  inf];                         %Give constraint upper bound
+        %------------------------------------------------------
+        %   (*) Foot/End-Effector Forces
+        %------------------------------------------------------
+        %     (-) x-axis
+        %-----------------------------------------------------
+        %       - Euqation (1): Fx <= 0 + Mfx*C -->
+        %                     Fx - Mfx*C <= 0
+        %           Use Ineq_Difference
+        %           Input: v[k] = F(F/H)x[k]
+        %                  bigM = Mfx
+        %                  z[k] = C(F/H)[k]
+        %           lbg = -inf
+        %           ubg = 0
+        %-----------------------------------------------------
+        %           Front Leg
+            EqTemp = Ineq_Difference(FFx(k), Mfx, CF(PhaseIdx));
+            g   = {g{:}, EqTemp};     %Append to constraint function list
+            lbg = [lbg;  -inf];       %Give constraint lower bound
+            ubg = [ubg;  0];          %Give constraint upper bound
+
+        %           Hind Leg
+            EqTemp = Ineq_Difference(FHx(k), Mfx, CH(PhaseIdx));
+            g   = {g{:}, EqTemp};     %Append to constraint function list
+            lbg = [lbg;  -inf];       %Give constraint lower bound
+            ubg = [ubg;  0];          %Give constraint upper bound
+        %------------------------------------------------------           
+        %       - Equation (2): Fx >= 0 - Mfx*C -->
+        %                       Fx + Mfx*C >= 0 -->
+        %                       0 <= Fx + Mfx*C
+        %           Use Ineq_Summation
+        %           Input: v[k] = F(F/H)x[k]
+        %                  bigM = Mfx
+        %                  z[k] = C(F/H)[k]
+        %           lbg = 0
+        %           ubg = inf
+        %------------------------------------------------------
+        %           Front Leg
+            EqTemp = Ineq_Summation(FFx(k), Mfx, CF(PhaseIdx));
+            g   = {g{:}, EqTemp};     %Append to constraint function list
+            lbg = [lbg;  0];          %Give constraint lower bound
+            ubg = [ubg;  inf];        %Give constraint upper bound
+
+        %           Hind Leg
+            EqTemp = Ineq_Summation(FHx(k), Mfx, CH(PhaseIdx));
+            g   = {g{:}, EqTemp};     %Append to constraint function list
+            lbg = [lbg;  0];          %Give constraint lower bound
+            ubg = [ubg;  inf];        %Give constraint upper bound
+        %------------------------------------------------------
+        %     (-) y-axis
+        %------------------------------------------------------
+        %       - Equation (1): Fy <= 0 + Mfy*C -->
+        %                       Fy - Mfy*C <= 0
+        %           Use Ineq_Difference
+        %           Input: v[k] = F(F/H)y[k]
+        %                  bigM = Mfy
+        %                  z[k] = C(F/H)[k]
+        %           lbg = -inf
+        %           ubg = 0
+        %------------------------------------------------------
+        %           Front Leg
+            EqTemp = Ineq_Difference(FFy(k), Mfy, CF(PhaseIdx));
+            g   = {g{:}, EqTemp};     %Append to constraint function list
+            lbg = [lbg;  -inf];       %Give constraint lower bound
+            ubg = [ubg;  0];          %Give constraint upper bound
+
+        %           Hind Leg
+            EqTemp = Ineq_Difference(FHy(k), Mfy, CH(PhaseIdx));
+            g   = {g{:}, EqTemp};     %Append to constraint function list
+            lbg = [lbg;  -inf];          %Give constraint lower bound
+            ubg = [ubg;  0];        %Give constraint upper bound
+        %------------------------------------------------------
+        %       - Equation (2): F(F/H)y >= 0 
+        %           Achieve by Changing Lower Variable bounds
+        %-------------------------------------------------------
+        %       (Place Holder) May need to consider the terrain direction when
+        %       having slope terrain (Do not pull from the ground surface)
+        %------------------------------------------------------
+        %           Front Leg
+            lb_DecisionVars(find(VarNamesList == ['FFy_',num2str(k-1)])) = 0;
+        %           Hind Leg
+            lb_DecisionVars(find(VarNamesList == ['FHy_',num2str(k-1)])) = 0;
+        % Complementarity Constraints Built  
+        %------------------------------------------------------
     end
-    %----------------------------------------------------
-    % Complementarity Constraint
-    %   Use Functions: Ineq_Difference --> v[k] - bigM*z[k]
-    %                  Ineq_Summation  --> v[k] + bigM*z[k]
-    %   Input: v[k] --> Continuous Variables at time step k
-    %          bigM --> bigM constant
-    %          z[k] --> Integer/Binary Variable at time step k
-    %----------------------------------------------------
-%         %   (*) Extract Index for Identifying Contact Configuration for
-%         %--------------------------------------------------------------
-%         %   Governing Current Time Step
-% 
-%             ContactConfigIdx = floor((k-1)/NumLocalTimeSteps) + 1; % k-1 is the time step enumeration
-
-    %----------------------------------------------------
-    %   (*) Foot/End-effector Position (y-axis only)
-    %---------------------------------------------------
-    %       (Place Holder) Need to Change Height into loop-up table
-    %       function if we go for uneven terrain
-    %--------------------------------------------------
-    %       - Equation (1): Py <= Height + Mpos(1-C) -->
-    %                       Py + Mpos*C <= Height + Mpos -->
-    %                       Py + Mpos*C - Height(x) <= Mpos
-    %         Use Ineq_Summation
-    %         Input: v[k] = P(F/H)y[k]
-    %                bigM = Mpos_y
-    %                z[k] = C(F/H)[k]
-    %                Additionally: - TerrainHeight
-    %         lbg = -inf 
-    %         ubg = Mpos_y
-    %-------------------------------------------    
-    %           Front Leg
-        EqTemp = Ineq_Summation(PFy(k),Mpos_y, CF(PhaseIdx)) - TerrainModel(PFx(k));
-        g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mpos_y];      %Give constraint upper bound
-
-    %           Hind Leg
-        EqTemp = Ineq_Summation(PHy(k), Mpos_y, CH(PhaseIdx)) - TerrainModel(PHx(k));
-        g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mpos_y];      %Give constraint upper bound
-    %-------------------------------------------
-    %       - Equation (2): Py >= Height -->
-    %                       Height <= Py <= inf -->
-    %       For Uneven Terrain: 0 <= Py -Height(x) <= inf
-    %
-    %----------------------------------------------------
-    %         (Place Holder) For even terrain, achieve this constraint by changing variable lower bounds
-    %                        Change to complementarity form when
-    %                        introducing uneven terrain
-    %----------------------------------------------------
-    %   Front Leg
-    EqTemp = PFy(k) - TerrainModel(PFx(k));
-    g   = {g{:}, EqTemp};
-    lbg = [lbg;  0];
-    ubg = [ubg;  inf];
-    %   Hind Leg
-    EqTemp = PHy(k) - TerrainModel(PHx(k));
-    g   = {g{:}, EqTemp};
-    lbg = [lbg;  0];
-    ubg = [ubg;  inf];
-
-    %----------------------------------------------------
-    %   (*) Foot/End-Effector Velocity (for both x-axis and y-axis)
-    %----------------------------------------------------
-    %       - Equation (1): Pdot <= 0 + Mvel(1-C) -->
-    %                       Pdot + Mvel*C <= Mvel -->
-    %         Use Ineq_Summation
-    %         Input: v[k] = P(F/H)(x/y)dot[k]
-    %                bigM = Mvel
-    %                z[k] = C(F/H)[k]
-    %         lbg = -inf
-    %         ubg = Mvel
-    %----------------------------------------------------
-    %           Front Leg x-axis
-        EqTemp = Ineq_Summation(PFxdot(k), Mvelx, CF(PhaseIdx));
-        g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvelx];                       %Give constraint upper bound
-
-    %           Front Leg y-axis
-        EqTemp = Ineq_Summation(PFydot(k), Mvely, CF(PhaseIdx));
-        g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvely];                       %Give constraint upper bound
-
-    %           Hind Leg x-axis
-        EqTemp = Ineq_Summation(PHxdot(k), Mvelx, CH(PhaseIdx));
-        g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvelx];                       %Give constraint upper bound
-
-    %           Hind Leg y-axis
-        EqTemp = Ineq_Summation(PHydot(k), Mvely, CH(PhaseIdx));
-        g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -inf];                        %Give constraint lower bound
-        ubg = [ubg;  Mvely];                       %Give constraint upper bound
-    %------------------------------------------------------              
-    %       - Equation (2): Pdot >= 0 - Mvel(1-C) -->
-    %                       Pdot - Mvel*C >= -Mvel -->
-    %                       -Mvel <= Pdot - Mvel*C
-    %         Use Function Ineq_Difference
-    %         Input: v[k] = P(F/H)(x/y)dot[k]
-    %                bigM = -Mvel
-    %                z[k] = C(F/H)[k]
-    %         lbg = -Mvel
-    %         ubg = inf
-    %------------------------------------------------------
-    %           Front Leg x-axis
-        EqTemp = Ineq_Difference(PFxdot(k), Mvelx, CF(PhaseIdx));
-        g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
-        ubg = [ubg;  inf];                         %Give constraint upper bound
-
-    %           Front Leg y-axis
-        EqTemp = Ineq_Difference(PFydot(k), Mvely, CF(PhaseIdx));
-        g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvely];                      %Give constraint lower bound
-        ubg = [ubg;  inf];                         %Give constraint upper bound
-
-    %           Hind Leg x-axis
-        EqTemp = Ineq_Difference(PHxdot(k), Mvelx, CH(PhaseIdx));
-        g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
-        ubg = [ubg;  inf];                         %Give constraint upper bound
-
-    %           Hind Leg y-axis
-        EqTemp = Ineq_Difference(PHydot(k), Mvely, CH(PhaseIdx));
-        g   = {g{:}, EqTemp};                      %Append to constraint function list
-        lbg = [lbg;  -Mvely];                      %Give constraint lower bound
-        ubg = [ubg;  inf];                         %Give constraint upper bound
-    %------------------------------------------------------
-    %   (*) Foot/End-Effector Forces
-    %------------------------------------------------------
-    %     (-) x-axis
-    %-----------------------------------------------------
-    %       - Euqation (1): Fx <= 0 + Mfx*C -->
-    %                     Fx - Mfx*C <= 0
-    %           Use Ineq_Difference
-    %           Input: v[k] = F(F/H)x[k]
-    %                  bigM = Mfx
-    %                  z[k] = C(F/H)[k]
-    %           lbg = -inf
-    %           ubg = 0
-    %-----------------------------------------------------
-    %           Front Leg
-        EqTemp = Ineq_Difference(FFx(k), Mfx, CF(PhaseIdx));
-        g   = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;  -inf];       %Give constraint lower bound
-        ubg = [ubg;  0];          %Give constraint upper bound
-
-    %           Hind Leg
-        EqTemp = Ineq_Difference(FHx(k), Mfx, CH(PhaseIdx));
-        g   = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;  -inf];       %Give constraint lower bound
-        ubg = [ubg;  0];          %Give constraint upper bound
-    %------------------------------------------------------           
-    %       - Equation (2): Fx >= 0 - Mfx*C -->
-    %                       Fx + Mfx*C >= 0 -->
-    %                       0 <= Fx + Mfx*C
-    %           Use Ineq_Summation
-    %           Input: v[k] = F(F/H)x[k]
-    %                  bigM = Mfx
-    %                  z[k] = C(F/H)[k]
-    %           lbg = 0
-    %           ubg = inf
-    %------------------------------------------------------
-    %           Front Leg
-        EqTemp = Ineq_Summation(FFx(k), Mfx, CF(PhaseIdx));
-        g   = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;  0];          %Give constraint lower bound
-        ubg = [ubg;  inf];        %Give constraint upper bound
-
-    %           Hind Leg
-        EqTemp = Ineq_Summation(FHx(k), Mfx, CH(PhaseIdx));
-        g   = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;  0];          %Give constraint lower bound
-        ubg = [ubg;  inf];        %Give constraint upper bound
-    %------------------------------------------------------
-    %     (-) y-axis
-    %------------------------------------------------------
-    %       - Equation (1): Fy <= 0 + Mfy*C -->
-    %                       Fy - Mfy*C <= 0
-    %           Use Ineq_Difference
-    %           Input: v[k] = F(F/H)y[k]
-    %                  bigM = Mfy
-    %                  z[k] = C(F/H)[k]
-    %           lbg = -inf
-    %           ubg = 0
-    %------------------------------------------------------
-    %           Front Leg
-        EqTemp = Ineq_Difference(FFy(k), Mfy, CF(PhaseIdx));
-        g   = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;  -inf];       %Give constraint lower bound
-        ubg = [ubg;  0];          %Give constraint upper bound
-
-    %           Hind Leg
-        EqTemp = Ineq_Difference(FHy(k), Mfy, CH(PhaseIdx));
-        g   = {g{:}, EqTemp};     %Append to constraint function list
-        lbg = [lbg;  -inf];          %Give constraint lower bound
-        ubg = [ubg;  0];        %Give constraint upper bound
-    %------------------------------------------------------
-    %       - Equation (2): F(F/H)y >= 0 
-    %           Achieve by Changing Lower Variable bounds
-    %-------------------------------------------------------
-    %       (Place Holder) May need to consider the terrain direction when
-    %       having slope terrain (Do not pull from the ground surface)
-    %------------------------------------------------------
-    %           Front Leg
-        lb_DecisionVars(find(VarNamesList == ['FFy_',num2str(k-1)])) = 0;
-    %           Hind Leg
-        lb_DecisionVars(find(VarNamesList == ['FHy_',num2str(k-1)])) = 0;
-    % Complementarity Constraints Built  
-    %------------------------------------------------------
 
     %----------------------------------------------------
     % Kinematics Constraint
@@ -1051,11 +1080,17 @@ for k = 1:tauSeriesLength
 %     
     %----------------------------------------------------
     % Cost Function - Integral/Lagrangian Term
+    %   Cost of Transport
     %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + h*PFxdot(k)^2 + h*PFydot(k)^2 + h*PHxdot(k)^2 + h*PHydot(k)^2;
     J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
+    %VelCostWweight = 500;
+    %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + VelCostWweight*h*PFxdot(k)^2 + VelCostWweight*h*PFydot(k)^2 + VelCostWweight*h*PHxdot(k)^2 + VelCostWweight*h*PHydot(k)^2;
     %J = J + h*xdot(k)^2;%h*ydot(k)^2 + h*thetadot(k)^2;% + h*thetadot(k)^2; h*xdot(k)^2 + 
     %----------------------------------------------------
 end
+
+%J = J/Ts(end);
+%J = J/x(end);
 
 %-----------------------------------------------------------------------
 %   Switching Time Constraints
@@ -1071,16 +1106,25 @@ end
 %           (*) Ts[end] = Tend (Terminal Time Constraint)
 %               - Achieve by Setting up Variable Bounds (Lower Bound = Upper Bound = Tend)
 %-----------------------------------------------------------------------
+%       Phase Lower Bound
+%Phaselb = 0.1;
+Phaselb = 0;
+InitTerminalPhaselb = 0; %0.01
 for i = 1:NumPhases
     if i == 1
         EqTemp = Ts(1) - 0;
         g = {g{:}, EqTemp};
-        lbg = [lbg; 0];
+        lbg = [lbg; InitTerminalPhaselb];
         ubg = [ubg; inf];
+    elseif i == NumPhases
+        EqTemp = Ts(i) - Ts(i-1);
+        g = {g{:}, EqTemp};
+        lbg = [lbg; InitTerminalPhaselb];
+        ubg = [ubg; inf]; 
     else
         EqTemp = Ts(i) - Ts(i-1);
         g = {g{:}, EqTemp};
-        lbg = [lbg; 0];
+        lbg = [lbg; Phaselb];
         ubg = [ubg; inf]; 
     end
 end
@@ -1091,7 +1135,7 @@ if Tend_flag == 1 %only constrain terminal time when user specifies that
     lb_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = Tend;
     ub_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = Tend;
 elseif Tend_flag == 2 %Bounded Terminal Time
-    lb_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = 0;
+    lb_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = 0.1;
     ub_DecisionVars(find(VarNamesList == ['Ts_',num2str(NumPhases)])) = Tend_Bound;
 end
 %-----------------------------------------------------------------------
@@ -1116,6 +1160,9 @@ elseif Tend_flag == 2 %Bounded Terminal Time -> x_end = speed*Tend -> x_end - sp
     g = {g{:}, EqTemp};
     lbg = [lbg; 0];
     ubg = [ubg; 0];
+    %Minimum Locomotion Distrance for Terminal X-axis Position
+    lb_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = BodyLength/2;
+    ub_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = 5*BodyLength;
 end
 %-----------------------------------------------------------------------
 %       Y-axis Positions
@@ -1166,7 +1213,21 @@ EqTemp = [cos(theta(1)), -sin(theta(1)); sin(theta(1)), cos(theta(1))]'*([PHx(1)
 g = {g{:}, EqTemp};
 lbg = [lbg; 0; 0];
 ubg = [ubg; 0; 0];
-%-----------------------------------------------------------------------
+% %-----------------------------------------------------------------------
+% %   Contact Configurations (Front Leg)
+% %-----------------------------------------------------------------------
+% EqTemp = CF(1) - CF(end);
+% g = {g{:}, EqTemp};
+% lbg = [lbg; 0];
+% ubg = [ubg; 0];
+% %-----------------------------------------------------------------------
+% %   Contact Configuration (Hind Leg)
+% %-----------------------------------------------------------------------
+% EqTemp = CH(1) - CH(end);
+% g = {g{:}, EqTemp};
+% lbg = [lbg; 0];
+% ubg = [ubg; 0];
+% %-----------------------------------------------------------------------
 disp('Constraints and Objetive Function Constructed')
 disp('===================================================')
 disp(' ')
@@ -1322,12 +1383,25 @@ PFcenterY_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
 PHcenterX_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
 PHcenterY_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
 
-%Inputs, TimeStepDiff due to euler integration
+%Feet State, TimeStepDiff due to euler integration
 PFx_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 PFy_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 PHx_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 PHy_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 
+%Input
+
+FFx_result(find(TimeStepDiff <= 1e-3)) = [];
+FFy_result(find(TimeStepDiff <= 1e-3)) = [];
+FHx_result(find(TimeStepDiff <= 1e-3)) = [];
+FHy_result(find(TimeStepDiff <= 1e-3)) = [];
+
+PFxdot_result(find(TimeStepDiff <= 1e-3)) = [];
+PFydot_result(find(TimeStepDiff <= 1e-3)) = [];
+PHxdot_result(find(TimeStepDiff <= 1e-3)) = [];
+PHydot_result(find(TimeStepDiff <= 1e-3)) = [];
+
+%Net Forces
 NetForceX(find(TimeStepDiff <= 1e-3)) = [];
 NetForceY(find(TimeStepDiff <= 1e-3)) = [];
 
@@ -1342,10 +1416,27 @@ NetForceX(end) = 0;
 NetForceY(end) = 0;
 NetTorque(end) = 0;
 
+%Phase Lengths
+
+PhaseLengths_origin = diff(PhaseSwitchingTime);
+
+PhaseLengths = PhaseLengths_origin;
+PhaseLengths(find(PhaseLengths_origin <= 1e-3 )) = [];
+
+%Contact Configurations
+CF_result(find(PhaseLengths_origin <= 1e-3 )) = [];
+CH_result(find(PhaseLengths_origin <= 1e-3 )) = [];
+
+gait = [CF_result, CH_result, PhaseLengths]
+
 disp('Removed Variables within Vanished Phases');
 disp('===================================================');
 disp(' ');
 %=======================================================================
+
+%recover some important info
+
+result_cost = full(sol.f); %cost function
 
 %=======================================================================
 % Close Diary

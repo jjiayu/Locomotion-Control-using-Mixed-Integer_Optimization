@@ -1,0 +1,220 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+With a Particular Emphasis on Periodical Gait Discovery
+Multi-Phase Formulation:
+Optimize over State, Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   17-May-2019 17:09:00
+
+----------------------------------------------------
+Correspondent Log File Name: Periodical-Loco-log-20190517T170900
+====================================================
+ 
+====================================================
+Setup Robot Kinematics Properties: 
+----------------------------------------------------
+Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):
+0.4
+----------------------------------------------------
+Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):
+0.4
+----------------------------------------------------
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify the Terrain Type: 1 -> Flat Terrain; 2 -> Slopes
+1
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+2
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Specify Travel Speed along X-axis (m/s): 
+3
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+2
+Terminal Time (Tend) is Set as Free Variables
+Specify Upper Bound of Terminal Time (i.e. 1,2..(s)):
+3
+----------------------------------------------------
+ 
+====================================================
+Temporal and Discretization Setup:
+----------------------------------------------------
+Input Number of Phases: 
+3
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+10
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.033333
+Number of Knots/Discretization of tau (from 0 to 1: 31) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+====================================================
+ 
+====================================================
+Big-M Setup
+====================================================
+Big-M for Foot/End-Effector in X-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: 
+1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
+3
+ 
+Input Big-M value for foot/end-effector Velocity for X-axis: 
+5
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 5 m/s
+----------------------------------------------------
+Big-M for Foot/End-Effector in Y-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: 
+1 -> Default Value (5m/s); 2 -> User Specified: 
+2
+ 
+Input Big-M value for foot/end-effector Velocity for Y-axis (e.g. 1-5+ m/s): 
+NOTE: Can Write the Value as the Kinematics Bounding Box Height (BoundingBox_Height)/Desired Time to Travel the Entire Bounding Box Height
+5
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: 5 m/s
+----------------------------------------------------
+Big-M for Contact Forces
+Input Big-M for Foot-Ground Reaction Forces along X-axis (e.g. 200,300,1000,1e5):
+300
+----------------------------------------------------
+Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3, 1e5, better larger than Mfx):
+1200
+====================================================
+====================================================
+Solver Setups:
+====================================================
+Solver Selection: 
+1 -> Knitro; 2 -> Bonmin 
+1
+Selected Solver: knitro
+----------------------------------------------------
+Solver Dependent Options:
+----------------------------------------------------
+Define Number of Max Nodes to be Explored: 
+ 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value
+1
+Selected Worst-case Scenarios to Explore 64 Nodes
+====================================================
+ 
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (2 variables).
+hessopt:                 1
+mip_branchrule:          2
+mip_heuristic:           0
+mip_maxnodes:            64
+mip_outinterval:         50
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                567
+    bounded below only:                              62
+    bounded above only:                               0
+    bounded below and above:                         39
+    fixed:                                            1
+    free:                                           465
+Number of binary variables:                           6
+Number of integer variables:                          0
+Number of constraints:                             1059
+    linear equalities:                                8
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      304
+    linear one-sided inequalities:                  623
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          124
+Number of nonzeros in Jacobian:                    3589
+Number of nonzeros in Hessian:                     1522
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 64 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       6    9.74e+04       9.74e+04                   0.305
+*      6       3       0    4.88e+05  f    9.74e+04    4.88e+05       0.497
+*     12       5       0    2.64e+05  f    9.77e+04    2.64e+05       1.211
+*     16       1       0    2.48e+05  f    1.08e+05    2.48e+05       1.624
+      19       0            1.82e+05       2.48e+05    2.48e+05       2.060
+
+EXIT: Optimal solution found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   2.47620243113736e+05
+Final integrality gap (abs / rel)   =  0.00e+00 /   0.00e+00 ( 0.00%)
+# of nodes processed                =       19
+# of subproblems processed          =       22
+Total program time (secs)           =       2.06588 (     2.051 CPU time)
+Time spent in evaluations (secs)    =       0.09600
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg       0.0283       0.0278      1382
+   nlp_gf_jg       0.0268       0.0264       944
+  nlp_hess_l        0.024       0.0238       901
+      solver         2.06         2.09         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+
+gait =
+
+         0         0    0.1000
+    1.0000    1.0000    0.1333
+         0         0    0.1000
+
+Removed Variables within Vanished Phases
+===================================================
+ 

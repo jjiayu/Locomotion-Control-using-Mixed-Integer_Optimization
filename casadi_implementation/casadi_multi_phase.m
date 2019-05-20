@@ -68,8 +68,12 @@ PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
 disp('====================================================');
 disp('Setup Robot Kinematics Properties: ')
 disp('----------------------------------------------------');
-BoundingBox_Width = 0.8;
-BoundingBox_Height = 0.4;
+BoundingBox_Width  = input('Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):\n');
+disp('----------------------------------------------------');
+BoundingBox_Height = input('Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):\n');
+disp('----------------------------------------------------');
+%BoundingBox_Width = 0.8;
+%BoundingBox_Height = 0.4;
 %======================================================================
 
 %======================================================================
@@ -1254,7 +1258,7 @@ if strcmp(SolverSelected, 'knitro')
                           'mip_outlevel',    2,...      % Print accumulated time for every node.
                           'mip_selectrule',  3,...      % The rule for selecting nodes 2 has the best performance
                           'mip_branchrule',  2,...      % MIP Branching rule
-                          'mip_maxnodes',    NumMaxNodes);      % Max Number of Nodes wish to be explored
+                          'mip_maxnodes',    NumMaxNodes+10);      % Max Number of Nodes wish to be explored
     
 elseif strcmp(SolverSelected, 'bonmin')
     solverOption = struct('option_file_name', 'bonmin.opt');  
@@ -1388,12 +1392,25 @@ PFcenterY_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
 PHcenterX_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
 PHcenterY_result_world(find(TimeStepDiff <= 1e-3) + 1) = [];
 
-%Inputs, TimeStepDiff due to euler integration
+%Feet State, TimeStepDiff due to euler integration
 PFx_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 PFy_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 PHx_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 PHy_result(find(TimeStepDiff <= 1e-3) + 1) = [];
 
+%Input
+
+FFx_result(find(TimeStepDiff <= 1e-3)) = [];
+FFy_result(find(TimeStepDiff <= 1e-3)) = [];
+FHx_result(find(TimeStepDiff <= 1e-3)) = [];
+FHy_result(find(TimeStepDiff <= 1e-3)) = [];
+
+PFxdot_result(find(TimeStepDiff <= 1e-3)) = [];
+PFydot_result(find(TimeStepDiff <= 1e-3)) = [];
+PHxdot_result(find(TimeStepDiff <= 1e-3)) = [];
+PHydot_result(find(TimeStepDiff <= 1e-3)) = [];
+
+%Net Forces
 NetForceX(find(TimeStepDiff <= 1e-3)) = [];
 NetForceY(find(TimeStepDiff <= 1e-3)) = [];
 
@@ -1408,10 +1425,22 @@ NetForceX(end) = 0;
 NetForceY(end) = 0;
 NetTorque(end) = 0;
 
+%Phase Lengths
+
+PhaseLengths = diff(PhaseSwitchingTime);
+
+%Contact Configurations
+CF_result(find(PhaseLengths <= 1e-3 )) = [];
+CH_result(find(PhaseLengths <= 1e-3 )) = [];
+
 disp('Removed Variables within Vanished Phases');
 disp('===================================================');
 disp(' ');
 %=======================================================================
+
+%recover some important info
+
+result_cost = full(sol.f); %cost function %cost function
 
 %=======================================================================
 % Close Diary
