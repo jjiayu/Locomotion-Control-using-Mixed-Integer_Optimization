@@ -1,0 +1,218 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+With a Particular Emphasis on Periodical Gait Discovery
+Multi-Phase Formulation:
+Optimize over State, Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   21-May-2019 10:13:40
+
+----------------------------------------------------
+Correspondent Log File Name: Periodical-Loco-log-20190521T101340
+====================================================
+ 
+====================================================
+Setup Robot Kinematics Properties: 
+----------------------------------------------------
+Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):
+0.4
+----------------------------------------------------
+Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):
+0.4
+----------------------------------------------------
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify the Terrain Type: 1 -> Flat Terrain; 2 -> Slopes
+1
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+2
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Specify Travel Speed along X-axis (m/s): 
+0.9
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+1
+Input Termianl Time (e.g. 1s): 
+1
+----------------------------------------------------
+ 
+====================================================
+Temporal and Discretization Setup:
+----------------------------------------------------
+Input Number of Phases: 
+3
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+10
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.033333
+Number of Knots/Discretization of tau (from 0 to 1: 31) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+====================================================
+ 
+====================================================
+Big-M Setup
+====================================================
+Big-M for Foot/End-Effector in X-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: 
+1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
+3
+ 
+Input Big-M value for foot/end-effector Velocity for X-axis: 
+2.5
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 2.5 m/s
+----------------------------------------------------
+Big-M for Foot/End-Effector in Y-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: 
+1 -> Default Value (5m/s); 2 -> User Specified: 
+5
+ 
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Periodical_Motion_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/Periodical_Motion_Discovery_casadi_multi_phase.m', 264)" style="font-weight:bold">Periodical_Motion_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/Periodical_Motion_Discovery_casadi_multi_phase.m',264,0)">line 264</a>)
+Unexpected Case for big-M for Y-axis foot/End-effector Velocity
+} 
+help rand
+ <strong>rand</strong> Uniformly distributed pseudorandom numbers.
+    R = <strong>rand</strong>(N) returns an N-by-N matrix containing pseudorandom values drawn
+    from the standard uniform distribution on the open interval(0,1).  <strong>rand</strong>(M,N)
+    or <strong>rand</strong>([M,N]) returns an M-by-N matrix.  <strong>rand</strong>(M,N,P,...) or
+    <strong>rand</strong>([M,N,P,...]) returns an M-by-N-by-P-by-... array.  <strong>rand</strong> returns a
+    scalar.  <strong>rand</strong>(SIZE(A)) returns an array the same size as A.
+ 
+    Note: The size inputs M, N, P, ... should be nonnegative integers.
+    Negative integers are treated as 0.
+ 
+    R = <strong>rand</strong>(..., CLASSNAME) returns an array of uniform values of the 
+    specified class. CLASSNAME can be 'double' or 'single'.
+ 
+    R = <strong>rand</strong>(..., 'like', Y) returns an array of uniform values of the 
+    same class as Y.
+ 
+    The sequence of numbers produced by <strong>rand</strong> is determined by the settings of
+    the uniform random number generator that underlies <strong>rand</strong>, RANDI, and RANDN.
+    Control that shared random number generator using RNG.
+ 
+    Examples:
+ 
+       Example 1: Generate values from the uniform distribution on the
+       interval (a, b).
+          r = a + (b-a).*rand(100,1);
+ 
+       Example 2: Use the RANDI function, instead of <strong>rand</strong>, to generate
+       integer values from the uniform distribution on the set 1:100.
+          r = randi(100,1,5);
+ 
+       Example 3: Reset the random number generator used by <strong>rand</strong>, RANDI, and
+       RANDN to its default startup settings, so that <strong>rand</strong> produces the same
+       random numbers as if you restarted MATLAB.
+          rng('default')
+          rand(1,5)
+ 
+       Example 4: Save the settings for the random number generator used by
+       <strong>rand</strong>, RANDI, and RANDN, generate 5 values from <strong>rand</strong>, restore the
+       settings, and repeat those values.
+          s = rng
+          u1 = rand(1,5)
+          rng(s);
+          u2 = rand(1,5) % contains exactly the same values as u1
+ 
+       Example 5: Reinitialize the random number generator used by <strong>rand</strong>,
+       RANDI, and RANDN with a seed based on the current time.  <strong>rand</strong> will
+       return different values each time you do this.  NOTE: It is usually
+       not necessary to do this more than once per MATLAB session.
+          rng('shuffle');
+          rand(1,5)
+ 
+    See <a href="matlab:helpview([docroot '\techdoc\math\math.map'],'update_random_number_generator')">Replace Discouraged Syntaxes of rand and randn</a> to use RNG to replace
+    <strong>rand</strong> with the 'seed', 'state', or 'twister' inputs.
+ 
+    See also <a href="matlab:help randi">randi</a>, <a href="matlab:help randn">randn</a>, <a href="matlab:help rng">rng</a>, <a href="matlab:help RandStream">RandStream</a>, <a href="matlab:help RandStream/rand">RandStream/rand</a>,
+             <a href="matlab:help sprand">sprand</a>, <a href="matlab:help sprandn">sprandn</a>, <a href="matlab:help randperm">randperm</a>.
+
+    <a href="matlab:doc rand">Reference page for rand</a>
+    <a href="matlab:matlab.internal.language.introspective.overloads.displayOverloads('rand')">Other functions named rand</a>
+
+rand
+
+ans =
+
+    0.7454
+
+rand
+
+ans =
+
+    0.9091
+
+rand
+
+ans =
+
+    0.5846
+
+rand
+
+ans =
+
+    0.9065
+
+ran
+{Undefined function or variable 'ran'.
+} 
+rand
+
+ans =
+
+    0.0567
+
+rand
+
+ans =
+
+    0.5567
+
+rand
+
+ans =
+
+    0.0030
+
+rand
+
+ans =
+
+    0.1532
+
+rand
+
+ans =
+
+    0.4075
+
+rand
+
+ans =
+
+    0.2334
+
+rand
+
+ans =
+
+    0.5353
+
+Periodical_Motion_Discovery_casadi_multi_phase

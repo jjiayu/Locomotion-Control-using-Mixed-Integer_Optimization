@@ -569,7 +569,7 @@ end
 
 %       Other Important Setups
 %           Initial Guess of Decision Variables
-DecisionVarsInit = rand(size(DecisionVars)); %Random Initial Guess
+DecisionVarsInit = 10*rand(size(DecisionVars)); %Random Initial Guess
 %DecisionVarsInit = zeros(size(DecisionVars)); %Zero Initial guess
 %           Lower and upper bounds, variable type
 lb_DecisionVars = [];  %Variable Lower Bound 
