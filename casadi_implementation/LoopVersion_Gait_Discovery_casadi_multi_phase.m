@@ -16,8 +16,15 @@ clc;
 
 %========================================================
 % Identfy Data Storage Folder
-ExpDirectory = uigetdir;
+%ExpDirectory = uigetdir;
+%disp(['Experiment Working Directory: ', ExpDirectory])
+
+%Save current directory as working directory
+ExpDirectory = pwd;
 disp(['Experiment Working Directory: ', ExpDirectory])
+
+%Return to the Script Folder
+cd ../..
 
 %========================================================
 % Import CasADi related packages
@@ -389,21 +396,21 @@ for speedIdx = 1:length(SpeedList)
     PFx = SX.sym('PFx', tauSeriesLength);
     PFy = SX.sym('PFy', tauSeriesLength);
     %               Front Leg Velocities
-    PFxdot = SX.sym('PFxdot', tauSeriesLength); 
-    PFydot = SX.sym('PFydot', tauSeriesLength);
+    PFxdot = SX.sym('PFxdot', tauSeriesLength - 1); 
+    PFydot = SX.sym('PFydot', tauSeriesLength - 1);
     %               Hind Leg Locations
     PHx = SX.sym('PHx', tauSeriesLength);
     PHy = SX.sym('PHy', tauSeriesLength);
     %               Hind Leg Velocities
-    PHxdot = SX.sym('PHxdot', tauSeriesLength);
-    PHydot = SX.sym('PHydot', tauSeriesLength);
+    PHxdot = SX.sym('PHxdot', tauSeriesLength - 1);
+    PHydot = SX.sym('PHydot', tauSeriesLength - 1);
     %           Foot-Ground Reaction Forces
     %               Front Leg Forces
-    FFx = SX.sym('FFx', tauSeriesLength);
-    FFy = SX.sym('FFy', tauSeriesLength);
+    FFx = SX.sym('FFx', tauSeriesLength - 1);
+    FFy = SX.sym('FFy', tauSeriesLength - 1);
     %               Hind Leg Forces
-    FHx = SX.sym('FHx', tauSeriesLength);
-    FHy = SX.sym('FHy', tauSeriesLength);
+    FHx = SX.sym('FHx', tauSeriesLength - 1);
+    FHy = SX.sym('FHy', tauSeriesLength - 1);
     %-----------------------------------------------------------------------
     %       Create Decision Variable Name Lists 
     %           Using CreateVarsNameList(varsCasADi)
@@ -600,7 +607,7 @@ for speedIdx = 1:length(SpeedList)
 
     %       Other Important Setups
     %           Initial Guess of Decision Variables
-    DecisionVarsInit = 5*rand(size(DecisionVars)); %Random Initial Guess
+    DecisionVarsInit = 10*rand(size(DecisionVars)); %Random Initial Guess
     %DecisionVarsInit = zeros(size(DecisionVars)); %Zero Initial guess
     %           Lower and upper bounds, variable type
     lb_DecisionVars = [];  %Variable Lower Bound 
@@ -1048,6 +1055,53 @@ for speedIdx = 1:length(SpeedList)
                 lb_DecisionVars(find(VarNamesList == ['FHy_',num2str(k-1)])) = 0;
             % Complementarity Constraints Built  
             %------------------------------------------------------
+            
+            %----------------------------------------------------
+            % Friction Cone
+            %----------------------------------------------------
+            %   Equation: Fx[k] - miu*dot(Norm[k],Force[k]) <= 0
+            %       Use Function FrictionCone
+            %       Input: Norm[k]   = [Nx[k],Ny[k]]
+            %              Force[k]  = [F(F/H)x[k], F(F/H)y[k]]
+            %              Const_miu = miu
+            %       lbg = -inf
+            %       ubg = 0
+            %----------------------------------------------------
+            %   (Place Holder) Need to change terrain norm when move to (uneven)
+            %   curvature terrain
+            %----------------------------------------------------
+            %       Front Leg
+                EqTemp = FrictionCone(TerrainNorm, [FFx(k),FFy(k)], miu);
+                g   = {g{:}, EqTemp};         %Append to constraint function list
+                lbg = [lbg;  -inf];           %Give constraint lower bound
+                ubg = [ubg;  0];              %Give constraint upper bound
+
+            %       Hind Leg
+                EqTemp = FrictionCone(TerrainNorm, [FHx(k), FHy(k)], miu);
+                g   = {g{:}, EqTemp};         %Append to constraint function list
+                lbg = [lbg;  -inf];           %Give constraint lower bound
+                ubg = [ubg;  0];              %Give constraint upper bound
+        %     %----------------------------------------------------
+        %     % Torso y-axis level constraint (The Highest Bounding Box border should be always above the Ground)
+        %     %----------------------------------------------------
+        %     %   Equation: 1/2*BodyHeight <= y[k] - TerrainModel(x[k]) <= inf
+        %     %   lbg = 0
+        %     %   ubg = inf
+        %         
+        %         EqTemp = y(k) - TerrainModel(x(k));
+        %         g   = {g{:}, EqTemp};
+        %         lbg = [lbg; 1/2*BodyHeight];
+        %         ubg = [ubg; inf];
+        %     
+            %----------------------------------------------------
+            % Cost Function - Integral/Lagrangian Term
+            %   Cost of Transport
+            %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + h*PFxdot(k)^2 + h*PFydot(k)^2 + h*PHxdot(k)^2 + h*PHydot(k)^2;
+            J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
+            %VelCostWweight = 500;
+            %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + VelCostWweight*h*PFxdot(k)^2 + VelCostWweight*h*PFydot(k)^2 + VelCostWweight*h*PHxdot(k)^2 + VelCostWweight*h*PHydot(k)^2;
+            %J = J + h*xdot(k)^2;%h*ydot(k)^2 + h*thetadot(k)^2;% + h*thetadot(k)^2; h*xdot(k)^2 + 
+            %----------------------------------------------------
         end
 
         %----------------------------------------------------
@@ -1072,56 +1126,7 @@ for speedIdx = 1:length(SpeedList)
             g   = {g{:}, EqTemp};                                              %Append to constraint function list
             lbg = [lbg;  -[BoundingBox_Width;BoundingBox_Height]/2];           %Give constraint lower bound
             ubg = [ubg;  [BoundingBox_Width;BoundingBox_Height]/2];            %Give constraint upper bound
-        %----------------------------------------------------
-        % Friction Cone
-        %----------------------------------------------------
-        %   Equation: Fx[k] - miu*dot(Norm[k],Force[k]) <= 0
-        %       Use Function FrictionCone
-        %       Input: Norm[k]   = [Nx[k],Ny[k]]
-        %              Force[k]  = [F(F/H)x[k], F(F/H)y[k]]
-        %              Const_miu = miu
-        %       lbg = -inf
-        %       ubg = 0
-        %----------------------------------------------------
-        %   (Place Holder) Need to change terrain norm when move to (uneven)
-        %   curvature terrain
-        %----------------------------------------------------
-        %       Front Leg
-            EqTemp = FrictionCone(TerrainNorm, [FFx(k),FFy(k)], miu);
-            g   = {g{:}, EqTemp};         %Append to constraint function list
-            lbg = [lbg;  -inf];           %Give constraint lower bound
-            ubg = [ubg;  0];              %Give constraint upper bound
-
-        %       Hind Leg
-            EqTemp = FrictionCone(TerrainNorm, [FHx(k), FHy(k)], miu);
-            g   = {g{:}, EqTemp};         %Append to constraint function list
-            lbg = [lbg;  -inf];           %Give constraint lower bound
-            ubg = [ubg;  0];              %Give constraint upper bound
-    %     %----------------------------------------------------
-    %     % Torso y-axis level constraint (The Highest Bounding Box border should be always above the Ground)
-    %     %----------------------------------------------------
-    %     %   Equation: 1/2*BodyHeight <= y[k] - TerrainModel(x[k]) <= inf
-    %     %   lbg = 0
-    %     %   ubg = inf
-    %         
-    %         EqTemp = y(k) - TerrainModel(x(k));
-    %         g   = {g{:}, EqTemp};
-    %         lbg = [lbg; 1/2*BodyHeight];
-    %         ubg = [ubg; inf];
-    %     
-        %----------------------------------------------------
-        % Cost Function - Integral/Lagrangian Term
-        %   Cost of Transport
-        %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + h*PFxdot(k)^2 + h*PFydot(k)^2 + h*PHxdot(k)^2 + h*PHydot(k)^2;
-        J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
-        %VelCostWweight = 500;
-        %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + VelCostWweight*h*PFxdot(k)^2 + VelCostWweight*h*PFydot(k)^2 + VelCostWweight*h*PHxdot(k)^2 + VelCostWweight*h*PHydot(k)^2;
-        %J = J + h*xdot(k)^2;%h*ydot(k)^2 + h*thetadot(k)^2;% + h*thetadot(k)^2; h*xdot(k)^2 + 
-        %----------------------------------------------------
     end
-
-    %J = J/Ts(end);
-    %J = J/x(end);
 
     %-----------------------------------------------------------------------
     %   Switching Time Constraints
@@ -1280,7 +1285,11 @@ for speedIdx = 1:length(SpeedList)
                               'mip_outlevel',    2,...      % Print accumulated time for every node.
                               'mip_selectrule',  3,...      % The rule for selecting nodes 2 has the best performance
                               'mip_branchrule',  2,...      % MIP Branching rule
-                              'mip_maxnodes',    NumMaxNodes);      % Max Number of Nodes wish to be explored
+                              'mip_maxnodes',    NumMaxNodes ...      % Max Number of Nodes wish to be explored
+                              );
+ %                             'Multistart',       1,...          % Open multi start
+ %                             'ms_maxsolves',   2 ...    % Maximum CPU time
+ %                             );
 
     elseif strcmp(SolverSelected, 'bonmin')
         solverOption = struct('option_file_name', 'bonmin.opt');  
@@ -1361,8 +1370,8 @@ for speedIdx = 1:length(SpeedList)
     NetForceY = FFy_result + FHy_result;
 
     % Torque on the body
-    FrontTorque_result = (PFx_result - x_result).*FFy_result - (PFy_result - y_result).*FFx_result;
-    HindTorque_result = (PHx_result - x_result).*FHy_result - (PHy_result - y_result).*FHx_result;
+    FrontTorque_result = (PFx_result(1:end-1) - x_result(1:end-1)).*FFy_result - (PFy_result(1:end-1) - y_result(1:end-1)).*FFx_result;
+    HindTorque_result  = (PHx_result(1:end-1) - x_result(1:end-1)).*FHy_result - (PHy_result(1:end-1) - y_result(1:end-1)).*FHx_result;
 
     NetTorque = FrontTorque_result + HindTorque_result;
 

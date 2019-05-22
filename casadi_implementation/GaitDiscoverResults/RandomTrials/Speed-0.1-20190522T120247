@@ -1,0 +1,231 @@
+====================================================
+Gait Search for Locomotion Speed 0.1 m/s
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (113 variables).
+hessopt:                 1
+ms_enable:               1
+ms_maxsolves:            20
+mip_branchrule:          2
+mip_heuristic:           0
+mip_maxnodes:            64
+mip_outinterval:         50
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                559
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                        277
+    fixed:                                            3
+    free:                                           279
+Number of binary variables:                           6
+Number of integer variables:                          0
+Number of constraints:                             1036
+    linear equalities:                                5
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      304
+    linear one-sided inequalities:                  603
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          124
+Number of nonzeros in Jacobian:                    3545
+Number of nonzeros in Hessian:                     1427
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 420 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       6    9.74e+04       9.74e+04                  83.150
+*      8       5       0    2.03e+05  f    9.74e+04    2.03e+05    1030.573
+*     16       9       0    1.95e+05  f    9.74e+04    1.95e+05    1769.645
+*     22      11       0    1.01e+05  f    9.74e+04    1.01e+05    2243.070
+ERROR: User routine for hess_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+       Could not evaluate second derivatives at the current point.
+       No further progress can be made.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for hess_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+       Could not evaluate second derivatives at the current point.
+       No further progress can be made.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+       Could not evaluate first derivatives at the current point.
+      50       3         FAILED -500       9.74e+04    1.01e+05    3932.744
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1294)" style="font-weight:bold">LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/LoopVersion_Gait_Discovery_casadi_multi_phase.m',1294,0)">line 1294</a>)
+    elseif strcmp(SolverSelected, 'bonmin')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentolin
