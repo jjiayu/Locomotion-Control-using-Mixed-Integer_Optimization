@@ -33,7 +33,7 @@ import casadi.*
 %========================================================
 % Command Line Logging
 diary off
-TaskParameterLog_filename = strcat('Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+TaskParameterLog_filename = strcat('MultiStart-Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
 diary([ExpDirectory, '/', TaskParameterLog_filename]);
 
 %=========================================================
@@ -619,33 +619,63 @@ for speedIdx = 1:length(SpeedList)
             ub_DecisionVars = [ub_DecisionVars, ones( 1, VarLengthList(i))];
             varstype        = [varstype,        ones(1, VarLengthList(i))];            %0 (use zeros) -> Continuous Variable/ 1 (use ones) -> Binary Variable
         else %continuous variables
-            if strcmp(varList(i),'theta') == 1
+            if     strcmp(varList(i),'x') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-0.1, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( speed*Tend+0.1*speed*Tend, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'y') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-25, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 25, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'theta') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-pi/2, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( pi/2, 1, VarLengthList(i))];
-            elseif strcmp(varList(i),'FFx') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mfx, 1, VarLengthList(i))];
-            elseif strcmp(varList(i),'FHx') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mfx, 1, VarLengthList(i))];
-            elseif strcmp(varList(i),'FFy') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mfy, 1, VarLengthList(i))];
-            elseif strcmp(varList(i),'FHy') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mfy, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'xdot') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-5*speed, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 5*speed, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'ydot') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-100, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 100, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'thetadot') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-5*pi, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 5*pi, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'PFx') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-speed*Tend - 5*BoundingBox_Width, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( speed*Tend + 5*BoundingBox_Width, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'PFy') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-25 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 25                       , 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'PHx') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-speed*Tend - 5*BoundingBox_Width, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( speed*Tend + 5*BoundingBox_Width, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'PHy') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-25 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 25                       , 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PFxdot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PFydot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mvely, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely - 0.1*Mvely, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mvely + 0.1*Mvely, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PHxdot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PHydot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mvely, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely - 0.1*Mvely, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mvely + 0.1*Mvely, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'FFx') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'FHx') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'FFy') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy - 0.1*Mfy, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mfy + 0.1*Mfy, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'FHy') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy - 0.1*Mfy, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mfy + 0.1*Mfy, 1, VarLengthList(i))];
+            elseif strcmp(varList(i),'Ts') == 1
+                lb_DecisionVars = [lb_DecisionVars, repmat( 0, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Tend+0.1*Tend, 1, VarLengthList(i))];
             else %other unbounded variables
                 lb_DecisionVars = [lb_DecisionVars, repmat(-inf, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( inf, 1, VarLengthList(i))];
@@ -1280,16 +1310,18 @@ for speedIdx = 1:length(SpeedList)
 
     %       Build Solver Option Structure
     if strcmp(SolverSelected, 'knitro')
-        solverOption = struct('mip_outinterval', 50,...     % (Log Output Frequency) Log Output per Nodes
+        solverOption = struct('mip_outinterval', 1,...      % (Log Output Frequency) Log Output per Nodes
                               'mip_heuristic',   0,...
                               'mip_outlevel',    2,...      % Print accumulated time for every node.
                               'mip_selectrule',  3,...      % The rule for selecting nodes 2 has the best performance
                               'mip_branchrule',  2,...      % MIP Branching rule
-                              'mip_maxnodes',    NumMaxNodes ...      % Max Number of Nodes wish to be explored
-                              );
- %                             'Multistart',       1,...          % Open multi start
- %                             'ms_maxsolves',   2 ...    % Maximum CPU time
- %                             );
+                              'mip_maxnodes',    NumMaxNodes,...      % Max Number of Nodes wish to be explored
+                              'Multistart',      1,...      % Open multi start
+                              'ms_maxsolves',    25);      % Maximum CPU time
+   %                           'par_numthreads',  2,...
+   %                           'ms_deterministic',0);
+   %                           'par_msnumthreads',3 ...
+
 
     elseif strcmp(SolverSelected, 'bonmin')
         solverOption = struct('option_file_name', 'bonmin.opt');  
