@@ -1317,7 +1317,7 @@ for speedIdx = 1:length(SpeedList)
                               'mip_branchrule',  2,...      % MIP Branching rule
                               'mip_maxnodes',    NumMaxNodes,...      % Max Number of Nodes wish to be explored
                               'Multistart',      1,...      % Open multi start
-                              'ms_maxsolves',    25);      % Maximum CPU time
+                              'ms_maxsolves',    50);      % Maximum CPU time
    %                           'par_numthreads',  2,...
    %                           'ms_deterministic',0);
    %                           'par_msnumthreads',3 ...
