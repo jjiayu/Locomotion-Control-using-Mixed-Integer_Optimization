@@ -76,7 +76,7 @@ disp('----------------------------------------------------');
 disp('Date and Time:');
 disp(datetime('now'));
 disp('----------------------------------------------------');
-disp(['Correspondent Log File Name: ', TaskParameterLog_filename, 'in the Directory: ', ExpDirectory]);
+disp(['Correspondent Log File Name: ', TaskParameterLog_filename, ', in the Directory: ', ExpDirectory]);
 disp('====================================================');
 disp(' ');
 %=====================================================================
