@@ -28,7 +28,7 @@ StridePeriod = input('Specify Stride Period: \n');
 
 ExpDirectory = ['~/TerminatorGaitOptResults/LargeNumNodes/MultiMINLPRuns-',num2str(NPhase),'Phases-StridePeriod-',num2str(StridePeriod)];
 
-if ~exist(ExpDirectory,dir)
+if ~exist(ExpDirectory,'dir')
     ExpMkDirStatus = mkdir(ExpDirectory);
     if ExpMkDirStatus == 1
         disp(['Experiment Working Directory Created: ', ExpDirectory])
