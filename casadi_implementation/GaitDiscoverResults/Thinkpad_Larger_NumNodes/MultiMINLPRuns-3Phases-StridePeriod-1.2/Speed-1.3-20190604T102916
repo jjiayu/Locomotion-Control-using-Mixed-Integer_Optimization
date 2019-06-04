@@ -1,0 +1,131 @@
+====================================================
+Gait Search for 3-Phases Motion(5-Knots per Phase), Stride Period 1.2 Locomotion Speed 1.3 m/s Round 8
+Experiment Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/GaitDiscoverResults/Thinkpad_Larger_NumNodes/MultiMINLPRuns-3Phases-StridePeriod-1.2
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+solverOption = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+    mip_outinterval: 100
+      mip_heuristic: -1
+       mip_outlevel: 2
+     mip_selectrule: 0
+     mip_branchrule: 1
+       mip_maxnodes: 1000064
+
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (33 variables).
+hessopt:                 1
+mip_branchrule:          1
+mip_maxnodes:            1000064
+mip_outinterval:         100
+mip_outlevel:            2
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_selectrule from AUTO to 2.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                289
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                        286
+    fixed:                                            3
+    free:                                             0
+Number of binary variables:                           6
+Number of integer variables:                          0
+Number of constraints:                              526
+    linear equalities:                                5
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      154
+    linear one-sided inequalities:                  303
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:           64
+Number of nonzeros in Jacobian:                    1810
+Number of nonzeros in Hessian:                      717
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 240 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+   iter =      1: Iinf =      6, FeasError =   2.697e-02
+   iter =      2: Iinf =      1, FeasError =   5.200e-01
+   iter =      3: Iinf =      6, FeasError =   3.069e-03
+   iter =      4: Iinf =      2, FeasError =   1.040e+00
+   iter =      5: Iinf =      1, FeasError =   1.917e-02
+   iter =      6: Iinf =      2, FeasError =   1.040e+00
+*  iter =      7: Iinf =      0, FeasError =   2.533e-08, Obj =   3.192e+05
+Knitro found integer feasible point in 7 heuristic iterations
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+*      1       0       0  -1.80e+308     -1.80e+308    3.19e+05       3.199
+*     65      34       0    3.18e+05  f    1.80e+05    3.18e+05       9.897
+*     66      33       0    2.98e+05  f    1.80e+05    2.98e+05      10.141
+*     95       4       0    2.74e+05  f    2.65e+05    2.74e+05      13.405
+      97       2            2.74e+05       2.74e+05    2.74e+05      13.472
+
+EXIT: Optimal solution found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   2.74367659237406e+05
+Final integrality gap (abs / rel)   =  0.00e+00 /   0.00e+00 ( 0.00%)
+# of nodes processed                =       97
+# of subproblems processed          =      108
+Total program time (secs)           =      13.49943 (    13.332 CPU time)
+Time spent in evaluations (secs)    =       0.70377
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg        0.237        0.196      8322
+   nlp_gf_jg         0.18        0.176      5420
+  nlp_hess_l        0.152        0.157      5211
+      solver         13.3         13.5         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+
+gait =
+
+    1.0000    1.0000    0.4298
+         0         0    0.6240
+    1.0000    1.0000    0.1462
+
+Removed Variables within Vanished Phases
+===================================================
+ 

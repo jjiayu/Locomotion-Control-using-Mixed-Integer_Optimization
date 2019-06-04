@@ -1,0 +1,332 @@
+====================================================
+Gait Search for Locomotion Speed 0.1 m/s Round 1
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (33 variables).
+hessopt:                 1
+mip_branchrule:          2
+mip_heuristic:           0
+mip_outinterval:         1
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                289
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                        286
+    fixed:                                            3
+    free:                                             0
+Number of binary variables:                           6
+Number of integer variables:                          0
+Number of constraints:                              526
+    linear equalities:                                5
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      154
+    linear one-sided inequalities:                  303
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:           64
+Number of nonzeros in Jacobian:                    1810
+Number of nonzeros in Hessian:                      717
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 240 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       6  -1.80e+308     -1.80e+308                   0.665
+       2       1       5    8.76e+04     -1.80e+308                   0.732
+       3       2       4    8.76e+04     -1.80e+308                   0.764
+       4       3       3    8.76e+04     -1.80e+308                   0.782
+       5       4       2    1.75e+05     -1.80e+308                   0.807
+       6       5         INFEASIBLE  pr  -1.80e+308                   0.967
+       7       4       1    1.75e+05     -1.80e+308                   1.006
+*      8       5       0    1.83e+05  f  -1.80e+308    1.83e+05       1.245
+       9       4         INFEASIBLE  pr  -1.80e+308    1.83e+05       1.365
+      10       3       2    8.94e+04     -1.80e+308    1.83e+05       1.403
+      11       4       5    8.76e+04       8.76e+04    1.83e+05       1.437
+      12       5       4    8.76e+04       8.76e+04    1.83e+05       1.681
+      13       6         FAILED -500       8.76e+04    1.83e+05       1.857
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+      14       7       2    8.76e+04       8.76e+04    1.83e+05       2.393
+      15       8       1    1.75e+05       8.76e+04    1.83e+05       2.427
+      16       9            1.83e+05 pr    8.76e+04    1.83e+05       2.484
+      17       8         FAILED -500       8.76e+04    1.83e+05       2.743
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+ERROR: User routine for hess_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+       Could not evaluate second derivatives at the current point.
+       No further progress can be made.
+      18       7         FAILED -500       8.76e+04    1.83e+05       3.003
+      19       8         FAILED -500       8.76e+04    1.83e+05       3.082
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+*     20       7       0    9.13e+04  f    8.76e+04    9.13e+04       3.171
+      21       6         FAILED -500       8.76e+04    9.13e+04       3.239
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+      22       7            1.75e+05 pr    8.76e+04    9.13e+04       3.316
+      23       6         FAILED -500       8.76e+04    9.13e+04       3.406
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+      24       7         FAILED -500       8.76e+04    9.13e+04       3.552
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+      25       6         FAILED -500       8.76e+04    9.13e+04       3.710
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+ERROR: User routine for hess_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+       Could not evaluate second derivatives at the current point.
+       No further progress can be made.
+      26       5         FAILED -500       8.76e+04    9.13e+04       3.910
+      27       6       2    8.96e+04       8.76e+04    9.13e+04       3.975
+      28       7       1    8.97e+04       8.76e+04    9.13e+04       4.050
+ERROR: User routine for hess_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+       Could not evaluate second derivatives at the current point.
+       No further progress can be made.
+      29       8         FAILED -500       8.76e+04    9.13e+04       4.077
+      30       7            9.13e+04 pr    8.76e+04    9.13e+04       4.125
+      31       6       1    8.97e+04       8.76e+04    9.13e+04       4.155
+      32       7       2    8.97e+04       8.76e+04    9.13e+04       4.185
+      33       8       4    8.76e+04       8.76e+04    9.13e+04       4.440
+      34       9       3    8.76e+04       8.76e+04    9.13e+04       4.473
+      35      10            1.75e+05 pr    8.76e+04    9.13e+04       4.509
+      36       9       2    8.94e+04       8.76e+04    9.13e+04       4.605
+      37      10       1    8.94e+04       8.76e+04    9.13e+04       4.632
+      38      11            1.75e+05 pr    8.76e+04    9.13e+04       4.670
+      39      10            9.13e+04 pr    8.76e+04    9.13e+04       4.824
+      40       9       1    8.94e+04       8.76e+04    9.13e+04       4.868
+      41      10       3    8.97e+04       8.76e+04    9.13e+04       5.186
+      42      11       2    8.97e+04       8.76e+04    9.13e+04       5.529
+      43      12            1.75e+05 pr    8.76e+04    9.13e+04       5.639
+      44      11       1    8.97e+04       8.76e+04    9.13e+04       5.673
+      45      12            9.13e+04 pr    8.76e+04    9.13e+04       5.708
+      46      11         INFEASIBLE  pr    8.76e+04    9.13e+04       5.886
+      47      10       2    8.97e+04       8.76e+04    9.13e+04       5.931
+      48      11       3    8.76e+04       8.76e+04    9.13e+04       6.062
+      49      12       2    8.76e+04       8.76e+04    9.13e+04       6.168
+      50      13       1    8.94e+04       8.76e+04    9.13e+04       6.189
+      51      14            1.75e+05 pr    8.76e+04    9.13e+04       6.260
+      52      13         INFEASIBLE  pr    8.76e+04    9.13e+04       6.687
+      53      12       1    8.94e+04       8.76e+04    9.13e+04       6.892
+      54      13       2    8.76e+04       8.76e+04    9.13e+04       6.928
+      55      14       4    8.76e+04       8.76e+04    9.13e+04       6.977
+      56      15       1    8.94e+04       8.76e+04    9.13e+04       7.116
+      57      16            1.75e+05 pr    8.76e+04    9.13e+04       7.138
+      58      15         INFEASIBLE  pr    8.76e+04    9.13e+04       7.512
+      59      14       3    8.94e+04       8.76e+04    9.13e+04       7.554
+      60      15            9.13e+04 pr    8.76e+04    9.13e+04       7.579
+      61      14       2    8.94e+04       8.76e+04    9.13e+04       7.610
+      62      15            1.75e+05 pr    8.76e+04    9.13e+04       7.677
+      63      14       1    8.97e+04       8.76e+04    9.13e+04       7.798
+      64      15            9.13e+04 pr    8.76e+04    9.13e+04       7.858
+      65      14         INFEASIBLE  pr    8.76e+04    9.13e+04       8.029
+      66      13            1.75e+05 pr    8.76e+04    9.13e+04       8.248
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m', 1350)" style="font-weight:bold">MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/MultiMINLPRuns_LoopVersion_Gait_Discovery_casadi_multi_phase.m',1350,0)">line 1350</a>)
+    sol = solver('x0',  DecisionVarsInit, ...
+} 
+       Could not evaluate first derivatives at the current point.
+      67      12         FAILED -500       8.76e+04    9.13e+04       8.593
+      68      13         INFEASIBLE  pr    8.76e+04    9.13e+04       9.186
+      69      12         INFEASIBLE  pr    8.76e+04    9.13e+04       9.655
+      70      11            9.13e+04 pr    8.76e+04    9.13e+04       9.702
+      71      10         INFEASIBLE  pr    8.76e+04    9.13e+04      10.217
+      72       9       1    8.97e+04       8.76e+04    9.13e+04      10.315
+      73      10            9.13e+04 pr    8.76e+04    9.13e+04      10.362
+      74       9         INFEASIBLE  pr    8.76e+04    9.13e+04      10.911
+      75       8       1    8.97e+04       8.76e+04    9.13e+04      10.929
+      76       9            9.13e+04 pr    8.76e+04    9.13e+04      11.282
+      77       8            9.13e+04 pr    8.76e+04    9.13e+04      11.335
+      78       7         INFEASIBLE  pr    8.76e+04    9.13e+04      11.704
+      79       6            1.75e+05 pr    8.76e+04    9.13e+04      12.030
+      80       5         INFEASIBLE  pr    8.76e+04    9.13e+04      12.230
+      81       4            9.13e+04 pr    8.76e+04    9.13e+04      12.271
+      82       3         INFEASIBLE  pr    8.76e+04    9.13e+04      12.626
+      83       2            9.13e+04 pr    8.76e+04    9.13e+04      12.668
+      84       1            9.13e+04 pr    8.76e+04    9.13e+04      12.694
+      85       0       1    8.94e+04       8.76e+04    9.13e+04      12.723
+      86       1            1.75e+05 pr    8.76e+04    9.13e+04      12.752
+      87       0            9.13e+04 pr    8.76e+04    9.13e+04      12.807
+
+EXIT: All nodes have been explored. Integer feasible point found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   9.12867318987013e+04
+Final integrality gap (abs / rel)   =  3.65e+03 /   4.00e-02 ( 4.00%)
+# of nodes processed                =       87
+# of subproblems processed          =       89
+Total program time (secs)           =      12.86825 (    12.293 CPU time)
+Time spent in evaluations (secs)    =       0.55226
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg        0.202        0.183      6920
+   nlp_gf_jg         0.12        0.125      3510
+  nlp_hess_l        0.121        0.122      3391
+      solver         12.3         12.9         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+
+gait =
+
+    1.0000    1.0000    0.8640
+         0         0    0.0360
+
+Removed Variables within Vanished Phases
+===================================================
+ 

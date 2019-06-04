@@ -1,0 +1,167 @@
+====================================================
+Gait Search for Locomotion Speed 0.5 m/s
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (33 variables).
+hessopt:                 1
+mip_branchrule:          2
+mip_heuristic:           0
+mip_maxnodes:            64
+mip_outinterval:         1
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                289
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                        286
+    fixed:                                            3
+    free:                                             0
+Number of binary variables:                           6
+Number of integer variables:                          0
+Number of constraints:                              526
+    linear equalities:                                5
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      154
+    linear one-sided inequalities:                  303
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:           64
+Number of nonzeros in Jacobian:                    1810
+Number of nonzeros in Hessian:                      717
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 240 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       6  -1.80e+308     -1.80e+308                   2.126
+       2       1       5    2.92e+04     -1.80e+308                   2.400
+       3       2       4    2.92e+04     -1.80e+308                   2.422
+       4       3       3    2.92e+04     -1.80e+308                   2.435
+       5       4       2    5.84e+04     -1.80e+308                   2.462
+       6       5       1    5.84e+04     -1.80e+308                   2.474
+       7       6         INFEASIBLE  pr  -1.80e+308                   2.551
+*      8       5       0    7.30e+04  f  -1.80e+308    7.30e+04       2.665
+       9       4       1    5.84e+04     -1.80e+308    7.30e+04       2.686
+      10       5       5    2.92e+04       2.92e+04    7.30e+04       2.722
+      11       6       2    3.65e+04       2.92e+04    7.30e+04       2.861
+      12       7       4    2.92e+04       2.92e+04    7.30e+04       2.890
+      13       8       3    2.92e+04       2.92e+04    7.30e+04       2.918
+      14       9       2    3.25e+04       2.92e+04    7.30e+04       3.157
+      15      10       1    3.65e+04       2.92e+04    7.30e+04       3.180
+      16      11            7.30e+04 pr    2.92e+04    7.30e+04       3.203
+*     17      10       0    3.65e+04  f    2.92e+04    3.65e+04       3.263
+      18       9       1    3.25e+04       2.92e+04    3.65e+04       3.288
+      19      10       4    2.92e+04       2.92e+04    3.65e+04       3.313
+      20      11       3    2.92e+04       2.92e+04    3.65e+04       3.339
+      21      12       2    2.92e+04       2.92e+04    3.65e+04       3.361
+      22      13            5.84e+04 pr    2.92e+04    3.65e+04       3.420
+      23      12         INFEASIBLE  pr    2.92e+04    3.65e+04       3.549
+      24      11       2    2.92e+04       2.92e+04    3.65e+04       3.573
+      25      12       3    2.92e+04       2.92e+04    3.65e+04       3.651
+      26      13       2    3.25e+04       2.92e+04    3.65e+04       3.682
+      27      14            5.84e+04 pr    2.92e+04    3.65e+04       3.709
+      28      13       1    3.32e+04       2.92e+04    3.65e+04       3.735
+      29      14            3.65e+04 pr    2.92e+04    3.65e+04       3.754
+      30      13         INFEASIBLE  pr    2.92e+04    3.65e+04       3.860
+      31      12         INFEASIBLE  pr    2.92e+04    3.65e+04       4.219
+      32      11       1    3.32e+04       2.92e+04    3.65e+04       4.248
+      33      12            3.65e+04 pr    2.92e+04    3.65e+04       4.267
+      34      11            3.65e+04 pr    2.92e+04    3.65e+04       4.410
+      35      10         INFEASIBLE  pr    2.92e+04    3.65e+04       4.733
+      36       9            5.84e+04 pr    2.92e+04    3.65e+04       4.780
+      37       8            3.65e+04 pr    2.92e+04    3.65e+04       4.962
+      38       7            3.65e+04 pr    2.92e+04    3.65e+04       5.110
+      39       6       3    2.92e+04       2.92e+04    3.65e+04       5.134
+      40       7       2    3.25e+04       2.92e+04    3.65e+04       5.162
+      41       8            5.84e+04 pr    2.92e+04    3.65e+04       5.209
+      42       7       1    3.32e+04       2.92e+04    3.65e+04       5.230
+      43       8            3.65e+04 pr    2.92e+04    3.65e+04       5.248
+      44       7         INFEASIBLE  pr    2.92e+04    3.65e+04       5.501
+      45       6       2    3.25e+04       2.92e+04    3.65e+04       5.727
+      46       7       4    2.92e+04       2.92e+04    3.65e+04       5.763
+      47       8       3    3.25e+04       2.92e+04    3.65e+04       5.851
+      48       9       2    3.25e+04       2.92e+04    3.65e+04       5.878
+      49      10            3.65e+04 pr    2.92e+04    3.65e+04       5.898
+      50       9       1    3.25e+04       2.92e+04    3.65e+04       5.922
+      51      10            5.84e+04 pr    2.92e+04    3.65e+04       5.945
+      52       9            3.65e+04 pr    2.92e+04    3.65e+04       5.971
+      53       8       2    3.25e+04       2.92e+04    3.65e+04       6.101
+      54       9       3    3.25e+04       2.92e+04    3.65e+04       6.152
+      55      10       3    2.92e+04       2.92e+04    3.65e+04       6.184
+      56      11            5.84e+04 pr    2.92e+04    3.65e+04       6.212
+      57      10       2    3.25e+04       3.25e+04    3.65e+04       6.674
+      58      11            3.65e+04 pr    3.25e+04    3.65e+04       6.732
+      59      10       1    3.25e+04       3.25e+04    3.65e+04       6.756
+      60      11            5.84e+04 pr    3.25e+04    3.65e+04       6.857
+      61      10         INFEASIBLE  pr    3.25e+04    3.65e+04       7.222
+      62       9            3.65e+04 pr    3.25e+04    3.65e+04       7.245
+      63       8       2    3.25e+04       3.25e+04    3.65e+04       7.330
+      64       9       1    3.25e+04       3.25e+04    3.65e+04       7.360
+
+EXIT: Node limit reached. Integer feasible point found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   3.65146927594774e+04
+Final integrality gap (abs / rel)   =  4.06e+03 /   1.11e-01 (11.11%)
+# of nodes processed                =       64
+# of subproblems processed          =       66
+Total program time (secs)           =       7.37308 (     7.071 CPU time)
+Time spent in evaluations (secs)    =       0.37757
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg        0.126        0.121      4453
+   nlp_gf_jg       0.0842        0.084      2568
+  nlp_hess_l       0.0716       0.0712      2439
+      solver         7.08          7.4         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+
+gait =
+
+    1.0000    1.0000    0.2400
+         0         0    0.0600
+
+Removed Variables within Vanished Phases
+===================================================
+ 

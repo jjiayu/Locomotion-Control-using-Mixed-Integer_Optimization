@@ -1,0 +1,133 @@
+====================================================
+Gait Search for 5-Phases Motion(5-Knots per Phase), Stride Period 0.1 Locomotion Speed 0.4 m/s Round 7
+Experiment Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/GaitDiscoverResults/Thinkpad_UniformHeuristicsDefaultRules/MultiMINLPRuns-5Phases-StridePeriod-0.1
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+solverOption = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+    mip_outinterval: 100
+      mip_heuristic: -1
+       mip_outlevel: 2
+     mip_selectrule: 0
+     mip_branchrule: 1
+       mip_maxnodes: 1024
+
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (53 variables).
+hessopt:                 1
+mip_branchrule:          1
+mip_maxnodes:            1024
+mip_outinterval:         100
+mip_outlevel:            2
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_selectrule from AUTO to 2.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                475
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                        472
+    fixed:                                            3
+    free:                                             0
+Number of binary variables:                          10
+Number of integer variables:                          0
+Number of constraints:                              868
+    linear equalities:                                5
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      254
+    linear one-sided inequalities:                  505
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          104
+Number of nonzeros in Jacobian:                    3004
+Number of nonzeros in Hessian:                     1247
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 400 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+   iter =      1: Iinf =      1, FeasError =   1.600e-01
+*  iter =      2: Iinf =      0, FeasError =   4.891e-12, Obj =   2.318e+04
+Knitro found integer feasible point in 2 heuristic iterations
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+*      1       0       0  -1.80e+308     -1.80e+308    2.32e+04       1.227
+     100      95       1    1.16e+04       9.74e+03    2.32e+04      15.484
+     200     183       5    9.74e+03       9.74e+03    2.32e+04      42.114
+*    272     247       0    1.16e+04  f    1.06e+04    1.16e+04      50.953
+     300     247       4    1.06e+04       1.06e+04    1.16e+04      54.593
+     400     267       2    1.06e+04       1.06e+04    1.16e+04      87.053
+     500     287            1.16e+04 pr    1.06e+04    1.16e+04     109.938
+     600     293       1    1.06e+04       1.06e+04    1.16e+04     121.265
+     700     303            1.95e+04 pr    1.06e+04    1.16e+04     134.277
+     800     305            1.16e+04 pr    1.06e+04    1.16e+04     147.982
+     900     279            1.16e+04 pr    1.06e+04    1.16e+04     158.732
+    1000     235       1    1.08e+04       1.06e+04    1.16e+04     168.543
+
+EXIT: Node limit reached. Integer feasible point found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   1.15919127654801e+04
+Final integrality gap (abs / rel)   =  1.01e+03 /   8.70e-02 ( 8.70%)
+# of nodes processed                =     1024
+# of subproblems processed          =     1028
+Total program time (secs)           =     174.35019 (   174.628 CPU time)
+Time spent in evaluations (secs)    =       8.22659
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg         2.58         2.29    101798
+   nlp_gf_jg         2.36         2.34     75708
+  nlp_hess_l         2.18         2.16     73812
+      solver          175          174         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+
+gait =
+
+    1.0000         0    0.0160
+    1.0000    1.0000    0.0680
+         0    1.0000    0.0160
+
+Removed Variables within Vanished Phases
+===================================================
+ 

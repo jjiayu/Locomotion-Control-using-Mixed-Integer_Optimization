@@ -336,6 +336,10 @@ else
     ME_NumMaxNodes = MException('Initialization:NumMaxNodes','Unexpected Settings of Max Number of Nodes');
     throw(ME_NumMaxNodes)
 end
+disp('----------------------------------------------------');
+%       Define number of multistart solves for each sub-nonlinear
+%       optimizaiton problem
+NumMultiStartSolves = input('Specify Number of Multi-Start Solves for sub-nonlinear Optimization Problems (i.e. 1, 10, 25, 50): \n');
 disp('====================================================');
 disp(' ')
 
@@ -1317,7 +1321,7 @@ for speedIdx = 1:length(SpeedList)
                               'mip_branchrule',  2,...      % MIP Branching rule
                               'mip_maxnodes',    NumMaxNodes,...      % Max Number of Nodes wish to be explored
                               'Multistart',      1,...      % Open multi start
-                              'ms_maxsolves',    25);      % Maximum CPU time
+                              'ms_maxsolves',    NumMultiStartSolves);      % Maximum CPU time
    %                           'par_numthreads',  2,...
    %                           'ms_deterministic',0);
    %                           'par_msnumthreads',3 ...
