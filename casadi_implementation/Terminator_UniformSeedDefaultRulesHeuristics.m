@@ -54,6 +54,9 @@ disp(' ')
 %========================================================
 % Import CasADi related packages
 addpath('/usr/local/matlab/')
+addpath('/usr/local/lib/')
+addpath('/usr/local/include/')
+addpath('/usr/local/')
 import casadi.*
 
 %========================================================
