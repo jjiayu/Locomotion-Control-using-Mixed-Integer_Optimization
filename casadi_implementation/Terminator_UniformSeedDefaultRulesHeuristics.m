@@ -53,6 +53,7 @@ disp(' ')
 
 %========================================================
 % Import CasADi related packages
+addpath('/home/jiayi/bin/casadi-linux-matlabR2014b-v3.4.5')
 import casadi.*
 
 %========================================================
