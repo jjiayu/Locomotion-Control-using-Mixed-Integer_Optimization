@@ -14,15 +14,35 @@ clc;
 %cd /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/
 
 % Get Screen Name
-%ScreenSessionName = getenv('ScreenName')
-%if isempty(ScreenSessionName)
-%    error('Undefined Envionrment Variable for Identifying ScreenName');
-%end
+ScreenSessionName = getenv('ScreenName')
+if isempty(ScreenSessionName)
+    error('Undefined Envionrment Variable for Identifying ScreenName');
+end
+disp(' ')
 
 %========================================================
 % Identfy Data Storage Folder
-ExpDirectory = uigetdir;
-disp(['Experiment Working Directory: ', ExpDirectory])
+disp('Set up Experiment Saving Directory:')
+NPhase = input('Specify Number of Phases: \n');
+StridePeriod = input('Specify Stride Period: \n');
+
+ExpDirectory = ['~/TerminatorGaitOptResults/LargeNodeNumNoHeuristicsDefaultRule/MultiMINLPRuns-',num2str(NPhase),'Phases-StridePeriod-',num2str(StridePeriod)];
+
+if ~exist(ExpDirectory,'dir')
+    ExpMkDirStatus = mkdir(ExpDirectory);
+    if ExpMkDirStatus == 1
+        disp(['Experiment Working Directory Created: ', ExpDirectory])
+    else
+        error('Failed to Create Experiment Directory!')
+    end
+else
+    disp(['Experiment Working Directory already Exists: ', ExpDirectory])
+end
+
+disp(' ')
+
+%ExpDirectory = uigetdir;
+
 
 % %Save current directory as working directory
 % ExpDirectory = pwd;
@@ -33,6 +53,7 @@ disp(['Experiment Working Directory: ', ExpDirectory])
 
 %========================================================
 % Import CasADi related packages
+addpath('~/bin/casadi_executables/usr/local/matlab/')
 import casadi.*
 
 %========================================================
@@ -55,7 +76,7 @@ disp('----------------------------------------------------');
 disp('Date and Time:');
 disp(datetime('now'));
 disp('----------------------------------------------------');
-disp(['Correspondent Log File Name: ', TaskParameterLog_filename, 'in the Directory: ', ExpDirectory]);
+disp(['Correspondent Log File Name: ', TaskParameterLog_filename, ', in the Directory: ', ExpDirectory]);
 disp('====================================================');
 disp(' ');
 %=====================================================================
@@ -1335,7 +1356,7 @@ for speedIdx = 1:length(SpeedList)
     %       Build Solver Option Structure
     if strcmp(SolverSelected, 'knitro')
         solverOption = struct('mip_outinterval', 100,...      % (Log Output Frequency) Log Output per Nodes
-                              'mip_heuristic',   -1,...     %-1,let sover to select heuristics method, 0, disable heuristics
+                              'mip_heuristic',   0,...     %-1,let sover to select heuristics method, 0, disable heuristics
                               'mip_outlevel',    2,...      % Print accumulated time for every node.
                               'mip_selectrule',  0,...      % 
                               'mip_branchrule',  1,...      % MIP Branching rule The rule for selecting nodes 2 has the best performance
@@ -1552,6 +1573,6 @@ disp('All Experiments Finished')
 disp('===================================================');
 
 % Send Email to Notify the Finish of the Computation
-%setpref('Internet','E_mail','Jiayi.Wang@ed.ac.uk');
-%setpref('Internet','SMTP_Server','smtp.staffmail.ed.ac.uk');
-%sendmail('Jiayi.Wang@ed.ac.uk',['Experiemnt Finished for ', num2str(NumPhases), '-Phase Motion, Stride Period: ', num2str(Tend), ', Session Name: ', ScreenSessionName]);
+setpref('Internet','E_mail','Jiayi.Wang@ed.ac.uk');
+setpref('Internet','SMTP_Server','smtp.staffmail.ed.ac.uk');
+sendmail('Jiayi.Wang@ed.ac.uk',['Experiemnt Finished for ', num2str(NumPhases), '-Phase Motion, Stride Period: ', num2str(Tend), ', Session Name: ', ScreenSessionName]);
