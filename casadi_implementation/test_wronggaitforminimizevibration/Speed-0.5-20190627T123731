@@ -1,0 +1,162 @@
+====================================================
+Gait Search for 3-Phases Motion(5-Knots per Phase), Stride Period 0.8 Locomotion Speed 0.5 m/s Round 2
+Experiment Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/test_wronggaitforminimizevibration
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+solverOption = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+    mip_outinterval: 100
+      mip_heuristic: 0
+       mip_outlevel: 2
+     mip_selectrule: 0
+     mip_branchrule: 1
+       mip_maxnodes: 1000064
+
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+Knitro presolve eliminated 83 variables and 282 constraints.
+
+hessopt:                 1
+Knitro changing algorithm from AUTO to 1.
+Knitro changing bar_initpt from AUTO to 3.
+Knitro changing bar_murule from AUTO to 4.
+Knitro changing bar_penaltycons from AUTO to 0.
+Knitro changing bar_penaltyrule from AUTO to 2.
+Knitro changing bar_switchrule from AUTO to 2.
+Knitro changing linesearch from AUTO to 1.
+Knitro changing linsolver from AUTO to 2.
+Knitro shifted start point to satisfy presolved bounds (117 variables).
+Knitro fixing 83 variables eliminated from the presolve.
+
+Problem Characteristics                                 (   Presolved)
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                283 (         200)
+    bounded below only:                               0 (           0)
+    bounded above only:                               0 (           0)
+    bounded below and above:                        280 (         200)
+    fixed:                                            3 (           0)
+    free:                                             0 (           0)
+Number of constraints:                              526 (         308)
+    linear equalities:                                5 (           5)
+    quadratic equalities:                             0 (           0)
+    gen. nonlinear equalities:                      154 (         154)
+    linear one-sided inequalities:                  303 (          21)
+    quadratic one-sided inequalities:                 0 (           0)
+    gen. nonlinear one-sided inequalities:            0 (         128)
+    linear two-sided inequalities:                    0 (           0)
+    quadratic two-sided inequalities:                 0 (           0)
+    gen. nonlinear two-sided inequalities:           64 (           0)
+Number of nonzeros in Jacobian:                    1570 (        1299)
+Number of nonzeros in Hessian:                      712 (         428)
+
+  Iter      Objective      FeasError   OptError    ||Step||    CGits 
+--------  --------------  ----------  ----------  ----------  -------
+       0    2.605839e+05   5.911e+02
+      10    2.152127e+05   5.568e+02   1.654e+01   1.066e+02        0
+      20    1.752845e+05   5.325e+02   6.866e+02   2.785e+02        0
+      30    1.573189e+05   5.162e+02   1.872e+04   1.156e+02        0
+      40    2.750889e+05   1.668e+02   3.134e+03   4.547e+00        2
+      50    2.565638e+05   1.505e+02   1.199e+02   2.332e+00        0
+      60    2.432277e+05   1.412e+02   1.264e+02   5.420e+00        0
+      70    2.292375e+05   1.323e+02   1.312e+02   1.803e+01        0
+      80    2.139081e+05   1.275e+02   1.411e+02   4.143e+00        0
+      90    2.055114e+05   1.241e+02   1.440e+02   1.275e+01        0
+     100    1.930699e+05   1.188e+02   1.455e+02   7.107e+00        0
+     110    1.899642e+05   1.168e+02   1.490e+02   5.674e+00        0
+     120    1.963781e+05   1.057e+02   1.420e+02   1.514e+00        0
+     130    1.972403e+05   9.788e+01   1.354e+02   1.774e+00        0
+     140    2.060939e+05   9.285e+01   1.263e+02   2.475e+00        0
+     150    2.072539e+05   8.631e+01   1.185e+02   4.690e-01        0
+     160    2.033111e+05   8.318e+01   1.162e+02   1.994e-01        0
+     170    1.994562e+05   8.021e+01   1.149e+02   3.673e-01        0
+     180    1.929833e+05   7.396e+01   1.143e+02   1.585e+00        0
+     190    1.834486e+05   6.772e+01   1.116e+02   1.164e+00        0
+     200    1.601498e+05   4.751e+01   9.229e+01   5.241e+00        0
+     210    1.157610e+05   3.639e+01   3.121e+01   4.382e+00        1
+     220    6.574093e+04   1.084e+01   7.035e+00   3.594e+00        0
+     230    5.686277e+04   3.353e+00   8.426e+00   2.429e-01        0
+     240    3.178653e+04   3.121e+00   7.067e+00   1.237e+00        0
+     250    2.356501e+04   3.093e+00   1.085e+01   6.410e+00        1
+     260    1.777532e+04   2.247e+00   5.637e+00   2.402e+01        1
+     270    1.674495e+04   1.615e+00   9.496e+00   2.431e+00        3
+     280    1.280656e+04   1.393e+00   6.831e+00   1.667e+00        1
+     290    1.180836e+04   9.762e-01   3.231e+01   1.909e-03        0
+     300    1.142544e+04   9.912e-01   2.227e+01   7.672e-02        0
+     310    1.071831e+04   1.516e+00   2.864e+01   2.526e-02        0
+     320    1.730888e+04   9.704e-01   1.469e+01   2.846e+00        2
+     330    3.552892e+04   1.511e+00   2.830e+01   4.609e+00        1
+     340    3.554257e+04   9.056e-01   2.390e+01   2.885e+01        1
+     350    3.096219e+04   8.313e-01   8.894e+01   8.696e+00        3
+     360    2.506244e+04   6.911e-01   1.695e+01   6.903e+00        2
+     370    2.583093e+04   6.682e-01   1.082e+02   1.219e+01        6
+     380    2.514151e+04   5.909e-01   2.428e+01   1.471e+01        1
+     390    1.452529e+04   4.016e-01   5.151e+01   1.580e+01        1
+     400    1.203351e+04   3.269e-01   4.871e+01   5.466e+00        2
+     410    1.086210e+04   1.777e-01   6.682e+01   1.731e+00        2
+     420    1.181012e+04   4.800e-02   8.304e+01   6.016e+00        0
+     430    1.338491e+04   3.994e-02   7.547e+01   1.532e+00        0
+     440    1.721840e+04   7.458e-02   3.323e+01   8.271e+00        0
+     450    1.899372e+04   8.191e-03   3.318e+01   3.775e+01        0
+     460    7.922731e+03   6.934e-02   2.508e+01   1.253e+01        0
+     470    5.224616e+02   1.588e-01   3.549e+01   5.889e+02        0
+     480    2.726641e-01   6.323e-07   2.557e-02   1.145e-01        0
+     484    2.698352e-01   5.924e-06   1.663e-07   3.897e-01        0
+
+EXIT: Locally optimal solution found.
+
+Final Statistics
+----------------
+Final objective value               =   2.69835192547403e-01
+Final feasibility error (abs / rel) =   5.92e-06 / 1.00e-08
+Final optimality error  (abs / rel) =   1.66e-07 / 1.66e-07
+# of iterations                     =        484 
+# of CG iterations                  =        339 
+# of function evaluations           =        506
+# of gradient evaluations           =        486
+# of Hessian evaluations            =        485
+Total program time (secs)           =       0.83557 (     0.845 CPU time)
+Time spent in evaluations (secs)    =       0.02832
+
+===============================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg      0.00659       0.0064       507
+   nlp_gf_jg      0.00831      0.00819       486
+  nlp_hess_l      0.00923      0.00856       485
+      solver        0.849        0.849         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+
+gait =
+
+         0    1.0000    0.5647
+    1.0000    1.0000    0.0451
+    1.0000         0    0.1902
+
+Removed Variables within Vanished Phases
+===================================================
+ 

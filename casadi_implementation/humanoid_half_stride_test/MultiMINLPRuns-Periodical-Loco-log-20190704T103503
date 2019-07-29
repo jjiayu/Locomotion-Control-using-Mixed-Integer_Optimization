@@ -1,0 +1,122 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+With a Particular Emphasis on Periodical Gait Discovery
+Multi-Phase Formulation:
+Optimize over State, Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   04-Jul-2019 10:35:03
+
+----------------------------------------------------
+Correspondent Log File Name: MultiMINLPRuns-Periodical-Loco-log-20190704T103503in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/humanoid_half_stride_test
+====================================================
+ 
+====================================================
+Setup Robot Kinematics Properties: 
+----------------------------------------------------
+Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):
+0.4
+----------------------------------------------------
+Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):
+0.4
+----------------------------------------------------
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify the Terrain Type: 1 -> Flat Terrain; 2 -> Slopes
+1
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+2
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Specify the MINIMUM Desired Speed along X-axis (m/s): 
+1.8
+----------------------------------------------------
+Specify the MAXIMUM Desired Speed along X-axis (m/s): 
+1.8
+----------------------------------------------------
+Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):
+0.1
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+1
+Input Termianl Time (e.g. 1s): 
+0.4
+----------------------------------------------------
+ 
+====================================================
+Temporal and Discretization Setup:
+----------------------------------------------------
+Input Number of Phases: 
+2
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+5
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.1
+Number of Knots/Discretization of tau (from 0 to 1: 11) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+====================================================
+ 
+====================================================
+Big-M Setup
+====================================================
+Big-M for Foot/End-Effector in X-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: 
+1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: 
+3
+ 
+Input Big-M value for foot/end-effector Velocity for X-axis: 
+2.5
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for X-axis: 2.5 m/s
+----------------------------------------------------
+Big-M for Foot/End-Effector in Y-axis:
+Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: 
+1 -> Default Value (5m/s); 2 -> User Specified: 
+2
+ 
+Input Big-M value for foot/end-effector Velocity for Y-axis (e.g. 1-5+ m/s): 
+NOTE: Can Write the Value as the Kinematics Bounding Box Height (BoundingBox_Height)/Desired Time to Travel the Entire Bounding Box Height
+5
+ 
+Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: 5 m/s
+----------------------------------------------------
+Big-M for Contact Forces
+Input Big-M for Foot-Ground Reaction Forces along X-axis (e.g. 200,300,1000,1e5):
+300
+----------------------------------------------------
+Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3, 1e5, better larger than Mfx):
+1500
+====================================================
+====================================================
+Solver Setups:
+====================================================
+Solver Selection: 
+1 -> Knitro; 2 -> Bonmin 
+1
+Selected Solver: knitro
+----------------------------------------------------
+Solver Dependent Options:
+----------------------------------------------------
+Define Number of Max Nodes to be Explored: 
+ 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value
+1
+Selected Worst-case Scenarios to Explore 1000016 Nodes
+----------------------------------------------------
+Specify Number of Runs for the MINLP Programming (i.e. 1, 10, 25, 50, 100): 
+3
+====================================================
+ 
