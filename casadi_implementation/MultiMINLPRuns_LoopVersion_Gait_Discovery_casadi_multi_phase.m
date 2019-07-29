@@ -660,18 +660,18 @@ for speedIdx = 1:length(SpeedList)
             elseif strcmp(varList(i),'PHy') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-25 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( 25                       , 1, VarLengthList(i))];
-            elseif strcmp(varList(i),'PFxdot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
-            elseif strcmp(varList(i),'PFydot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely - 0.1*Mvely, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mvely + 0.1*Mvely, 1, VarLengthList(i))];
-            elseif strcmp(varList(i),'PHxdot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
-            elseif strcmp(varList(i),'PHydot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely - 0.1*Mvely, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( Mvely + 0.1*Mvely, 1, VarLengthList(i))];
+            %elseif strcmp(varList(i),'PFxdot') == 1
+                %lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
+                %ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
+            %elseif strcmp(varList(i),'PFydot') == 1
+            %    lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely - 0.1*Mvely, 1, VarLengthList(i))];    
+            %    ub_DecisionVars = [ub_DecisionVars, repmat( Mvely + 0.1*Mvely, 1, VarLengthList(i))];
+            %elseif strcmp(varList(i),'PHxdot') == 1
+            %    lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
+            %    ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
+            %elseif strcmp(varList(i),'PHydot') == 1
+            %    lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely - 0.1*Mvely, 1, VarLengthList(i))];    
+            %    ub_DecisionVars = [ub_DecisionVars, repmat( Mvely + 0.1*Mvely, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'FFx') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
@@ -685,7 +685,8 @@ for speedIdx = 1:length(SpeedList)
                 lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy - 0.1*Mfy, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( Mfy + 0.1*Mfy, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'Ts') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat( 0, 1, VarLengthList(i))];    
+                %lb_DecisionVars = [lb_DecisionVars, repmat( 0, 1, VarLengthList(i))];  
+                lb_DecisionVars = [lb_DecisionVars, repmat( 0.01*Tend, 1, VarLengthList(i))];  
                 ub_DecisionVars = [ub_DecisionVars, repmat( Tend+0.1*Tend, 1, VarLengthList(i))];
             else %other unbounded variables
                 lb_DecisionVars = [lb_DecisionVars, repmat(-inf, 1, VarLengthList(i))];    
@@ -700,6 +701,7 @@ for speedIdx = 1:length(SpeedList)
     DecisionVarsInit = zeros(size(DecisionVars));
     DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + rand(1, length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)));
     DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
+    DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))) = 100*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))));
     
     %------------------------
     %           (Place Holder) Check the size of lower and upper bounds and
@@ -953,8 +955,8 @@ for speedIdx = 1:length(SpeedList)
             %----------------------------------------------------
             %   (*) Foot/End-Effector Velocity (for both x-axis and y-axis)
             %----------------------------------------------------
-            %       - Equation (1): Pdot <= 0 + Mvel(1-C) -->
-            %                       Pdot + Mvel*C <= Mvel -->
+            %       - Equation (1): R(theta)Pdot <= 0 + Mvel(1-C) -->
+            %                       R(theta)Pdot + Mvel*C <= Mvel -->
             %         Use Ineq_Summation
             %         Input: v[k] = P(F/H)(x/y)dot[k]
             %                bigM = Mvel
@@ -963,32 +965,32 @@ for speedIdx = 1:length(SpeedList)
             %         ubg = Mvel
             %----------------------------------------------------
             %           Front Leg x-axis
-                EqTemp = Ineq_Summation(PFxdot(k), Mvelx, CF(PhaseIdx));
+                EqTemp = Ineq_Summation(cos(theta(k))*PFxdot(k)+sin(theta(k))*PFydot(k), Mvelx, CF(PhaseIdx));
                 g   = {g{:}, EqTemp};                      %Append to constraint function list
                 lbg = [lbg;  -inf];                        %Give constraint lower bound
                 ubg = [ubg;  Mvelx];                       %Give constraint upper bound
 
             %           Front Leg y-axis
-                EqTemp = Ineq_Summation(PFydot(k), Mvely, CF(PhaseIdx));
+                EqTemp = Ineq_Summation(-sin(theta(k))*PFxdot(k)+cos(theta(k))*PFydot(k), Mvely, CF(PhaseIdx));
                 g   = {g{:}, EqTemp};                      %Append to constraint function list
                 lbg = [lbg;  -inf];                        %Give constraint lower bound
                 ubg = [ubg;  Mvely];                       %Give constraint upper bound
 
             %           Hind Leg x-axis
-                EqTemp = Ineq_Summation(PHxdot(k), Mvelx, CH(PhaseIdx));
+                EqTemp = Ineq_Summation(cos(theta(k))*PHxdot(k)+sin(theta(k))*PHydot(k), Mvelx, CH(PhaseIdx));
                 g   = {g{:}, EqTemp};                      %Append to constraint function list
                 lbg = [lbg;  -inf];                        %Give constraint lower bound
                 ubg = [ubg;  Mvelx];                       %Give constraint upper bound
 
             %           Hind Leg y-axis
-                EqTemp = Ineq_Summation(PHydot(k), Mvely, CH(PhaseIdx));
+                EqTemp = Ineq_Summation(-sin(theta(k))*PHxdot(k)+cos(theta(k))*PHydot(k), Mvely, CH(PhaseIdx));
                 g   = {g{:}, EqTemp};                      %Append to constraint function list
                 lbg = [lbg;  -inf];                        %Give constraint lower bound
                 ubg = [ubg;  Mvely];                       %Give constraint upper bound
             %------------------------------------------------------              
-            %       - Equation (2): Pdot >= 0 - Mvel(1-C) -->
-            %                       Pdot - Mvel*C >= -Mvel -->
-            %                       -Mvel <= Pdot - Mvel*C
+            %       - Equation (2): R(theta)Pdot >= 0 - Mvel(1-C) -->
+            %                       R(theta)Pdot - Mvel*C >= -Mvel -->
+            %                       -Mvel <= R(theta)Pdot - Mvel*C
             %         Use Function Ineq_Difference
             %         Input: v[k] = P(F/H)(x/y)dot[k]
             %                bigM = -Mvel
@@ -997,25 +999,25 @@ for speedIdx = 1:length(SpeedList)
             %         ubg = inf
             %------------------------------------------------------
             %           Front Leg x-axis
-                EqTemp = Ineq_Difference(PFxdot(k), Mvelx, CF(PhaseIdx));
+                EqTemp = Ineq_Difference(cos(theta(k))*PFxdot(k)+sin(theta(k))*PFydot(k), Mvelx, CF(PhaseIdx));
                 g   = {g{:}, EqTemp};                      %Append to constraint function list
                 lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
                 ubg = [ubg;  inf];                         %Give constraint upper bound
 
             %           Front Leg y-axis
-                EqTemp = Ineq_Difference(PFydot(k), Mvely, CF(PhaseIdx));
+                EqTemp = Ineq_Difference(-sin(theta(k))*PFxdot(k)+cos(theta(k))*PFydot(k), Mvely, CF(PhaseIdx));
                 g   = {g{:}, EqTemp};                      %Append to constraint function list
                 lbg = [lbg;  -Mvely];                      %Give constraint lower bound
                 ubg = [ubg;  inf];                         %Give constraint upper bound
 
             %           Hind Leg x-axis
-                EqTemp = Ineq_Difference(PHxdot(k), Mvelx, CH(PhaseIdx));
+                EqTemp = Ineq_Difference(cos(theta(k))*PHxdot(k)+sin(theta(k))*PHydot(k), Mvelx, CH(PhaseIdx));
                 g   = {g{:}, EqTemp};                      %Append to constraint function list
                 lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
                 ubg = [ubg;  inf];                         %Give constraint upper bound
 
             %           Hind Leg y-axis
-                EqTemp = Ineq_Difference(PHydot(k), Mvely, CH(PhaseIdx));
+                EqTemp = Ineq_Difference(-sin(theta(k))*PHxdot(k)+cos(theta(k))*PHydot(k), Mvely, CH(PhaseIdx));
                 g   = {g{:}, EqTemp};                      %Append to constraint function list
                 lbg = [lbg;  -Mvely];                      %Give constraint lower bound
                 ubg = [ubg;  inf];                         %Give constraint upper bound
@@ -1311,6 +1313,29 @@ for speedIdx = 1:length(SpeedList)
     % lbg = [lbg; 0];
     % ubg = [ubg; 0];
     % %-----------------------------------------------------------------------
+    %------------------------------------------------------------------------
+    % Gait Constraint
+    %------------------------------------------------------------------------
+    FrontLeg_Contact = 0;
+    HindLeg_Contact = 0;
+    %for i = 2:NumPhases
+    %    FrontLeg_Contact = FrontLeg_Contact + abs(CF(i)-CF(i-1))*if_else(Ts(i)-Ts(i-1)<=1e-2,0,1);
+    %    HindLeg_Contact  = HindLeg_Contact  + abs(CH(i)-CH(i-1))*if_else(Ts(i)-Ts(i-1)<=1e-2,0,1);
+    %end
+    
+    for i = 2:NumPhases
+        FrontLeg_Contact = FrontLeg_Contact + abs(CF(i)-CF(i-1));
+        HindLeg_Contact  = HindLeg_Contact  + abs(CH(i)-CH(i-1));
+    end
+    
+    g = {g{:},FrontLeg_Contact};
+    lbg = [lbg;0];
+    ubg = [ubg;2];
+    
+    g = {g{:},HindLeg_Contact};
+    lbg = [lbg;0];
+    ubg = [ubg;2];
+    
     disp('Constraints and Objetive Function Constructed')
     disp('===================================================')
     disp(' ')
