@@ -13,7 +13,7 @@ clc;
 
 %cd /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/
 
-
+ 
 %========================================================
 % Identfy Data Storage Folder
 ExpDirectory = uigetdir;
@@ -297,7 +297,11 @@ Mfy = input('Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3,
 %Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
 disp('====================================================');
 %=======================================================================
-
+disp('====================================================');
+disp('Weight Setup for the minimize vibration cost')
+disp('====================================================');
+weight = input('Input weight(scaling factor) for the minimize vibration cost (i.e. 1, 500, 100, 10):\n');
+disp('====================================================');
 %=====================================================================
 % Solver SetUp
 %=====================================================================
@@ -1167,12 +1171,14 @@ for runIdx = 1:NumofRuns
             %   Cost of Transport
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + h*PFxdot(k)^2 + h*PFydot(k)^2 + h*PHxdot(k)^2 + h*PHydot(k)^2;
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
-            J = J + h*(theta(k)/pi*180)^2 + h*(thetadot(k)/pi*180)^2 + h*ydot(k)^2;
+            J = J + weight*h*(theta(k)/pi*180)^2 + weight*h*(thetadot(k)/pi*180)^2 + weight*h*ydot(k)^2;
             %VelCostWweight = 500;
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + VelCostWweight*h*PFxdot(k)^2 + VelCostWweight*h*PFydot(k)^2 + VelCostWweight*h*PHxdot(k)^2 + VelCostWweight*h*PHydot(k)^2;
             %J = J + h*xdot(k)^2;%h*ydot(k)^2 + h*thetadot(k)^2;% + h*thetadot(k)^2; h*xdot(k)^2 + 
             %----------------------------------------------------
         end
+        
+        J = J + weight*h*(theta(end)/pi*180)^2 + weight*h*(thetadot(end)/pi*180)^2 + weight*h*ydot(end)^2;
 
         %----------------------------------------------------
         % Kinematics Constraint
