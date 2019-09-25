@@ -1,0 +1,219 @@
+====================================================
+Gait Search for 4-Phases Motion(3-Knots per Phase), Stride Period 0.8 Locomotion Speed 1 m/s Round 3
+Experiment Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_Casadi_Fixed_Gait/test
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+solverOption = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+    mip_outinterval: 100
+      mip_heuristic: 0
+       mip_outlevel: 2
+     mip_selectrule: 0
+     mip_branchrule: 1
+       mip_maxnodes: 1000256
+
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+Knitro presolve eliminated 39 variables and 134 constraints.
+
+hessopt:                 1
+Knitro changing algorithm from AUTO to 1.
+Knitro changing bar_initpt from AUTO to 3.
+Knitro changing bar_murule from AUTO to 4.
+Knitro changing bar_penaltycons from AUTO to 0.
+Knitro changing bar_penaltyrule from AUTO to 2.
+Knitro changing bar_switchrule from AUTO to 2.
+Knitro changing linesearch from AUTO to 1.
+Knitro changing linsolver from AUTO to 2.
+Knitro shifted start point to satisfy presolved bounds (58 variables).
+Knitro fixing 39 variables eliminated from the presolve.
+
+Problem Characteristics                                 (   Presolved)
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                230 (         191)
+    bounded below only:                               0 (           0)
+    bounded above only:                               0 (           0)
+    bounded below and above:                        179 (         143)
+    fixed:                                            3 (           0)
+    free:                                            48 (          48)
+Number of constraints:                              425 (         343)
+    linear equalities:                                5 (           5)
+    quadratic equalities:                             0 (           0)
+    gen. nonlinear equalities:                      124 (         124)
+    linear one-sided inequalities:                  148 (          14)
+    quadratic one-sided inequalities:                 0 (           0)
+    gen. nonlinear one-sided inequalities:           96 (         200)
+    linear two-sided inequalities:                    0 (           0)
+    quadratic two-sided inequalities:                 0 (           0)
+    gen. nonlinear two-sided inequalities:           52 (           0)
+Number of nonzeros in Jacobian:                    1475 (        1397)
+Number of nonzeros in Hessian:                      640 (         431)
+
+  Iter      Objective      FeasError   OptError    ||Step||    CGits 
+--------  --------------  ----------  ----------  ----------  -------
+       0    1.610581e+06   7.905e+02
+      10    1.262709e+06   6.959e+02   6.135e+01   1.887e+02        0
+      20    6.880165e+05   6.437e+02   1.239e+02   6.005e+01        0
+      30    6.906423e+05   6.016e+02   1.579e+02   2.776e+01        0
+      40    5.254420e+05   5.481e+02   4.066e+01   1.887e+02        0
+      50    2.579144e+05   5.059e+02   3.705e+01   4.651e+02        0
+      60    3.093632e+05   4.132e+02   4.433e+01   4.211e+02        0
+      70    3.077709e+05   3.400e+02   2.920e+00   6.216e+01        0
+      80    3.262295e+05   3.377e+02   3.778e+00   1.078e+01        5
+      90    3.237242e+05   3.146e+02   1.799e+02   8.251e+01        0
+     100    4.550144e+05   2.818e+02   2.715e+01   1.038e+02        0
+     110    4.367651e+05   2.139e+02   7.521e+01   6.545e+01        0
+     120    4.746083e+05   1.901e+02   1.232e+02   1.777e-01        0
+     130    5.321081e+05   1.892e+02   1.230e+02   8.557e-01        0
+     140    5.667651e+05   1.880e+02   1.231e+02   7.916e-01        0
+     150    5.067366e+05   1.843e+02   1.229e+02   2.215e+00        0
+     160    4.610857e+05   1.348e+02   1.230e+02   1.735e+01        0
+     170    4.330322e+05   3.556e-01   1.221e+02   6.034e-01        0
+     180    4.187145e+05   4.643e-01   1.216e+02   5.611e+00        4
+     190    3.840797e+05   3.749e-01   1.054e+02   1.569e+01        0
+     200    3.692361e+05   3.110e-01   8.997e+01   1.311e+02        0
+     210    2.793569e+05   6.053e-01   1.353e+01   2.725e+02        0
+     220    1.434595e+05   6.649e-02   1.821e+05   4.136e-02        0
+     230    1.427618e+05   2.421e-04   2.437e+05   6.071e-01        3
+     240    1.427622e+05   3.226e-06   2.866e+00   1.612e-04        0
+     250    1.413892e+05   8.217e-03   2.622e+04   1.206e+01        1
+     260    1.257349e+05   2.149e-01   9.388e+05   2.403e-05        0
+     270    1.261303e+05   8.009e-03   1.557e+00   6.965e+00        4
+     280    1.247041e+05   9.575e-04   5.438e+07   1.371e-02        1
+     290    1.241651e+05   3.320e-02   1.232e+01   1.311e-01        0
+     300    1.248503e+05   5.879e-04   1.234e+01   9.013e-01        0
+     310    1.185016e+05   2.872e-03   9.399e-01   5.984e+00        0
+     320    1.182608e+05   4.804e-05   7.808e-01   1.048e+00        0
+     330    1.181822e+05   4.452e-03   6.624e+02   1.231e+01        0
+     340    1.181769e+05   9.929e-05   4.486e+01   1.919e+00        1
+     350    1.181915e+05   2.569e-03   1.504e+02   2.988e-03        0
+     360    1.181918e+05   1.043e-05   1.392e+02   5.349e-03        0
+     370    1.183596e+05   1.228e-03   7.832e+02   1.776e-02        0
+     380    1.184977e+05   2.366e-08   3.573e-03   2.328e-04        0
+     390    1.184974e+05   2.229e-09   3.576e-03   6.625e-05        0
+     400    1.184971e+05   2.366e-09   5.134e-03   1.545e-04        0
+     410    1.184968e+05   7.306e-09   1.626e-02   3.621e-04        0
+     420    1.184964e+05   4.457e-09   4.911e-03   1.049e-04        0
+     430    1.184961e+05   4.775e-09   1.044e-02   2.444e-04        0
+     440    1.184958e+05   2.716e-09   3.577e-03   7.086e-05        0
+     450    1.184955e+05   2.528e-09   5.488e-03   1.652e-04        0
+     460    1.184952e+05   8.228e-09   1.824e-02   3.877e-04        0
+     470    1.184949e+05   4.748e-09   5.246e-03   1.121e-04        0
+     480    1.184946e+05   5.444e-09   1.194e-02   2.614e-04        0
+     490    1.184943e+05   3.212e-09   3.578e-03   7.579e-05        0
+     500    1.184940e+05   2.701e-09   5.866e-03   1.766e-04        0
+     510    1.184937e+05   9.774e-09   1.957e-02   4.161e-04        0
+     520    1.184934e+05   5.069e-09   5.606e-03   1.199e-04        0
+     530    1.184931e+05   6.199e-09   1.310e-02   2.797e-04        0
+     540    1.184928e+05   3.428e-09   3.774e-03   8.103e-05        0
+     550    1.184925e+05   2.886e-09   6.269e-03   1.888e-04        0
+     560    1.184923e+05   1.358e-09   3.579e-03   5.473e-05        0
+     570    1.184919e+05   5.420e-09   5.992e-03   1.282e-04        0
+     580    1.184916e+05   7.049e-09   1.402e-02   2.994e-04        0
+     590    1.184914e+05   3.662e-09   4.032e-03   8.664e-05        0
+     600    1.184910e+05   3.231e-09   7.020e-03   2.018e-04        0
+     610    1.184908e+05   1.549e-09   3.580e-03   5.851e-05        0
+     620    1.184905e+05   2.083e-09   4.507e-03   1.365e-04        0
+     630    1.184901e+05   8.045e-09   1.501e-02   3.204e-04        0
+     640    1.184899e+05   3.944e-09   4.282e-03   9.256e-05        0
+     650    1.184896e+05   3.876e-09   7.708e-03   2.152e-04        0
+     660    1.184330e+05   4.351e-05   1.349e+02   8.098e-01        3
+     670    1.183562e+05   1.465e-04   1.089e+03   1.981e-04        0
+     680    1.184347e+05   4.566e-05   3.113e+03   1.364e+00        2
+     690    1.184101e+05   2.458e-05   4.072e+03   4.307e-01        2
+     700    1.183569e+05   8.161e-06   3.824e+03   7.016e-01        1
+     710    1.183287e+05   1.015e-05   3.746e+03   1.589e-01        2
+     720    1.183152e+05   8.433e-06   3.395e+03   5.378e-02        1
+     730    1.182924e+05   8.316e-06   2.733e+03   1.723e-01        3
+     740    1.182727e+05   7.602e-06   2.136e+03   9.378e-02        4
+     750    1.182674e+05   6.513e-07   6.160e-04   6.155e-02       19
+     760    1.182667e+05   5.677e-10   3.544e-03   7.080e-05        0
+     770    1.182664e+05   1.900e-09   3.544e-03   1.649e-04        0
+     780    1.182662e+05   3.516e-10   3.544e-03   4.797e-05        0
+     790    1.182659e+05   9.836e-09   4.071e-03   1.120e-04        0
+     800    1.182656e+05   4.969e-09   3.868e-03   2.604e-04        0
+     810    1.182654e+05   4.752e-10   3.545e-03   7.562e-05        0
+     820    1.182652e+05   1.609e-09   3.545e-03   1.761e-04        0
+     830    1.182649e+05   3.652e-10   3.544e-03   5.116e-05        0
+     840    1.182649e+05   2.811e-08   9.874e+00   9.418e-03        1
+     850    1.182566e+05   2.959e-06   1.637e+02   1.018e-01        1
+     860    1.182334e+05   3.507e-06   2.423e+02   1.237e-01        1
+     870    1.182014e+05   7.136e-06   6.332e+02   1.970e-01        2
+     880    1.181901e+05   6.314e-06   8.872e+02   1.942e-01        1
+     890    1.181748e+05   1.127e-06   3.328e+00   1.312e-01        0
+     900    1.182564e+05   1.274e-04   4.549e+02   2.384e-01        0
+     910    1.184263e+05   3.455e-04   1.103e+03   1.445e-01        0
+     920    1.183742e+05   2.866e-07   8.697e-03   1.695e-02        0
+     930    1.183597e+05   3.066e-06   3.274e+01   1.098e-02        0
+     940    1.183425e+05   4.382e-07   3.124e-02   3.419e-02        0
+     950    1.183219e+05   1.386e-06   6.003e-03   7.460e-02        0
+     960    1.182922e+05   4.031e-07   1.999e+01   1.681e-02        7
+     970    1.181973e+05   1.667e-04   1.037e+01   2.425e+00        0
+     975    1.181684e+05   1.848e-11   6.271e-08   7.528e-05        0
+
+EXIT: Locally optimal solution found.
+
+Final Statistics
+----------------
+Final objective value               =   1.18168417073000e+05
+Final feasibility error (abs / rel) =   1.85e-11 / 2.34e-14
+Final optimality error  (abs / rel) =   6.27e-08 / 6.18e-09
+# of iterations                     =        975 
+# of CG iterations                  =       1048 
+# of function evaluations           =       1276
+# of gradient evaluations           =        977
+# of Hessian evaluations            =        977
+Total program time (secs)           =       1.44148 (     1.471 CPU time)
+Time spent in evaluations (secs)    =       0.08257
+
+===============================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg       0.0213       0.0194      1277
+   nlp_gf_jg       0.0249       0.0239       977
+  nlp_hess_l       0.0264       0.0256       977
+      solver         1.47         1.45         1
+
+ans =
+
+  <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a>
+
+   1
+
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+
+gait =
+
+    1.0000    1.0000    0.3355
+    1.0000         0    0.1919
+         0         0    0.0713
+         0    1.0000    0.2014
+
+Removed Variables within Vanished Phases
+===================================================
+ 

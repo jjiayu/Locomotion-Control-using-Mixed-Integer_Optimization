@@ -1,0 +1,114 @@
+====================================================
+Gait Search for 4Phases Motion(10Knots per Phase), Locomotion Speed 0.8 m/s Round 5
+Experiment Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/test/4Phases-10TimeSteps-Rectangular_Bounding
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+MINLP solver shifted start point to satisfy bounds (111 variables).
+hessopt:                 1
+mip_branchrule:          2
+mip_heuristic:           0
+mip_maxnodes:            256
+mip_outinterval:         100
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                742
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                        579
+    fixed:                                            3
+    free:                                           160
+Number of binary variables:                           8
+Number of integer variables:                          0
+Number of constraints:                             1379
+    linear equalities:                                5
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      404
+    linear one-sided inequalities:                  484
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:          320
+    linear two-sided inequalities:                    0
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          166
+Number of nonzeros in Jacobian:                    5385
+Number of nonzeros in Hessian:                     2131
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 320 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0       8  -1.80e+308     -1.80e+308                   2.140
+*     10       7       0    2.69e+05  f  -1.80e+308    2.69e+05       3.334
+*     13       6       0    2.68e+05  f    7.79e+04    2.68e+05       5.151
+*     14       5       0    1.65e+05  f    7.79e+04    1.65e+05       5.584
+*     52      19       0    1.59e+05  f    7.79e+04    1.59e+05      43.947
+     100       5         INFEASIBLE  pr    1.10e+05    1.59e+05      78.962
+*    122       9       0    1.59e+05  f    1.50e+05    1.59e+05     128.286
+*    148       1       0    1.54e+05  f    1.50e+05    1.54e+05     169.512
+     149       0            1.49e+05       1.54e+05    1.54e+05     169.681
+
+EXIT: Optimal solution found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   1.54150682559284e+05
+Final integrality gap (abs / rel)   =  0.00e+00 /   0.00e+00 ( 0.00%)
+# of nodes processed                =      149
+# of subproblems processed          =      155
+Total program time (secs)           =     169.71292 (   170.628 CPU time)
+Time spent in evaluations (secs)    =       6.04545
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg         2.18         2.12     57755
+   nlp_gf_jg         1.76         1.75     31215
+  nlp_hess_l         1.72         1.71     31327
+      solver          171          170         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+
+gait =
+
+         0    1.0000    0.3742
+    1.0000         0    0.3884
+    1.0000    1.0000    0.0373
+
+Removed Variables within Vanished Phases
+===================================================
+ 

@@ -1,0 +1,199 @@
+====================================================
+Gait Search for 4-Phases Motion(10-Knots per Phase), Stride Period 1.1 Locomotion Speed 2.2 m/s Round 3
+Experiment Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_Casadi_Fixed_Gait/test
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+-----------------------------------------------------------
+Checked - Names in DecisionVars are consistent with the name labels in VarNamesList
+Constraints and Objetive Function Constructed
+===================================================
+ 
+===================================================
+Optimization Started
+
+solverOption = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+    mip_outinterval: 100
+      mip_heuristic: 0
+       mip_outlevel: 2
+     mip_selectrule: 0
+     mip_branchrule: 1
+       mip_maxnodes: 1000256
+
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+Knitro presolve eliminated 143 variables and 462 constraints.
+
+hessopt:                 1
+Knitro changing algorithm from AUTO to 1.
+Knitro changing bar_initpt from AUTO to 3.
+Knitro changing bar_murule from AUTO to 4.
+Knitro changing bar_penaltycons from AUTO to 0.
+Knitro changing bar_penaltyrule from AUTO to 2.
+Knitro changing bar_switchrule from AUTO to 2.
+Knitro changing linesearch from AUTO to 1.
+Knitro changing linsolver from AUTO to 2.
+Knitro shifted start point to satisfy presolved bounds (199 variables).
+Knitro fixing 143 variables eliminated from the presolve.
+
+Problem Characteristics                                 (   Presolved)
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                                734 (         591)
+    bounded below only:                               0 (           0)
+    bounded above only:                               0 (           0)
+    bounded below and above:                        571 (         431)
+    fixed:                                            3 (           0)
+    free:                                           160 (         160)
+Number of constraints:                             1377 (        1079)
+    linear equalities:                                5 (           5)
+    quadratic equalities:                             0 (           0)
+    gen. nonlinear equalities:                      404 (         404)
+    linear one-sided inequalities:                  484 (          22)
+    quadratic one-sided inequalities:                 0 (           0)
+    gen. nonlinear one-sided inequalities:          320 (         648)
+    linear two-sided inequalities:                    0 (           0)
+    quadratic two-sided inequalities:                 0 (           0)
+    gen. nonlinear two-sided inequalities:          164 (           0)
+Number of nonzeros in Jacobian:                    4737 (        4527)
+Number of nonzeros in Hessian:                     2117 (        1334)
+
+  Iter      Objective      FeasError   OptError    ||Step||    CGits 
+--------  --------------  ----------  ----------  ----------  -------
+       0    1.746186e+05   9.047e+02
+      10    1.953805e+05   8.142e+02   2.452e+02   1.937e+01        0
+      20    2.811703e+05   7.880e+02   8.653e+01   7.740e+00        0
+      30    3.253766e+05   7.880e+02   8.652e+01   1.977e+00        0
+      40    3.746786e+05   7.880e+02   8.645e+01   2.649e+00        0
+      50    5.095534e+05   7.880e+02   8.303e+01   2.343e+01        0
+      60    5.135257e+05   7.879e+02   7.770e+01   6.944e+00        0
+      70    5.130263e+05   7.874e+02   7.911e+01   2.669e+01        0
+      80    5.122707e+05   7.851e+02   8.142e+01   7.636e+00        0
+      90    5.117260e+05   7.835e+02   8.245e+01   2.503e+00        0
+     100    5.114753e+05   7.825e+02   8.185e+01   6.214e+00        0
+     110    5.108790e+05   7.811e+02   8.435e+01   4.775e+00        0
+     120    5.108023e+05   7.796e+02   8.494e+01   2.980e+00        0
+     130    5.101365e+05   7.777e+02   9.134e+01   7.226e+00        1
+     140    4.976409e+05   7.764e+02   8.644e+01   2.892e+00        0
+     150    4.578623e+05   7.735e+02   8.709e+01   6.170e+00        0
+     160    3.922494e+05   7.697e+02   9.019e+01   5.801e-01        0
+     170    4.482808e+05   7.623e+02   8.535e+01   4.317e+00        0
+     180    5.044433e+05   7.577e+02   8.216e+01   4.066e+00        0
+     190    5.022918e+05   7.505e+02   7.877e+01   4.253e+00        0
+     200    4.975641e+05   7.342e+02   7.933e+01   5.136e+00        0
+     210    4.907087e+05   7.146e+02   8.221e+01   2.121e+01        0
+     220    4.716416e+05   6.614e+02   8.224e+01   6.294e+01        1
+     230    4.394192e+05   5.465e+02   7.970e+01   1.779e-01        0
+     240    4.191821e+05   3.786e+02   7.755e+01   2.339e-02        0
+     250    4.102707e+05   2.331e+02   7.136e+01   4.355e+00        1
+     260    4.097301e+05   1.188e+00   7.163e+01   1.381e+00        0
+     270    4.112017e+05   1.837e+00   7.058e+01   2.955e+00        1
+     280    4.141325e+05   1.537e+00   7.028e+01   1.787e-01        0
+     290    4.160663e+05   8.990e-01   6.977e+01   4.649e-01        0
+     300    4.181460e+05   9.496e-01   6.892e+01   7.475e+00        1
+     310    4.332635e+05   7.780e-01   7.621e+01   3.008e+00        0
+     320    4.160625e+05   8.433e-01   6.955e+01   2.179e+01        1
+     330    4.178012e+05   8.507e-01   6.985e+01   4.899e-02        0
+     340    4.188243e+05   8.964e-01   7.131e+01   3.438e+00        1
+     350    4.221200e+05   9.276e-01   7.401e+01   4.082e+00        1
+     360    4.196020e+05   9.201e-01   7.306e+01   1.805e+01        0
+     370    4.171137e+05   8.717e-01   7.043e+01   1.530e+00        0
+     380    4.165948e+05   8.199e-01   7.055e+01   7.816e+00        0
+     390    4.138861e+05   7.570e-01   7.079e+01   1.344e+01        0
+     400    4.130682e+05   7.194e-01   7.128e+01   2.011e-01        0
+     410    4.152525e+05   7.107e-01   7.191e+01   2.568e+01        0
+     420    4.252143e+05   3.813e-01   7.283e+01   5.026e+00        0
+     430    4.294879e+05   3.703e-01   7.357e+01   2.677e+00        0
+     440    4.349174e+05   3.550e-01   7.374e+01   5.607e+00        1
+     450    4.439971e+05   3.227e-01   7.581e+01   2.739e+00        0
+     460    4.528791e+05   2.562e-01   7.858e+01   1.610e+01        0
+     470    4.580516e+05   2.422e-01   8.101e+01   1.111e-01        0
+     480    4.681483e+05   2.347e-01   8.506e+01   4.526e+00        1
+     490    4.726494e+05   2.280e-01   8.751e+01   4.124e+00        2
+     500    4.734705e+05   2.244e-01   8.862e+01   2.349e-01        0
+     510    4.745276e+05   2.197e-01   9.034e+01   1.716e+01        0
+     520    4.770277e+05   2.151e-01   9.399e+01   3.022e+01        0
+     530    4.780150e+05   2.135e-01   9.508e+01   4.971e-01        0
+     540    4.794021e+05   2.110e-01   9.650e+01   2.202e+01        0
+     550    4.816925e+05   2.040e-01   9.886e+01   7.888e+00        1
+     560    4.834345e+05   2.004e-01   1.008e+02   1.955e+01        2
+     570    4.843794e+05   1.976e-01   1.021e+02   1.262e+01        0
+     580    4.870192e+05   1.907e-01   1.055e+02   7.414e+01        0
+     590    4.891104e+05   1.820e-01   1.093e+02   1.539e+01        0
+     600    4.949483e+05   1.645e-01   1.172e+02   2.034e+01        0
+     610    5.002290e+05   1.523e-01   1.207e+02   1.538e-01        0
+     620    5.068905e+05   1.378e-01   1.288e+02   3.902e+01        1
+     630    5.090142e+05   1.317e-01   1.328e+02   2.578e+01        0
+     640    5.120095e+05   1.254e-01   1.361e+02   1.930e+01        0
+     650    5.140535e+05   1.210e-01   1.383e+02   3.238e+00        0
+     660    5.186892e+05   1.155e-01   1.418e+02   2.819e+01        1
+     670    5.242183e+05   1.092e-01   1.469e+02   1.772e+01        1
+     680    5.282881e+05   1.044e-01   1.527e+02   1.124e+01        1
+     690    5.297370e+05   9.911e-02   1.558e+02   7.147e+00        0
+     700    5.324085e+05   9.484e-02   1.589e+02   2.300e+00        0
+     710    5.351806e+05   8.746e-02   1.655e+02   1.919e+01        0
+     720    5.368354e+05   7.292e-02   1.681e+02   3.731e+00        1
+     730    5.390228e+05   7.057e-02   1.699e+02   5.216e+00        2
+     740    5.431872e+05   5.343e-02   1.728e+02   6.650e+00        0
+     750    5.443384e+05   9.637e-02   1.738e+02   4.132e+01        0
+     760    5.447701e+05   9.482e-02   1.747e+02   1.921e-01        0
+     770    5.462295e+05   6.228e-02   1.823e+02   3.881e+01        0
+     780    5.491527e+05   3.515e-02   1.914e+02   6.061e+00        3
+     790    5.535856e+05   1.967e-02   1.977e+02   4.932e-01        0
+     800    5.670575e+05   1.940e-02   2.076e+02   1.526e+00        0
+     810    5.822033e+05   2.183e-02   2.056e+02   9.924e+01        0
+     820    5.673358e+05   5.693e-06   2.062e+02   1.480e+02       51
+     830    5.670461e+05   1.187e-05   4.431e+00   1.764e-01        1
+     839    5.672128e+05   1.018e-01   4.431e+00   3.820e-13        0
+
+EXIT: Terminate at infeasible point because the relative change in solution
+      estimate < xtol for 3 consecutive iterations.
+
+Final Statistics
+----------------
+Final objective value               =   5.67212767769449e+05
+Final feasibility error (abs / rel) =   1.02e-01 / 1.13e-04
+Final optimality error  (abs / rel) =   4.43e+00 / 2.15e-02
+# of iterations                     =        839 
+# of CG iterations                  =        489 
+# of function evaluations           =        867
+# of gradient evaluations           =        841
+# of Hessian evaluations            =        840
+Total program time (secs)           =       8.75431 (     7.856 CPU time)
+Time spent in evaluations (secs)    =       0.37424
+
+===============================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg       0.0728       0.0717       868
+   nlp_gf_jg        0.101        0.132       841
+  nlp_hess_l        0.102        0.116       840
+      solver         7.86         8.76         1
+===================================================
+ 
+===================================================
+Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+
+gait =
+
+         0         0    0.0969
+         0         0    0.4679
+         0    1.0000    0.2432
+    1.0000         0    0.2920
+
+Removed Variables within Vanished Phases
+===================================================
+ 
