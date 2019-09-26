@@ -361,8 +361,6 @@ CH = CH';
 diary off
 %======================================================================
 
-warning('off','all');
-
 %
 %   Big for-loop for to compute multiple MINLP Runs
 %
@@ -714,9 +712,9 @@ for speedIdx = 1:length(SpeedList)
     
     %   Generate Initial Guess that samples the entire search space
     DecisionVarsInit = zeros(size(DecisionVars));
-    DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == x_label(end))) = linspace(0,speed*Tend,length(x_label));
-    DecisionVarsInit(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))));
-    %DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))));
+    %DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == x_label(end))) = linspace(0,speed*Tend,length(x_label));
+    %DecisionVarsInit(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))));
+    DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))));
 %    DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
     DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))));
     %DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + rand(1, length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)));
@@ -1567,7 +1565,9 @@ for speedIdx = 1:length(SpeedList)
     diary off
     
     % Save Experimental Result
+    warning('off');
     save([ExpDirectory, '/', ExpLog_filename, '.mat']);
+    warning('on')
 
 end
 
