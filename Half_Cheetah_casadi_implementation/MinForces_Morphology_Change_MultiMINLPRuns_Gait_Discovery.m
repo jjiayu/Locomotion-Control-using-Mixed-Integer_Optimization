@@ -13,7 +13,7 @@ clc;
 
 %cd /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/
 
- 
+
 %========================================================
 % Identfy Data Storage Folder
 ExpDirectory = uigetdir;
@@ -72,12 +72,22 @@ BodyLength = 0.6;
 BodyHeight = 0.2;
 %       Default foot position in Local robot frame
 DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
+%       Set-up Robot Mophorlogy
+disp('====================================================');
+disp('Robot Mophorlogy Setup')
+disp('----------------------------------------------------');
+disp(['Robot Body Length:', num2str(BodyLength)]);
+LegLocationPortion = input('Decide Leg Position, How much portion from the center of the torso towards the border of the torso (i.e. 0%, 10%, 50%, 100%, do not type % symbol): \n');
+LegLocationPortion = LegLocationPortion/100;
+disp('----------------------------------------------------');
 %           Front Foot Default Positions (IN ROBOT FRAME)
-PFCenterX = 1/2*BodyLength;
+PFCenterX = 1/2*BodyLength*LegLocationPortion;
 PFCenterY = -(1/2*BodyHeight + DefaultLegLength);
 %           Hind Foot Default Positions (IN ROBOT FRAME)
-PHCenterX = -1/2*BodyLength;
+PHCenterX = -1/2*BodyLength*LegLocationPortion;
 PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
+disp(['X-axis Coordinate of Default limb location of the Front Leg (should smaller than or equal to) 1/2*BodyLength: ', num2str(PFCenterX)]);
+disp(['X-axis Coordinate of Default limb location of the Hind Leg (should Larger than or equal to) -1/2*BodyLength: ', num2str(PHCenterX)]);
 %       Kinematics Bounding Box Constraint
 disp('====================================================');
 disp('Setup Robot Kinematics Properties: ')
@@ -297,11 +307,7 @@ Mfy = input('Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3,
 %Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
 disp('====================================================');
 %=======================================================================
-disp('====================================================');
-disp('Weight Setup for the minimize vibration cost')
-disp('====================================================');
-weight = input('Input weight(scaling factor) for the minimize vibration cost (i.e. 1, 500, 100, 10):\n');
-disp('====================================================');
+
 %=====================================================================
 % Solver SetUp
 %=====================================================================
@@ -1170,16 +1176,12 @@ for runIdx = 1:NumofRuns
             % Cost Function - Integral/Lagrangian Term
             %   Cost of Transport
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + h*PFxdot(k)^2 + h*PFydot(k)^2 + h*PHxdot(k)^2 + h*PHydot(k)^2;
-            %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
-            %J = J + weight*h*(theta(k)/pi*180)^2 + weight*h*(thetadot(k)/pi*180)^2 + weight*h*ydot(k)^2;
-            J = J + weight*h*theta(k)^2 + weight*h*thetadot(k)^2 + weight*h*ydot(k)^2;
+            J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
             %VelCostWweight = 500;
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + VelCostWweight*h*PFxdot(k)^2 + VelCostWweight*h*PFydot(k)^2 + VelCostWweight*h*PHxdot(k)^2 + VelCostWweight*h*PHydot(k)^2;
             %J = J + h*xdot(k)^2;%h*ydot(k)^2 + h*thetadot(k)^2;% + h*thetadot(k)^2; h*xdot(k)^2 + 
             %----------------------------------------------------
         end
-        
-        J = J + weight*h*theta(end)^2 + weight*h*thetadot(end)^2 + weight*h*ydot(end)^2;
 
         %----------------------------------------------------
         % Kinematics Constraint

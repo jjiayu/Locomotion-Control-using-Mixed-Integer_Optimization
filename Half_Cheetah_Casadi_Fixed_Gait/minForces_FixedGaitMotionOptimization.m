@@ -720,7 +720,8 @@ for speedIdx = 1:length(SpeedList)
     %DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + rand(1, length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)));
     %DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))) = 5*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))));
     %    DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
-    
+    %temp = load(['/home/jiayu/Dropbox/Half_Cheetah_MiniForces_with_PhaseTimeLowerBound/','4Phase_StridePeriod_0.6/','Speed-2.2-20190926T110445.mat'],'DecisionVarsInit');
+    %DecisionVarsInit = temp.DecisionVarsInit(1:734);
     %------------------------
     %           (Place Holder) Check the size of lower and upper bounds and
     %           vartype with respect the DecisionVars

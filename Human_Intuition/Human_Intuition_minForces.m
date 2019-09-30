@@ -1,4 +1,4 @@
-% Mixed-integer Nonlinear Optimization in 2D case, use auto differentiation
+% Fixed-Gait Optimization, use auto differentiation
 % to compute gradients and hessians
 % Multiphase Formulation:
 %   Cut the time horizon into a few phases
@@ -13,7 +13,12 @@ clc;
 
 %cd /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/
 
- 
+% Get Screen Name
+%ScreenSessionName = getenv('ScreenName')
+%if isempty(ScreenSessionName)
+%    error('Undefined Envionrment Variable for Identifying ScreenName');
+%end
+
 %========================================================
 % Identfy Data Storage Folder
 ExpDirectory = uigetdir;
@@ -33,7 +38,7 @@ import casadi.*
 %========================================================
 % Command Line Logging
 diary off
-TaskParameterLog_filename = strcat('MultiMINLPRuns-Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+TaskParameterLog_filename = strcat('Fixed-Gait-Optimization-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
 diary([ExpDirectory, '/', TaskParameterLog_filename]);
 
 %=========================================================
@@ -42,10 +47,10 @@ disp('====================================================');
 disp('Genearl Information:');
 disp('====================================================');
 disp('CasADi Implementation');
-disp('2D Locomotion Control using Mixed-integer Nonlinear Optimization');
-disp('With a Particular Emphasis on Periodical Gait Discovery');
+disp('2D Locomotion Control for Fixed-Gait Optimization');
+%disp('With a Particular Emphasis on Periodical Gait Discovery');
 disp('Multi-Phase Formulation:');
-disp('Optimize over State, Control, Gait Sequence, and Switching Time');
+disp('Optimize over State, Control, and Switching Time');
 disp('----------------------------------------------------');
 disp('Date and Time:');
 disp(datetime('now'));
@@ -297,11 +302,7 @@ Mfy = input('Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3,
 %Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
 disp('====================================================');
 %=======================================================================
-disp('====================================================');
-disp('Weight Setup for the minimize vibration cost')
-disp('====================================================');
-weight = input('Input weight(scaling factor) for the minimize vibration cost (i.e. 1, 500, 100, 10):\n');
-disp('====================================================');
+
 %=====================================================================
 % Solver SetUp
 %=====================================================================
@@ -311,7 +312,7 @@ disp('====================================================');
 disp('Solver Setups:')
 disp('====================================================');
 disp('Solver Selection: ')
-SolverNum = input('1 -> Knitro; 2 -> Bonmin \n');
+SolverNum = 1; %input('1 -> Knitro; 2 -> Bonmin \n');
 if SolverNum == 1
     SolverSelected = 'knitro';
 elseif SolverNum == 2
@@ -326,13 +327,13 @@ disp('----------------------------------------------------');
 disp('Solver Dependent Options:')
 disp('----------------------------------------------------');
 %       Define maximum nodes to be explored
-NumMaxNodesCases = input('Define Number of Max Nodes to be Explored: \n 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value\n');
+NumMaxNodesCases = 1; % input('Define Number of Max Nodes to be Explored: \n 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value\n');
 if NumMaxNodesCases == 1  %Worst-case Scenario
     %-------------------------------------------
     %   (Place Holder) Need to change the exponential base when have more
     %   legs in 3D
     %-------------------------------------------
-    NumMaxNodes = (2*2)^(NumPhases);
+    NumMaxNodes = (2*2)^(NumPhases)+1e6;
     disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
 elseif NumMaxNodesCases == 2 %User-specified
     NumMaxNodes = input('Input number of maximum node to be explored: \n');
@@ -347,12 +348,50 @@ disp('----------------------------------------------------');
 %       Define number of multistart solves for each sub-nonlinear
 %       optimizaiton problem
 NumofRuns = input('Specify Number of Runs for the MINLP Programming (i.e. 1, 10, 25, 50, 100): \n');
-%disp('----------------------------------------------------');
-%NumMultiStartSolves = input('Determine Number of multi-start runs inside MINLP runs (i.e. 5): \n');
 disp('====================================================');
 disp(' ')
 
+%       Define Gait and Speed Range
+disp('Define the Human Intuition Gait Mapping');
+CF_List = {};
+CH_List = {};
+for query_idx = 1:3
+    Gait_selection = input(['Define the Gait ',num2str(query_idx),' (1. Walking-D, 2. Trotting, 3. Bounding-D, 4. Galloping): \n']);
+    if Gait_selection == 1 %^Walking-D
+        CF_seq = [1;1;0;1];
+        CH_seq = [0;1;1;1];
+    elseif Gait_selection == 2 %trotting
+        CF_seq = [1;1;0;0];
+        CH_seq = [0;0;1;1];
+    elseif Gait_selection == 3 %Bounding-D
+        CF_seq = [0;0;0;1];
+        CH_seq = [0;1;0;0];
+    elseif Gait_selection == 4 %Galloping
+        CF_seq = [1;0;0;1];
+        CH_seq = [0;0;1;1];
+    end
+    repeat_times = input(['Type the How many times the ',num2str(query_idx),'st gait should be repeated (i.e. 7): \n']);
+    for repeat_idx = 1:repeat_times
+        CF_List{(query_idx-1)*repeat_times + repeat_idx} = CF_seq;
+        CH_List{(query_idx-1)*repeat_times + repeat_idx} = CH_seq;
+    end
+end
+disp('----------------------------------------------------');
+disp('Defined Human Intuition Gait Mapping')
+for gaitList_idx = 1: length(CF_List)
+    disp(['Gait for Speed ',num2str(SpeedList(gaitList_idx)),':'])
+    [CF_List{gaitList_idx},CH_List{gaitList_idx}]
+end
+disp('====================================================');
+disp(' ')
 
+%
+
+%       Define the gait
+%CF = input('Define the contact sequence for Front Leg (CF), a column vector: ');
+%CH = input('Define the contact sequence for Hind Leg (CH), a column vector: ');
+%CF = CF';
+%CH = CH';
 
 %   Stop Diary
 diary off
@@ -361,24 +400,26 @@ diary off
 %
 %   Big for-loop for to compute multiple MINLP Runs
 %
-for speedIdx = 1:length(SpeedList)
-%for runIdx = 1:NumofRuns
+
+for runIdx = 1:NumofRuns
 
 %======================================================================
 %   Parameter Setup Done, Actual Optimization Starts
 %======================================================================
-for runIdx = 1:NumofRuns
-%for speedIdx = 1:length(SpeedList)
+
+for speedIdx = 1:length(SpeedList)
     
     %Scan the speed
     speed = SpeedList(speedIdx);
+    CF = CF_List{speedIdx};
+    CH = CH_List{speedIdx};
     
     diary off
     ExpLog_filename = strcat(['Speed-', num2str(speed), '-'], datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
     diary([ExpDirectory, '/', ExpLog_filename]);
     
     disp('====================================================');
-    disp(['Gait Search for ', num2str(NumPhases),'Phases Motion(', num2str(NumLocalKnots),'Knots per Phase),',' Locomotion Speed ', num2str(speed), ' m/s', ' Round ', num2str(runIdx)])
+    disp(['Gait Search for ', num2str(NumPhases),'-Phases Motion(', num2str(NumLocalKnots),'-Knots per Phase), ','Stride Period ', num2str(Tend), ' Locomotion Speed ', num2str(speed), ' m/s', ' Round ', num2str(runIdx)])
     disp(['Experiment Directory: ', ExpDirectory])
     disp('====================================================');
 
@@ -470,23 +511,23 @@ for runIdx = 1:NumofRuns
     %                   Front Leg Contact On/Off: CF
     %                   Hind Leg Contact On/Off : CH
     %--------------------------------------------
-    CF = SX.sym('CF', NumPhases + 1);
-    CH = SX.sym('CH', NumPhases + 1);
-    CF = CF(2:end);
-    CH = CH(2:end);
+    %CF = SX.sym('CF', NumPhases + 1);
+    %CH = SX.sym('CH', NumPhases + 1);
+    %CF = CF(2:end);
+    %CH = CH(2:end);
 
     %       Create Variable Name List
-    CF_label = CreateVarsNameList(CF);
-    CH_label = CreateVarsNameList(CH);
+    %CF_label = CreateVarsNameList(CF);
+    %CH_label = CreateVarsNameList(CH);
     %----------------------------------------------------------------------
     %       Check Correctness of the Generated Variables
     %----------------------------------------------------------------------
-    if length(CF) == NumPhases && length(CH) == NumPhases && length(Ts) == NumPhases
-        disp('Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly')
-    else
-        ME_PhaseRelatedConfig = MException('Initialization:PhaseRelatedConfig','The contact configuration and switching time is not defined for each phase');
-        throw(ME_PhaseRelatedConfig)
-    end
+%    if length(CF) == NumPhases && length(CH) == NumPhases && length(Ts) == NumPhases
+%        disp('Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly')
+%    else
+%        ME_PhaseRelatedConfig = MException('Initialization:PhaseRelatedConfig','The contact configuration and switching time is not defined for each phase');
+%        throw(ME_PhaseRelatedConfig)
+%    end
 
     %-----------------------------------------------------------------------
     %   Assemble Lists for all decision variables
@@ -497,8 +538,8 @@ for runIdx = 1:NumofRuns
                "PHx",  "PHy",    "PHxdot",      "PHydot",...
                "FFx",  "FFy",...
                "FHx",  "FHy",...
-               "Ts",...
-               "CF",   "CH"];
+               "Ts"];%,...
+%               "CF",   "CH"];
 
     %       Variable Length List
     VarLengthList = [length(x_label),     length(y_label),      length(theta_label), ...
@@ -507,8 +548,8 @@ for runIdx = 1:NumofRuns
                      length(PHx_label),   length(PHy_label),    length(PHxdot_label),       length(PHydot_label), ...
                      length(FFx_label),   length(FFy_label),...
                      length(FHx_label),   length(FHy_label),...
-                     length(Ts_label),...
-                     length(CF_label),    length(CH_label)];
+                     length(Ts_label)];%,...
+%                     length(CF_label),    length(CH_label)];
 
     %       Full decision variable names list
     VarNamesList = [x_label,      y_label,      theta_label,...
@@ -517,8 +558,8 @@ for runIdx = 1:NumofRuns
                     PHx_label,    PHy_label,    PHxdot_label,      PHydot_label,...
                     FFx_label,    FFy_label,...
                     FHx_label,    FHy_label,...
-                    Ts_label,...
-                    CF_label,     CH_label];
+                    Ts_label];%,...
+%                    CF_label,     CH_label];
     %----------------------------------------------------------------------
     %   Verifications
     %       (Place Holder - Not Required) Check if variable names are defined
@@ -608,8 +649,8 @@ for runIdx = 1:NumofRuns
                     PHx,        PHy,        PHxdot,         PHydot,...
                     FFx,        FFy,...
                     FHx,        FHy,...
-                    Ts,...
-                    CF,         CH}; 
+                    Ts};%,...
+%                    CF,         CH}; 
     DecisionVars = vertcat(DecisionVars{:}); %make a vertical vector
 
     %       Verify if the variable names are consistent in DecisionVars and VarNameList 
@@ -672,25 +713,17 @@ for runIdx = 1:NumofRuns
                 lb_DecisionVars = [lb_DecisionVars, repmat(-5 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( 5                       , 1, VarLengthList(i))];
             %elseif strcmp(varList(i),'PFxdot') == 1
-                %lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
-                %ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
-                %lb_DecisionVars = [lb_DecisionVars, repmat(-50, 1, VarLengthList(i))];    
-                %ub_DecisionVars = [ub_DecisionVars, repmat( 50, 1, VarLengthList(i))];
+            %    lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
+            %    ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
             %elseif strcmp(varList(i),'PFydot') == 1
             %    lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely - 0.1*Mvely, 1, VarLengthList(i))];    
             %    ub_DecisionVars = [ub_DecisionVars, repmat( Mvely + 0.1*Mvely, 1, VarLengthList(i))];
-            %     lb_DecisionVars = [lb_DecisionVars, repmat(-50, 1, VarLengthList(i))];    
-            %     ub_DecisionVars = [ub_DecisionVars, repmat( 50, 1, VarLengthList(i))];
             %elseif strcmp(varList(i),'PHxdot') == 1
             %    lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
             %    ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
-            %     lb_DecisionVars = [lb_DecisionVars, repmat(-50, 1, VarLengthList(i))];    
-            %     ub_DecisionVars = [ub_DecisionVars, repmat( 50, 1, VarLengthList(i))];
             %elseif strcmp(varList(i),'PHydot') == 1
             %    lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely - 0.1*Mvely, 1, VarLengthList(i))];    
             %    ub_DecisionVars = [ub_DecisionVars, repmat( Mvely + 0.1*Mvely, 1, VarLengthList(i))];
-            %     lb_DecisionVars = [lb_DecisionVars, repmat(-50, 1, VarLengthList(i))];    
-            %     ub_DecisionVars = [ub_DecisionVars, repmat( 50, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'FFx') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
@@ -704,8 +737,7 @@ for runIdx = 1:NumofRuns
                 lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy - 0.1*Mfy, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( Mfy + 0.1*Mfy, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'Ts') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat( 0, 1, VarLengthList(i))];  
-                %lb_DecisionVars = [lb_DecisionVars, repmat( 0.01*Tend, 1, VarLengthList(i))];  
+                lb_DecisionVars = [lb_DecisionVars, repmat( 0, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( Tend+0.1*Tend, 1, VarLengthList(i))];
             else %other unbounded variables
                 lb_DecisionVars = [lb_DecisionVars, repmat(-inf, 1, VarLengthList(i))];    
@@ -721,12 +753,13 @@ for runIdx = 1:NumofRuns
     %DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == x_label(end))) = linspace(0,speed*Tend,length(x_label));
     %DecisionVarsInit(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))));
     DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))));
-    DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
+%    DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
     DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))));
     %DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + rand(1, length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)));
-    %DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
     %DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))) = 5*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))));
-    
+    %    DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
+    %temp = load(['/home/jiayu/Dropbox/Half_Cheetah_MiniForces_with_PhaseTimeLowerBound/','4Phase_StridePeriod_0.6/','Speed-2.2-20190926T110445.mat'],'DecisionVarsInit');
+    %DecisionVarsInit = temp.DecisionVarsInit(1:734);
     %------------------------
     %           (Place Holder) Check the size of lower and upper bounds and
     %           vartype with respect the DecisionVars
@@ -1171,15 +1204,16 @@ for runIdx = 1:NumofRuns
             %   Cost of Transport
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + h*PFxdot(k)^2 + h*PFydot(k)^2 + h*PHxdot(k)^2 + h*PHydot(k)^2;
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
-            %J = J + weight*h*(theta(k)/pi*180)^2 + weight*h*(thetadot(k)/pi*180)^2 + weight*h*ydot(k)^2;
-            J = J + weight*h*theta(k)^2 + weight*h*thetadot(k)^2 + weight*h*ydot(k)^2;
             %VelCostWweight = 500;
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + VelCostWweight*h*PFxdot(k)^2 + VelCostWweight*h*PFydot(k)^2 + VelCostWweight*h*PHxdot(k)^2 + VelCostWweight*h*PHydot(k)^2;
             %J = J + h*xdot(k)^2;%h*ydot(k)^2 + h*thetadot(k)^2;% + h*thetadot(k)^2; h*xdot(k)^2 + 
             %----------------------------------------------------
+            %Force Squared
+            J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
+            %minimize vibration
+            %J = J + h*((theta(k)/pi*180)^2 + (thetadot(k)/pi*180)^2 + ydot(k)^2);
+            
         end
-        
-        J = J + weight*h*theta(end)^2 + weight*h*thetadot(end)^2 + weight*h*ydot(end)^2;
 
         %----------------------------------------------------
         % Kinematics Constraint
@@ -1223,6 +1257,8 @@ for runIdx = 1:NumofRuns
     %Phaselb = 0.1;
     %Phaselb = 0;
     %InitTerminalPhaselb = 0; %0.01
+    %Phaselb = Tend*2.5/100; %0.1
+    %InitTerminalPhaselb = Tend*2.5/100; %0.01
     phaselb = Tend*phase_lower_bound_portion
     for i = 1:NumPhases
         if i == 1
@@ -1342,29 +1378,6 @@ for runIdx = 1:NumofRuns
     % lbg = [lbg; 0];
     % ubg = [ubg; 0];
     % %-----------------------------------------------------------------------
-    %------------------------------------------------------------------------
-    % Gait Constraint
-    %------------------------------------------------------------------------
-    FrontLeg_Contact = 0;
-    HindLeg_Contact = 0;
-    %for i = 2:NumPhases
-    %    FrontLeg_Contact = FrontLeg_Contact + abs(CF(i)-CF(i-1))*if_else(Ts(i)-Ts(i-1)<=1e-2,0,1);
-    %    HindLeg_Contact  = HindLeg_Contact  + abs(CH(i)-CH(i-1))*if_else(Ts(i)-Ts(i-1)<=1e-2,0,1);
-    %end
-    
-    for i = 2:NumPhases
-        FrontLeg_Contact = FrontLeg_Contact + abs(CF(i)-CF(i-1));
-        HindLeg_Contact  = HindLeg_Contact  + abs(CH(i)-CH(i-1));
-    end
-    
-    g = {g{:},FrontLeg_Contact};
-    lbg = [lbg;0];
-    ubg = [ubg;2];
-    
-    g = {g{:},HindLeg_Contact};
-    lbg = [lbg;0];
-    ubg = [ubg;2];
-    
     disp('Constraints and Objetive Function Constructed')
     disp('===================================================')
     disp(' ')
@@ -1384,11 +1397,11 @@ for runIdx = 1:NumofRuns
         solverOption = struct('mip_outinterval', 100,...      % (Log Output Frequency) Log Output per Nodes
                               'mip_heuristic',   0,...     %-1,let sover to select heuristics method, 0, disable heuristics
                               'mip_outlevel',    2,...      % Print accumulated time for every node.
-                              'mip_selectrule',  3,...      % 
-                              'mip_branchrule',  2,...      % MIP Branching rule The rule for selecting nodes 2 has the best performance
+                              'mip_selectrule',  0,...      % 
+                              'mip_branchrule',  1,...      % MIP Branching rule The rule for selecting nodes 2 has the best performance
                               'mip_maxnodes',    NumMaxNodes);      % Max Number of Nodes wish to be explored
-  %                            'Multistart',      1,...      % Open multi start
-  %                            'ms_maxsolves',    NumMultiStartSolves);      % Maximum CPU time
+   %                           'Multistart',      1,...      % Open multi start
+   %                           'ms_maxsolves',    NumMultiStartSolves);      % Maximum CPU time
    %                           'par_numthreads',  2,...
    %                           'ms_deterministic',0);
    %                           'par_msnumthreads',3 ...
@@ -1397,7 +1410,9 @@ for runIdx = 1:NumofRuns
     elseif strcmp(SolverSelected, 'bonmin')
         solverOption = struct('option_file_name', 'bonmin.opt');  
     end
-
+    
+    solverOption
+    
     %   Construct Nonlinear Programming Function Object
     solver = nlpsol('solver', SolverSelected, prob, struct('discrete', varstype, SolverSelected, solverOption));
 
@@ -1407,6 +1422,9 @@ for runIdx = 1:NumofRuns
                  'ubx', ub_DecisionVars,...
                  'lbg', lbg,...
                  'ubg', ubg);
+    % Attention!
+    return_status = solver.stats();
+    return_status.success 
     disp('===================================================')
     disp(' ')
     %=======================================================================
@@ -1460,8 +1478,8 @@ for runIdx = 1:NumofRuns
     PHydot_result = res(find(VarNamesList == 'PHydot_0'):find(VarNamesList == PHydot_label(end)));
 
     % Contact Configuration
-    CF_result = res(find(VarNamesList == CF_label(1)):find(VarNamesList == CF_label(end)));
-    CH_result = res(find(VarNamesList == CH_label(1)):find(VarNamesList == CH_label(end)));
+    CF_result = CF;%res(find(VarNamesList == CF_label(1)):find(VarNamesList == CF_label(end)));
+    CH_result = CH;%res(find(VarNamesList == CH_label(1)):find(VarNamesList == CH_label(end)));
 
     % Contact force result
     FFx_result = res(find(VarNamesList == 'FFx_0'):find(VarNamesList == FFx_label(end)));
@@ -1494,7 +1512,7 @@ for runIdx = 1:NumofRuns
     xdot_result_origin = xdot_result;    ydot_result_origin = ydot_result;   thetadot_result_origin = thetadot_result;
     PFx_result_origin  = PFx_result;     PFy_result_origin  = PFy_result;    PFxdot_result_origin   = PFxdot_result;      PFydot_result_origin = PFydot_result;
     PHx_result_origin  = PHx_result;     PHy_result_origin  = PHy_result;    PHxdot_result_origin   = PHxdot_result;      PHydot_result_origin = PHydot_result;
-    CF_result_origin   = CF_result;      CH_result_origin   = CH_result;
+    CF_result_origin   = CF;      CH_result_origin   = CH;
     FFx_result_origin  = FFx_result;     FFy_result_origin  = FFy_result;    
     FHx_result_origin  = FHx_result;     FHy_result_origin  = FHy_result;
     NetForceX_origin   = NetForceX;      NetForceY_origin   = NetForceY;
@@ -1586,7 +1604,7 @@ for runIdx = 1:NumofRuns
     diary off
     
     % Save Experimental Result
-    warning('off')
+    warning('off');
     save([ExpDirectory, '/', ExpLog_filename, '.mat']);
     warning('on')
 
@@ -1598,3 +1616,7 @@ disp('===================================================');
 disp('All Experiments Finished')
 disp('===================================================');
 
+% Send Email to Notify the Finish of the Computation
+%setpref('Internet','E_mail','Jiayi.Wang@ed.ac.uk');
+%setpref('Internet','SMTP_Server','smtp.staffmail.ed.ac.uk');
+%sendmail('Jiayi.Wang@ed.ac.uk',['Experiemnt Finished for ', num2str(NumPhases), '-Phase Motion, Stride Period: ', num2str(Tend), ', Session Name: ', ScreenSessionName]);

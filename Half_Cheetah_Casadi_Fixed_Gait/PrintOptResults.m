@@ -1,12 +1,12 @@
 clear;
 clc;
 
-directory = uigetdir([pwd,'/LargerNumNodes_GaitSelectionResult/'], 'Select Working Directory');
+directory = uigetdir([pwd], 'Select Working Directory');
 
 warning('off','all');
 
 diary off
-ResultCleanLog = strcat('Gait-Optimization-Results', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+ResultCleanLog = strcat('Optimization-Results_Summary_with_Fixed_Gait', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
 diary([directory, '/', ResultCleanLog]);
 
 disp(['Working Directory: ', directory])
@@ -40,7 +40,14 @@ for SpeedIdx = 1:length(Query_SpeedList)
         
         %Clean the Result Files, Remove failed optimizations
         
-        if (mod(sum(gait(:,1)),1) == 0) && (mod(sum(gait(:,2)),1) == 0)
+        if strcmp(return_status.return_status,'KTR_RC_OPTIMAL_OR_SATISFACTORY')||...
+           strcmp(return_status.return_status,'KTR_RC_NEAR_OPT')||...
+           strcmp(return_status.return_status,'KTR_RC_FEAS_XTOL')||...
+           strcmp(return_status.return_status,'KTR_RC_FEAS_NO_IMPROVE')||...
+           strcmp(return_status.return_status,'KTR_RC_FEAS_FTOL')||...
+           strcmp(return_status.return_status,'KTR_RC_ITER_LIMIT_FEAS')||...
+           strcmp(return_status.return_status,'KTR_RC_TIME_LIMIT_FEAS')||...
+           strcmp(return_status.return_status,'KTR_RC_FEVAL_LIMIT_FEAS')
             
             CleanFiles = {CleanFiles{:},Files(fileIdx)};
             
@@ -56,12 +63,20 @@ for SpeedIdx = 1:length(Query_SpeedList)
     
     disp('===========================================================')
     
+    result_summary.speedList(SpeedIdx) = speed;
+    
     if isempty(CleanFiles)
         
         disp('All Optimization Trials Failed to Find Optimal Gait for This Speed......')
     
         disp('===========================================================')
         
+        %save results
+        
+        result_summary.costList(SpeedIdx) = inf;
+        result_summary.gaitList{SpeedIdx} = inf;
+        result_summary.opt_file_list{SpeedIdx} = inf;
+
     else
         
         [min_cost,min_cost_Idx] = min(cost_results);
@@ -77,7 +92,12 @@ for SpeedIdx = 1:length(Query_SpeedList)
         gait_results{min_cost_Idx}
 
         disp(['Corresponding Cost is: ', num2str(min_cost)])
-
+        
+        %Save results
+        result_summary.costList(SpeedIdx) = min_cost;
+        result_summary.gaitList{SpeedIdx} = gait_results{min_cost_Idx};
+        result_summary.opt_file_list{SpeedIdx} = CleanFiles{min_cost_Idx}.name;
+        
         disp('===========================================================')
 
         disp('Loop Over All Results')
@@ -89,7 +109,7 @@ for SpeedIdx = 1:length(Query_SpeedList)
 
             disp('-------------------------------------------------------')
 
-            disp(['Gait Optimizaiton Result for File ', num2str(fileIdx), ', FileName: ', CleanFiles{fileIdx}.name])
+            disp(['Optimizaiton Result for File ', num2str(fileIdx), ', FileName: ', CleanFiles{fileIdx}.name])
 
             disp('The Optimal Gait is:')
 
@@ -116,5 +136,7 @@ for SpeedIdx = 1:length(Query_SpeedList)
     end
     
 end
+
+save([directory,'/','result_summary']);
 
 diary off
