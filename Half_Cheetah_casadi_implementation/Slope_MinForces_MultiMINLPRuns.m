@@ -91,6 +91,12 @@ disp('----------------------------------------------------');
 %======================================================================
 
 %======================================================================
+%Setup Cost
+cost_flag = input('Decide Cost: 1-> Minimize Force Squared 2-> Minimize Vibration: \n');
+%======================================================================
+
+
+%======================================================================
 %Environment Information
 %----------------------------------------------------------------------
 %   Display some info
@@ -101,7 +107,7 @@ disp('----------------------------------------------------');
 %----------------------------------------------------------------------
 %   Setup the Terrain Model
 %----------------------------------------------------------------------
-TerrainType = input('Specify the Terrain Type: 1 -> Flat Terrain; 2 -> Slopes\n');
+TerrainType = input('Specify the Terrain Type: 1 -> Flat Terrain (Use this if Terrain Slope = 0); 2 -> Slopes\n');
 
 if TerrainType == 1 %Flat Terrain
     disp('Selected Flat Terrain');
@@ -121,6 +127,9 @@ if TerrainType == 1 %Flat Terrain
         h_terrain = h_terrain + if_else(x_query < sum(HeightChangingPlaces(1:i)), 0, LevelChanges(i));
     end
     TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
+    terrain_slope_degrees = 0;
+    terrain_slope_rad = terrain_slope_degrees/180*pi;
+    terrain_slope = tan(terrain_slope_rad);
     disp('----------------------------------------------------');
     
 elseif TerrainType == 2 %Slope
@@ -160,12 +169,17 @@ if PlotTerrainFlag == 1 %Yes, Plot the terrain model
 end
 %-----------------------------------------------------------------------
 %Other Parameters
-TerrainNorm = [0,1]; %For Flat Terrain
-if TerrainType == 2 % if Stairs, over-write the terrain norm with 
-    TerrainNorm = [cos(terrain_slope_rad), -sin(terrain_slope_rad); sin(terrain_slope_rad), cos(terrain_slope_rad)]*TerrainNorm';
+if TerrainType == 1 %Flat Terrain
+    TerrainNorm = [0;1];
+elseif TerrainType == 2 % if Stairs, over-write the terrain norm with 
+    TerrainNorm = [0;1];
+    TerrainNorm = [cos(terrain_slope_rad), -sin(terrain_slope_rad); sin(terrain_slope_rad), cos(terrain_slope_rad)]*TerrainNorm;
 end
 disp('Terrain Norm is: ');
 TerrainNorm
+TerrainTangent = [cos(terrain_slope_rad),-sin(terrain_slope_rad);sin(terrain_slope_rad),cos(terrain_slope_rad)]*[1;0];
+disp('Terrain Tangent is: ');
+TerrainTangent
 disp('----------------------------------------------------');
 miu = 0.6; %friction coefficient
 disp('----------------------------------------------------');
@@ -596,23 +610,23 @@ for runIdx = 1:NumofRuns
     kinematics = [cos(thetak), -sin(thetak); sin(thetak), cos(thetak)]'*(Pk' - [xk,yk]') - Pc';
     KinematicsConstraint = Function('KinematicsConstraint',{rk, Pk, Pc},{kinematics});
     %-----------------------------------------------------------------------
-    %   Friction Cones (In 2D, Flat Terrain) -->
-    %               Fx[k] - Const_miu*(Norm*[Fx[k],Fy[k]]') <= 0
-    %--------------------------------
-    %   (Place Holder) Need to Change when move to 3D Case and/or Uneven
-    %   Terrains (change equation and norm)
-    %--------------------------------
-    %       Variable Definitions
-    Const_miu = SX.sym('miu');
-    NormX     = SX.sym('Nx[k]');
-    NormY     = SX.sym('Ny[k]');
-    Norm      = [NormX, NormY];
-    ForceX    = SX.sym('Fx[k]');
-    ForceY    = SX.sym('Fy[k]');
-    Force     = [ForceX, ForceY];
-    %       Build Functions
-    friction = ForceX - Const_miu*(dot(Norm,Force));
-    FrictionCone = Function('FrictionCone',{Norm, Force, Const_miu},{friction});
+%     %   Friction Cones (In 2D, Flat Terrain) -->
+%     %               Fx[k] - Const_miu*(Norm*[Fx[k],Fy[k]]') <= 0
+%     %--------------------------------
+%     %   (Place Holder) Need to Change when move to 3D Case and/or Uneven
+%     %   Terrains (change equation and norm)
+%     %--------------------------------
+%     %       Variable Definitions
+%     Const_miu = SX.sym('miu');
+%     NormX     = SX.sym('Nx[k]');
+%     NormY     = SX.sym('Ny[k]');
+%     Norm      = [NormX, NormY];
+%     ForceX    = SX.sym('Fx[k]');
+%     ForceY    = SX.sym('Fy[k]');
+%     Force     = [ForceX, ForceY];
+%     %       Build Functions
+%     friction = ForceX - Const_miu*(dot(Norm,Force));
+%     FrictionCone = Function('FrictionCone',{Norm, Force, Const_miu},{friction});
     %-----------------------------------------------------------------------
 
     %=======================================================================
@@ -667,9 +681,14 @@ for runIdx = 1:NumofRuns
                 if TerrainType == 1 %Flat Terrain
                     lb_DecisionVars = [lb_DecisionVars, repmat(-5, 1, VarLengthList(i))];    
                     ub_DecisionVars = [ub_DecisionVars, repmat( 5, 1, VarLengthList(i))];
-                elseif TerrainType == 2 %slope, over-write
-                    lb_DecisionVars = [lb_DecisionVars, repmat(-2*MaxSpeed*Tend/cos(terrain_slope_rad), 1, VarLengthList(i))];    
-                    ub_DecisionVars = [ub_DecisionVars, repmat( 2*MaxSpeed*Tend/cos(terrain_slope_rad), 1, VarLengthList(i))];
+                elseif TerrainType == 2 %slope
+                    if MaxSpeed*Tend >= 5
+                        baseheightlimit = 2*MaxSpeed*Tend;
+                    else
+                        baseheightlimit = 5;
+                    end
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit/cos(terrain_slope_rad), 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit/cos(terrain_slope_rad), 1, VarLengthList(i))];
                 end
             elseif strcmp(varList(i),'theta') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-pi/2, 1, VarLengthList(i))];    
@@ -678,8 +697,8 @@ for runIdx = 1:NumofRuns
                 lb_DecisionVars = [lb_DecisionVars, repmat(-5*speed, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( 5*speed, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'ydot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-10, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 10, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-25, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 25, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'thetadot') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-5*pi, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( 5*pi, 1, VarLengthList(i))];
@@ -690,9 +709,14 @@ for runIdx = 1:NumofRuns
                 if TerrainType == 1 %flat terrain
                     lb_DecisionVars = [lb_DecisionVars, repmat(-5 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
                     ub_DecisionVars = [ub_DecisionVars, repmat( 5                       , 1, VarLengthList(i))];
-                elseif TerrainType == 2 %slope, over-write
-                    lb_DecisionVars = [lb_DecisionVars, repmat(-2*MaxSpeed*Tend/cos(terrain_slope_rad) - 5*BoundingBox_Height, 1, VarLengthList(i))];    
-                    ub_DecisionVars = [ub_DecisionVars, repmat( 2*MaxSpeed*Tend/cos(terrain_slope_rad)                       , 1, VarLengthList(i))];
+                elseif TerrainType == 2 %slope
+                    if MaxSpeed*Tend >= 5
+                        baseheightlimit = 2*MaxSpeed*Tend;
+                    else
+                        baseheightlimit = 5;
+                    end
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit/cos(terrain_slope_rad) - 5*BoundingBox_Height, 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit/cos(terrain_slope_rad)                       , 1, VarLengthList(i))];
                 end
             elseif strcmp(varList(i),'PHx') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-speed*Tend - 5*BoundingBox_Width, 1, VarLengthList(i))];    
@@ -701,9 +725,14 @@ for runIdx = 1:NumofRuns
                 if TerrainType == 1 %Flat Terrain
                     lb_DecisionVars = [lb_DecisionVars, repmat(-5 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
                     ub_DecisionVars = [ub_DecisionVars, repmat( 5                       , 1, VarLengthList(i))];
-                elseif TerrainType == 2 %slope, over-write
-                    lb_DecisionVars = [lb_DecisionVars, repmat(-2*MaxSpeed*Tend/cos(terrain_slope_rad) - 5*BoundingBox_Height, 1, VarLengthList(i))];    
-                    ub_DecisionVars = [ub_DecisionVars, repmat( 2*MaxSpeed*Tend/cos(terrain_slope_rad)                       , 1, VarLengthList(i))];
+                elseif TerrainType == 2 %slope
+                    if MaxSpeed*Tend >= 5
+                        baseheightlimit = 2*MaxSpeed*Tend;
+                    else
+                        baseheightlimit = 5;
+                    end
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit/cos(terrain_slope_rad) - 5*BoundingBox_Height, 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit/cos(terrain_slope_rad)                       , 1, VarLengthList(i))];
                 end
             %elseif strcmp(varList(i),'PFxdot') == 1
                 %lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
@@ -1127,8 +1156,9 @@ for runIdx = 1:NumofRuns
                 lbg = [lbg;  0];          %Give constraint lower bound
                 ubg = [ubg;  inf];        %Give constraint upper bound
             %------------------------------------------------------
-            %     (-) y-axis
+            %     (-) y-axis force
             %------------------------------------------------------
+            if TerrainType == 1 %Flat Terrain
             %       - Equation (1): Fy <= 0 + Mfy*C -->
             %                       Fy - Mfy*C <= 0
             %           Use Ineq_Difference
@@ -1137,7 +1167,6 @@ for runIdx = 1:NumofRuns
             %                  z[k] = C(F/H)[k]
             %           lbg = -inf
             %           ubg = 0
-            %------------------------------------------------------
             %           Front Leg
                 EqTemp = Ineq_Difference(FFy(k), Mfy, CF(PhaseIdx));
                 g   = {g{:}, EqTemp};     %Append to constraint function list
@@ -1149,30 +1178,62 @@ for runIdx = 1:NumofRuns
                 g   = {g{:}, EqTemp};     %Append to constraint function list
                 lbg = [lbg;  -inf];          %Give constraint lower bound
                 ubg = [ubg;  0];        %Give constraint upper bound
-            %------------------------------------------------------
-            %       - Equation (2): F(F/H)y >= 0 
-            %           Achieve by Changing Lower Variable bounds
-            %-------------------------------------------------------
-            %       (Place Holder) May need to consider the terrain direction when
-            %       having slope terrain (Do not pull from the ground surface)
-            %------------------------------------------------------
-            %           Front Leg
+                
+            %   Fy >= 0 Unilaterla constratin
+                %           Front Leg
                 lb_DecisionVars(find(VarNamesList == ['FFy_',num2str(k-1)])) = 0;
-            %           Hind Leg
-                lb_DecisionVars(find(VarNamesList == ['FHy_',num2str(k-1)])) = 0;
+                %           Hind Leg
+                lb_DecisionVars(find(VarNamesList == ['FHy_',num2str(k-1)])) = 0; 
+                
+            elseif TerrainType == 2 %Slope Terrain
+                %   Fy <= 0 + Mfy*C --> Fy - Mfy*C <= 0
+                %           Front Leg
+                EqTemp = Ineq_Difference(FFy(k), Mfy, CF(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  -inf];       %Give constraint lower bound
+                ubg = [ubg;  0];          %Give constraint upper bound
+
+                %           Hind Leg
+                EqTemp = Ineq_Difference(FHy(k), Mfy, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  -inf];          %Give constraint lower bound
+                ubg = [ubg;  0];        %Give constraint upper bound
+                %   Fy >= -Mfy*C --> Fy + Mfy*C >= 0 
+                %           Front Leg
+                EqTemp = Ineq_Summation(FFy(k), Mfy, CF(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  0];          %Give constraint lower bound
+                ubg = [ubg;  inf];        %Give constraint upper bound
+
+                %           Hind Leg
+                EqTemp = Ineq_Summation(FHy(k), Mfy, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  0];          %Give constraint lower bound
+                ubg = [ubg;  inf];        %Give constraint upper bound
+                %Terrain Norm/Unilateral Constraint
+                %Fn >= 0 (Normal Force) larger than 0 --> [Fx;Fy]'*TerrainNorm >= 0
+                %           Front Leg
+                EqTemp = [FFx(k);FFy(k)]'*TerrainNorm;
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  0];          %Give constraint lower bound
+                ubg = [ubg;  inf];        %Give constraint upper bound
+                %           Hind Leg
+                EqTemp = [FHx(k);FHy(k)]'*TerrainNorm;
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  0];          %Give constraint lower bound
+                ubg = [ubg;  inf];        %Give constraint upper bound
+            end
+            
             % Complementarity Constraints Built  
             %------------------------------------------------------
             
             %----------------------------------------------------
             % Friction Cone
             %----------------------------------------------------
+            %   Reference: https://scaron.info/teaching/friction-cones.html
             %   General Equation:
-            %   Ft[k] <= miu*Fn[k] ---> Ft[k] - miu*Fn[k] <= 0
-            %   Ft[k]: tangential component of the force along the surface;
-            %   Ft[k] = dot(Terrain_Tangential_vec,Force_vec)
-            %   Terrain_Tangential_vec = R(terrain_slope_vec)*[1;0]
-            %   Fn[k]: normal component of the force along the surface
-            %   Fn[k] = dot(TerrainNorm, Force_vec)
+            %   miu*TerrainNorm'*F + TerrainTangent'*F >= 0
+            %   miu*TerrainNorm'*F - TerrainTangent'*F >= 0
             %
             %   Equation for 0-degree flat terrain: Fx[k] - miu*dot(Norm[k],Force[k]) <= 0
             %       Use Function FrictionCone
@@ -1185,32 +1246,28 @@ for runIdx = 1:NumofRuns
             %   (Place Holder) Need to change terrain norm when move to (uneven)
             %   curvature terrain
             %----------------------------------------------------
-            if TerrainType == 1 %Flat Terrain
-                %       Front Leg
-                EqTemp = FrictionCone(TerrainNorm, [FFx(k),FFy(k)], miu);
-                g   = {g{:}, EqTemp};         %Append to constraint function list
-                lbg = [lbg;  -inf];           %Give constraint lower bound
-                ubg = [ubg;  0];              %Give constraint upper bound
+              %       Front Leg
+              EqTemp = miu*TerrainNorm'*[FFx(k);FFy(k)] + TerrainTangent'*[FFx(k);FFy(k)];
+              g   = {g{:}, EqTemp};         %Append to constraint function list
+              lbg = [lbg;  0];           %Give constraint lower bound
+              ubg = [ubg;  inf];              %Give constraint upper bound
+              
+              EqTemp = miu*TerrainNorm'*[FFx(k);FFy(k)] - TerrainTangent'*[FFx(k);FFy(k)];
+              g   = {g{:}, EqTemp};         %Append to constraint function list
+              lbg = [lbg;  0];           %Give constraint lower bound
+              ubg = [ubg;  inf];              %Give constraint upper bound
+               
+              %       Hind Leg
+              EqTemp = miu*TerrainNorm'*[FHx(k);FHy(k)] + TerrainTangent'*[FHx(k);FHy(k)];
+              g   = {g{:}, EqTemp};         %Append to constraint function list
+              lbg = [lbg;  0];           %Give constraint lower bound
+              ubg = [ubg;  inf];              %Give constraint upper bound
+              
+              EqTemp = miu*TerrainNorm'*[FHx(k);FHy(k)] - TerrainTangent'*[FHx(k);FHy(k)];
+              g   = {g{:}, EqTemp};         %Append to constraint function list
+              lbg = [lbg;  0];           %Give constraint lower bound
+              ubg = [ubg;  inf];              %Give constraint upper bound
 
-                %       Hind Leg
-                EqTemp = FrictionCone(TerrainNorm, [FHx(k), FHy(k)], miu);
-                g   = {g{:}, EqTemp};         %Append to constraint function list
-                lbg = [lbg;  -inf];           %Give constraint lower bound
-                ubg = [ubg;  0];              %Give constraint upper bound
-            elseif TerrainType == 2 %Slope Terrain
-                Terrain_Tangential_vec = [cos(terrain_slope_rad),-sin(terrain_slope_rad);sin(terrain_slope_rad),cos(terrain_slope_rad)]*[1;0];
-                %       Front Leg
-                EqTemp = dot([Terrain_Tangential_vec,[FFx(k),FFy(k)]]) - miu*dot(TerrainNorm,[FFx(k),FFy(k)]);
-                g   = {g{:}, EqTemp};         %Append to constraint function list
-                lbg = [lbg;  -inf];           %Give constraint lower bound
-                ubg = [ubg;  0];              %Give constraint upper bound
-
-                %       Hind Leg
-                EqTemp = dot([Terrain_Tangential_vec,[FHx(k),FHy(k)]]) - miu*dot(TerrainNorm,[FHx(k),FHy(k)]);
-                g   = {g{:}, EqTemp};         %Append to constraint function list
-                lbg = [lbg;  -inf];           %Give constraint lower bound
-                ubg = [ubg;  0];              %Give constraint upper bound
-            end
 
         %     %----------------------------------------------------
         %     % Torso y-axis level constraint (The Highest Bounding Box border should be always above the Ground)
@@ -1228,11 +1285,19 @@ for runIdx = 1:NumofRuns
             % Cost Function - Integral/Lagrangian Term
             %   Cost of Transport
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + h*PFxdot(k)^2 + h*PFydot(k)^2 + h*PHxdot(k)^2 + h*PHydot(k)^2;
-            J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
+            if cost_flag == 1 %Minimize Force Squared
+                J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
+            elseif cost_flag == 2 %Minimize Vibration
+                J = J + h*theta(k)^2 + h*thetadot(k)^2 + h*ydot(k)^2;
+            end
             %VelCostWweight = 500;
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + VelCostWweight*h*PFxdot(k)^2 + VelCostWweight*h*PFydot(k)^2 + VelCostWweight*h*PHxdot(k)^2 + VelCostWweight*h*PHydot(k)^2;
             %J = J + h*xdot(k)^2;%h*ydot(k)^2 + h*thetadot(k)^2;% + h*thetadot(k)^2; h*xdot(k)^2 + 
             %----------------------------------------------------
+        end
+        
+        if cost_flag == 2 %Minimize Vibration
+            J = J + h*theta(end)^2 + h*thetadot(end)^2 + h*ydot(end)^2;
         end
 
         %----------------------------------------------------
