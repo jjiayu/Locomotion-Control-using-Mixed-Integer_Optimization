@@ -1288,7 +1288,7 @@ for runIdx = 1:NumofRuns
             if cost_flag == 1 %Minimize Force Squared
                 J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
             elseif cost_flag == 2 %Minimize Vibration
-                J = J + h*theta(k)^2 + h*thetadot(k)^2 + h*ydot(k)^2;
+                J = J + h*(theta(k)-terrain_slope_rad)^2 + h*thetadot(k)^2 + h*ydot(k)^2;
             end
             %VelCostWweight = 500;
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + VelCostWweight*h*PFxdot(k)^2 + VelCostWweight*h*PFydot(k)^2 + VelCostWweight*h*PHxdot(k)^2 + VelCostWweight*h*PHydot(k)^2;
@@ -1297,7 +1297,7 @@ for runIdx = 1:NumofRuns
         end
         
         if cost_flag == 2 %Minimize Vibration
-            J = J + h*theta(end)^2 + h*thetadot(end)^2 + h*ydot(end)^2;
+            J = J + h*(theta(end)-terrain_slope_rad)^2 + h*thetadot(end)^2 + h*ydot(end)^2;
         end
 
         %----------------------------------------------------
