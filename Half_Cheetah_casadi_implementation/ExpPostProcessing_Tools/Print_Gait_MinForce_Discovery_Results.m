@@ -40,7 +40,7 @@ for SpeedIdx = 1:length(Query_SpeedList)
         
         %Clean the Result Files, Remove failed optimizations
         
-        if (mod(sum(gait(:,1)),1) == 0) && (mod(sum(gait(:,2)),1) == 0)
+        if (mod(sum(gait(:,1)),1) == 0) && (mod(sum(gait(:,2)),1) == 0) && sum(gait(:,1))<NumPhases && sum(gait(:,2))<NumPhases
             
             CleanFiles = {CleanFiles{:},Files(fileIdx)};
             

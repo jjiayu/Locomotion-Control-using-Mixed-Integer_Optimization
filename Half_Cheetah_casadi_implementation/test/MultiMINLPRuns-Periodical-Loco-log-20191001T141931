@@ -1,0 +1,58 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+With a Particular Emphasis on Periodical Gait Discovery
+Multi-Phase Formulation:
+Optimize over State, Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   01-Oct-2019 14:19:31
+
+----------------------------------------------------
+Correspondent Log File Name: MultiMINLPRuns-Periodical-Loco-log-20191001T141931in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_casadi_implementation/test
+====================================================
+ 
+====================================================
+Setup Robot Kinematics Properties: 
+----------------------------------------------------
+Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):
+0.4
+----------------------------------------------------
+Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):
+0.4
+----------------------------------------------------
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify the Terrain Type: 1 -> Flat Terrain; 2 -> Slopes
+2
+Selected Slope Terrain
+Spoecify the terrain slope in Degrees (i.e.: 0, 10, 30...): 
+10
+Defined terrain slope: 0.17633
+
+ans =
+
+    1.4721
+
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+1
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+.../casadi/core/sx_function.cpp:69: Cannot evaluate "TerrainModel:(i0)->(o0) SXFunction" since variables [h_terrain] are
+free.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1433)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1433,0)">line 1433</a>)
+        res = self.call(varargin);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Slope_MinForces_MultiMINLPRuns', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_casadi_implementation/Slope_MinForces_MultiMINLPRuns.m', 154)" style="font-weight:bold">Slope_MinForces_MultiMINLPRuns</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_casadi_implementation/Slope_MinForces_MultiMINLPRuns.m',154,0)">line 154</a>)
+        terrainy = full(TerrainModel(terrainx));
+} 
+opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)
+Slope_MinForces_MultiMINLPRuns
+Experiment Working Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_casadi_implementation/test

@@ -26,7 +26,7 @@ disp(['Experiment Working Directory: ', ExpDirectory])
 % %Return to the Script Folder
 % cd ../..
 
-%========================================================
+%========================================================De
 % Import CasADi related packages
 import casadi.*
 
@@ -72,22 +72,12 @@ BodyLength = 0.6;
 BodyHeight = 0.2;
 %       Default foot position in Local robot frame
 DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
-%       Set-up Robot Mophorlogy
-disp('====================================================');
-disp('Robot Mophorlogy Setup')
-disp('----------------------------------------------------');
-disp(['Robot Body Length:', num2str(BodyLength)]);
-LegLocationPortion = input('Decide Leg Position, How much portion from the center of the torso towards the border of the torso (i.e. 0%, 10%, 50%, 100%, do not type % symbol): \n');
-LegLocationPortion = LegLocationPortion/100;
-disp('----------------------------------------------------');
 %           Front Foot Default Positions (IN ROBOT FRAME)
-PFCenterX = 1/2*BodyLength*LegLocationPortion;
+PFCenterX = 1/2*BodyLength;
 PFCenterY = -(1/2*BodyHeight + DefaultLegLength);
 %           Hind Foot Default Positions (IN ROBOT FRAME)
-PHCenterX = -1/2*BodyLength*LegLocationPortion;
+PHCenterX = -1/2*BodyLength;
 PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
-disp(['X-axis Coordinate of Default limb location of the Front Leg (should smaller than or equal to) 1/2*BodyLength: ', num2str(PFCenterX)]);
-disp(['X-axis Coordinate of Default limb location of the Hind Leg (should Larger than or equal to) -1/2*BodyLength: ', num2str(PHCenterX)]);
 %       Kinematics Bounding Box Constraint
 disp('====================================================');
 disp('Setup Robot Kinematics Properties: ')
@@ -124,36 +114,59 @@ if TerrainType == 1 %Flat Terrain
     %For Visualization program
     HeightChangingPlaces_vis = ones(1,MaxNumStairs);
     LevelChanges_vis = LevelChanges;
+    %Build Terrain Model for flat terrain 
+    h_terrain = 0;
+    x_query   = SX.sym('x_query', 1);
+    for i = 1:MaxNumStairs
+        h_terrain = h_terrain + if_else(x_query < sum(HeightChangingPlaces(1:i)), 0, LevelChanges(i));
+    end
+    TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
+    disp('----------------------------------------------------');
+    
 elseif TerrainType == 2 %Slope
     disp('Selected Slope Terrain');
-    ME_SlopeUnavailable = MException('Initialization:SlopeUnavailable',['Slope Terrain Un-implemented']);
+    terrain_slope_degrees = input('Spoecify the terrain slope in Degrees (i.e.: -30, -10, 0, 10, 30...): \n');
+    terrain_slope_rad = terrain_slope_degrees/180*pi;
+    terrain_slope = tan(terrain_slope_rad);
+    disp(['Defined terrain slope: ',num2str(terrain_slope)]);
+    %check if terrain calulation is correct: atan(terrain_slope)/pi*180
+    %Build Terrain Model for slope terrain
+    x_query   = SX.sym('x_query', 1);
+    h_terrain = terrain_slope*x_query;
+    TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
+    disp('----------------------------------------------------');
 else %Unknown Scenario
     ME_TerrainType = MException('Initialization:TerrainType',['Unknown Terrain Type']);
     throw(ME_TerrainType)
 end
 
-%         Build Terrain Model Function --> CasADi If-Else implementation
-%           Define CasADi symbolic variables
-h_terrain = 0;
-x_query   = SX.sym('x_query', 1);
-for i = 1:MaxNumStairs
-    h_terrain = h_terrain + if_else(x_query < sum(HeightChangingPlaces(1:i)), 0, LevelChanges(i));
-end
-TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
-disp('----------------------------------------------------');
 %-----------------------------------------------------------------------
 %   Plot Terrain Model
 PlotTerrainFlag = input('Plot the Terrain Model? 1 -> Yes; 2 -> No\n');
 if PlotTerrainFlag == 1 %Yes, Plot the terrain model    
-    terrainx = linspace(-2, sum(HeightChangingPlaces)+3, 1e4);
-    terrainy = full(TerrainModel(terrainx));
-    plot(terrainx,terrainy,'LineWidth',2)
-    ylim([min(terrainy)-1,max(terrainy)+1])
-    disp('----------------------------------------------------');
+    if TerrainType == 1 %Flat terrain
+        terrainx = linspace(-2, sum(HeightChangingPlaces)+3, 1e4);
+        terrainy = full(TerrainModel(terrainx));
+        plot(terrainx,terrainy,'LineWidth',2)
+        ylim([min(terrainy)-1,max(terrainy)+1])
+        disp('----------------------------------------------------');
+    elseif TerrainType == 2 %Slope
+        terrainx = linspace(-2, 10, 1e4);
+        terrainy = full(TerrainModel(terrainx));
+        plot(terrainx,terrainy,'LineWidth',2)
+        ylim([min(terrainy)-1,max(terrainy)+1])
+        disp('----------------------------------------------------');
+    end
 end
 %-----------------------------------------------------------------------
 %Other Parameters
-TerrainNorm = [0,1];
+TerrainNorm = [0,1]; %For Flat Terrain
+if TerrainType == 2 % if Stairs, over-write the terrain norm with 
+    TerrainNorm = [cos(terrain_slope_rad), -sin(terrain_slope_rad); sin(terrain_slope_rad), cos(terrain_slope_rad)]*TerrainNorm';
+end
+disp('Terrain Norm is: ');
+TerrainNorm
+disp('----------------------------------------------------');
 miu = 0.6; %friction coefficient
 disp('----------------------------------------------------');
 disp(['Friction Cone: ', num2str(miu)]);
@@ -1153,7 +1166,15 @@ for runIdx = 1:NumofRuns
             %----------------------------------------------------
             % Friction Cone
             %----------------------------------------------------
-            %   Equation: Fx[k] - miu*dot(Norm[k],Force[k]) <= 0
+            %   General Equation:
+            %   Ft[k] <= miu*Fn[k] ---> Ft[k] - miu*Fn[k] <= 0
+            %   Ft[k]: tangential component of the force along the surface;
+            %   Ft[k] = dot(Terrain_Tangential_vec,Force_vec)
+            %   Terrain_Tangential_vec = R(terrain_slope_vec)*[1;0]
+            %   Fn[k]: normal component of the force along the surface
+            %   Fn[k] = dot(TerrainNorm, Force_vec)
+            %
+            %   Equation for 0-degree flat terrain: Fx[k] - miu*dot(Norm[k],Force[k]) <= 0
             %       Use Function FrictionCone
             %       Input: Norm[k]   = [Nx[k],Ny[k]]
             %              Force[k]  = [F(F/H)x[k], F(F/H)y[k]]
@@ -1164,17 +1185,33 @@ for runIdx = 1:NumofRuns
             %   (Place Holder) Need to change terrain norm when move to (uneven)
             %   curvature terrain
             %----------------------------------------------------
-            %       Front Leg
+            if TerrainType == 1 %Flat Terrain
+                %       Front Leg
                 EqTemp = FrictionCone(TerrainNorm, [FFx(k),FFy(k)], miu);
                 g   = {g{:}, EqTemp};         %Append to constraint function list
                 lbg = [lbg;  -inf];           %Give constraint lower bound
                 ubg = [ubg;  0];              %Give constraint upper bound
 
-            %       Hind Leg
+                %       Hind Leg
                 EqTemp = FrictionCone(TerrainNorm, [FHx(k), FHy(k)], miu);
                 g   = {g{:}, EqTemp};         %Append to constraint function list
                 lbg = [lbg;  -inf];           %Give constraint lower bound
                 ubg = [ubg;  0];              %Give constraint upper bound
+            elseif TerrainType == 2 %Slope Terrain
+                Terrain_Tangential_vec = [cos(terrain_slope_rad),-sin(terrain_slope_rad);sin(terrain_slope_rad),cos(terrain_slope_rad)]*[1;0];
+                %       Front Leg
+                EqTemp = dot([Terrain_Tangential_vec,[FFx(k),FFy(k)]]) - miu*dot(TerrainNorm,[FFx(k),FFy(k)]);
+                g   = {g{:}, EqTemp};         %Append to constraint function list
+                lbg = [lbg;  -inf];           %Give constraint lower bound
+                ubg = [ubg;  0];              %Give constraint upper bound
+
+                %       Hind Leg
+                EqTemp = dot([Terrain_Tangential_vec,[FHx(k),FHy(k)]]) - miu*dot(TerrainNorm,[FHx(k),FHy(k)]);
+                g   = {g{:}, EqTemp};         %Append to constraint function list
+                lbg = [lbg;  -inf];           %Give constraint lower bound
+                ubg = [ubg;  0];              %Give constraint upper bound
+            end
+
         %     %----------------------------------------------------
         %     % Torso y-axis level constraint (The Highest Bounding Box border should be always above the Ground)
         %     %----------------------------------------------------
@@ -1298,7 +1335,11 @@ for runIdx = 1:NumofRuns
     %-----------------------------------------------------------------------
     %       Y-axis Positions
     %-----------------------------------------------------------------------
-    EqTemp = y(1) - y(end);
+    if TerrainType == 1 %Flat Terrain
+        EqTemp = y(1) - y(end);
+    elseif TerrainType == 2 %Slope Terrain
+        EqTemp = y(end) - y(1) - speed*Tend*tan(terrain_slope_rad); 
+    end
     g = {g{:}, EqTemp};
     lbg = [lbg; 0];
     ubg = [ubg; 0];

@@ -641,8 +641,13 @@ for runIdx = 1:NumofRuns
                 lb_DecisionVars = [lb_DecisionVars, repmat(-0.1, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( speed*Tend+0.1*speed*Tend, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'y') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-5, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 5, 1, VarLengthList(i))];
+                if TerrainType == 1 %Flat Terrain
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-5, 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( 5, 1, VarLengthList(i))];
+                elseif TerrainType == 2 %slope, over-write
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-2*MaxSpeed*Tend/cos(terrain_slope_rad), 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( 2*MaxSpeed*Tend/cos(terrain_slope_rad), 1, VarLengthList(i))];
+                end
             elseif strcmp(varList(i),'theta') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-pi/2, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( pi/2, 1, VarLengthList(i))];
@@ -659,14 +664,24 @@ for runIdx = 1:NumofRuns
                 lb_DecisionVars = [lb_DecisionVars, repmat(-speed*Tend - 5*BoundingBox_Width, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( speed*Tend + 5*BoundingBox_Width, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PFy') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-5 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 5                       , 1, VarLengthList(i))];
+                if TerrainType == 1 %flat terrain
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-5 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( 5                       , 1, VarLengthList(i))];
+                elseif TerrainType == 2 %slope, over-write
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-2*MaxSpeed*Tend/cos(terrain_slope_rad) - 5*BoundingBox_Height, 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( 2*MaxSpeed*Tend/cos(terrain_slope_rad)                       , 1, VarLengthList(i))];
+                end
             elseif strcmp(varList(i),'PHx') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-speed*Tend - 5*BoundingBox_Width, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( speed*Tend + 5*BoundingBox_Width, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PHy') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-5 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 5                       , 1, VarLengthList(i))];
+                if TerrainType == 1 %Flat Terrain
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-5 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( 5                       , 1, VarLengthList(i))];
+                elseif TerrainType == 2 %slope, over-write
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-2*MaxSpeed*Tend/cos(terrain_slope_rad) - 5*BoundingBox_Height, 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( 2*MaxSpeed*Tend/cos(terrain_slope_rad)                       , 1, VarLengthList(i))];
+                end
             %elseif strcmp(varList(i),'PFxdot') == 1
                 %lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
                 %ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
