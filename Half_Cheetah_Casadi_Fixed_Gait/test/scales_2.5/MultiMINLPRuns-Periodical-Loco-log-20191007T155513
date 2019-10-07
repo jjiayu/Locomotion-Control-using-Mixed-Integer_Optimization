@@ -1,0 +1,101 @@
+====================================================
+Genearl Information:
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+With a Particular Emphasis on Periodical Gait Discovery
+Multi-Phase Formulation:
+Optimize over State, Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   07-Oct-2019 15:55:13
+
+----------------------------------------------------
+Correspondent Log File Name: MultiMINLPRuns-Periodical-Loco-log-20191007T155513in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_Casadi_Fixed_Gait/test/scales
+====================================================
+ 
+====================================================
+Setup Robot Kinematics Properties: 
+----------------------------------------------------
+Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):
+0.4
+----------------------------------------------------
+Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):
+0.4
+----------------------------------------------------
+Decide Cost: 
+ 1-> Minimize Force Squared 
+ 2-> Minimize Vibration 
+ 3-> Minimize tangential speed (along the terrain) to the deisred speed at every knot 
+ 4-> Minimize tangential speed (to the desired speed), normal axis speed (towards zero) 
+ 5 -> Minimize tangential speed (to the desired speed), normal speed (tp zero), angular speed thetadot (to the terrain slope): 
+3
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify the Terrain Type: 1 -> Flat Terrain (Use this if Terrain Slope = 0); 2 -> Slopes
+1
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+0
+Terrain Norm is: 
+
+TerrainNorm =
+
+     0
+     1
+
+Terrain Tangent is: 
+
+TerrainTangent =
+
+     1
+     0
+
+----------------------------------------------------
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Specify the MINIMUM Desired Speed along X-axis (m/s): 
+0.5
+----------------------------------------------------
+Specify the MAXIMUM Desired Speed along X-axis (m/s): 
+0.5
+----------------------------------------------------
+Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):
+0.1
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+1
+Input Termianl Time (e.g. 1s): 
+0.85
+----------------------------------------------------
+Input Phase Lower Bound (in percentage of total motion duration: 2.5% - no need to type percentage symbol): 
+10
+
+phase_lower_bound_portion =
+
+    0.1000
+
+----------------------------------------------------
+ 
+====================================================
+Temporal and Discretization Setup:
+----------------------------------------------------
+Input Number of Phases: 
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Fixeed_GaitSlope_MinForces_MultiMINLPRuns', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_Casadi_Fixed_Gait/Fixeed_GaitSlope_MinForces_MultiMINLPRuns.m', 238)" style="font-weight:bold">Fixeed_GaitSlope_MinForces_MultiMINLPRuns</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_Casadi_Fixed_Gait/Fixeed_GaitSlope_MinForces_MultiMINLPRuns.m',238,0)">line 238</a>)
+} 
+Fixeed_GaitSlope_MinForces_MultiMINLPRuns
+
+ans =
+
+     0
+
+Experiment Working Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_Casadi_Fixed_Gait/test/scales_2.5

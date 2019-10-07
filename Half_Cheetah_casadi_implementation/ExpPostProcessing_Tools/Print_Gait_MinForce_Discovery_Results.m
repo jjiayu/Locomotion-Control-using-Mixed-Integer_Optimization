@@ -97,9 +97,9 @@ for SpeedIdx = 1:length(Query_SpeedList)
 
             disp(['Optimal Cost: ', num2str(cost_results(fileIdx))])
 
-            disp(['Difference to Minimum Cost (Current Cost - Minimum Cost): ', num2str(cost_results(fileIdx) - min_cost)])
+            disp(['Difference to Minimum Cost (Current Cost - Minimum Cost): ', num2str(cost_results(fileIdx) - min_cost),' In Percentage: ',num2str((cost_results(fileIdx) - min_cost)/min_cost*100),'%'])
             
-            if cost_results(fileIdx) - min_cost <= 1
+            if (cost_results(fileIdx) - min_cost)/min_cost*100 <= 0.1
                 
                 disp('Cost Value is Equivalent to the Minimum Cost? -> YES')
                 

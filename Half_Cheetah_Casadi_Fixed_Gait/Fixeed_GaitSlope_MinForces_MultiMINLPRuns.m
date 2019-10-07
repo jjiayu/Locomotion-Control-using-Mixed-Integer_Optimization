@@ -12,7 +12,7 @@ clear;
 clc;
 
 %cd /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/
-
+0.
 
 %========================================================
 % Identfy Data Storage Folder
@@ -26,7 +26,7 @@ disp(['Experiment Working Directory: ', ExpDirectory])
 % %Return to the Script Folder
 % cd ../..
 
-%========================================================
+%========================================================De
 % Import CasADi related packages
 import casadi.*
 
@@ -94,7 +94,6 @@ disp('----------------------------------------------------');
 %Setup Cost
 cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared \n 2-> Minimize Vibration \n 3-> Minimize tangential speed (along the terrain) to the deisred speed at every knot \n 4-> Minimize tangential speed (to the desired speed), normal axis speed (towards zero) \n 5 -> Minimize tangential speed (to the desired speed), normal speed (tp zero), angular speed thetadot (to the terrain slope): \n');
 %======================================================================
-
 
 %======================================================================
 %Environment Information
@@ -385,7 +384,11 @@ NumofRuns = input('Specify Number of Runs for the MINLP Programming (i.e. 1, 10,
 disp('====================================================');
 disp(' ')
 
-
+%       Define the gait
+CF = input('Define the contact sequence for Front Leg (CF), a column vector: ');
+CH = input('Define the contact sequence for Hind Leg (CH), a column vector: ');
+CF = CF';
+CH = CH';
 
 %   Stop Diary
 diary off
@@ -503,23 +506,23 @@ for runIdx = 1:NumofRuns
     %                   Front Leg Contact On/Off: CF
     %                   Hind Leg Contact On/Off : CH
     %--------------------------------------------
-    CF = SX.sym('CF', NumPhases + 1);
-    CH = SX.sym('CH', NumPhases + 1);
-    CF = CF(2:end);
-    CH = CH(2:end);
+    %CF = SX.sym('CF', NumPhases + 1);
+    %CH = SX.sym('CH', NumPhases + 1);
+    %CF = CF(2:end);
+    %CH = CH(2:end);
 
     %       Create Variable Name List
-    CF_label = CreateVarsNameList(CF);
-    CH_label = CreateVarsNameList(CH);
+    %CF_label = CreateVarsNameList(CF);
+    %CH_label = CreateVarsNameList(CH);
     %----------------------------------------------------------------------
     %       Check Correctness of the Generated Variables
     %----------------------------------------------------------------------
-    if length(CF) == NumPhases && length(CH) == NumPhases && length(Ts) == NumPhases
-        disp('Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly')
-    else
-        ME_PhaseRelatedConfig = MException('Initialization:PhaseRelatedConfig','The contact configuration and switching time is not defined for each phase');
-        throw(ME_PhaseRelatedConfig)
-    end
+%     if length(CF) == NumPhases && length(CH) == NumPhases && length(Ts) == NumPhases
+%         disp('Checked - Contact Configuration and Switching Time Varaibels for Each Phase are Generated Coorectly')
+%     else
+%         ME_PhaseRelatedConfig = MException('Initialization:PhaseRelatedConfig','The contact configuration and switching time is not defined for each phase');
+%         throw(ME_PhaseRelatedConfig)
+%     end
 
     %-----------------------------------------------------------------------
     %   Assemble Lists for all decision variables
@@ -530,8 +533,8 @@ for runIdx = 1:NumofRuns
                "PHx",  "PHy",    "PHxdot",      "PHydot",...
                "FFx",  "FFy",...
                "FHx",  "FHy",...
-               "Ts",...
-               "CF",   "CH"];
+               "Ts"];%,...
+               %"CF",   "CH"];
 
     %       Variable Length List
     VarLengthList = [length(x_label),     length(y_label),      length(theta_label), ...
@@ -540,8 +543,8 @@ for runIdx = 1:NumofRuns
                      length(PHx_label),   length(PHy_label),    length(PHxdot_label),       length(PHydot_label), ...
                      length(FFx_label),   length(FFy_label),...
                      length(FHx_label),   length(FHy_label),...
-                     length(Ts_label),...
-                     length(CF_label),    length(CH_label)];
+                     length(Ts_label)];%,...
+                     %length(CF_label),    length(CH_label)];
 
     %       Full decision variable names list
     VarNamesList = [x_label,      y_label,      theta_label,...
@@ -550,8 +553,8 @@ for runIdx = 1:NumofRuns
                     PHx_label,    PHy_label,    PHxdot_label,      PHydot_label,...
                     FFx_label,    FFy_label,...
                     FHx_label,    FHy_label,...
-                    Ts_label,...
-                    CF_label,     CH_label];
+                    Ts_label];%,...
+                    %CF_label,     CH_label];
     %----------------------------------------------------------------------
     %   Verifications
     %       (Place Holder - Not Required) Check if variable names are defined
@@ -641,8 +644,8 @@ for runIdx = 1:NumofRuns
                     PHx,        PHy,        PHxdot,         PHydot,...
                     FFx,        FFy,...
                     FHx,        FHy,...
-                    Ts,...
-                    CF,         CH}; 
+                    Ts};%,...
+                    %CF,         CH}; 
     DecisionVars = vertcat(DecisionVars{:}); %make a vertical vector
 
     %       Verify if the variable names are consistent in DecisionVars and VarNameList 
@@ -784,7 +787,7 @@ for runIdx = 1:NumofRuns
     %DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == x_label(end))) = linspace(0,speed*Tend,length(x_label));
     %DecisionVarsInit(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == y_label(1)):find(VarNamesList == Ts_label(end))));
     DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))));
-    DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
+%    DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
     DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))));
     %DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + rand(1, length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)));
     %DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
@@ -1316,8 +1319,8 @@ for runIdx = 1:NumofRuns
             %J = J + h*xdot(k)^2;%h*ydot(k)^2 + h*thetadot(k)^2;% + h*thetadot(k)^2; h*xdot(k)^2 + 
             %----------------------------------------------------
         end
-        
-% %!!!!!!!!!Add final knot in the cost, but should not add every time in the loop, put if k == NumKnots   
+%         
+% %!!!!!!!!!Add final knot in the cost, but should not add every time in the loop, put if k == NumKnots        
 %         if k == tauSeriesLength
 %             if cost_flag == 2 %Minimize Vibration
 %                 J = J + h*(theta(end)-terrain_slope_rad)^2 + h*thetadot(end)^2 + h*([xdot(end);ydot(end)]'*TerrainNorm)^2;
@@ -1523,6 +1526,8 @@ for runIdx = 1:NumofRuns
     disp(' ')
     %=======================================================================
 
+    %J
+    
     %=======================================================================
     % Solve the Problem
     %=======================================================================
@@ -1560,6 +1565,9 @@ for runIdx = 1:NumofRuns
                  'ubx', ub_DecisionVars,...
                  'lbg', lbg,...
                  'ubg', ubg);
+             
+    return_status = solver.stats();
+    return_status.success 
     disp('===================================================')
     disp(' ')
     %=======================================================================
@@ -1613,8 +1621,8 @@ for runIdx = 1:NumofRuns
     PHydot_result = res(find(VarNamesList == 'PHydot_0'):find(VarNamesList == PHydot_label(end)));
 
     % Contact Configuration
-    CF_result = res(find(VarNamesList == CF_label(1)):find(VarNamesList == CF_label(end)));
-    CH_result = res(find(VarNamesList == CH_label(1)):find(VarNamesList == CH_label(end)));
+    CF_result = CF;%res(find(VarNamesList == CF_label(1)):find(VarNamesList == CF_label(end)));
+    CH_result = CH;%res(find(VarNamesList == CH_label(1)):find(VarNamesList == CH_label(end)));
 
     % Contact force result
     FFx_result = res(find(VarNamesList == 'FFx_0'):find(VarNamesList == FFx_label(end)));

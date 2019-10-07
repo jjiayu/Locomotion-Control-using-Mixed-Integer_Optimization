@@ -18,6 +18,8 @@ max_Speed = input('Input maximum Speed: \n');
 Speed_Resolution = input('Input spacing for Speed Vector: \n');
 Speed_List = min_Speed:Speed_Resolution:max_Speed;
 
+resultMatrix = cell(length(Speed_List),length(StridePeriod_List));
+
 FileMatrix = strings(length(Speed_List),length(StridePeriod_List));
 GaitMatrix = cell(length(Speed_List),length(StridePeriod_List));
 GaitNameMatrix = strings(length(Speed_List),length(StridePeriod_List));
@@ -63,10 +65,19 @@ for StridePeriod_Idx = 1:length(StridePeriod_List)
                 
             %here put data processing algorithm to deal with failed exps
             
-            FileMatrix(end-Speed_Idx+1,StridePeriod_Idx) = "N/A";
-            GaitMatrix{end-Speed_Idx+1,StridePeriod_Idx} = 0.5*ones(4,3);
-            GaitNameMatrix(end-Speed_Idx+1,StridePeriod_Idx) = "N/A";
-            CostMatrix(end-Speed_Idx+1,StridePeriod_Idx) = inf;
+            result_collection.strideperiod_speed_pair = [StridePeriod_List(StridePeriod_Idx),Speed_List(Speed_Idx)];
+            result_collection.OptimalGait = rand(4,3);
+            result_collection.OptimalGaitName = "N/A";
+            result_collection.OptimalFile = "N/A";
+            result_collection.OptimalCost = inf;
+            result_collection.SimilarLocalMinimaFileNames = "N/A";
+            
+            resultMatrix{end-Speed_Idx+1,StridePeriod_Idx} = result_collection;
+            
+            %FileMatrix(end-Speed_Idx+1,StridePeriod_Idx) = "N/A";
+            %GaitMatrix{end-Speed_Idx+1,StridePeriod_Idx} = 0.5*ones(4,3);
+            %GaitNameMatrix(end-Speed_Idx+1,StridePeriod_Idx) = "N/A";
+            %CostMatrix(end-Speed_Idx+1,StridePeriod_Idx) = inf;
             
         else
             %here put data processing algorithms
@@ -79,40 +90,31 @@ for StridePeriod_Idx = 1:length(StridePeriod_List)
             disp(['Corresponding Cost is: ', num2str(min_cost)])
             disp('===========================================================')
             
-            FileMatrix(end-Speed_Idx+1,StridePeriod_Idx) = CleanFiles{min_cost_Idx}.name;
-            GaitMatrix{end-Speed_Idx+1,StridePeriod_Idx} = gait_results{min_cost_Idx};
-            CostMatrix(end-Speed_Idx+1,StridePeriod_Idx) = min_cost;
+            result_collection.strideperiod_speed_pair = [StridePeriod_List(StridePeriod_Idx),Speed_List(Speed_Idx)];
+            result_collection.OptimalGait = gait_results{min_cost_Idx};
+            result_collection.OptimalGaitName = GaitNaming(gait_results{min_cost_Idx});
+            result_collection.OptimalFile = CleanFiles{min_cost_Idx}.name;
+            result_collection.OptimalCost = min_cost;
             
-%             %Deal with GaitName Generation
-%             %   Dublicate the gait
-%             GaitTemp = [Gait;Gait];
-%             %   
-%             HindContactIdx = [];
-%             for loop_idx = 1:size(GaitTemp,1)
-%                 if GaitTemp(loop_idx,1:2) == [0,1] %Find non-pronking gait, all start from [0,1]
-%                     HindContactIdx = [HindContactIdx,loop_idx];
-%                 end
-%             end
-%             StartingIdx = min(HindContactIdx);
-%             %   Get gait start from hind contact
-%             GaitfromHindContact = GaitTemp(StartingIdx:StartingIdx+3,:);
-%             %Clean Gait
-%             if GaitfromHindContact(1,1:2) == GaitfromHindContact(end,1:2)
-%                 GaitfromHindContact(1,3) = GaitfromHindContact(1,3) + GaitfromHindContact(end,3);
-%                 GaitfromHindContact(end,:) = [];
-%             else
-%                 for loop_idx = 1:size(GaitfromHindContact,1)-1
-%                     if GaitfromHindContact(loop_idx,1:2) == GaitfromHindContact(loop_idx+1,1:2)
-%                         GaitfromHindContact(loop_idx,3) = GaitfromHindContact(loop_idx,3) + GaitfromHindContact(loop_idx+1,2);
-%                         GaitfromHindContact(loop_idx+1,:) = [];
-%                     end
-%                 end
-%             end
-%             
-%             %judge Gait
-%             if GaitfromHindContact == [0,1;0,0;1,0;1,1] %Galloping
-%                 GaitNameMatrix(end-Speed_Idx+1,StridePeriod_Idx) = "Galloping"
-%             end
+            %Collect Local Minima with similar cost
+            result_collection.SimilarLocalMinimaFileNames = {};
+            for fileIdx = 1:length(CleanFiles)
+                disp('-------------------------------------------------------')
+                disp(['Gait Optimizaiton Result for File ', num2str(fileIdx), ', FileName: ', CleanFiles{fileIdx}.name])
+                disp('The Optimal Gait is:')
+                gait_results{fileIdx}
+                disp(['Optimal Cost: ', num2str(cost_results(fileIdx))])
+                disp(['Difference to Minimum Cost (Current Cost - Minimum Cost): ', num2str(cost_results(fileIdx) - min_cost),' In Percentage: ',num2str((cost_results(fileIdx) - min_cost)/min_cost*100),'%'])
+                if ((cost_results(fileIdx) - min_cost)/min_cost*100 <= 0.1) && (fileIdx ~= min_cost_Idx)
+                    disp('Cost Value is Equivalent to the Minimum Cost? -> YES')
+                    result_collection.SimilarLocalMinimaFileNames = {result_collection.SimilarLocalMinimaFileNames{:},CleanFiles{fileIdx}.name};
+                else
+                    disp('Cost Value is Equivalent to the Minimum Cost? -> No')
+                end
+            disp('-------------------------------------------------------')
+            end
+
+            resultMatrix{end-Speed_Idx+1,StridePeriod_Idx} = result_collection;
             
         end
         
@@ -121,5 +123,53 @@ for StridePeriod_Idx = 1:length(StridePeriod_List)
         %FileMatrix{:,StridePeriod_Idx} = FileList_currentStridePeriod;
     end
 end
+
+
+%Generate Gait Matrix
+GaitNameMatrix = cell(size(resultMatrix));
+
+for StridePeriodLoop_Idx = 1:size(resultMatrix,2)
+    for SpeedLoop_Idx = 1:size(resultMatrix,1)
+        GaitNameMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx} = GaitNaming(resultMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx}.OptimalGait);
+    end
+end
+
+%Generate Gait Matrix with similar Local Minima
+for StridePeriodLoop_Idx = 1:size(resultMatrix,2)
+    
+    StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriodLoop_Idx)),'/']
+    if mod(StridePeriod_List(StridePeriod_Idx),1)==0
+        StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriodLoop_Idx)),'.0/']
+    end
+    
+    for SpeedLoop_Idx = 1:size(resultMatrix,1)
+        
+        FileswithSimilarCost = resultMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx}.SimilarLocalMinimaFileNames;
+        
+        if isempty(FileswithSimilarCost) || strcmp(strcat(FileswithSimilarCost{:}),"N/A")
+            GaitNameswithSimilarCost = [];
+            resultMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx}.GaitNameswithSimilarCost = GaitNameswithSimilarCost;
+        else
+            GaitNameswithSimilarCost = [];
+            for FileLoop_Idx = 1:length(FileswithSimilarCost)
+                load([StridePeriod_Path,'/',FileswithSimilarCost{FileLoop_Idx}]);
+                tempGaitName = GaitNaming(gait);
+                GaitNameswithSimilarCost = [GaitNameswithSimilarCost,tempGaitName];
+            end
+            resultMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx}.GaitNameswithSimilarCost = GaitNameswithSimilarCost;  
+        end
+
+        resultMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx}.allLocalOptimalGaitWithSimilarCost = unique([resultMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx}.OptimalGaitName,GaitNameswithSimilarCost]);
+           
+%         GaitNameswithSimilarCost = [];
+%         for FileLoop_Idx = 1:length(FileswithSimilarCost)
+%             load([StridePeriod_Path,'/',Files(FileLoop_Idx).name]);
+%             tempGaitName = GaitNaming(gait);
+%             GaitNameswithSimilarCost = [GaitNameswithSimilarCost,tempGaitName];
+%         end
+    end
+end
+
+
 
 
