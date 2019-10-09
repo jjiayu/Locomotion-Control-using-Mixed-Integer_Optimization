@@ -102,6 +102,74 @@ if cost_flag~= 1 && cost_flag ~= 2
 end
 disp('====================================================');
 %======================================================================
+%       Define the gait
+disp('====================================================');
+%user_defined_gait = input('Select the gait: \n 1 -> Walking-D (Symmetric Walking) \n 2 -> Trotting \n 3 -> Galloping \n 4 -> Bounding-D (Symmetric Bounding) \n 5 -> Pronking \n 6-> Walking-S-2DoubleSupportPhase (Asymmetric Walking/Galloping without flying phase) \n 7-> Walking-S-2HindSupportPhase \n 8-> Walking-S-2FrontSupportPhase \n 9-> Bounding-S-2FlyingPhase (Asymmetric Bounding/Galloping without double support phase) \n 10 -> Bounding-S-2HindSupportPhase \n 11-> Bounding-S-2FrontSupportPhase \n');
+user_defined_gait = input('Select the gait: \n 1 -> Walking-D (Symmetric Walking) \n 2 -> Trotting \n 3 -> Galloping \n 4 -> Bounding-D (Symmetric Bounding) \n 5 -> Pronking \n 6-> Walking-S (Asymmetric Walking/Galloping without flying phase) (3-Phases) \n 7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) (3Phases) \n');
+if user_defined_gait == 1 %Walking-D (Symmetric Walking)
+    CF = [1,1,0,1]';
+    CH = [0,1,1,1]';
+    [CF,CH]'
+elseif user_defined_gait == 2 %Trotting
+    CF = [1,1,0,0]';
+    CH = [0,0,1,1]';
+    [CF,CH]'
+elseif user_defined_gait == 3 %Galloping
+    CF = [1,0,0,1]';
+    CH = [0,0,1,1]';
+    [CF,CH]'
+elseif user_defined_gait == 4 %Bounding-D (Symmetric Bounding)
+    CF = [0,0,0,1]';
+    CH = [0,1,0,0]';
+    [CF,CH]'
+elseif user_defined_gait == 5 %Pronking
+    CF = [0,1,1,0]';
+    CH = [0,1,1,0]';
+    [CF,CH]'
+elseif user_defined_gait == 6 %Walking-S (Asymmetric Walking/Galloping without flying phase) (3-Phases)
+    CF = [0,1,1]';
+    CH = [1,1,0]';
+    [CF,CH]'
+elseif user_defined_gait == 7 %Bounding-S (Asymmetric Bounding/Galloping without double support phase) (3Phases)
+    CF = [0,1,0]';
+    CH = [1,0,0]';
+    [CF,CH]'
+% elseif user_defined_gait == 6 %Walking-S-2DoubleSupportPhase (Asymmetric Walking/Galloping without flying phase)
+%     CF = [0,1,1,1]';
+%     CH = [1,1,1,0]';
+%     [CF,CH]'
+% elseif user_defined_gait == 7 %Walking-S-2HindSupportPhase
+%     CF = [0,0,1,1]';
+%     CH = [1,1,1,0]';
+%     %CF = [0,1,1]';
+%     %CH = [1,1,0]';
+%     %CF = [0,0,1,1,1,1]';
+%     %CH = [1,1,1,1,0,0]';
+%     [CF,CH]'
+% elseif user_defined_gait == 8 %Walking-S-2FrontSupportPhase
+%     CF = [0,1,1,1]';
+%     CH = [1,1,0,0]';
+%     [CF,CH]'
+% elseif user_defined_gait == 9 %Bounding-S (Asymmetric Bounding/Galloping without double support phase)
+%     CF = [0,1,0,0]';
+%     CH = [1,0,0,0]';
+%     %CF = [0,1,0]';
+%     %CH = [1,0,0]';
+%     [CF,CH]'
+% elseif user_defined_gait == 10 %Bounding-S-2HindSupportPhase
+%     CF = [0,0,1,0]';
+%     CH = [1,1,0,0]';
+%     [CF,CH]'
+% elseif user_defined_gait == 11 %Bounding-S-2FrontSupportPhase
+%     CF = [0,1,1,0]';
+%     CH = [1,0,0,0]';
+%     [CF,CH]'
+end
+% CF = input('Define the contact sequence for Front Leg (CF), a column vector: ');
+% CH = input('Define the contact sequence for Hind Leg (CH), a column vector: ');
+% CF = CF';
+% CH = CH';
+disp('====================================================');
 
 %======================================================================
 %Environment Information
@@ -243,7 +311,9 @@ disp('====================================================');
 disp('Temporal and Discretization Setup:');
 disp('----------------------------------------------------');
 %   Number of Phases
-NumPhases = input('Input Number of Phases: \n');
+NumPhases = length(CF);
+disp(['Number of Phases: ',num2str(NumPhases)]);
+%input('Input Number of Phases: \n');
 disp('----------------------------------------------------');
 %   Number of timesteps for each phase
 NumLocalKnots = input('Input Number of Knots for Each Phase: \n');
@@ -391,42 +461,6 @@ NumofRuns = input('Specify Number of Runs for the MINLP Programming (i.e. 1, 10,
 %NumMultiStartSolves = input('Determine Number of multi-start runs inside MINLP runs (i.e. 5): \n');
 disp('====================================================');
 disp(' ')
-
-%       Define the gait
-user_defined_gait = input('Select the gait: \n 1 -> Walking-D (Symmetric Walking) \n 2 -> Trotting \n 3 -> Galloping \n 4 -> Bounding-D (Symmetric Bounding) \n 5 -> Pronking \n 6-> Walking-S (Asymmetric Walking/Galloping without flying phase) \n 7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) \n');
-if user_defined_gait == 1 %Walking-D (Symmetric Walking)
-    CF = [1,1,0,1]';
-    CH = [0,1,1,1]';
-    [CF,CH]'
-elseif user_defined_gait == 2 %Trotting
-    CF = [1,1,0,0]';
-    CH = [0,0,1,1]';
-    [CF,CH]'
-elseif user_defined_gait == 3 %Galloping
-    CF = [1,0,0,1]';
-    CH = [0,0,1,1]';
-    [CF,CH]'
-elseif user_defined_gait == 4 %Bounding-D (Symmetric Bounding)
-    CF = [0,0,0,1]';
-    CH = [0,1,0,0]';
-    [CF,CH]'
-elseif user_defined_gait == 5 %Pronking
-    CF = [0,1,1,0]';
-    CH = [0,1,1,0]';
-    [CF,CH]'
-elseif user_defined_gait == 6 %Walking-S (Asymmetric Walking/Galloping without flying phase)
-    CF = [0,1,1,1]';
-    CH = [1,1,1,0]';
-    [CF,CH]'
-elseif user_defined_gait == 7 %Bounding-S (Asymmetric Bounding/Galloping without double support phase)
-    CF = [0,0,0,1]';
-    CH = [0,1,0,0]';
-    [CF,CH]'
-end
-% CF = input('Define the contact sequence for Front Leg (CF), a column vector: ');
-% CH = input('Define the contact sequence for Hind Leg (CH), a column vector: ');
-% CF = CF';
-% CH = CH';
 
 %   Stop Diary
 diary off
