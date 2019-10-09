@@ -12,7 +12,6 @@ clear;
 clc;
 
 %cd /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/
-0.
 
 %========================================================
 % Identfy Data Storage Folder
@@ -92,7 +91,16 @@ disp('----------------------------------------------------');
 
 %======================================================================
 %Setup Cost
-cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared \n 2-> Minimize Vibration \n 3-> Minimize tangential speed (along the terrain) to the deisred speed at every knot \n 4-> Minimize tangential speed (to the desired speed), normal axis speed (towards zero) \n 5 -> Minimize tangential speed (to the desired speed), normal speed (tp zero), angular speed thetadot (to the terrain slope): \n');
+disp('====================================================');
+disp('Set up Cost Terms:')
+disp('----------------------------------------------------');
+cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n 2-> Minimize x-axis Force (Maximize Robustness) \n 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero) \n 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n 5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope) \n 6-> Feet Velocity (Pending)');
+%cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared \n 2-> Minimize Body Vibration (ydot, theta towards terrain slope, thetadot) \n 3-> Minimize tangential speed (along the terrain) to the deisred speed at every knot \n 4-> Minimize tangential speed (to the desired speed), normal axis speed (towards zero) \n 5 -> Minimize tangential speed (to the desired speed), normal speed (tp zero), angular speed thetadot (to the terrain slope) \n 6-> Minimize Body Vibration with Constant Tangential Speed (ydot, theta towards terrain slope, thetadot, xdot toward desired tangetial speed): \n');
+if cost_flag~= 1 && cost_flag ~= 2
+    disp('----------------------------------------------------');
+    cost_type_flag = input('Decide the Type (Formulation-wise) of the cost (2 and 4 are prefered): 1-> Time Integral Only \n 2-> Time Integral with Scaled Cost \n 3 -> No Time Integral \n 4 -> No Time Integral with Scaled Cost \n 5 -> Infinity Norm \n');
+end
+disp('====================================================');
 %======================================================================
 
 %======================================================================
@@ -385,10 +393,40 @@ disp('====================================================');
 disp(' ')
 
 %       Define the gait
-CF = input('Define the contact sequence for Front Leg (CF), a column vector: ');
-CH = input('Define the contact sequence for Hind Leg (CH), a column vector: ');
-CF = CF';
-CH = CH';
+user_defined_gait = input('Select the gait: \n 1 -> Walking-D (Symmetric Walking) \n 2 -> Trotting \n 3 -> Galloping \n 4 -> Bounding-D (Symmetric Bounding) \n 5 -> Pronking \n 6-> Walking-S (Asymmetric Walking/Galloping without flying phase) \n 7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) \n');
+if user_defined_gait == 1 %Walking-D (Symmetric Walking)
+    CF = [1,1,0,1]';
+    CH = [0,1,1,1]';
+    [CF,CH]'
+elseif user_defined_gait == 2 %Trotting
+    CF = [1,1,0,0]';
+    CH = [0,0,1,1]';
+    [CF,CH]'
+elseif user_defined_gait == 3 %Galloping
+    CF = [1,0,0,1]';
+    CH = [0,0,1,1]';
+    [CF,CH]'
+elseif user_defined_gait == 4 %Bounding-D (Symmetric Bounding)
+    CF = [0,0,0,1]';
+    CH = [0,1,0,0]';
+    [CF,CH]'
+elseif user_defined_gait == 5 %Pronking
+    CF = [0,1,1,0]';
+    CH = [0,1,1,0]';
+    [CF,CH]'
+elseif user_defined_gait == 6 %Walking-S (Asymmetric Walking/Galloping without flying phase)
+    CF = [0,1,1,1]';
+    CH = [1,1,1,0]';
+    [CF,CH]'
+elseif user_defined_gait == 7 %Bounding-S (Asymmetric Bounding/Galloping without double support phase)
+    CF = [0,0,0,1]';
+    CH = [0,1,0,0]';
+    [CF,CH]'
+end
+% CF = input('Define the contact sequence for Front Leg (CF), a column vector: ');
+% CH = input('Define the contact sequence for Hind Leg (CH), a column vector: ');
+% CF = CF';
+% CH = CH';
 
 %   Stop Diary
 diary off
@@ -1289,30 +1327,87 @@ for runIdx = 1:NumofRuns
             %   Cost of Transport
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + h*PFxdot(k)^2 + h*PFydot(k)^2 + h*PHxdot(k)^2 + h*PHydot(k)^2;
             Scale_Factor = 1000; %difference below 1e-3 are treated as the same
-            if cost_flag == 1 %Minimize Force Squared
-                J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2; 
-            elseif cost_flag == 2 %Minimize Vibration
-                J = J + h*(theta(k)-terrain_slope_rad)^2 + h*thetadot(k)^2 + h*([xdot(k);ydot(k)]'*TerrainNorm)^2;
-            elseif cost_flag == 3 %Minimize the speed difference between the desired speed at every knot (along the tangential line of the terrain)
-                %Trapzoidal Integration
-                %J = J + 1/2*h*((xdot(k+1)-speed)^2 + (xdot(k)-speed)^2) + 1/2*h*((ydot(k+1)-speed*tan(terrain_slope_rad))^2 + (ydot(k)-speed*tan(terrain_slope_rad))^2);
-                %Euler Integration with Scale factor
-                J = J + h*(((xdot(k)-speed)*Scale_Factor)^2) + h*(((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2);
-                %J = J + h*([xdot(k),ydot(k)]*TerrainTangent)^2;
-                %No time
-                %J = J + ((xdot(k)-speed)*Scale_Factor)^2 + ((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2;
-            elseif cost_flag == 4 %Minimize tangential speed (to the desired speed), normal axis speed (towards zero)
+            if cost_flag == 1 %Minimize Force Squared (Energy Loss)
+                J = J + h*(FFx(k)^2) + h*(FFy(k)^2) + h*(FHx(k)^2) + h*(FHy(k)^2); 
+            elseif cost_flag == 2 %Minimize x-axis Force (Maximize Robustness)
+                J = J + h*(FFx(k)^2) + h*(FHx(k)^2);
+            elseif cost_flag == 3 %Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero)
+                if cost_type_flag == 1 %with Time Integral
+                    J = J + h*((theta(k)-terrain_slope_rad)^2) + h*(thetadot(k)^2) + h*(([xdot(k),ydot(k)]*TerrainNorm)^2);
+                elseif cost_type_flag == 2 %with Time Integral - Scaled
+                    J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2);
+                elseif cost_type_flag == 3 %No Time Integral
+                    J = J + (theta(k)-terrain_slope_rad)^2 + thetadot(k)^2 + ([xdot(k),ydot(k)]*TerrainNorm)^2;
+                elseif cost_type_flag == 4 %No Time Integral - Scaled
+                    J = J + ((theta(k)-terrain_slope_rad)*Scale_Factor)^2 + (thetadot(k)*Scale_Factor)^2 + (([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2;
+                elseif cost_type_flag == 5 %infinity norm
+                    J = norm((theta-terrain_slope_rad)*Scale_Factor,inf) + norm(thetadot*Scale_Factor,inf) + norm(([xdot,ydot]*TerrainNorm)*Scale_Factor,inf);
+                end
+            elseif cost_flag == 4 %5 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)
+                if cost_type_flag == 1 %with Time Integral
+                    J = J + h*(([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2) + h*(([xdot(k),ydot(k)]*TerrainNorm)^2) + h*(thetadot(k)^2);
+                elseif cost_type_flag == 2 %with Time Integral - Scaled
+                    J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
+                    %J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
+                elseif cost_type_flag == 3 %No Time Integral
+                    J = J + ([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2 + ([xdot(k),ydot(k)]*TerrainNorm)^2 + thetadot(k)^2;
+                elseif cost_type_flag == 4 %No Time Integral - Scaled
+                    J = J + (([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2 + (([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2 + (thetadot(k)*Scale_Factor)^2;                
+                elseif cost_type_flag == 5 %infinity norm
+                    J = norm(([xdot,ydot]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor,inf) + norm(([xdot,ydot]*TerrainNorm)*Scale_Factor,inf) + norm((thetadot*Scale_Factor),inf);
+                end
+            elseif cost_flag == 5 %Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope)
+                if cost_type_flag == 1 %with Time Integral
+                    J = J + h*(([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2) + h*(([xdot(k),ydot(k)]*TerrainNorm)^2) + h*(thetadot(k)^2) + h*((theta(k)-terrain_slope_rad)^2);
+                elseif cost_type_flag == 2 %with Time Integral - Scaled
+                    J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2) + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2);
+                    %J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
+                elseif cost_type_flag == 3 %No Time Integral
+                    J = J + ([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2 + ([xdot(k),ydot(k)]*TerrainNorm)^2 + thetadot(k)^2 + (theta(k)-terrain_slope_rad)^2;
+                elseif cost_type_flag == 4 %No Time Integral - Scaled
+                    J = J + h*(([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2 + h*(([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2 + h*(thetadot(k)*Scale_Factor)^2 + h*((theta(k)-terrain_slope_rad)*Scale_Factor)^2;                
+                elseif cost_type_flag == 5 %infinity norm
+                    J = norm(([xdot,ydot]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor,inf) + norm(([xdot,ydot]*TerrainNorm)*Scale_Factor,inf) + norm(thetadot,inf) + norm((theta-terrain_slope_rad)*Scale_Factor,inf);
+                end
+            elseif cost_flag == 6 %Feet Velocity (Pending)  
+%             elseif cost_flag == 4 %Minimize the speed difference between the desired speed at every knot (along the tangential line of the terrain)
+%                 if cost_type_flag == 1 %with Time Integral
+%                     J = J + h*([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2;
+%                 elseif cost_type_flag == 2 %with Time Integral - Scaled
+%                     J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2);
+%                 elseif cost_type_flag == 3 %No Time Integral
+%                     J = J + ([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2;
+%                 elseif cost_type_flag == 4 %No Time Integral - Scaled
+%                     J = J + (([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2;
+%                 end    
+%                 %Trapzoidal Integration
+%                 %J = J + 1/2*h*((xdot(k+1)-speed)^2 + (xdot(k)-speed)^2) + 1/2*h*((ydot(k+1)-speed*tan(terrain_slope_rad))^2 + (ydot(k)-speed*tan(terrain_slope_rad))^2);
+%                 %Euler Integration with Scale factor
+%                 %J = J + h*(((xdot(k)-speed)*Scale_Factor)^2) + h*(((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2);
+%                 %J = J + h*([xdot(k),ydot(k)]*TerrainTangent)^2;
+%                 %No time
+%                 %J = J + ((xdot(k)-speed)*Scale_Factor)^2 + ((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2;
+%             elseif cost_flag == 4 %Minimize tangential speed (to the desired speed), normal axis speed (towards zero)
+%                 if cost_type_flag == 1 %with Time Integral
+%                     J = J + h*([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2 + h*([xdot(k),ydot(k)]*TerrainNorm)^2;
+%                 elseif cost_type_flag == 2 %with Time Integral - Scaled
+%                     J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2);
+%                 elseif cost_type_flag == 3 %No Time Integral
+%                     J = J + ([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2 + ([xdot(k),ydot(k)]*TerrainNorm)^2;
+%                 elseif cost_type_flag == 4 %No Time Integral - Scaled
+%                     J = J + (([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2 + (([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2;
+%                 end    
                 %J = J + h*(xdot(k)-speed)^2 + h*(ydot(k)-speed*tan(terrain_slope_rad))^2 + h*([xdot(k);ydot(k)]'*TerrainNorm)^2;
                 %Euler Integration
-                J = J + h*(((xdot(k)-speed)*Scale_Factor)^2) + h*(((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2) + h*(((ydot(k)/cos(terrain_slope_rad))*Scale_Factor)^2);
+                %J = J + h*(((xdot(k)-speed)*Scale_Factor)^2) + h*(((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2) + h*(((ydot(k)/cos(terrain_slope_rad))*Scale_Factor)^2);
                 %No Time
-                %J = J + ((xdot(k)-speed)*Scale_Factor)^2 + ((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2 + ((ydot(k)/cos(terrain_slope_rad))*Scale_Factor)^2;
-            elseif cost_flag == 5 %5 -> Minimize tangential speed (to the desired speed), normal speed (tp zero), angular speed thetadot (to zero)
+                %J = J + ((xdot(k)-speed)*Scale_Factor)^2 + ((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2 + ((ydot(k)/cos(terrain_slope_rad))*Scale_Factor)^2; 
                 %J = J + h*(xdot(k)-speed)^2 + h*(ydot(k)-speed*tan(terrain_slope_rad))^2 + h*([xdot(k);ydot(k)]'*TerrainNorm)^2 + h*thetadot(k)^2;
                 %Euler Integration
-                J = J + h*(((xdot(k)-speed)*Scale_Factor)^2) + h*(((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2) + h*(((ydot(k)/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
+                %J = J + h*(((xdot(k)-speed)*Scale_Factor)^2) + h*(((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2) + h*(((ydot(k)/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
                 %No Time
                 %J = J + ((xdot(k)-speed)*Scale_Factor)^2 + ((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2 + ((ydot(k)/cos(terrain_slope_rad))*Scale_Factor)^2 + (thetadot(k)*Scale_Factor)^2;
+                %-----------------
             end
             %VelCostWweight = 500;
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + VelCostWweight*h*PFxdot(k)^2 + VelCostWweight*h*PFydot(k)^2 + VelCostWweight*h*PHxdot(k)^2 + VelCostWweight*h*PHydot(k)^2;
