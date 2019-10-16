@@ -25,7 +25,7 @@ disp(['Experiment Working Directory: ', ExpDirectory])
 % %Return to the Script Folder
 % cd ../..
 
-%========================================================De
+%========================================================
 % Import CasADi related packages
 import casadi.*
 
@@ -94,9 +94,9 @@ disp('----------------------------------------------------');
 disp('====================================================');
 disp('Set up Cost Terms:')
 disp('----------------------------------------------------');
-cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n 2-> Minimize x-axis Force (Maximize Robustness) \n 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero) \n 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n 5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope) \n 6-> Feet Velocity (Pending)');
+cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n 2-> Minimize Tangential Force (Maximize Robustness) \n 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero) \n 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n 5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope) \n 6-> Feet Velocity \n');
 %cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared \n 2-> Minimize Body Vibration (ydot, theta towards terrain slope, thetadot) \n 3-> Minimize tangential speed (along the terrain) to the deisred speed at every knot \n 4-> Minimize tangential speed (to the desired speed), normal axis speed (towards zero) \n 5 -> Minimize tangential speed (to the desired speed), normal speed (tp zero), angular speed thetadot (to the terrain slope) \n 6-> Minimize Body Vibration with Constant Tangential Speed (ydot, theta towards terrain slope, thetadot, xdot toward desired tangetial speed): \n');
-if cost_flag~= 1 && cost_flag ~= 2
+if cost_flag~= 1 && cost_flag ~= 2 && cost_flag ~= 6
     disp('----------------------------------------------------');
     cost_type_flag = input('Decide the Type (Formulation-wise) of the cost (2 and 4 are prefered): 1-> Time Integral Only \n 2-> Time Integral with Scaled Cost \n 3 -> No Time Integral \n 4 -> No Time Integral with Scaled Cost \n 5 -> Infinity Norm \n');
 end
@@ -410,6 +410,7 @@ Mfy = input('Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3,
 %Mfx = 1e2; %(N) big-M for foot-ground reaction forces for x-axis
 %Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
 disp('====================================================');
+Mf = sqrt(Mfx^2+Mfy^2);
 %=======================================================================
 
 %=====================================================================
@@ -1285,7 +1286,9 @@ for runIdx = 1:NumofRuns
                 g   = {g{:}, EqTemp};     %Append to constraint function list
                 lbg = [lbg;  0];          %Give constraint lower bound
                 ubg = [ubg;  inf];        %Give constraint upper bound
-                %Terrain Norm/Unilateral Constraint
+                %--------
+                %!!Terrain Norm/Unilateral Constraint
+                %--------
                 %Fn >= 0 (Normal Force) larger than 0 --> [Fx;Fy]'*TerrainNorm >= 0
                 %           Front Leg
                 EqTemp = [FFx(k);FFy(k)]'*TerrainNorm;
@@ -1363,8 +1366,9 @@ for runIdx = 1:NumofRuns
             Scale_Factor = 1000; %difference below 1e-3 are treated as the same
             if cost_flag == 1 %Minimize Force Squared (Energy Loss)
                 J = J + h*(FFx(k)^2) + h*(FFy(k)^2) + h*(FHx(k)^2) + h*(FHy(k)^2); 
-            elseif cost_flag == 2 %Minimize x-axis Force (Maximize Robustness)
-                J = J + h*(FFx(k)^2) + h*(FHx(k)^2);
+            elseif cost_flag == 2 %Minimize Tangential Force (Maximize Robustness)
+                %J = J + h*(FFx(k)^2) + h*(FHx(k)^2);
+                J = J + h*((([FFx(k),FFy(k)]*TerrainTangent)*Scale_Factor)^2) + h*((([FHx(k),FHy(k)]*TerrainTangent)*Scale_Factor)^2);
             elseif cost_flag == 3 %Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero)
                 if cost_type_flag == 1 %with Time Integral
                     J = J + h*((theta(k)-terrain_slope_rad)^2) + h*(thetadot(k)^2) + h*(([xdot(k),ydot(k)]*TerrainNorm)^2);
@@ -1403,7 +1407,8 @@ for runIdx = 1:NumofRuns
                 elseif cost_type_flag == 5 %infinity norm
                     J = norm(([xdot,ydot]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor,inf) + norm(([xdot,ydot]*TerrainNorm)*Scale_Factor,inf) + norm(thetadot,inf) + norm((theta-terrain_slope_rad)*Scale_Factor,inf);
                 end
-            elseif cost_flag == 6 %Feet Velocity (Pending)  
+            elseif cost_flag == 6 %Feet Velocity (Pending)
+                J = J + h*(PFxdot(k)^2) + h*(PFydot(k)^2) + h*(PHxdot(k)^2) + h*(PHydot(k)^2);
 %             elseif cost_flag == 4 %Minimize the speed difference between the desired speed at every knot (along the tangential line of the terrain)
 %                 if cost_type_flag == 1 %with Time Integral
 %                     J = J + h*([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2;
