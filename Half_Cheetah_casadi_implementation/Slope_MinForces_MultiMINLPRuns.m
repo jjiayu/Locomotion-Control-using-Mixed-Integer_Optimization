@@ -776,23 +776,23 @@ for runIdx = 1:NumofRuns
             elseif strcmp(varList(i),'FFx') == 1
                 %lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
                 %ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
-                lb_DecisionVars = [lb_DecisionVars, repmat(-2*sqrt(Mf_squared), 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 2*sqrt(Mf_squared), 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-1.2*sqrt(Mf_squared), 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 1.2*sqrt(Mf_squared), 1, VarLengthList(i))];
             elseif strcmp(varList(i),'FHx') == 1
                 %lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
                 %ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
-                lb_DecisionVars = [lb_DecisionVars, repmat(-2*sqrt(Mf_squared), 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 2*sqrt(Mf_squared), 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-1.2*sqrt(Mf_squared), 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 1.2*sqrt(Mf_squared), 1, VarLengthList(i))];
             elseif strcmp(varList(i),'FFy') == 1
                 %lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy - 0.1*Mfy, 1, VarLengthList(i))];    
                 %ub_DecisionVars = [ub_DecisionVars, repmat( Mfy + 0.1*Mfy, 1, VarLengthList(i))];
-                lb_DecisionVars = [lb_DecisionVars, repmat(-2*sqrt(Mf_squared), 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 2*sqrt(Mf_squared), 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-1.2*sqrt(Mf_squared), 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 1.2*sqrt(Mf_squared), 1, VarLengthList(i))];
             elseif strcmp(varList(i),'FHy') == 1
                 %lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy - 0.1*Mfy, 1, VarLengthList(i))];    
                 %ub_DecisionVars = [ub_DecisionVars, repmat( Mfy + 0.1*Mfy, 1, VarLengthList(i))];
-                lb_DecisionVars = [lb_DecisionVars, repmat(-2*sqrt(Mf_squared), 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 2*sqrt(Mf_squared), 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-1.2*sqrt(Mf_squared), 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 1.2*sqrt(Mf_squared), 1, VarLengthList(i))];
             elseif strcmp(varList(i),'Ts') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat( 0, 1, VarLengthList(i))];  
                 %lb_DecisionVars = [lb_DecisionVars, repmat( 0.01*Tend, 1, VarLengthList(i))];  
