@@ -1627,6 +1627,8 @@ for runIdx = 1:NumofRuns
                  'ubx', ub_DecisionVars,...
                  'lbg', lbg,...
                  'ubg', ubg);
+    return_status = solver.stats();
+    return_status.success 
     disp('===================================================')
     disp(' ')
     %=======================================================================
