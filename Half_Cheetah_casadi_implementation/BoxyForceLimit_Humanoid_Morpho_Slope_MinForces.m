@@ -76,7 +76,7 @@ DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y t
 disp('====================================================');
 disp('Setup Robot Morphology');
 disp('----------------------------------------------------');
-Limb_Displacement_Percentage = input('Decide Limb displacement percentage from the middle of the body (No need to type percentage symbol (0 means humanoid, 100 means half-cheetah):');
+Limb_Displacement_Percentage = input('Decide Limb displacement percentage from the middle of the body (No need to type percentage symbol (0 means humanoid, 100 means half-cheetah):\n');
 Limb_Displacement_Percentage = Limb_Displacement_Percentage/100;
 PFCenterX = 1/2*BodyLength*Limb_Displacement_Percentage;
 PFCenterY = -(1/2*BodyHeight + DefaultLegLength);
