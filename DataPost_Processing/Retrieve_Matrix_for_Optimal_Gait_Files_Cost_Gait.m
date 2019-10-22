@@ -27,9 +27,9 @@ CostMatrix = zeros(length(Speed_List),length(StridePeriod_List));
 
 for StridePeriod_Idx = 1:length(StridePeriod_List)
     StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriod_Idx)),'/']
-    if mod(StridePeriod_List(StridePeriod_Idx),1)==0
-        StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriod_Idx)),'.0/']
-    end
+%     if mod(StridePeriod_List(StridePeriod_Idx),1)==0
+%         StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriod_Idx)),'.0/']
+%     end
     
     for Speed_Idx = 1:length(Speed_List)  
         speed = Speed_List(Speed_Idx);
@@ -50,7 +50,7 @@ for StridePeriod_Idx = 1:length(StridePeriod_List)
         
             %Clean the Result Files, Remove failed optimizations
         
-            if (mod(sum(gait(:,1)),1) == 0) && (mod(sum(gait(:,2)),1) == 0) && sum(gait(:,1))<NumPhases && sum(gait(:,2))<NumPhases
+            if (mod(sum(gait(:,1)),1) == 0) && (mod(sum(gait(:,2)),1) == 0) && (sum(gait(:,1))<NumPhases) && (sum(gait(:,2))<NumPhases)
                 CleanFiles = {CleanFiles{:},Files(fileIdx)};
                 gait_results = {gait_results{:},gait};
                 cost_results = [cost_results,result_cost];
@@ -134,13 +134,18 @@ for StridePeriodLoop_Idx = 1:size(resultMatrix,2)
     end
 end
 
+GaitNameMatrix_withAllLocalMinima = cell(size(resultMatrix));
+
 %Generate Gait Matrix with similar Local Minima
 for StridePeriodLoop_Idx = 1:size(resultMatrix,2)
     
     StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriodLoop_Idx)),'/']
-    if mod(StridePeriod_List(StridePeriod_Idx),1)==0
-        StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriodLoop_Idx)),'.0/']
-    end
+    
+%     if mod(StridePeriod_List(StridePeriod_Idx),1)==0
+%         StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriodLoop_Idx)),'.0/']
+%     else
+%         StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriodLoop_Idx)),'/']
+%     end
     
     for SpeedLoop_Idx = 1:size(resultMatrix,1)
         
@@ -160,7 +165,13 @@ for StridePeriodLoop_Idx = 1:size(resultMatrix,2)
         end
 
         resultMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx}.allLocalOptimalGaitWithSimilarCost = unique([resultMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx}.OptimalGaitName,GaitNameswithSimilarCost]);
-           
+        
+        AllLocatMinimaGaitName = [];
+        for Idx_temp = 1:length(resultMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx}.allLocalOptimalGaitWithSimilarCost)
+            AllLocatMinimaGaitName = [AllLocatMinimaGaitName,resultMatrix{SpeedLoop_Idx,StridePeriodLoop_Idx}.allLocalOptimalGaitWithSimilarCost{Idx_temp},'/'];
+        end
+        
+        GaitNameMatrix_withAllLocalMinima{SpeedLoop_Idx,StridePeriodLoop_Idx} = AllLocatMinimaGaitName;
 %         GaitNameswithSimilarCost = [];
 %         for FileLoop_Idx = 1:length(FileswithSimilarCost)
 %             load([StridePeriod_Path,'/',Files(FileLoop_Idx).name]);
