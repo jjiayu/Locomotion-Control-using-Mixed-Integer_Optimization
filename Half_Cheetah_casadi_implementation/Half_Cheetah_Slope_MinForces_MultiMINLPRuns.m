@@ -11,395 +11,690 @@
 clear;
 clc;
 
-%cd /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/
+diary off
 
-
-%========================================================
-% Identfy Data Storage Folder
-ExpDirectory = uigetdir;
-disp(['Experiment Working Directory: ', ExpDirectory])
-
-% %Save current directory as working directory
-% ExpDirectory = pwd;
-% disp(['Experiment Working Directory: ', ExpDirectory])
-% 
-% %Return to the Script Folder
-% cd ../..
-
-%========================================================
 % Import CasADi related packages
 import casadi.*
 
-%========================================================
-% Command Line Logging
-diary off
-TaskParameterLog_filename = strcat('MultiMINLPRuns-Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
-diary([ExpDirectory, '/', TaskParameterLog_filename]);
+%cd /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/casadi_implementation/
 
-%=========================================================
-% Display Script Information
-disp('====================================================');
-disp('Genearl Information:');
-disp('====================================================');
-disp('CasADi Implementation');
-disp('2D Locomotion Control using Mixed-integer Nonlinear Optimization');
-disp('With a Particular Emphasis on Periodical Gait Discovery');
-disp('Multi-Phase Formulation:');
-disp('Optimize over State, Control, Gait Sequence, and Switching Time');
-disp('----------------------------------------------------');
-disp('Date and Time:');
-disp(datetime('now'));
-disp('----------------------------------------------------');
-disp(['Correspondent Log File Name: ', TaskParameterLog_filename, 'in the Directory: ', ExpDirectory]);
-disp('====================================================');
-disp(' ');
-%=====================================================================
-% Add path
-%addpath('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5')
+Paras_Define_Method = input('Define the way of defining parameters: 1 -> Take from File 2-> Define Manually: \n');
 
-%======================================================================
-%Inertia Parameters(Information from MIT Cheetah 3)
-m = 45; %kg
-I = 2.1; %kg m^2 Izz
-G = 9.80665; %m/s^2
-%======================================================================
-
-%======================================================================
-%   Kinematics Constraint Parameters
-%======================================================================
-%       Body Size
-BodyLength = 0.6;
-BodyHeight = 0.2;
-%       Default foot position in Local robot frame
-DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
-%           Front Foot Default Positions (IN ROBOT FRAME)
-PFCenterX = 1/2*BodyLength;
-PFCenterY = -(1/2*BodyHeight + DefaultLegLength);
-%           Hind Foot Default Positions (IN ROBOT FRAME)
-PHCenterX = -1/2*BodyLength;
-PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
-%       Kinematics Bounding Box Constraint
-disp('====================================================');
-disp('Setup Robot Kinematics Properties: ')
-disp('----------------------------------------------------');
-BoundingBox_Width  = input('Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):\n');
-disp('----------------------------------------------------');
-BoundingBox_Height = input('Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):\n');
-disp('----------------------------------------------------');
-%BoundingBox_Width = 0.6;
-%BoundingBox_Height = 0.6;
-%======================================================================
-
-%======================================================================
-%Setup Cost
-disp('====================================================');
-disp('Set up Cost Terms:')
-disp('----------------------------------------------------');
-cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n 2-> Minimize Tangential Force (Maximize Robustness) \n 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero) \n 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n 5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope) \n 6-> Feet Velocity \n');
-%cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared \n 2-> Minimize Body Vibration (ydot, theta towards terrain slope, thetadot) \n 3-> Minimize tangential speed (along the terrain) to the deisred speed at every knot \n 4-> Minimize tangential speed (to the desired speed), normal axis speed (towards zero) \n 5 -> Minimize tangential speed (to the desired speed), normal speed (tp zero), angular speed thetadot (to the terrain slope) \n 6-> Minimize Body Vibration with Constant Tangential Speed (ydot, theta towards terrain slope, thetadot, xdot toward desired tangetial speed): \n');
-if cost_flag~= 1 && cost_flag ~= 2 && cost_flag ~= 6
-    disp('----------------------------------------------------');
-    cost_type_flag = input('Decide the Type (Formulation-wise) of the cost (2 and 4 are prefered): 1-> Time Integral Only \n 2-> Time Integral with Scaled Cost \n 3 -> No Time Integral \n 4 -> No Time Integral with Scaled Cost \n 5 -> Infinity Norm \n');
-end
-disp('====================================================');
-
-
-%======================================================================
-%Environment Information
-%----------------------------------------------------------------------
-%   Display some info
-%----------------------------------------------------------------------
-disp('====================================================');
-disp('Setup Terrain Model: ')
-disp('----------------------------------------------------');
-%----------------------------------------------------------------------
-%   Setup the Terrain Model
-%----------------------------------------------------------------------
-TerrainType = input('Specify the Terrain Type: 1 -> Flat Terrain (Use this if Terrain Slope = 0); 2 -> Slopes\n');
-
-if TerrainType == 1 %Flat Terrain
-    disp('Selected Flat Terrain');
-    %Use Lagecy Implementation
-    %       Maximum Number of Stairs can handle
-    MaxNumStairs = 10;
-    NumStairs = MaxNumStairs; %May remove
-    HeightChangingPlaces = zeros(1,MaxNumStairs);
-    LevelChanges   = zeros(1,MaxNumStairs);
-    %For Visualization program
-    HeightChangingPlaces_vis = ones(1,MaxNumStairs);
-    LevelChanges_vis = LevelChanges;
-    %Build Terrain Model for flat terrain 
-    h_terrain = 0;
-    x_query   = SX.sym('x_query', 1);
-    for i = 1:MaxNumStairs
-        h_terrain = h_terrain + if_else(x_query < sum(HeightChangingPlaces(1:i)), 0, LevelChanges(i));
-    end
-    TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
-    terrain_slope_degrees = 0;
-    terrain_slope_rad = terrain_slope_degrees/180*pi;
-    terrain_slope = tan(terrain_slope_rad);
-    disp('----------------------------------------------------');
+if Paras_Define_Method == 1 %Take from file
+    % Identfy Data Storage Folder
     
-elseif TerrainType == 2 %Slope
-    disp('Selected Slope Terrain');
-    terrain_slope_degrees = input('Spoecify the terrain slope in Degrees (i.e.: -30, -10, 0, 10, 30...): \n');
-    terrain_slope_rad = terrain_slope_degrees/180*pi;
-    terrain_slope = tan(terrain_slope_rad);
-    disp(['Defined terrain slope: ',num2str(terrain_slope)]);
-    %check if terrain calulation is correct: atan(terrain_slope)/pi*180
-    %Build Terrain Model for slope terrain
-    x_query   = SX.sym('x_query', 1);
-    h_terrain = terrain_slope*x_query;
-    TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
-    disp('----------------------------------------------------');
-else %Unknown Scenario
-    ME_TerrainType = MException('Initialization:TerrainType',['Unknown Terrain Type']);
-    throw(ME_TerrainType)
-end
-
-%-----------------------------------------------------------------------
-%   Plot Terrain Model
-PlotTerrainFlag = input('Plot the Terrain Model? 1 -> Yes; 2 -> No\n');
-if PlotTerrainFlag == 1 %Yes, Plot the terrain model    
-    if TerrainType == 1 %Flat terrain
-        terrainx = linspace(-2, sum(HeightChangingPlaces)+3, 1e4);
-        terrainy = full(TerrainModel(terrainx));
-        plot(terrainx,terrainy,'LineWidth',2)
-        ylim([min(terrainy)-1,max(terrainy)+1])
-        disp('----------------------------------------------------');
-    elseif TerrainType == 2 %Slope
-        terrainx = linspace(-2, 10, 1e4);
-        terrainy = full(TerrainModel(terrainx));
-        plot(terrainx,terrainy,'LineWidth',2)
-        ylim([min(terrainy)-1,max(terrainy)+1])
-        disp('----------------------------------------------------');
+    Terminator_or_Laptop = input('Define what device we are using now: 1-> Laptop/Desktop 2-> Terminator: \n');
+    if Terminator_or_Laptop == 1 %Laptop/Desktop
+        ParamFileDir = uigetdir;
+        screen_name = input('Type Screen Name (quote using '' or ""):\n');
+        email_message = input('Type Email Message (i.e. like robot type (half cheetah, humanoid, terrain_type, etc., any features, using '' and "" to quote))');
+    elseif Terminator_or_Laptop == 2 %Terminator
+        ParamFileDir = input('Manually Define Folder Path Storing Parameter File (quote with '' or ""): \n');
     end
-end
-%-----------------------------------------------------------------------
-%Other Parameters
-if TerrainType == 1 %Flat Terrain
-    TerrainNorm = [0;1];
-elseif TerrainType == 2 % if Stairs, over-write the terrain norm with 
-    TerrainNorm = [0;1];
-    TerrainNorm = [cos(terrain_slope_rad), -sin(terrain_slope_rad); sin(terrain_slope_rad), cos(terrain_slope_rad)]*TerrainNorm;
-end
-disp('Terrain Norm is: ');
-TerrainNorm
-TerrainTangent = [cos(terrain_slope_rad),-sin(terrain_slope_rad);sin(terrain_slope_rad),cos(terrain_slope_rad)]*[1;0];
-disp('Terrain Tangent is: ');
-TerrainTangent
-disp('----------------------------------------------------');
-miu = 0.6; %friction coefficient
-disp('----------------------------------------------------');
-disp(['Friction Cone: ', num2str(miu)]);
-disp('====================================================');
-disp(' ')
-%======================================================================
-
-%======================================================================
-% Task Specifications
-%======================================================================
-%   Display Information
-%----------------------------------------------------------------------
-disp('====================================================');
-disp('Task Specification:')
-disp('----------------------------------------------------');
-%----------------------------------------------------------------------
-%   Specify Desired Speed
-%----------------------------------------------------------------------
-MinSpeed = input('Specify the MINIMUM Desired Speed along X-axis (m/s): \n');
-disp('----------------------------------------------------');
-MaxSpeed = input('Specify the MAXIMUM Desired Speed along X-axis (m/s): \n');
-disp('----------------------------------------------------');
-SpeedResolution = input('Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):\n');
-disp('----------------------------------------------------');
-SpeedList = MinSpeed:SpeedResolution:MaxSpeed;
-%----------------------------------------------------------------------
-%   Terminal time
-%----------------------------------------------------------------------
-disp('Terminal Time:')
-Tend_flag = input('Optimization of Terminal Time (Tend): \n1 -> Optimize, 2 -> Left as Free Variable \n');
-if Tend_flag == 1 %Optimize Terminal Time
-    Tend = input('Input Termianl Time (e.g. 1s): \n');
-elseif Tend_flag == 2
-    disp('Terminal Time (Tend) is Set as Free Variables')
-    Tend_Bound = input('Specify Upper Bound of Terminal Time (i.e. 1,2..(s)):\n');
-else
-    ME_Tend = MException('Initialization:Tend_flag','Unknown Indicator for Determining the on/off of Terminal Time Optimization');
-    throw(ME_Tend)
-end
-disp('----------------------------------------------------');
-phase_lower_bound_portion = input('Input Phase Lower Bound (in percentage of total motion duration: 2.5% - no need to type percentage symbol): \n');
-phase_lower_bound_portion = phase_lower_bound_portion/100
-disp('----------------------------------------------------');
-disp(' ')
-%======================================================================
-
-%======================================================================
-% Time Step and Discretization Parameter Settings
-%----------------------------------------------------------------------
-%   Display Info
-%----------------------------------------------------------------------
-disp('====================================================');
-disp('Temporal and Discretization Setup:');
-disp('----------------------------------------------------');
-%   Number of Phases
-NumPhases = input('Input Number of Phases: \n');
-disp('----------------------------------------------------');
-%   Number of timesteps for each phase
-NumLocalKnots = input('Input Number of Knots for Each Phase: \n');
-disp('----------------------------------------------------');
-%   Total Number of TimeSteps exclude time step 0
-NumKnots = NumPhases*NumLocalKnots;
-%   Parameter tau
-tau_upper_limit = 1; %upper limit of tau --> tau \in [0,1]
-tauStepLength = tau_upper_limit/NumKnots; %discritization step size of tau
-%   Discretization of tau
-tauSeries = 0:tauStepLength:tau_upper_limit;
-tauSeriesLength = length(tauSeries);
-%   Print some Info
-disp('Resultant Discretization:')
-disp(['Knot/Discretization Step Size of tau: ', num2str(tauStepLength)]);
-disp(['Number of Knots/Discretization of tau (from 0 to ', num2str(tau_upper_limit), ': ', num2str(tauSeriesLength), ') (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)']);
-disp('====================================================');
-disp(' ')
-%======================================================================
-
-
-%=======================================================================
-% (Place Holder): Setup of Soft constraints on Terminal Condition or not
-%=======================================================================
-
-%======================================================================
-% Big-M Parameters for Complementarity Constraints
-%======================================================================
-%   Display Information
-%----------------------------------------------------------------------
-disp('====================================================');
-disp('Big-M Setup')
-disp('====================================================');
-%----------------------------------------------------------------------
-%   Big-M for foot positions in y-axis (meters)
-Mpos_y = 100; 
-%----------------------------------------------------------------------
-%   Determine big-M for foot velocity
-%-------------------------------
-%   (Place Holder) big-M for all x, y, z axis velocities need to respecify
-%   when move to 3D
-%------------------------------------------------------------------------
-%       big-M for X-axis Foot/End-Effector Velocity
-%-------------------------------------------------------------------------
-disp('Big-M for Foot/End-Effector in X-axis:')
-MvelxCase = input('Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: \n1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: \n');
-disp(' ')
-if MvelxCase == 1
-    Mvelx = 5; %Default Mvel Value
-%    disp(['Selected Default Value for Big-M value for Foot/End-Effector Valocity in X-axis: ', num2str(Mvelx)]);
-elseif MvelxCase == 2
-    if exist('Tend', 'var')
-        disp(['Current Averate Task Speed in X-axis: ', num2str(speed)]);
-        MvelxScaling = input('Input the Scaling Factor of the Average Task Speed (in X-axis) (i.e. 1, 2, 3, etc...): \n');
-        Mvelx = speed*MvelxScaling;
+    
+    %ParamFileDir = uigetdir;
+    disp(['Directory Storing Parameter File: ', ParamFileDir])
+    
+    %Load Parameter File
+    run([ParamFileDir,'/Parameters.m']);
+    
+    %----------------------------------------------------------------------
+    %   Terminal time Setup
+    %----------------------------------------------------------------------
+    disp('=====================================================');
+    disp('Terminal Time:')
+    Tend_flag = input('Optimization of Terminal Time (Tend): \n1 -> Optimize, 2 -> Left as Free Variable \n');
+    if Tend_flag == 1 %Optimize Terminal Time
+        Tend = input('Input Termianl Time (e.g. 1s): \n');
+        %Check if folder exist
+        if exist([ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)],'dir') == 1
+            ExpDirectory = [ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)];
+        else %or mkdir
+            mkdir([ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)]);
+            ExpDirectory = [ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)];
+        end
+        
+    elseif Tend_flag == 2
+        disp('Terminal Time (Tend) is Set as Free Variables')
+        Tend_Bound = input('Specify Upper Bound of Terminal Time (i.e. 1,2..(s)):\n');
+        ExpDirectory = ParamFileDir;
     else
-        warning('Terminal Time is Undefined -> Unable to Compute Average Task Speed in X-axis');
-        Mvelx = input('Manually Specify a Big-M value for Foot/End-Effector Velocity in X-axis: \n');
+        ME_Tend = MException('Initialization:Tend_flag','Unknown Indicator for Determining the on/off of Terminal Time Optimization');
+        throw(ME_Tend)
     end
-elseif MvelxCase == 3
-    Mvelx = input('Input Big-M value for foot/end-effector Velocity for X-axis: \n');
+    disp('=====================================================');
+
+        %========================================================
+    % Command Line Logging
+    %diary off
+    TaskParameterLog_filename = strcat('MultiMINLPRuns-Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+    diary([ExpDirectory, '/', TaskParameterLog_filename]);
+
+    %=========================================================
+    % Display Script Information
+    disp('====================================================');
+    disp('Genearl Information:');
+    disp('====================================================');
+    disp('Parameter Loaded From File')
+    disp('====================================================');
+    disp('CasADi Implementation');
+    disp('2D Locomotion Control using Mixed-integer Nonlinear Optimization');
+    disp('With a Particular Emphasis on Periodical Gait Discovery');
+    disp('Multi-Phase Formulation:');
+    disp('Optimize over State, Control, Gait Sequence, and Switching Time');
+    disp('----------------------------------------------------');
+    disp('Date and Time:');
+    disp(datetime('now'));
+    disp('----------------------------------------------------');
+    disp(['Correspondent Log File Name: ', TaskParameterLog_filename, 'in the Directory: ', ExpDirectory]);
+    disp('====================================================');
+    disp(' ');
+    %=====================================================================
+
+
+    %======================================================================
+    %Inertia Parameters(Information from MIT Cheetah 3)
+    disp('====================================================');
+    disp(['Inertial Parameters'])
+    disp('====================================================');
+    disp(['mass: ',num2str(m),'(kg)']);
+    disp(['Z-axis Inertial - Izz: ',num2str(I), '(kg m^2)']);
+    disp(['Gravaty: ',num2str(G), 'm/s']);
+    %======================================================================
+
+    %======================================================================
+    %   Kinematics Constraint Parameters
+    %======================================================================
+    disp('====================================================');
+    disp(['Kinematics Constraint Parameters'])
+    disp('====================================================');
+    %       Body Size
+    disp('Body Size')
+    disp('----------------------------------------------------');
+    disp(['Body Length: ',num2str(BodyLength),' (m)']);
+    disp(['Body Height: ',num2str(BodyHeight),' (m)']);
+    disp('----------------------------------------------------');
+    disp('Robot Kinematics Bounding Box')
+    disp('----------------------------------------------------');
+    disp(['Bounding Box Width: ',num2str(BoundingBox_Width),' (m)']);
+    disp(['Bounding Box Height: ',num2str(BoundingBox_Height),' (m)']);
+    disp('----------------------------------------------------');
+    %======================================================================
+
+    %======================================================================
+    %Cost Setup
+    disp('====================================================');
+    disp('Cost Setup')
+    disp('----------------------------------------------------');
+    disp('Selected Cost:');
+    if cost_flag == 1
+        disp('1-> Minimize Force Squared (Energy Loss)');
+    elseif cost_flag == 2
+        disp('2-> Minimize Tangential Force (Maximize Robustness)');
+    elseif cost_flag == 3
+        disp('3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero)');
+    elseif cost_flag == 4
+        disp('4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)');
+    elseif cost_flag == 5
+        disp('5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope)');
+    elseif cost_flag == 6
+        disp('6-> Feet Velocity');
+    end
+    
+    if cost_flag~= 1 && cost_flag ~= 2 && cost_flag ~= 6
+        disp('----------------------------------------------------');
+        disp('Cost Formulation Type: ')
+        if cost_type_flag ==1
+            disp('1-> Time Integral Only');
+        elseif cost_type_flag == 2
+            disp('2-> Time Integral with Scaled Cost');
+        elseif cost_type_flag == 3
+            disp('3 -> No Time Integral')
+        elseif cost_type_flag == 4
+            disp('4 -> No Time Integral with Scaled Cost')
+        elseif cost_type_flag == 5
+            disp('5 -> Infinity Norm')
+        end
+    end
+    disp('====================================================');
+
+
+    %======================================================================
+    %Environment Information
+    %----------------------------------------------------------------------
+    %   Display some info
+    %----------------------------------------------------------------------
+    disp('====================================================');
+    disp('Terrain Model: ')
+    disp('----------------------------------------------------');
+    if TerrainType == 1
+        disp('Flat Terrain');
+    elseif TerrainType == 2
+        disp('Slopes');
+    end
+    %-----------------------------------------------------------------------
+    %Other Parameters
+    if TerrainType == 1 %Flat Terrain
+        TerrainNorm = [0;1];
+    elseif TerrainType == 2 % if Stairs, over-write the terrain norm with 
+        TerrainNorm = [0;1];
+        TerrainNorm = [cos(terrain_slope_rad), -sin(terrain_slope_rad); sin(terrain_slope_rad), cos(terrain_slope_rad)]*TerrainNorm;
+    end
+    disp('Terrain Norm is: ');
+    TerrainNorm
+    TerrainTangent = [cos(terrain_slope_rad),-sin(terrain_slope_rad);sin(terrain_slope_rad),cos(terrain_slope_rad)]*[1;0];
+    disp('Terrain Tangent is: ');
+    TerrainTangent
+    disp('----------------------------------------------------');
+    miu = 0.6; %friction coefficient
+    disp('----------------------------------------------------');
+    disp(['Friction Cone: ', num2str(miu)]);
+    disp('====================================================');
+    disp(' ')
+    %======================================================================
+
+    %======================================================================
+    % Task Specifications
+    %======================================================================
+    %   Display Information
+    %----------------------------------------------------------------------
+    disp('====================================================');
+    disp('Task Specification:')
+    disp('----------------------------------------------------');
+    %----------------------------------------------------------------------
+    %   Specify Desired Speed
+    %----------------------------------------------------------------------
+    disp(['Minimal Speed: ',num2str(MinSpeed)]);
+    disp(['Maximum Speed: ',num2str(MaxSpeed)]);
+    disp(['Speed Resolution: ',num2str(SpeedResolution)])
+    %----------------------------------------------------------------------
+    %   Terminal time
+    %----------------------------------------------------------------------
+    if Tend_flag == 1 %Optimize Terminal Time
+        disp(['Fixed Terminal Time: ',num2str(Tend)]);
+    elseif Tend_flag == 2
+        disp(['Terminal Time as an Optimization Variable'])
+    end
+    disp('----------------------------------------------------');
+    disp(['Phase Duration Lower Bound: ',num2str(phase_lower_bound_portion*100),'%'])
+    disp('----------------------------------------------------');
+    disp(' ')
+    %======================================================================
+
+    %======================================================================
+    % Time Step and Discretization Parameter Settings
+    %----------------------------------------------------------------------
+    %   Display Info
+    %----------------------------------------------------------------------
+    disp('====================================================');
+    disp('Temporal and Discretization Setup:');
+    disp('----------------------------------------------------');
+    %   Number of Phases
+    disp(['Number of Phase: ',num2str(NumPhases)]);
+    disp('----------------------------------------------------');
+    %   Number of timesteps for each phase
+    disp(['Number of Knots for each phase:' ,num2str(NumLocalKnots)]);
+    disp('----------------------------------------------------');
+    %   Print some Info
+    disp('Resultant Discretization:')
+    disp(['Knot/Discretization Step Size of tau: ', num2str(tauStepLength)]);
+    disp(['Number of Knots/Discretization of tau (from 0 to ', num2str(tau_upper_limit), ': ', num2str(tauSeriesLength), ') (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)']);
+    disp('====================================================');
+    disp(' ')
+    %======================================================================
+
+
+    %=======================================================================
+    % (Place Holder): Setup of Soft constraints on Terminal Condition or not
+    %=======================================================================
+
+    %======================================================================
+    % Big-M Parameters for Complementarity Constraints
+    %======================================================================
+    %   Display Information
+    %----------------------------------------------------------------------
+    disp('====================================================');
+    disp('Big-M Setup')
+    disp('====================================================');
+    %----------------------------------------------------------------------
+    %   big-M for foot velocity
+    %-------------------------------
+    %   (Place Holder) big-M for all x, y, z axis velocities need to respecify
+    %   when move to 3D
+    %------------------------------------------------------------------------
+    %       big-M for X-axis Foot/End-Effector Velocity
+    %-------------------------------------------------------------------------
+    disp('Big-M for Foot/End-Effector Velocities')
+    disp('----------------------------------------------------');
+    disp(['Big-M for Foot/End-Effector Velocity in X-axis: ',num2str(Mvelx)]);
+    disp(['Big-M for Foot/End-Effector Velocity in Y-axis: ',num2str(Mvely)]);
+    disp('----------------------------------------------------');
+    disp('Big-M for Contact Forces');
+    disp('----------------------------------------------------');
+    disp(['Big-M for Foot/End-Effector Forces in X-axis: ',num2str(Mfx)]);
+    disp(['Big-M for Foot/End-Effector Forces in X-axis: ',num2str(Mfy)]);
+    disp('====================================================');
+    %=======================================================================
+
+    %=====================================================================
+    % Solver SetUp
+    %=====================================================================
+    %   Choose Solver
+    %---------------------------------------------------------------------
+    disp('====================================================');
+    disp('Solver Setups:')
+    disp('====================================================');
+    disp('Solver Selection: ')
+    if SolverNum == 1
+        disp('Solver Selected: Knitro');
+    elseif SolverNum == 2
+        disp('Solver Selected: Bonmin');
+    end
+    disp('----------------------------------------------------');
+    %   Solver Dependent Options
+    disp('Solver Dependent Options:')
+    disp('----------------------------------------------------');
+    disp(['Number of Maximum Nodes to be solved: ',num2str(NumMaxNodes)]);
+    disp(['NUmber of Maximum Optimization Runes: ',num2str(NumofRuns)]);
+    %   Stop Diary
+    diary off
+    %======================================================================
+   
+    Continue_flag = input('Satisfied with the paramter setting? 1-> yes, 2-> no \n');
+    if Continue_flag == 2
+        ME_UserStop = MException('Initialization:UserStop',['User is unsatisfied with the parameter setup']);
+        throw(ME_UserStop)
+    end
+    
+elseif Paras_Define_Method == 2 %Define Manually
+    %========================================================
+    % Identfy Data Storage Folder
+    ExpDirectory = uigetdir;
+    disp(['Experiment Working Directory: ', ExpDirectory])
+
+    % %Save current directory as working directory
+    % ExpDirectory = pwd;
+    % disp(['Experiment Working Directory: ', ExpDirectory])
+    % 
+    % %Return to the Script Folder
+    % cd ../..
+
+    %========================================================
+    % Command Line Logging
+    %diary off
+    TaskParameterLog_filename = strcat('MultiMINLPRuns-Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+    diary([ExpDirectory, '/', TaskParameterLog_filename]);
+
+    %=========================================================
+    % Display Script Information
+    disp('====================================================');
+    disp('Genearl Information:');
+    disp('====================================================');
+    disp('Parameter Defined Maunally')
+    disp('====================================================');
+    disp('CasADi Implementation');
+    disp('2D Locomotion Control using Mixed-integer Nonlinear Optimization');
+    disp('With a Particular Emphasis on Periodical Gait Discovery');
+    disp('Multi-Phase Formulation:');
+    disp('Optimize over State, Control, Gait Sequence, and Switching Time');
+    disp('----------------------------------------------------');
+    disp('Date and Time:');
+    disp(datetime('now'));
+    disp('----------------------------------------------------');
+    disp(['Correspondent Log File Name: ', TaskParameterLog_filename, 'in the Directory: ', ExpDirectory]);
+    disp('====================================================');
+    disp(' ');
+    %=====================================================================
+    % Add path
+    %addpath('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5')
+
+    %======================================================================
+    %Inertia Parameters(Information from MIT Cheetah 3)
+    m = 45; %kg
+    I = 2.1; %kg m^2 Izz
+    G = 9.80665; %m/s^2
+    %======================================================================
+
+    %======================================================================
+    %   Kinematics Constraint Parameters
+    %======================================================================
+    %       Body Size
+    BodyLength = 0.6;
+    BodyHeight = 0.2;
+    %       Default foot position in Local robot frame
+    DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
+    %           Front Foot Default Positions (IN ROBOT FRAME)
+    PFCenterX = 1/2*BodyLength;
+    PFCenterY = -(1/2*BodyHeight + DefaultLegLength);
+    %           Hind Foot Default Positions (IN ROBOT FRAME)
+    PHCenterX = -1/2*BodyLength;
+    PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
+    %       Kinematics Bounding Box Constraint
+    disp('====================================================');
+    disp('Setup Robot Kinematics Properties: ')
+    disp('----------------------------------------------------');
+    BoundingBox_Width  = input('Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):\n');
+    disp('----------------------------------------------------');
+    BoundingBox_Height = input('Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):\n');
+    disp('----------------------------------------------------');
+    %BoundingBox_Width = 0.6;
+    %BoundingBox_Height = 0.6;
+    %======================================================================
+
+    %======================================================================
+    %Setup Cost
+    disp('====================================================');
+    disp('Set up Cost Terms:')
+    disp('----------------------------------------------------');
+    cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n 2-> Minimize Tangential Force (Maximize Robustness) \n 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero) \n 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n 5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope) \n 6-> Feet Velocity \n');
+    %cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared \n 2-> Minimize Body Vibration (ydot, theta towards terrain slope, thetadot) \n 3-> Minimize tangential speed (along the terrain) to the deisred speed at every knot \n 4-> Minimize tangential speed (to the desired speed), normal axis speed (towards zero) \n 5 -> Minimize tangential speed (to the desired speed), normal speed (tp zero), angular speed thetadot (to the terrain slope) \n 6-> Minimize Body Vibration with Constant Tangential Speed (ydot, theta towards terrain slope, thetadot, xdot toward desired tangetial speed): \n');
+    if cost_flag~= 1 && cost_flag ~= 2 && cost_flag ~= 6
+        disp('----------------------------------------------------');
+        cost_type_flag = input('Decide the Type (Formulation-wise) of the cost (2 and 4 are prefered): 1-> Time Integral Only \n 2-> Time Integral with Scaled Cost \n 3 -> No Time Integral \n 4 -> No Time Integral with Scaled Cost \n 5 -> Infinity Norm \n');
+    end
+    disp('====================================================');
+
+    %======================================================================
+    %Environment Information
+    %----------------------------------------------------------------------
+    %   Display some info
+    %----------------------------------------------------------------------
+    disp('====================================================');
+    disp('Setup Terrain Model: ')
+    disp('----------------------------------------------------');
+    %----------------------------------------------------------------------
+    %   Setup the Terrain Model
+    %----------------------------------------------------------------------
+    TerrainType = input('Specify the Terrain Type: 1 -> Flat Terrain (Use this if Terrain Slope = 0); 2 -> Slopes\n');
+
+    if TerrainType == 1 %Flat Terrain
+        disp('Selected Flat Terrain');
+        %Use Lagecy Implementation
+        %       Maximum Number of Stairs can handle
+        MaxNumStairs = 10;
+        NumStairs = MaxNumStairs; %May remove
+        HeightChangingPlaces = zeros(1,MaxNumStairs);
+        LevelChanges   = zeros(1,MaxNumStairs);
+        %For Visualization program
+        HeightChangingPlaces_vis = ones(1,MaxNumStairs);
+        LevelChanges_vis = LevelChanges;
+        %Build Terrain Model for flat terrain 
+        h_terrain = 0;
+        x_query   = SX.sym('x_query', 1);
+        for i = 1:MaxNumStairs
+            h_terrain = h_terrain + if_else(x_query < sum(HeightChangingPlaces(1:i)), 0, LevelChanges(i));
+        end
+        TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
+        terrain_slope_degrees = 0;
+        terrain_slope_rad = terrain_slope_degrees/180*pi;
+        terrain_slope = tan(terrain_slope_rad);
+        disp('----------------------------------------------------');
+
+    elseif TerrainType == 2 %Slope
+        disp('Selected Slope Terrain');
+        terrain_slope_degrees = input('Spoecify the terrain slope in Degrees (i.e.: -30, -10, 0, 10, 30...): \n');
+        terrain_slope_rad = terrain_slope_degrees/180*pi;
+        terrain_slope = tan(terrain_slope_rad);
+        disp(['Defined terrain slope: ',num2str(terrain_slope)]);
+        %check if terrain calulation is correct: atan(terrain_slope)/pi*180
+        %Build Terrain Model for slope terrain
+        x_query   = SX.sym('x_query', 1);
+        h_terrain = terrain_slope*x_query;
+        TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
+        disp('----------------------------------------------------');
+    else %Unknown Scenario
+        ME_TerrainType = MException('Initialization:TerrainType',['Unknown Terrain Type']);
+        throw(ME_TerrainType)
+    end
+
+    %-----------------------------------------------------------------------
+    %   Plot Terrain Model
+    PlotTerrainFlag = input('Plot the Terrain Model? 1 -> Yes; 2 -> No\n');
+    if PlotTerrainFlag == 1 %Yes, Plot the terrain model    
+        if TerrainType == 1 %Flat terrain
+            terrainx = linspace(-2, sum(HeightChangingPlaces)+3, 1e4);
+            terrainy = full(TerrainModel(terrainx));
+            plot(terrainx,terrainy,'LineWidth',2)
+            ylim([min(terrainy)-1,max(terrainy)+1])
+            disp('----------------------------------------------------');
+        elseif TerrainType == 2 %Slope
+            terrainx = linspace(-2, 10, 1e4);
+            terrainy = full(TerrainModel(terrainx));
+            plot(terrainx,terrainy,'LineWidth',2)
+            ylim([min(terrainy)-1,max(terrainy)+1])
+            disp('----------------------------------------------------');
+        end
+    end
+    %-----------------------------------------------------------------------
+    %Other Parameters
+    if TerrainType == 1 %Flat Terrain
+        TerrainNorm = [0;1];
+    elseif TerrainType == 2 % if Stairs, over-write the terrain norm with 
+        TerrainNorm = [0;1];
+        TerrainNorm = [cos(terrain_slope_rad), -sin(terrain_slope_rad); sin(terrain_slope_rad), cos(terrain_slope_rad)]*TerrainNorm;
+    end
+    disp('Terrain Norm is: ');
+    TerrainNorm
+    TerrainTangent = [cos(terrain_slope_rad),-sin(terrain_slope_rad);sin(terrain_slope_rad),cos(terrain_slope_rad)]*[1;0];
+    disp('Terrain Tangent is: ');
+    TerrainTangent
+    disp('----------------------------------------------------');
+    miu = 0.6; %friction coefficient
+    disp('----------------------------------------------------');
+    disp(['Friction Cone: ', num2str(miu)]);
+    disp('====================================================');
+    disp(' ')
+    %======================================================================
+
+    %======================================================================
+    % Task Specifications
+    %======================================================================
+    %   Display Information
+    %----------------------------------------------------------------------
+    disp('====================================================');
+    disp('Task Specification:')
+    disp('----------------------------------------------------');
+    %----------------------------------------------------------------------
+    %   Specify Desired Speed
+    %----------------------------------------------------------------------
+    MinSpeed = input('Specify the MINIMUM Desired Speed along X-axis (m/s): \n');
+    disp('----------------------------------------------------');
+    MaxSpeed = input('Specify the MAXIMUM Desired Speed along X-axis (m/s): \n');
+    disp('----------------------------------------------------');
+    SpeedResolution = input('Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):\n');
+    disp('----------------------------------------------------');
+    SpeedList = MinSpeed:SpeedResolution:MaxSpeed;
+    %----------------------------------------------------------------------
+    %   Terminal time
+    %----------------------------------------------------------------------
+    disp('Terminal Time:')
+    Tend_flag = input('Optimization of Terminal Time (Tend): \n1 -> Optimize, 2 -> Left as Free Variable \n');
+    if Tend_flag == 1 %Optimize Terminal Time
+        Tend = input('Input Termianl Time (e.g. 1s): \n');
+    elseif Tend_flag == 2
+        disp('Terminal Time (Tend) is Set as Free Variables')
+        Tend_Bound = input('Specify Upper Bound of Terminal Time (i.e. 1,2..(s)):\n');
+    else
+        ME_Tend = MException('Initialization:Tend_flag','Unknown Indicator for Determining the on/off of Terminal Time Optimization');
+        throw(ME_Tend)
+    end
+    disp('----------------------------------------------------');
+    phase_lower_bound_portion = input('Input Phase Lower Bound (in percentage of total motion duration: 2.5% - no need to type percentage symbol): \n');
+    phase_lower_bound_portion = phase_lower_bound_portion/100
+    disp('----------------------------------------------------');
+    disp(' ')
+    %======================================================================
+
+    %======================================================================
+    % Time Step and Discretization Parameter Settings
+    %----------------------------------------------------------------------
+    %   Display Info
+    %----------------------------------------------------------------------
+    disp('====================================================');
+    disp('Temporal and Discretization Setup:');
+    disp('----------------------------------------------------');
+    %   Number of Phases
+    NumPhases = input('Input Number of Phases: \n');
+    disp('----------------------------------------------------');
+    %   Number of timesteps for each phase
+    NumLocalKnots = input('Input Number of Knots for Each Phase: \n');
+    disp('----------------------------------------------------');
+    %   Total Number of TimeSteps exclude time step 0
+    NumKnots = NumPhases*NumLocalKnots;
+    %   Parameter tau
+    tau_upper_limit = 1; %upper limit of tau --> tau \in [0,1]
+    tauStepLength = tau_upper_limit/NumKnots; %discritization step size of tau
+    %   Discretization of tau
+    tauSeries = 0:tauStepLength:tau_upper_limit;
+    tauSeriesLength = length(tauSeries);
+    %   Print some Info
+    disp('Resultant Discretization:')
+    disp(['Knot/Discretization Step Size of tau: ', num2str(tauStepLength)]);
+    disp(['Number of Knots/Discretization of tau (from 0 to ', num2str(tau_upper_limit), ': ', num2str(tauSeriesLength), ') (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)']);
+    disp('====================================================');
+    disp(' ')
+    %======================================================================
+
+
+    %=======================================================================
+    % (Place Holder): Setup of Soft constraints on Terminal Condition or not
+    %=======================================================================
+
+    %======================================================================
+    % Big-M Parameters for Complementarity Constraints
+    %======================================================================
+    %   Display Information
+    %----------------------------------------------------------------------
+    disp('====================================================');
+    disp('Big-M Setup')
+    disp('====================================================');
+    %----------------------------------------------------------------------
+    %   Big-M for foot positions in y-axis (meters)
+    Mpos_y = 100; 
+    %----------------------------------------------------------------------
+    %   Determine big-M for foot velocity
+    %-------------------------------
+    %   (Place Holder) big-M for all x, y, z axis velocities need to respecify
+    %   when move to 3D
+    %------------------------------------------------------------------------
+    %       big-M for X-axis Foot/End-Effector Velocity
+    %-------------------------------------------------------------------------
+    disp('Big-M for Foot/End-Effector in X-axis:')
+    MvelxCase = input('Select the Setup Case for big-M value for Foot/End-Effector Velocity in x-axis: \n1 -> Default Value (5m/s); 2 -> N time of average task speed (in X-axis); 3 -> User Specified: \n');
+    disp(' ')
+    if MvelxCase == 1
+        Mvelx = 5; %Default Mvel Value
+    %    disp(['Selected Default Value for Big-M value for Foot/End-Effector Valocity in X-axis: ', num2str(Mvelx)]);
+    elseif MvelxCase == 2
+        if exist('Tend', 'var')
+            disp(['Current Averate Task Speed in X-axis: ', num2str(speed)]);
+            MvelxScaling = input('Input the Scaling Factor of the Average Task Speed (in X-axis) (i.e. 1, 2, 3, etc...): \n');
+            Mvelx = speed*MvelxScaling;
+        else
+            warning('Terminal Time is Undefined -> Unable to Compute Average Task Speed in X-axis');
+            Mvelx = input('Manually Specify a Big-M value for Foot/End-Effector Velocity in X-axis: \n');
+        end
+    elseif MvelxCase == 3
+        Mvelx = input('Input Big-M value for foot/end-effector Velocity for X-axis: \n');
+    else
+        ME_MvelxCase = MException('Initialization:MvelxCase','Unexpected Case for big-M for X-axis foot/End-effector Velocity');
+        throw(ME_MvelxCase)
+    end
+    disp(' ')
+    disp(['Configured Big-M Value for Foot/End-Effector Velocity for X-axis: ', num2str(Mvelx), ' m/s']);
+    disp('----------------------------------------------------');
+    %---------------------------------------------------------------------
+    %       big-M for Y-axis Foot/End-Effector Velocity
+    %---------------------------------------------------------------------
+    disp('Big-M for Foot/End-Effector in Y-axis:')
+    MvelyCase = input('Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: \n1 -> Default Value (5m/s); 2 -> User Specified: \n');
+    disp(' ')
+    if MvelyCase == 1
+        Mvely = 5; %Default Mvely Value
+    %    disp(['Selected Default Value for Big-M value for Foot/End-Effector Valocity in Y-axis: ', num2str(Mvely), ' m/s']);
+    elseif MvelyCase == 2
+        Mvely = input('Input Big-M value for foot/end-effector Velocity for Y-axis (e.g. 1-5+ m/s): \nNOTE: Can Write the Value as the Kinematics Bounding Box Height (BoundingBox_Height)/Desired Time to Travel the Entire Bounding Box Height\n');
+    %    disp(['Big-M value for Foot/End-Effector Velocity in Y-axis set as: ', num2str(Mvely), ' m/s']);
+    else
+        ME_MvelyCase = MException('Initialization:MvelyCase','Unexpected Case for big-M for Y-axis foot/End-effector Velocity');
+        throw(ME_MvelyCase)
+    end
+    disp(' ')
+    disp(['Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: ', num2str(Mvely), ' m/s']);
+    disp('----------------------------------------------------');
+    %----------------------------------------------------------------------
+    %   Big-M for Foot-Ground Reaction Forces
+    disp('Big-M for Contact Forces')
+    Mfx = input('Input Big-M for Foot-Ground Reaction Forces along X-axis (e.g. 200,300,1000,1e5):\n');
+    disp('----------------------------------------------------');
+    Mfy = input('Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3, 1e5, better larger than Mfx):\n');
+    %Mfx = 1e2; %(N) big-M for foot-ground reaction forces for x-axis
+    %Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
+    disp('====================================================');
+    %=======================================================================
+
+    %=====================================================================
+    % Solver SetUp
+    %=====================================================================
+    %   Choose Solver
+    %---------------------------------------------------------------------
+    disp('====================================================');
+    disp('Solver Setups:')
+    disp('====================================================');
+    disp('Solver Selection: ')
+    SolverNum = input('1 -> Knitro; 2 -> Bonmin \n');
+    if SolverNum == 1
+        SolverSelected = 'knitro';
+    elseif SolverNum == 2
+        SolverSelected = 'bonmin';
+    else
+        ME_SelectSolvers = MException('Initialization:SelectSolvers','Unknown Solver Nominated');
+        throw(ME_SelectSolvers)
+    end
+    disp(['Selected Solver: ', SolverSelected])
+    disp('----------------------------------------------------');
+    %   Solver Dependent Options
+    disp('Solver Dependent Options:')
+    disp('----------------------------------------------------');
+    %       Define maximum nodes to be explored
+    NumMaxNodesCases = input('Define Number of Max Nodes to be Explored: \n 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value\n');
+    if NumMaxNodesCases == 1  %Worst-case Scenario
+        %-------------------------------------------
+        %   (Place Holder) Need to change the exponential base when have more
+        %   legs in 3D
+        %-------------------------------------------
+        NumMaxNodes = (2*2)^(NumPhases+1);
+        disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
+    elseif NumMaxNodesCases == 2 %User-specified
+        NumMaxNodes = input('Input number of maximum node to be explored: \n');
+    elseif NumMaxNodesCases == 3 %Default Value
+        NumMaxNodes = 1e5;
+        disp(['Selected Default Case to Explore ', num2str(NumMaxNodes), ' Nodes'])
+    else
+        ME_NumMaxNodes = MException('Initialization:NumMaxNodes','Unexpected Settings of Max Number of Nodes');
+        throw(ME_NumMaxNodes)
+    end
+    disp('----------------------------------------------------');
+    %       Define number of multistart solves for each sub-nonlinear
+    %       optimizaiton problem
+    NumofRuns = input('Specify Number of Runs for the MINLP Programming (i.e. 1, 10, 25, 50, 100): \n');
+    %disp('----------------------------------------------------');
+    %NumMultiStartSolves = input('Determine Number of multi-start runs inside MINLP runs (i.e. 5): \n');
+    disp('====================================================');
+    disp(' ')
+
+
+
+    %   Stop Diary
+    diary off
+    %======================================================================
+    
 else
-    ME_MvelxCase = MException('Initialization:MvelxCase','Unexpected Case for big-M for X-axis foot/End-effector Velocity');
-    throw(ME_MvelxCase)
+    ME_Parametersetup = MException('Initialization:Parametersetup','Unexpected Parameter setup method');
+    throw(ME_Parametersetup)
 end
-disp(' ')
-disp(['Configured Big-M Value for Foot/End-Effector Velocity for X-axis: ', num2str(Mvelx), ' m/s']);
-disp('----------------------------------------------------');
-%---------------------------------------------------------------------
-%       big-M for Y-axis Foot/End-Effector Velocity
-%---------------------------------------------------------------------
-disp('Big-M for Foot/End-Effector in Y-axis:')
-MvelyCase = input('Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: \n1 -> Default Value (5m/s); 2 -> User Specified: \n');
-disp(' ')
-if MvelyCase == 1
-    Mvely = 5; %Default Mvely Value
-%    disp(['Selected Default Value for Big-M value for Foot/End-Effector Valocity in Y-axis: ', num2str(Mvely), ' m/s']);
-elseif MvelyCase == 2
-    Mvely = input('Input Big-M value for foot/end-effector Velocity for Y-axis (e.g. 1-5+ m/s): \nNOTE: Can Write the Value as the Kinematics Bounding Box Height (BoundingBox_Height)/Desired Time to Travel the Entire Bounding Box Height\n');
-%    disp(['Big-M value for Foot/End-Effector Velocity in Y-axis set as: ', num2str(Mvely), ' m/s']);
-else
-    ME_MvelyCase = MException('Initialization:MvelyCase','Unexpected Case for big-M for Y-axis foot/End-effector Velocity');
-    throw(ME_MvelyCase)
-end
-disp(' ')
-disp(['Configured Big-M Value for Foot/End-Effector Velocity for Y-axis: ', num2str(Mvely), ' m/s']);
-disp('----------------------------------------------------');
-%----------------------------------------------------------------------
-%   Big-M for Foot-Ground Reaction Forces
-disp('Big-M for Contact Forces')
-Mfx = input('Input Big-M for Foot-Ground Reaction Forces along X-axis (e.g. 200,300,1000,1e5):\n');
-disp('----------------------------------------------------');
-Mfy = input('Input Big-M for Foot-Ground Reaction Forces along Y-axis (e.g. 1e3, 1e5, better larger than Mfx):\n');
-%Mfx = 1e2; %(N) big-M for foot-ground reaction forces for x-axis
-%Mfy = 1e5; %(N) big-M for foot-ground reaction forces for y-axis
-disp('====================================================');
-Mf_squared = Mfx^2+Mfy^2;
+
 %=======================================================================
-
-%=====================================================================
-% Solver SetUp
-%=====================================================================
-%   Choose Solver
-%---------------------------------------------------------------------
-disp('====================================================');
-disp('Solver Setups:')
-disp('====================================================');
-disp('Solver Selection: ')
-SolverNum = input('1 -> Knitro; 2 -> Bonmin \n');
-if SolverNum == 1
-    SolverSelected = 'knitro';
-elseif SolverNum == 2
-    SolverSelected = 'bonmin';
-else
-    ME_SelectSolvers = MException('Initialization:SelectSolvers','Unknown Solver Nominated');
-    throw(ME_SelectSolvers)
-end
-disp(['Selected Solver: ', SolverSelected])
-disp('----------------------------------------------------');
-%   Solver Dependent Options
-disp('Solver Dependent Options:')
-disp('----------------------------------------------------');
-%       Define maximum nodes to be explored
-NumMaxNodesCases = input('Define Number of Max Nodes to be Explored: \n 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value\n');
-if NumMaxNodesCases == 1  %Worst-case Scenario
-    %-------------------------------------------
-    %   (Place Holder) Need to change the exponential base when have more
-    %   legs in 3D
-    %-------------------------------------------
-    NumMaxNodes = (2*2)^(NumPhases);
-    disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
-elseif NumMaxNodesCases == 2 %User-specified
-    NumMaxNodes = input('Input number of maximum node to be explored: \n');
-elseif NumMaxNodesCases == 3 %Default Value
-    NumMaxNodes = 1e5;
-    disp(['Selected Default Case to Explore ', num2str(NumMaxNodes), ' Nodes'])
-else
-    ME_NumMaxNodes = MException('Initialization:NumMaxNodes','Unexpected Settings of Max Number of Nodes');
-    throw(ME_NumMaxNodes)
-end
-disp('----------------------------------------------------');
-%       Define number of multistart solves for each sub-nonlinear
-%       optimizaiton problem
-NumofRuns = input('Specify Number of Runs for the MINLP Programming (i.e. 1, 10, 25, 50, 100): \n');
-%disp('----------------------------------------------------');
-%NumMultiStartSolves = input('Determine Number of multi-start runs inside MINLP runs (i.e. 5): \n');
-disp('====================================================');
-disp(' ')
-
-
-
-%   Stop Diary
-diary off
-%======================================================================
-
 %
 %   Big for-loop for to compute multiple MINLP Runs
 %
@@ -691,16 +986,13 @@ for runIdx = 1:NumofRuns
                     lb_DecisionVars = [lb_DecisionVars, repmat(-5, 1, VarLengthList(i))];    
                     ub_DecisionVars = [ub_DecisionVars, repmat( 5, 1, VarLengthList(i))];
                 elseif TerrainType == 2 %slope
-%                     if MaxSpeed*Tend >= 5
-%                         baseheightlimit = 2*MaxSpeed*Tend;
-%                     else
-%                         baseheightlimit = 5;
-%                     end
-                    baseheightlimit = speed*Tend*5;
-%                    lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit/cos(terrain_slope_rad), 1, VarLengthList(i))];    
-%                    ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit/cos(terrain_slope_rad), 1, VarLengthList(i))];
-                    lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit, 1, VarLengthList(i))];    
-                    ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit, 1, VarLengthList(i))];
+                    if MaxSpeed*Tend >= 5
+                        baseheightlimit = 2*MaxSpeed*Tend;
+                    else
+                        baseheightlimit = 5;
+                    end
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit/cos(terrain_slope_rad), 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit/cos(terrain_slope_rad), 1, VarLengthList(i))];
                 end
             elseif strcmp(varList(i),'theta') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-pi/2, 1, VarLengthList(i))];    
@@ -722,16 +1014,13 @@ for runIdx = 1:NumofRuns
                     lb_DecisionVars = [lb_DecisionVars, repmat(-5 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
                     ub_DecisionVars = [ub_DecisionVars, repmat( 5                       , 1, VarLengthList(i))];
                 elseif TerrainType == 2 %slope
-%                     if MaxSpeed*Tend >= 5
-%                         baseheightlimit = 2*MaxSpeed*Tend;
-%                     else
-%                         baseheightlimit = 5;
-%                     end
-                    baseheightlimit = speed*Tend*5;
-%                     lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit/cos(terrain_slope_rad) - 5*BoundingBox_Height, 1, VarLengthList(i))];    
-%                     ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit/cos(terrain_slope_rad)                       , 1, VarLengthList(i))];
-                    lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit - 5*BoundingBox_Height, 1, VarLengthList(i))];    
-                    ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit                       , 1, VarLengthList(i))];
+                    if MaxSpeed*Tend >= 5
+                        baseheightlimit = 2*MaxSpeed*Tend;
+                    else
+                        baseheightlimit = 5;
+                    end
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit/cos(terrain_slope_rad) - 5*BoundingBox_Height, 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit/cos(terrain_slope_rad)                       , 1, VarLengthList(i))];
                 end
             elseif strcmp(varList(i),'PHx') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-speed*Tend - 5*BoundingBox_Width, 1, VarLengthList(i))];    
@@ -741,18 +1030,14 @@ for runIdx = 1:NumofRuns
                     lb_DecisionVars = [lb_DecisionVars, repmat(-5 - 5*BoundingBox_Height, 1, VarLengthList(i))];    
                     ub_DecisionVars = [ub_DecisionVars, repmat( 5                       , 1, VarLengthList(i))];
                 elseif TerrainType == 2 %slope
-%                     if MaxSpeed*Tend >= 5
-%                         baseheightlimit = 2*MaxSpeed*Tend;
-%                     else
-%                         baseheightlimit = 5;
-%                     end
-                    baseheightlimit = speed*Tend*5;
-%                     lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit/cos(terrain_slope_rad) - 5*BoundingBox_Height, 1, VarLengthList(i))];    
-%                     ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit/cos(terrain_slope_rad)                       , 1, VarLengthList(i))];
-                    lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit - 5*BoundingBox_Height, 1, VarLengthList(i))];    
-                    ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit                       , 1, VarLengthList(i))];
+                    if MaxSpeed*Tend >= 5
+                        baseheightlimit = 2*MaxSpeed*Tend;
+                    else
+                        baseheightlimit = 5;
+                    end
+                    lb_DecisionVars = [lb_DecisionVars, repmat(-baseheightlimit/cos(terrain_slope_rad) - 5*BoundingBox_Height, 1, VarLengthList(i))];    
+                    ub_DecisionVars = [ub_DecisionVars, repmat( baseheightlimit/cos(terrain_slope_rad)                       , 1, VarLengthList(i))];
                 end
-                
             %elseif strcmp(varList(i),'PFxdot') == 1
                 %lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
                 %ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
@@ -774,25 +1059,17 @@ for runIdx = 1:NumofRuns
             %     lb_DecisionVars = [lb_DecisionVars, repmat(-50, 1, VarLengthList(i))];    
             %     ub_DecisionVars = [ub_DecisionVars, repmat( 50, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'FFx') == 1
-                %lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
-                %ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
-                lb_DecisionVars = [lb_DecisionVars, repmat(-1.2*sqrt(Mf_squared), 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 1.2*sqrt(Mf_squared), 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'FHx') == 1
-                %lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
-                %ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
-                lb_DecisionVars = [lb_DecisionVars, repmat(-1.2*sqrt(Mf_squared), 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 1.2*sqrt(Mf_squared), 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'FFy') == 1
-                %lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy - 0.1*Mfy, 1, VarLengthList(i))];    
-                %ub_DecisionVars = [ub_DecisionVars, repmat( Mfy + 0.1*Mfy, 1, VarLengthList(i))];
-                lb_DecisionVars = [lb_DecisionVars, repmat(-1.2*sqrt(Mf_squared), 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 1.2*sqrt(Mf_squared), 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy - 0.1*Mfy, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mfy + 0.1*Mfy, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'FHy') == 1
-                %lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy - 0.1*Mfy, 1, VarLengthList(i))];    
-                %ub_DecisionVars = [ub_DecisionVars, repmat( Mfy + 0.1*Mfy, 1, VarLengthList(i))];
-                lb_DecisionVars = [lb_DecisionVars, repmat(-1.2*sqrt(Mf_squared), 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 1.2*sqrt(Mf_squared), 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-Mfy - 0.1*Mfy, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mfy + 0.1*Mfy, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'Ts') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat( 0, 1, VarLengthList(i))];  
                 %lb_DecisionVars = [lb_DecisionVars, repmat( 0.01*Tend, 1, VarLengthList(i))];  
@@ -1138,45 +1415,108 @@ for runIdx = 1:NumofRuns
             %------------------------------------------------------
             %   (*) Foot/End-Effector Forces
             %------------------------------------------------------
-            %     (-)Force Magnitude Limit
-            %       -Equation: (1) Fx^2 + Fy^2 <= C*Mf_squared; -> Fx^2 + Fy^2 -
-            %       C*Mf_squred <= 0
-            %                  (2) Fx^2 + Fy^2 >= 0
-            %       (*) Front Leg
-                %FDx^2 + FFy^2 >= 0
-                EqTemp = FFx(k)^2 + FFy(k)^2;
-                g   = {g{:}, EqTemp};     %Append to constraint function list
-                lbg = [lbg;  0];       %Give constraint lower bound
-                ubg = [ubg;  inf];          %Give constraint upper bound
-                %FFx^2 + FFy^2 - C*Mf_squred <= 0
-                EqTemp = FFx(k)^2 + FFy(k)^2 - CF(PhaseIdx)*Mf_squared;
-                g   = {g{:}, EqTemp};     %Append to constraint function list
-                lbg = [lbg;  -inf];       %Give constraint lower bound
-                ubg = [ubg;  0];          %Give constraint upper bound
-            %       (*) Hind Leg
-                %FHx^2 + FHy^2 >= 0
-                EqTemp = FHx(k)^2 + FHy(k)^2;
-                g   = {g{:}, EqTemp};     %Append to constraint function list
-                lbg = [lbg;  0];       %Give constraint lower bound
-                ubg = [ubg;  inf];          %Give constraint upper bound
-                %FHx^2 + FHy^2 - C*Mf_squred <= 0
-                EqTemp = FHx(k)^2 + FHy(k)^2 - CH(PhaseIdx)*Mf_squared;
+            %     (-) x-axis
+            %-----------------------------------------------------
+            %       - Euqation (1): Fx <= 0 + Mfx*C -->
+            %                     Fx - Mfx*C <= 0
+            %           Use Ineq_Difference
+            %           Input: v[k] = F(F/H)x[k]
+            %                  bigM = Mfx
+            %                  z[k] = C(F/H)[k]
+            %           lbg = -inf
+            %           ubg = 0
+            %-----------------------------------------------------
+            %           Front Leg
+                EqTemp = Ineq_Difference(FFx(k), Mfx, CF(PhaseIdx));
                 g   = {g{:}, EqTemp};     %Append to constraint function list
                 lbg = [lbg;  -inf];       %Give constraint lower bound
                 ubg = [ubg;  0];          %Give constraint upper bound
-            %--------------------------------------------------------
-            %     (-) Unilateral Constraint
-            %       -Equation: Fn >= 0 (Normal Force) larger than 0 --> [Fx;Fy]'*TerrainNorm >= 0      
-            %Fn >= 0 (Normal Force) larger than 0 --> [Fx;Fy]'*TerrainNorm >= 0
-            if TerrainType == 1 %Falt Terrain
-                %   Fy >= 0 Unilaterla constratin
+
+            %           Hind Leg
+                EqTemp = Ineq_Difference(FHx(k), Mfx, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  -inf];       %Give constraint lower bound
+                ubg = [ubg;  0];          %Give constraint upper bound
+            %------------------------------------------------------           
+            %       - Equation (2): Fx >= 0 - Mfx*C -->
+            %                       Fx + Mfx*C >= 0 -->
+            %                       0 <= Fx + Mfx*C
+            %           Use Ineq_Summation
+            %           Input: v[k] = F(F/H)x[k]
+            %                  bigM = Mfx
+            %                  z[k] = C(F/H)[k]
+            %           lbg = 0
+            %           ubg = inf
+            %------------------------------------------------------
+            %           Front Leg
+                EqTemp = Ineq_Summation(FFx(k), Mfx, CF(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  0];          %Give constraint lower bound
+                ubg = [ubg;  inf];        %Give constraint upper bound
+
+            %           Hind Leg
+                EqTemp = Ineq_Summation(FHx(k), Mfx, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  0];          %Give constraint lower bound
+                ubg = [ubg;  inf];        %Give constraint upper bound
+            %------------------------------------------------------
+            %     (-) y-axis force
+            %------------------------------------------------------
+            if TerrainType == 1 %Flat Terrain
+            %       - Equation (1): Fy <= 0 + Mfy*C -->
+            %                       Fy - Mfy*C <= 0
+            %           Use Ineq_Difference
+            %           Input: v[k] = F(F/H)y[k]
+            %                  bigM = Mfy
+            %                  z[k] = C(F/H)[k]
+            %           lbg = -inf
+            %           ubg = 0
+            %           Front Leg
+                EqTemp = Ineq_Difference(FFy(k), Mfy, CF(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  -inf];       %Give constraint lower bound
+                ubg = [ubg;  0];          %Give constraint upper bound
+
+            %           Hind Leg
+                EqTemp = Ineq_Difference(FHy(k), Mfy, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  -inf];          %Give constraint lower bound
+                ubg = [ubg;  0];        %Give constraint upper bound
+                
+            %   Fy >= 0 Unilaterla constratin
                 %           Front Leg
                 lb_DecisionVars(find(VarNamesList == ['FFy_',num2str(k-1)])) = 0;
                 %           Hind Leg
                 lb_DecisionVars(find(VarNamesList == ['FHy_',num2str(k-1)])) = 0; 
-            elseif TerrainType == 2 %Slope
+                
+            elseif TerrainType == 2 %Slope Terrain
+                %   Fy <= 0 + Mfy*C --> Fy - Mfy*C <= 0
+                %           Front Leg
+                EqTemp = Ineq_Difference(FFy(k), Mfy, CF(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  -inf];       %Give constraint lower bound
+                ubg = [ubg;  0];          %Give constraint upper bound
+
+                %           Hind Leg
+                EqTemp = Ineq_Difference(FHy(k), Mfy, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  -inf];          %Give constraint lower bound
+                ubg = [ubg;  0];        %Give constraint upper bound
+                %   Fy >= -Mfy*C --> Fy + Mfy*C >= 0 
+                %           Front Leg
+                EqTemp = Ineq_Summation(FFy(k), Mfy, CF(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  0];          %Give constraint lower bound
+                ubg = [ubg;  inf];        %Give constraint upper bound
+
+                %           Hind Leg
+                EqTemp = Ineq_Summation(FHy(k), Mfy, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};     %Append to constraint function list
+                lbg = [lbg;  0];          %Give constraint lower bound
+                ubg = [ubg;  inf];        %Give constraint upper bound
+                %Terrain Norm/Unilateral Constraint
                 %Fn >= 0 (Normal Force) larger than 0 --> [Fx;Fy]'*TerrainNorm >= 0
-                %   Front Leg
+                %           Front Leg
                 EqTemp = [FFx(k);FFy(k)]'*TerrainNorm;
                 g   = {g{:}, EqTemp};     %Append to constraint function list
                 lbg = [lbg;  0];          %Give constraint lower bound
@@ -1187,120 +1527,6 @@ for runIdx = 1:NumofRuns
                 lbg = [lbg;  0];          %Give constraint lower bound
                 ubg = [ubg;  inf];        %Give constraint upper bound
             end
-%             %     (-) x-axis
-%             %-----------------------------------------------------
-%             %       - Euqation (1): Fx <= 0 + Mfx*C -->
-%             %                     Fx - Mfx*C <= 0
-%             %           Use Ineq_Difference
-%             %           Input: v[k] = F(F/H)x[k]
-%             %                  bigM = Mfx
-%             %                  z[k] = C(F/H)[k]
-%             %           lbg = -inf
-%             %           ubg = 0
-%             %-----------------------------------------------------
-%             %           Front Leg
-%                 EqTemp = Ineq_Difference(FFx(k), Mfx, CF(PhaseIdx));
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  -inf];       %Give constraint lower bound
-%                 ubg = [ubg;  0];          %Give constraint upper bound
-% 
-%             %           Hind Leg
-%                 EqTemp = Ineq_Difference(FHx(k), Mfx, CH(PhaseIdx));
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  -inf];       %Give constraint lower bound
-%                 ubg = [ubg;  0];          %Give constraint upper bound
-%             %------------------------------------------------------           
-%             %       - Equation (2): Fx >= 0 - Mfx*C -->
-%             %                       Fx + Mfx*C >= 0 -->
-%             %                       0 <= Fx + Mfx*C
-%             %           Use Ineq_Summation
-%             %           Input: v[k] = F(F/H)x[k]
-%             %                  bigM = Mfx
-%             %                  z[k] = C(F/H)[k]
-%             %           lbg = 0
-%             %           ubg = inf
-%             %------------------------------------------------------
-%             %           Front Leg
-%                 EqTemp = Ineq_Summation(FFx(k), Mfx, CF(PhaseIdx));
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  0];          %Give constraint lower bound
-%                 ubg = [ubg;  inf];        %Give constraint upper bound
-% 
-%             %           Hind Leg
-%                 EqTemp = Ineq_Summation(FHx(k), Mfx, CH(PhaseIdx));
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  0];          %Give constraint lower bound
-%                 ubg = [ubg;  inf];        %Give constraint upper bound
-%             %------------------------------------------------------
-%             %     (-) y-axis force
-%             %------------------------------------------------------
-%             if TerrainType == 1 %Flat Terrain
-%             %       - Equation (1): Fy <= 0 + Mfy*C -->
-%             %                       Fy - Mfy*C <= 0
-%             %           Use Ineq_Difference
-%             %           Input: v[k] = F(F/H)y[k]
-%             %                  bigM = Mfy
-%             %                  z[k] = C(F/H)[k]
-%             %           lbg = -inf
-%             %           ubg = 0
-%             %           Front Leg
-%                 EqTemp = Ineq_Difference(FFy(k), Mfy, CF(PhaseIdx));
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  -inf];       %Give constraint lower bound
-%                 ubg = [ubg;  0];          %Give constraint upper bound
-% 
-%             %           Hind Leg
-%                 EqTemp = Ineq_Difference(FHy(k), Mfy, CH(PhaseIdx));
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  -inf];          %Give constraint lower bound
-%                 ubg = [ubg;  0];        %Give constraint upper bound
-%                 
-%             %   Fy >= 0 Unilaterla constratin
-%                 %           Front Leg
-%                 lb_DecisionVars(find(VarNamesList == ['FFy_',num2str(k-1)])) = 0;
-%                 %           Hind Leg
-%                 lb_DecisionVars(find(VarNamesList == ['FHy_',num2str(k-1)])) = 0; 
-%                 
-%             elseif TerrainType == 2 %Slope Terrain
-%                 %   Fy <= 0 + Mfy*C --> Fy - Mfy*C <= 0
-%                 %           Front Leg
-%                 EqTemp = Ineq_Difference(FFy(k), Mfy, CF(PhaseIdx));
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  -inf];       %Give constraint lower bound
-%                 ubg = [ubg;  0];          %Give constraint upper bound
-% 
-%                 %           Hind Leg
-%                 EqTemp = Ineq_Difference(FHy(k), Mfy, CH(PhaseIdx));
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  -inf];          %Give constraint lower bound
-%                 ubg = [ubg;  0];        %Give constraint upper bound
-%                 %   Fy >= -Mfy*C --> Fy + Mfy*C >= 0 
-%                 %           Front Leg
-%                 EqTemp = Ineq_Summation(FFy(k), Mfy, CF(PhaseIdx));
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  0];          %Give constraint lower bound
-%                 ubg = [ubg;  inf];        %Give constraint upper bound
-% 
-%                 %           Hind Leg
-%                 EqTemp = Ineq_Summation(FHy(k), Mfy, CH(PhaseIdx));
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  0];          %Give constraint lower bound
-%                 ubg = [ubg;  inf];        %Give constraint upper bound
-%                 %--------
-%                 %!!Terrain Norm/Unilateral Constraint
-%                 %--------
-%                 %Fn >= 0 (Normal Force) larger than 0 --> [Fx;Fy]'*TerrainNorm >= 0
-%                 %           Front Leg
-%                 EqTemp = [FFx(k);FFy(k)]'*TerrainNorm;
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  0];          %Give constraint lower bound
-%                 ubg = [ubg;  inf];        %Give constraint upper bound
-%                 %           Hind Leg
-%                 EqTemp = [FHx(k);FHy(k)]'*TerrainNorm;
-%                 g   = {g{:}, EqTemp};     %Append to constraint function list
-%                 lbg = [lbg;  0];          %Give constraint lower bound
-%                 ubg = [ubg;  inf];        %Give constraint upper bound
-%             end
             
             % Complementarity Constraints Built  
             %------------------------------------------------------
@@ -1697,6 +1923,8 @@ for runIdx = 1:NumofRuns
                  'ubx', ub_DecisionVars,...
                  'lbg', lbg,...
                  'ubg', ubg);
+    return_status = solver.stats();
+    return_status.success 
     disp('===================================================')
     disp(' ')
     %=======================================================================
@@ -1887,4 +2115,9 @@ end
 disp('===================================================');
 disp('All Experiments Finished')
 disp('===================================================');
+
+if exist('Terminator_or_Laptop','var') == 1 && Terminator_or_Laptop == 2 %terminator
+    %Send email to notify the success
+    sendmail('Jiayi.Wang@ed.ac.uk',[screen_name,' is done~',' ',email_message]);
+end
 
