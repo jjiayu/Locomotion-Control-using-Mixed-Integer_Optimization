@@ -156,8 +156,8 @@
     %   (Place Holder) big-M for all x, y, z axis velocities need to respecify
     %   when move to 3D
     %------------------------------------------------------------------------
-        Mvelx = 2.5;
-        Mvely = 2.5;
+    Mvelx = 2.5;
+    Mvely = 2.5;
     %----------------------------------------------------------------------
     %   Big-M for Foot-Ground Reaction Forces
     %----------------------------------------------------------------------
