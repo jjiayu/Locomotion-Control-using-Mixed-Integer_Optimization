@@ -48,12 +48,14 @@ else
                 if isequal(clean_Gait_from_HindSupport(loop_Idx,:),clean_Gait_from_HindSupport(loop_Idx+1,:))
                     vanishing_phase_idx = [vanishing_phase_idx,loop_Idx+1];
                 end
-            end                
-            %remove redudant phases
-            for loop_Idx = 1:size(vanishing_phase_idx)
-                clean_Gait_from_HindSupport(vanishing_phase_idx(loop_Idx),:) = [];
-            end
+            end         
+            clean_Gait_from_HindSupport(vanishing_phase_idx,:) = [];
             
+%             %remove redudant phases
+%             for loop_Idx = 1:size(vanishing_phase_idx)
+%                 clean_Gait_from_HindSupport(vanishing_phase_idx(loop_Idx),:) = [];
+%             end
+
             %Assign Names
             if size(clean_Gait_from_HindSupport,1) == 2
                 if isequal(clean_Gait_from_HindSupport(2,:),[1,0])
