@@ -49,13 +49,20 @@ for StridePeriod_Idx = 1:length(StridePeriod_List)
             load([StridePeriod_Path,'/',Files(fileIdx).name]);
         
             %Clean the Result Files, Remove failed optimizations
-        
-            if (mod(sum(gait(:,1)),1) == 0) && (mod(sum(gait(:,2)),1) == 0) && (sum(gait(:,1))<NumPhases) && (sum(gait(:,2))<NumPhases)
-                CleanFiles = {CleanFiles{:},Files(fileIdx)};
-                gait_results = {gait_results{:},gait};
-                cost_results = [cost_results,result_cost];
+            
+            if exist('return_status','var') == 1
+                if return_status.success == 1
+                    CleanFiles = {CleanFiles{:},Files(fileIdx)};
+                    gait_results = {gait_results{:},gait};
+                    cost_results = [cost_results,result_cost];
+                end
+            else %no existence of resturn_status
+                if (mod(sum(gait(:,1)),1) == 0) && (mod(sum(gait(:,2)),1) == 0) && (sum(gait(:,1))<NumPhases) && (sum(gait(:,2))<NumPhases)
+                    CleanFiles = {CleanFiles{:},Files(fileIdx)};
+                    gait_results = {gait_results{:},gait};
+                    cost_results = [cost_results,result_cost];
+                end
             end
-        
         end
         
         if isempty(CleanFiles)
