@@ -29,7 +29,7 @@ if Paras_Define_Method == 1 %Take from file
     elseif Terminator_or_Laptop == 2 %Terminator
         ParamFileDir = input('Manually Define Folder Path Storing Parameter File (quote with ''): \n');
         screen_name = input('Type Screen Name (quote using ''):\n');
-        email_message = input('Type Email Message (i.e. like robot type (half cheetah, humanoid, terrain_type, etc., any features, using '' to quote))');
+        email_message = input('Type Email Message (i.e. like robot type (half cheetah, humanoid, terrain_type, etc., any features, using '' to quote)):\n');
     end
     
     %ParamFileDir = uigetdir;
