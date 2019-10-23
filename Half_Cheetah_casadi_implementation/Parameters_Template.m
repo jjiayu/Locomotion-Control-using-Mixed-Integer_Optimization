@@ -74,8 +74,10 @@
         terrain_slope = tan(terrain_slope_rad);
         disp('----------------------------------------------------');
     elseif TerrainType == 2 %Slope
+        %------------------------------------------------------------------
         %Spoecify the terrain slope in Degrees (i.e.: -30, -10, 0, 10, 30...)
         terrain_slope_degrees = 10;
+        %------------------------------------------------------------------
         terrain_slope_rad = terrain_slope_degrees/180*pi;
         terrain_slope = tan(terrain_slope_rad);
         x_query   = SX.sym('x_query', 1);
