@@ -189,5 +189,37 @@ for StridePeriodLoop_Idx = 1:size(resultMatrix,2)
 end
 
 
+figure()
+hold on
+title('Gait Mapping')
+%Ploting Figures
+for outerloop_idx = 1:size(resultMatrix,1)
+    for innerloop_idx = 1:size(resultMatrix,2)
+        for GaitNameLoop_Idx = 1:length(resultMatrix{outerloop_idx,innerloop_idx}.allLocalOptimalGaitWithSimilarCost)
+            GaitNameTemp = resultMatrix{outerloop_idx,innerloop_idx}.allLocalOptimalGaitWithSimilarCost(GaitNameLoop_Idx);
+            if contains(GaitNameTemp,'Gallop') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'m-p','MarkerSize',30, 'LineWidth',1, 'MarkerFaceColor','m', 'LineStyle','none')
+            elseif contains(GaitNameTemp,'Walking-D') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'g-^','MarkerSize',30, 'LineWidth',4, 'LineStyle','none')
+            elseif contains(GaitNameTemp,'Bounding-D') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'r-s','MarkerSize',35, 'LineWidth',4, 'LineStyle','none')
+            elseif contains(GaitNameTemp,'Pronking') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'b-o','MarkerSize',15, 'LineWidth',1, 'LineStyle','none')
+            elseif contains(GaitNameTemp,'Walking-S') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'g-d','MarkerSize',25, 'LineWidth',3,'LineStyle','none')
+            elseif contains(GaitNameTemp,'Bounding-S') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'d','MarkerSize',25,'LineWidth',1,'MarkerFaceColor','#EDB120', 'MarkerEdgeColor','#EDB120','LineStyle','none')
+            elseif contains(GaitNameTemp,'Trotting') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'h','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
+            elseif contains(GaitNameTemp,'Unknown') == 1
+                disp(' Need Handling')
+            end
+        end
+    end
+end
+xlabel('Stride Period (s)');
+ylabel('Speed (m/s)');
+hold off
+
 
 

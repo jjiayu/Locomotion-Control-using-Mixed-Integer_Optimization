@@ -28,7 +28,7 @@ if Paras_Define_Method == 1 %Take from file
         ParamFileDir = uigetdir;
     elseif Terminator_or_Laptop == 2 %Terminator
         ParamFileDir = input('Manually Define Folder Path Storing Parameter File (quote with ''): \n');
-        [cmd_status,cmdoutput] = system('screen -ls')
+        [cmd_status,cm]
         %screen_name = input('Type Screen Name (quote using ''):\n');
         %email_message = input('Type Email Message (i.e. like robot type (half cheetah, humanoid, terrain_type, etc., any features, using '' to quote)):\n');
     end
@@ -2119,6 +2119,6 @@ disp('===================================================');
 
 if exist('Terminator_or_Laptop','var') == 1 && Terminator_or_Laptop == 2 %terminator
     %Send email to notify the success
-    sendmail('Jiayi.Wang@ed.ac.uk',[cmdoutput,' is done~']);
+    sendmail('Jiayi.Wang@ed.ac.uk',[screen_name,' is done~',' ',email_message]);
 end
 
