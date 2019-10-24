@@ -115,9 +115,19 @@ for outerloop_idx = 1:size(resultMatrix,1)
     end
 end
 
-legend(legend_vector)
+%used for making title
+cost_name_vector = ["1-> Minimize Force Squared (Energy Loss)",...
+                    "2-> Minimize Tangential Force (Maximize Robustness)",...
+                    "3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero)",...
+                    "4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)",...
+                    "5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope)",...
+                    "6-> Feet Velocity"];
 
 xlabel('Stride Period (s)');
+xlim([0.3,1.7])
 ylabel('Speed (m/s)');
+ylim([0.1,2.6])
+title(strcat(cost_name_vector(cost_flag),' Slope:',num2str(terrain_slope), '  Degrees'));
+legend(legend_vector)
 set(gca,'FontSize',24)
 hold off
