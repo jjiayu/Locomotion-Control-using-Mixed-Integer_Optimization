@@ -2119,6 +2119,7 @@ disp('===================================================');
 
 if exist('Terminator_or_Laptop','var') == 1 && Terminator_or_Laptop == 2 %terminator
     %Send email to notify the success
-    sendmail('Jiayi.Wang@ed.ac.uk',[cmdoutput,' is done~']);
+    split_cmdoutput = splitlines(cmdoutput);
+    sendmail('Jiayi.Wang@ed.ac.uk',[split_cmdoutput{2},' is done~']);
 end
 
