@@ -1,10 +1,10 @@
 clear;
 clc;
 
-directory = uigetdir(['~/Dropbox/'], 'Select Working Directory');
-
 diary off
 warning('off')
+
+directory = uigetdir(['~/Dropbox/'], 'Select Working Directory');
 
 min_StridePeriod = input('Input Minimum Stride Period: \n');
 max_StridePeriod = input('Input Maximum Stride Perdio: \n');
@@ -18,6 +18,10 @@ max_Speed = input('Input maximum Speed: \n');
 Speed_Resolution = input('Input spacing for Speed Vector: \n');
 Speed_List = min_Speed:Speed_Resolution:max_Speed;
 
+%Start Logging
+GaitMappingGenerationLog = strcat('Gait-Mapping-Generation-Results', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+diary([directory, '/', GaitMappingGenerationLog]);
+
 resultMatrix = cell(length(Speed_List),length(StridePeriod_List));
 
 FileMatrix = strings(length(Speed_List),length(StridePeriod_List));
@@ -30,13 +34,18 @@ for StridePeriod_Idx = 1:length(StridePeriod_List)
 %     if mod(StridePeriod_List(StridePeriod_Idx),1)==0
 %         StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriod_Idx)),'.0/']
 %     end
-    
+        disp('===========================================================')
+        disp(['Results for Stride Period: ', num2str(StridePeriod_List(StridePeriod_Idx)), 's'])
+        disp('===========================================================')
+        disp(' ')
+
     for Speed_Idx = 1:length(Speed_List)  
         speed = Speed_List(Speed_Idx);
         
         disp('===========================================================')
         disp(['For Speed: ', num2str(speed), ' m/s'])
         disp(['Stride Period: ', num2str(StridePeriod_List(StridePeriod_Idx)), 's'])
+        disp('===========================================================')
         
         Files = dir(fullfile(StridePeriod_Path,['Speed-',num2str(speed),'-*.mat']));
         
@@ -104,6 +113,8 @@ for StridePeriod_Idx = 1:length(StridePeriod_List)
             result_collection.OptimalCost = min_cost;
             
             %Collect Local Minima with similar cost
+            disp('Loop Over All Results')
+            disp('===========================================================')
             result_collection.SimilarLocalMinimaFileNames = {};
             for fileIdx = 1:length(CleanFiles)
                 disp('-------------------------------------------------------')
@@ -144,6 +155,9 @@ end
 GaitNameMatrix_withAllLocalMinima = cell(size(resultMatrix));
 
 %Generate Gait Matrix with similar Local Minima
+disp('===========================================================')
+disp('Generate Gait Matrix includes all similar Local Minima')
+disp('===========================================================')
 for StridePeriodLoop_Idx = 1:size(resultMatrix,2)
     
     StridePeriod_Path = [directory,'/4Phases_StridePeriod_',num2str(StridePeriod_List(StridePeriodLoop_Idx)),'/']
@@ -188,38 +202,8 @@ for StridePeriodLoop_Idx = 1:size(resultMatrix,2)
     end
 end
 
+save([directory,strcat('/Gait_Mapping_result-',datestr(datetime('now'), 30),'.mat')]);
 
-figure()
-hold on
-title('Gait Mapping')
-%Ploting Figures
-for outerloop_idx = 1:size(resultMatrix,1)
-    for innerloop_idx = 1:size(resultMatrix,2)
-        for GaitNameLoop_Idx = 1:length(resultMatrix{outerloop_idx,innerloop_idx}.allLocalOptimalGaitWithSimilarCost)
-            GaitNameTemp = resultMatrix{outerloop_idx,innerloop_idx}.allLocalOptimalGaitWithSimilarCost(GaitNameLoop_Idx);
-            if contains(GaitNameTemp,'Gallop') == 1
-                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'m-p','MarkerSize',30, 'LineWidth',1, 'MarkerFaceColor','m', 'LineStyle','none')
-            elseif contains(GaitNameTemp,'Walking-D') == 1
-                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'g-^','MarkerSize',30, 'LineWidth',4, 'LineStyle','none')
-            elseif contains(GaitNameTemp,'Bounding-D') == 1
-                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'r-s','MarkerSize',35, 'LineWidth',4, 'LineStyle','none')
-            elseif contains(GaitNameTemp,'Pronking') == 1
-                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'b-o','MarkerSize',15, 'LineWidth',1, 'LineStyle','none')
-            elseif contains(GaitNameTemp,'Walking-S') == 1
-                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'g-d','MarkerSize',25, 'LineWidth',3,'LineStyle','none')
-            elseif contains(GaitNameTemp,'Bounding-S') == 1
-                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'d','MarkerSize',25,'LineWidth',1,'MarkerFaceColor','#EDB120', 'MarkerEdgeColor','#EDB120','LineStyle','none')
-            elseif contains(GaitNameTemp,'Trotting') == 1
-                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'h','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
-            elseif contains(GaitNameTemp,'Unknown') == 1
-                disp(' Need Handling')
-            end
-        end
-    end
-end
-xlabel('Stride Period (s)');
-ylabel('Speed (m/s)');
-hold off
-
+diary off
 
 
