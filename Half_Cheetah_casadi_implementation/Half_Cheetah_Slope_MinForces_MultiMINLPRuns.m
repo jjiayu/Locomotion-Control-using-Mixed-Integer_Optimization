@@ -70,7 +70,12 @@ if Paras_Define_Method == 1 %Take from file
     %diary off
     TaskParameterLog_filename = strcat('MultiMINLPRuns-Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
     diary([ExpDirectory, '/', TaskParameterLog_filename]);
-
+    
+    % Display screen number
+    if Terminator_or_Laptop == 2 %on terminator
+        disp('Screen Number:')
+        disp(cmdoutput)
+    end
     %=========================================================
     % Display Script Information
     disp('====================================================');
