@@ -73,8 +73,10 @@ if Paras_Define_Method == 1 %Take from file
     
     % Display screen number
     if Terminator_or_Laptop == 2 %on terminator
+        disp('====================================================');
         disp('Screen Number:')
         disp(cmdoutput)
+        disp('====================================================');
     end
     %=========================================================
     % Display Script Information
