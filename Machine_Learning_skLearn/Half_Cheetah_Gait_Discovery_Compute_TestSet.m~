@@ -286,11 +286,14 @@ for SampleIdx = 1:length(SelectedtestSamples)
     Tend = SelectedtestSamples(SampleIdx,1); %Define Stride Period
     SpeedList = SelectedtestSamples(SampleIdx,2); %Define Speed List
     
-    %Setup ExpDirectory
-    ExpDirectory = [working_directory,'/TestSet/StridePeriod_',num2str(Tend),'_Speed_',num2str(SpeedList)];
-    if exist(ExpDirectory,'dir') ~= 1
-        mkdir(ExpDirectory);
+    if exist([ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)],'dir') == 1
+        ExpDirectory = [ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)];
+    else %or mkdir
+        mkdir([ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)]);
+        ExpDirectory = [ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)];
     end
+    
+    ExpDirectory = [working_directory,'/TestSet/StridePeriod_',num2str(Tend),'_Speed_',num2str(SpeedList)];
     
     %run the computation
     run('~/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_casadi_implementation/MINLP_Computation_Loop.m');

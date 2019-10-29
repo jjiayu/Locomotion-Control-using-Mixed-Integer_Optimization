@@ -3,7 +3,8 @@ clc;
 
 % Generate random sample from the condition space as test task, for
 % different stride period and speed with fixed terrain slope
-NumTask = input('Define number of samples (i.e. 50): \n');
+NumTask_Requested = input('Define number of samples (i.e. 50): \n');
+NumTask = NumTask_Requested + 1; %more than the number of tasks requested to avoid repeating samples
 disp(' ')
 
 %Defined Stride Period and Speed Ranges
@@ -32,15 +33,39 @@ Scaled_max_Speed = max_Speed*Scaling_Factor;
 
 % Generate Random Samples, has to be unique
 % For Stride Period
-rand_Scaled_StridePeriod = randperm(Scaled_max_StridePeriod - Scaled_min_StridePeriod + 1,NumTask) + Scaled_min_StridePeriod;
+rand_Scaled_StridePeriod = randperm(Scaled_max_StridePeriod - Scaled_min_StridePeriod + 1, NumTask) + Scaled_min_StridePeriod;
 rand_StridePeriod = (rand_Scaled_StridePeriod - mod(rand_Scaled_StridePeriod,Scaled_Resolution))/Scaling_Factor;
 
-rand_Scaled_Speed = randperm(Scaled_max_Speed - Scaled_min_Speed + 1,NumTask) + Scaled_min_Speed;
+rand_Scaled_Speed = randperm(Scaled_max_Speed - Scaled_min_Speed + 1, NumTask) + Scaled_min_Speed;
 rand_Speed = (rand_Scaled_Speed - mod(rand_Scaled_Speed,Scaled_Resolution))/Scaling_Factor;
 
-% Build arrays to save into csv files
-TaskPair = [rand_StridePeriod',rand_Speed'];
+% Sample more and then select
+% % Build arrays to save into csv files
+% rawTaskPair = [rand_StridePeriod',rand_Speed']; %with a lot of samples
+% rawTaskPairTable = array2table(rawTaskPair,'VariableNames',["StridePeriod","Speed"]);
+% unique_rawTaskPairTable = unique(rawTaskPairTable);
+% 
+% % pick NUmTask samples from the pool
+% random_idx = randperm(size(unique_rawTaskPairTable,1),NumTask);
+% TaskPairTable = unique_rawTaskPairTable(random_idx,:);
+% TaskPair = table2array(TaskPairTable); %for plot
+
+% Generate Samples
+TaskPair = [rand_StridePeriod',rand_Speed']; %with a lot of samples
 TaskPairTable = array2table(TaskPair,'VariableNames',["StridePeriod","Speed"]);
+TaskPairTable = unique(TaskPairTable);
+
+if size(TaskPairTable,1) < NumTask_Requested
+    proceed_flag = input(['Insufficient Number of Samples, (', num2str(size(TaskPairTable,1)),' Samples)',' proceed or not? 1-> yes 2-> no \n']);
+    if proceed_flag == 2 %no
+        ME_InsufficientSamples = MException('Sample:Insufficient','Insufficient Number of Samples');
+        throw(ME_InsufficientSamples)
+    end
+elseif size(TaskPairTable,1) > NumTask_Requested
+    TaskPairTable = TaskPairTable(1:NumTask_Requested,:);
+end
+
+TaskPair = table2array(TaskPairTable);
 
 %Plot result
 plot(TaskPair(:,1),TaskPair(:,2),'o')
@@ -58,9 +83,10 @@ if Save_Flag == 1 %Save file
     elseif Terminator_Laptop_flag == 2 %terminator
         saving_directory = input('Manually Define Folder Path Storing Parameter File (quote with ''): \n');
     end
+    
+    disp(['Saving Directory: ',saving_directory]);
+    disp(' ')
+    writetable(TaskPairTable,[saving_directory,['/TestSet_TaskSamples-',datestr(datetime('now'), 30),'.csv']]);
 end
-disp(['Saving Directory: ',saving_directory]);
-disp(' ')
-writetable(TaskPairTable,[saving_directory,['/TestSet_TaskSamples-',datestr(datetime('now'), 30),'.csv']]);
 
 
