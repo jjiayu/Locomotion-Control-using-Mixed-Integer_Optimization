@@ -282,9 +282,14 @@ end
 
 % Perform computation
 
-for SampleIdx = 1:length(SelectedtestSamples)
+for SampleIdx = 1:size(SelectedtestSamples,1)
     Tend = SelectedtestSamples(SampleIdx,1); %Define Stride Period
     SpeedList = SelectedtestSamples(SampleIdx,2); %Define Speed List
+    
+    disp('====================================================');
+    disp(['Stride Period of the Test Sample: ',num2str(Tend)])
+    disp(['Speed of the Test Sample: ', num2str(SpeedList)]);
+    disp('====================================================');
     
     %Setup ExpDirectory
     ExpDirectory = [working_directory,'/TestSet/StridePeriod_',num2str(Tend),'_Speed_',num2str(SpeedList)];

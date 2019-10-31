@@ -614,6 +614,9 @@ elseif Paras_Define_Method == 2 %Define Manually
     %---------------------------------------------------------------------
     %       big-M for Y-axis Foot/End-Effector Velocity
     %---------------------------------------------------------------------
+    %   Velocity Big-M 
+    Mvel = 100;
+    %-------------------
     disp('Big-M for Foot/End-Effector in Y-axis:')
     MvelyCase = input('Select the Setup Case for big-M value for Foot/End-Effector Velocity in Y-axis: \n1 -> Default Value (5m/s); 2 -> User Specified: \n');
     disp(' ')

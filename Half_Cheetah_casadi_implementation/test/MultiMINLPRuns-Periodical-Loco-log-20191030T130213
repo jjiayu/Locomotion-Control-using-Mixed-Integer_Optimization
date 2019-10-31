@@ -1,0 +1,85 @@
+====================================================
+Genearl Information:
+====================================================
+Parameter Defined Maunally
+====================================================
+CasADi Implementation
+2D Locomotion Control using Mixed-integer Nonlinear Optimization
+With a Particular Emphasis on Periodical Gait Discovery
+Multi-Phase Formulation:
+Optimize over State, Control, Gait Sequence, and Switching Time
+----------------------------------------------------
+Date and Time:
+   30-Oct-2019 13:02:13
+
+----------------------------------------------------
+Correspondent Log File Name: MultiMINLPRuns-Periodical-Loco-log-20191030T130213in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_casadi_implementation/test
+====================================================
+ 
+====================================================
+Setup Robot Kinematics Properties: 
+----------------------------------------------------
+Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):
+0.4
+----------------------------------------------------
+Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):
+0.4
+----------------------------------------------------
+====================================================
+Set up Cost Terms:
+----------------------------------------------------
+Decide Cost: 
+ 1-> Minimize Force Squared (Energy Loss) 
+ 2-> Minimize Tangential Force (Maximize Robustness) 
+ 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero) 
+ 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) 
+ 5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope) 
+ 6-> Feet Velocity 
+1
+====================================================
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify the Terrain Type: 1 -> Flat Terrain (Use this if Terrain Slope = 0); 2 -> Slopes
+1
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+2
+Terrain Norm is: 
+
+TerrainNorm =
+
+     0
+     1
+
+Terrain Tangent is: 
+
+TerrainTangent =
+
+     1
+     0
+
+----------------------------------------------------
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Specify the MINIMUM Desired Speed along X-axis (m/s): 
+0.3
+----------------------------------------------------
+Specify the MAXIMUM Desired Speed along X-axis (m/s): 
+2.5
+----------------------------------------------------
+Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):
+0.
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Optimize, 2 -> Left as Free Variable 
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Half_Cheetah_Slope_MinForces_MultiMINLPRuns', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_casadi_implementation/Half_Cheetah_Slope_MinForces_MultiMINLPRuns.m', 519)" style="font-weight:bold">Half_Cheetah_Slope_MinForces_MultiMINLPRuns</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/Half_Cheetah_casadi_implementation/Half_Cheetah_Slope_MinForces_MultiMINLPRuns.m',519,0)">line 519</a>)
+} 
+Half_Cheetah_Slope_MinForces_MultiMINLPRuns

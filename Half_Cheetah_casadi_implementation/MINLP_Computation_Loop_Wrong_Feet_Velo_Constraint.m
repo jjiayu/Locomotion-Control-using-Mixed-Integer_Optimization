@@ -650,165 +650,76 @@ for runIdx = 1:NumofRuns
             g   = {g{:}, EqTemp};
             lbg = [lbg;  0];
             ubg = [ubg;  inf];
-            
-            %-------------------------------------------------------
-            %       Feet Velocity Constraint
-            %-------------------------------------------------------
-            %       Set One: Big-M Openinig and Closing of Feet Velocity
-            %           Equations (1): Pdot <= Mvel(1-C)   -->
-            %                          Pdot <= Mvel - Mvel*C -->
-            %                          Pdot + Mvel*C <= Mvel
-            %           lbg = -inf
-            %           ubg = Mvel
-                        %Mvel is a big
-            %           enough constant value (100) to control the opening
-            %           and closing of the constraint
-            %--------------------------------------------------------
-            %           Front Leg x-axis    
-                EqTemp = PFxdot(k) + Mvel*CF(PhaseIdx);
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -inf];
-                ubg = [ubg; Mvel];
-            %           Front Leg y-axis
-                EqTemp = PFydot(k) + Mvel*CF(PhaseIdx);
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -inf];
-                ubg = [ubg; Mvel];
-            %           Hind Leg x-axis    
-                EqTemp = PHxdot(k) + Mvel*CH(PhaseIdx);
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -inf];
-                ubg = [ubg; Mvel];
-            %           Hind Leg y-axis
-                EqTemp = PHydot(k) + Mvel*CH(PhaseIdx);
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -inf];
-                ubg = [ubg; Mvel];
-            %-----------------------------------------------------------
-            %       Equation (2): Pdot >= -Mvel(1-C) -->
-            %                     Pdot >= -Mvel + Mvel*C -->
-            %                     Pdot - Mvel*C >= -Mvel
-            %       lbg = -Mvel
-            %       ubg = inf
-            %-----------------------------------------------------------
-            %           Front Leg x-axis
-                EqTemp = PFxdot(k) - Mvel*CF(PhaseIdx);
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -Mvel];
-                ubg = [ubg; inf];
-            %           Front Leg y-axis
-                EqTemp = PFydot(k) - Mvel*CF(PhaseIdx);
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -Mvel];
-                ubg = [ubg; inf];
-            %           Hind Leg x-axis
-                EqTemp = PHxdot(k) - Mvel*CH(PhaseIdx);
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -Mvel];
-                ubg = [ubg; inf];
-            %           Hind Leg y-axis
-                EqTemp = PHydot(k) - Mvel*CH(PhaseIdx);
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -Mvel];
-                ubg = [ubg; inf];
-            %---------------------------------------------------------
-            %       Set (2): Speed Ranges
-            %---------------------------------------------------------
-            %           Equation :   |Pdot - Pdot_body| <= Mvel_x/y -->
-            %                 -Mvel_x/y <= Pdot - Pdot_body <= Mvel_x/y
-            %           lbg = -inf
-            %           ubg = Mvel_x/y
-            %---------------------------------------------------------
-            %           Front Leg x-axis
-                EqTemp = cos(theta(k))*(PFxdot(k) - xdot(k)) + sin(theta(k))*(PFydot(k) - ydot(k));
-                %EqTemp = PFxdot(k) - xdot(k);
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -Mvelx];
-                ubg = [ubg; Mvelx];
-            %           Front Leg y-axis
-                EqTemp = -sin(theta(k))*(PFxdot(k) - xdot(k)) + cos(theta(k))*(PFydot(k) - ydot(k));
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -Mvely];
-                ubg = [ubg; Mvely];
-            %           Hind Leg x-axis
-                EqTemp = cos(theta(k))*(PHxdot(k) - xdot(k)) + sin(theta(k))*(PHydot(k) - ydot(k));
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -Mvelx];
-                ubg = [ubg; Mvelx];
-            %           Hind Leg y-axis
-                EqTemp = -sin(theta(k))*(PHxdot(k) - xdot(k)) + cos(theta(k))*(PHydot(k) - ydot(k));
-                g   = {g{:}, EqTemp};
-                lbg = [lbg; -Mvely];
-                ubg = [ubg; Mvely];
+             
 %-------------------------------------------------------------------------
-%   Old Version - In-Correct for sure but the rotation matrix may be useful
+%   Old Version of Feet Velocity Constraint - In-Correct for sure but the rotation matrix may be useful
 %-------------------------------------------------------------------------
-%             %       - Equations (1): Body_Velo + R(theta)Pdot <= 0 + Mvel(1-C) -->
-%             %                       R(theta)Pdot + Mvel*C <= Mvel -->
-%             %         Use Ineq_Summation
-%             %         Input: v[k] = P(F/H)(x/y)dot[k]
-%             %                bigM = Mvel
-%             %                z[k] = C(F/H)[k]
-%             %         lbg = -inf
-%             %         ubg = Mvel
-%             %----------------------------------------------------
-%             %           Front Leg x-axis
-%                 EqTemp = Ineq_Summation(cos(theta(k))*PFxdot(k)+sin(theta(k))*PFydot(k), Mvelx, CF(PhaseIdx));
-%                 g   = {g{:}, EqTemp};                      %Append to constraint function list
-%                 lbg = [lbg;  -inf];                        %Give constraint lower bound
-%                 ubg = [ubg;  Mvelx];                       %Give constraint upper bound
-% 
-%             %           Front Leg y-axis
-%                 EqTemp = Ineq_Summation(-sin(theta(k))*PFxdot(k)+cos(theta(k))*PFydot(k), Mvely, CF(PhaseIdx));
-%                 g   = {g{:}, EqTemp};                      %Append to constraint function list
-%                 lbg = [lbg;  -inf];                        %Give constraint lower bound
-%                 ubg = [ubg;  Mvely];                       %Give constraint upper bound
-% 
-%             %           Hind Leg x-axis
-%                 EqTemp = Ineq_Summation(cos(theta(k))*PHxdot(k)+sin(theta(k))*PHydot(k), Mvelx, CH(PhaseIdx));
-%                 g   = {g{:}, EqTemp};                      %Append to constraint function list
-%                 lbg = [lbg;  -inf];                        %Give constraint lower bound
-%                 ubg = [ubg;  Mvelx];                       %Give constraint upper bound
-% 
-%             %           Hind Leg y-axis
-%                 EqTemp = Ineq_Summation(-sin(theta(k))*PHxdot(k)+cos(theta(k))*PHydot(k), Mvely, CH(PhaseIdx));
-%                 g   = {g{:}, EqTemp};                      %Append to constraint function list
-%                 lbg = [lbg;  -inf];                        %Give constraint lower bound
-%                 ubg = [ubg;  Mvely];                       %Give constraint upper bound
-%             %------------------------------------------------------              
-%             %       - Equation (2): R(theta)Pdot >= 0 - Mvel(1-C) -->
-%             %                       R(theta)Pdot - Mvel*C >= -Mvel -->
-%             %                       -Mvel <= R(theta)Pdot - Mvel*C
-%             %         Use Function Ineq_Difference
-%             %         Input: v[k] = P(F/H)(x/y)dot[k]
-%             %                bigM = -Mvel
-%             %                z[k] = C(F/H)[k]
-%             %         lbg = -Mvel
-%             %         ubg = inf
-%             %------------------------------------------------------
-%             %           Front Leg x-axis
-%                 EqTemp = Ineq_Difference(cos(theta(k))*PFxdot(k)+sin(theta(k))*PFydot(k), Mvelx, CF(PhaseIdx));
-%                 g   = {g{:}, EqTemp};                      %Append to constraint function list
-%                 lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
-%                 ubg = [ubg;  inf];                         %Give constraint upper bound
-% 
-%             %           Front Leg y-axis
-%                 EqTemp = Ineq_Difference(-sin(theta(k))*PFxdot(k)+cos(theta(k))*PFydot(k), Mvely, CF(PhaseIdx));
-%                 g   = {g{:}, EqTemp};                      %Append to constraint function list
-%                 lbg = [lbg;  -Mvely];                      %Give constraint lower bound
-%                 ubg = [ubg;  inf];                         %Give constraint upper bound
-% 
-%             %           Hind Leg x-axis
-%                 EqTemp = Ineq_Difference(cos(theta(k))*PHxdot(k)+sin(theta(k))*PHydot(k), Mvelx, CH(PhaseIdx));
-%                 g   = {g{:}, EqTemp};                      %Append to constraint function list
-%                 lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
-%                 ubg = [ubg;  inf];                         %Give constraint upper bound
-% 
-%             %           Hind Leg y-axis
-%                 EqTemp = Ineq_Difference(-sin(theta(k))*PHxdot(k)+cos(theta(k))*PHydot(k), Mvely, CH(PhaseIdx));
-%                 g   = {g{:}, EqTemp};                      %Append to constraint function list
-%                 lbg = [lbg;  -Mvely];                      %Give constraint lower bound
-%                 ubg = [ubg;  inf];                         %Give constraint upper bound
+            %       - Equations (1): Body_Velo + R(theta)Pdot <= 0 + Mvel(1-C) -->
+            %                       R(theta)Pdot + Mvel*C <= Mvel -->
+            %         Use Ineq_Summation
+            %         Input: v[k] = P(F/H)(x/y)dot[k]
+            %                bigM = Mvel
+            %                z[k] = C(F/H)[k]
+            %         lbg = -inf
+            %         ubg = Mvel
+            %----------------------------------------------------
+            %           Front Leg x-axis
+                EqTemp = Ineq_Summation(cos(theta(k))*PFxdot(k)+sin(theta(k))*PFydot(k), Mvelx, CF(PhaseIdx));
+                g   = {g{:}, EqTemp};                      %Append to constraint function list
+                lbg = [lbg;  -inf];                        %Give constraint lower bound
+                ubg = [ubg;  Mvelx];                       %Give constraint upper bound
+
+            %           Front Leg y-axis
+                EqTemp = Ineq_Summation(-sin(theta(k))*PFxdot(k)+cos(theta(k))*PFydot(k), Mvely, CF(PhaseIdx));
+                g   = {g{:}, EqTemp};                      %Append to constraint function list
+                lbg = [lbg;  -inf];                        %Give constraint lower bound
+                ubg = [ubg;  Mvely];                       %Give constraint upper bound
+
+            %           Hind Leg x-axis
+                EqTemp = Ineq_Summation(cos(theta(k))*PHxdot(k)+sin(theta(k))*PHydot(k), Mvelx, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};                      %Append to constraint function list
+                lbg = [lbg;  -inf];                        %Give constraint lower bound
+                ubg = [ubg;  Mvelx];                       %Give constraint upper bound
+
+            %           Hind Leg y-axis
+                EqTemp = Ineq_Summation(-sin(theta(k))*PHxdot(k)+cos(theta(k))*PHydot(k), Mvely, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};                      %Append to constraint function list
+                lbg = [lbg;  -inf];                        %Give constraint lower bound
+                ubg = [ubg;  Mvely];                       %Give constraint upper bound
+            %------------------------------------------------------              
+            %       - Equation (2): R(theta)Pdot >= 0 - Mvel(1-C) -->
+            %                       R(theta)Pdot - Mvel*C >= -Mvel -->
+            %                       -Mvel <= R(theta)Pdot - Mvel*C
+            %         Use Function Ineq_Difference
+            %         Input: v[k] = P(F/H)(x/y)dot[k]
+            %                bigM = -Mvel
+            %                z[k] = C(F/H)[k]
+            %         lbg = -Mvel
+            %         ubg = inf
+            %------------------------------------------------------
+            %           Front Leg x-axis
+                EqTemp = Ineq_Difference(cos(theta(k))*PFxdot(k)+sin(theta(k))*PFydot(k), Mvelx, CF(PhaseIdx));
+                g   = {g{:}, EqTemp};                      %Append to constraint function list
+                lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
+                ubg = [ubg;  inf];                         %Give constraint upper bound
+
+            %           Front Leg y-axis
+                EqTemp = Ineq_Difference(-sin(theta(k))*PFxdot(k)+cos(theta(k))*PFydot(k), Mvely, CF(PhaseIdx));
+                g   = {g{:}, EqTemp};                      %Append to constraint function list
+                lbg = [lbg;  -Mvely];                      %Give constraint lower bound
+                ubg = [ubg;  inf];                         %Give constraint upper bound
+
+            %           Hind Leg x-axis
+                EqTemp = Ineq_Difference(cos(theta(k))*PHxdot(k)+sin(theta(k))*PHydot(k), Mvelx, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};                      %Append to constraint function list
+                lbg = [lbg;  -Mvelx];                      %Give constraint lower bound
+                ubg = [ubg;  inf];                         %Give constraint upper bound
+
+            %           Hind Leg y-axis
+                EqTemp = Ineq_Difference(-sin(theta(k))*PHxdot(k)+cos(theta(k))*PHydot(k), Mvely, CH(PhaseIdx));
+                g   = {g{:}, EqTemp};                      %Append to constraint function list
+                lbg = [lbg;  -Mvely];                      %Give constraint lower bound
+                ubg = [ubg;  inf];                         %Give constraint upper bound
             %------------------------------------------------------
             %   (*) Foot/End-Effector Forces
             %------------------------------------------------------
