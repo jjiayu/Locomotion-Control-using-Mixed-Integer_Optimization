@@ -18,11 +18,27 @@
     BodyHeight = 0.2;
     %       Default foot position in Local robot frame
     DefaultLegLength = 0.45; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
+    
+    %-------------------------------
+    %   Morphology Definition: Morpho_change_flag
+    %   1-> Yes, Alllow Mophorlogy change 
+    %   2-> No Morphology change (Default: Half-CHeetah)
+    %-------------------------------
+    Morpho_change_flag = 1; 
+    
+    if Morpho_change_flag == 1 %Allow morphology change
+        Morpho_Percentage = 0; % A Humanoid Model
+        Morpho_Percentage = Morpho_Percentage/100;
+    else %No morphology change (Default Half_Cheetah)
+        Morpho_Percentage = 100;
+        Morpho_Percentage = Morpho_Percentage/100;
+    end
+    
     %           Front Foot Default Positions (IN ROBOT FRAME)
-    PFCenterX = 1/2*BodyLength;
+    PFCenterX = Morpho_Percentage*(1/2*BodyLength);
     PFCenterY = -(1/2*BodyHeight + DefaultLegLength);
     %           Hind Foot Default Positions (IN ROBOT FRAME)
-    PHCenterX = -1/2*BodyLength;
+    PHCenterX = Morpho_Percentage*(-1/2*BodyLength);
     PHCenterY = -(1/2*BodyHeight + DefaultLegLength);
     
     %       Kinematics Bounding Box Constraint
@@ -92,9 +108,12 @@
     %Other Parameters
     if TerrainType == 1 %Flat Terrain
         TerrainNorm = [0;1];
+        TerrainTangent = [1;0];
     elseif TerrainType == 2 % if Stairs, over-write the terrain norm with 
         TerrainNorm = [0;1];
         TerrainNorm = [cos(terrain_slope_rad), -sin(terrain_slope_rad); sin(terrain_slope_rad), cos(terrain_slope_rad)]*TerrainNorm;
+        TerrainTangent = [1;0];
+        TerrainTangent = [cos(terrain_slope_rad),-sin(terrain_slope_rad);sin(terrain_slope_rad),cos(terrain_slope_rad)]*TerrainTangent;
     end
 
     %-----------------------------------------------------------------------
@@ -151,15 +170,16 @@
     %   Big-M for foot positions in y-axis (meters)
     Mpos_y = 100; 
     %----------------------------------------------------------------------
-    %   Determine big-M for foot velocity
-    %-------------------------------
-    %   (Place Holder) big-M for all x, y, z axis velocities need to respecify
-    %   when move to 3D
-    %------------------------------------------------------------------------
+    %   Big-M for feet velocities
+    Mvel = 100;
+    %---------------------------------------------------------------------
+    %   Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame)
+    %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in X-axis (In Robot Frame)
     Mvelx = 2.5;
+    %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Y-axis (In Robot Frame)
     Mvely = 2.5;
     %----------------------------------------------------------------------
-    %   Big-M for Foot-Ground Reaction Forces
+    %   Big-M/Boundaries for Foot-Ground Reaction Forces
     %----------------------------------------------------------------------
     Mfx = 1000;
     Mfy = 1000;
