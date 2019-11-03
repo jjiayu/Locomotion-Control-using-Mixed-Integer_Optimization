@@ -48,6 +48,18 @@ if Paras_Define_Method == 2
     disp(['Experiment Working Directory: ', ExpDirectory])
 end
 
+%=====================================================================
+%   Selection Between Free Gait Discovery or Fixed Gait Discovery
+%=====================================================================
+disp('=====================================================');
+Fixed_FreeGait_flag = input('Decide 1-> Discovering Gait via MINLP; 2-> Generating Locomotion Plans for a Fixed Gait Sequence: \n');
+
+if Fixed_FreeGait_flag == 2 %fixed gait optimization
+    user_defined_gait = input('Select the gait: \n 1 -> Walking-D (Symmetric Walking) \n 2 -> Trotting \n 3 -> Galloping \n 4 -> Bounding-D (Symmetric Bounding) \n 5 -> Pronking \n 6-> Walking-S (Asymmetric Walking/Galloping without flying phase) (3-Phases) \n 7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) (3Phases) \n');
+    [CF,CH,GaitName] = Gait_Selection(user_defined_gait);
+end
+
+
 % Display Pre-defined Setup or Input Parameters
 %----------------------------------------------------------------------
 %   Terminal time Setup (Only for Cases when load parameter from File)
@@ -61,11 +73,20 @@ if Paras_Define_Method == 1 %load parameter from file
         Tend = input('Input Termianl Time (e.g. 1s): \n');
         
         %Define the Experiment Direcotry if we load parameter from file
-        if exist([ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)],'dir') == 1
-            ExpDirectory = [ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)];
-        else %or mkdir
-            mkdir([ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)]);
-            ExpDirectory = [ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)];
+        if Fixed_FreeGait_flag == 1 %Free Gait Discovery Using MINLP
+            if exist([ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)],'dir') == 1
+                ExpDirectory = [ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)];
+            else %or mkdir
+                mkdir([ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)]);
+                ExpDirectory = [ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)];
+            end
+        elseif Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
+            if exist([ParamFileDir,'/',GaitName,'StridePeriod_',num2str(Tend)],'dir') == 1
+                ExpDirectory = [ParamFileDir,'/',GaitName,'StridePeriod_',num2str(Tend)];
+            else %or mkdir
+                mkdir([ParamFileDir,'/',GaitName,'StridePeriod_',num2str(Tend)]);
+                ExpDirectory = [ParamFileDir,'/',GaitName,'StridePeriod_',num2str(Tend)];
+            end
         end
  
     elseif Tend_flag == 2
@@ -82,7 +103,11 @@ end
 %========================================================
 % Command Line Logging
 %diary off
-TaskParameterLog_filename = strcat('MultiMINLPRuns-Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+if Fixed_FreeGait_flag == 1 %Gait Discovery using MINLP
+    TaskParameterLog_filename = strcat('MultiMINLPRuns-Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+elseif Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
+    TaskParameterLog_filename = strcat('FixedGait-Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+end
 diary([ExpDirectory, '/', TaskParameterLog_filename]);
 
 % %=========================================================
@@ -428,7 +453,12 @@ if Paras_Define_Method == 1 %Take fro file
     disp('Temporal and Discretization Setup:');
     disp('----------------------------------------------------');
     %   Number of Phases
-    disp(['Number of Phase: ',num2str(NumPhases)]);
+    if Fixed_FreeGait_flag == 1 %Free Gait Discovery using MINLP
+        disp(['Number of Phase: ',num2str(NumPhases)]);
+    elseif Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
+        NumPhases = length(CF);
+        disp(['Number of Phase: ',num2str(NumPhases)])
+    end
     disp('----------------------------------------------------');
     %   Number of timesteps for each phase
     disp(['Number of Knots for each phase:' ,num2str(NumLocalKnots)]);
@@ -444,7 +474,12 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     disp('Temporal and Discretization Setup:');
     disp('----------------------------------------------------');
     %   Number of Phases
-    NumPhases = input('Input Number of Phases: \n');
+    if Fixed_FreeGait_flag == 1 %Free Gait Discovery using MINLP
+        NumPhases = input('Input Number of Phases: \n');
+    elseif Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
+        NumPhases = length(CF);
+        disp(['Number of Phase: ',num2str(NumPhases)])
+    end
     disp('----------------------------------------------------');
     %   Number of timesteps for each phase
     NumLocalKnots = input('Input Number of Knots for Each Phase: \n');
@@ -591,7 +626,7 @@ end
 %======================================================================
 %   Run the big computation loop
 %======================================================================
-run('MINLP_Computation_Loop.m');
+run('Computation_Loop_MINLP_and_FixedGait.m');
 %======================================================================
 
 disp('===================================================');
