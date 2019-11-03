@@ -229,6 +229,8 @@ if Paras_Define_Method == 1 %Take fro file
     disp('5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope)');
     elseif cost_flag == 6
     disp('6-> Feet Velocity');
+    elseif cost_flag == 7
+    disp('7-> Humanoid Smooth Motion')
     end
 
     if cost_flag~= 1 && cost_flag ~= 2 && cost_flag ~= 6
@@ -251,7 +253,7 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     disp('====================================================');
     disp('Set up Cost Terms:')
     disp('----------------------------------------------------');
-    cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n 2-> Minimize Tangential Force (Maximize Robustness) \n 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero) \n 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n 5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope) \n 6-> Feet Velocity \n');
+    cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n 2-> Minimize Tangential Force (Maximize Robustness) \n 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, ydot towards zero) \n 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n 5-> Minimize Velocity Smoothnes with Fixed Orientatation (add orientation the same as the terrain slope) \n 6-> Feet Velocity \n 7-> Humanoid Smooth Motion (theta, thetadot towards zero) \n');
     %cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared \n 2-> Minimize Body Vibration (ydot, theta towards terrain slope, thetadot) \n 3-> Minimize tangential speed (along the terrain) to the deisred speed at every knot \n 4-> Minimize tangential speed (to the desired speed), normal axis speed (towards zero) \n 5 -> Minimize tangential speed (to the desired speed), normal speed (tp zero), angular speed thetadot (to the terrain slope) \n 6-> Minimize Body Vibration with Constant Tangential Speed (ydot, theta towards terrain slope, thetadot, xdot toward desired tangetial speed): \n');
     if cost_flag~= 1 && cost_flag ~= 2 && cost_flag ~= 6
         disp('----------------------------------------------------');
