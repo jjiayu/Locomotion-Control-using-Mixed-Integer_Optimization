@@ -54,10 +54,14 @@ end
 %   Selection Between Free Gait Discovery or Fixed Gait Discovery
 %=====================================================================
 disp('=====================================================');
-Fixed_FreeGait_flag = input('Decide 1-> Discovering Gait via MINLP; 2-> Generating Locomotion Plans for a Fixed Gait Sequence: \n');
+if Paras_Define_Method == 2 %Using Defined manually
+    Fixed_FreeGait_flag = input('Decide 1-> Discovering Gait via MINLP; 2-> Generating Locomotion Plans for a Fixed Gait Sequence: \n');
+end
 
 if Fixed_FreeGait_flag == 2 %fixed gait optimization
-    user_defined_gait = input('Select the gait: \n 1 -> Walking-D (Symmetric Walking) \n 2 -> Trotting \n 3 -> Galloping \n 4 -> Bounding-D (Symmetric Bounding) \n 5 -> Pronking \n 6-> Walking-S (Asymmetric Walking/Galloping without flying phase) (3-Phases) \n 7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) (3Phases) \n');
+    if Paras_Define_Method == 2 %Using Defined manually 
+        user_defined_gait = input('Select the gait: \n 1 -> Walking-D (Symmetric Walking) \n 2 -> Trotting \n 3 -> Galloping \n 4 -> Bounding-D (Symmetric Bounding) \n 5 -> Pronking \n 6-> Walking-S (Asymmetric Walking/Galloping without flying phase) (3-Phases) \n 7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) (3Phases) \n');
+    end
     [CF,CH,GaitName] = Gait_Selection(user_defined_gait);
 end
 
