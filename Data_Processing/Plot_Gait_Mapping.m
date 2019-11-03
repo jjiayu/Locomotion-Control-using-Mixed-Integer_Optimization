@@ -31,6 +31,8 @@ for outerloop_idx = 1:size(resultMatrix,1)
             elseif contains(GaitNameTemp,'Unknown') == 1
                 %plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'x','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
                 unknown_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
+            elseif contains(GaitNameTemp,'N/A') == 1
+                infeasible_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
             end   
         end
     end
@@ -69,6 +71,11 @@ end
 if exist('unknown_sample','var') == 1
     plot(unknown_sample(1),unknown_sample(2),'x','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
     legend_vector = [legend_vector,"Unknown"];
+end
+
+if exist('infeasible_sample','var') == 1
+    plot(infeasible_sample(1),infeasible_sample(2),'v','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
+    legend_vector = [legend_vector,"Infeasible"];
 end
 
 %plot(walking_d_sample,'g-s','MarkerSize',35, 'LineWidth',2.5, 'LineStyle','none')
@@ -110,6 +117,9 @@ for outerloop_idx = 1:size(resultMatrix,1)
             elseif contains(GaitNameTemp,'Unknown') == 1
                 plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'x','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
                 %unknown_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
+            elseif contains(GaitNameTemp,'N/A') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'v','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
+                %unknown_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
             end   
         end
     end
@@ -126,7 +136,7 @@ cost_name_vector = ["1-> Minimize Force Squared (Energy Loss)",...
 xlabel('Stride Period (s)');
 xlim([0.3,1.7])
 ylabel('Speed (m/s)');
-ylim([0.1,2.6])
+ylim([0.1,max_Speed+0.3])
 title(strcat(cost_name_vector(cost_flag),' Slope:',num2str(terrain_slope_degrees), '  Degrees'));
 legend(legend_vector)
 set(gca,'FontSize',24)

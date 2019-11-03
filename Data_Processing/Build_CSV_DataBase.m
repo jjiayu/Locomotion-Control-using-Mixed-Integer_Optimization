@@ -26,6 +26,9 @@ for outerloop_idx = 1:size(resultMatrix,1)
                 elseif contains(GaitNameTemp,'Pronking') == 1
                     TempLine = {resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),"Pronking",7};
                     database(size(database,1)+1,:) = TempLine;
+                elseif contains(GaitNameTemp,'N/A') == 1
+                    TempLine = {resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),"Infeasible",8};
+                    database(size(database,1)+1,:) = TempLine;
                 end
             end
         end
