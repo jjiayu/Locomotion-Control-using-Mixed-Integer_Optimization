@@ -1032,7 +1032,10 @@ for runIdx = 1:NumofRuns
                 end
             elseif cost_flag == 6 %Feet Velocity (Pending)
                 J = J + h*(PFxdot(k)^2) + h*(PFydot(k)^2) + h*(PHxdot(k)^2) + h*(PHydot(k)^2);
-%             elseif cost_flag == 4 %Minimize the speed difference between the desired speed at every knot (along the tangential line of the terrain)
+            elseif cost_flag == 7 %Humanoid smooth motion
+                J = J + h*((theta(k)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
+%             
+%           elseif cost_flag == 4 %Minimize the speed difference between the desired speed at every knot (along the tangential line of the terrain)
 %                 if cost_type_flag == 1 %with Time Integral
 %                     J = J + h*([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2;
 %                 elseif cost_type_flag == 2 %with Time Integral - Scaled
