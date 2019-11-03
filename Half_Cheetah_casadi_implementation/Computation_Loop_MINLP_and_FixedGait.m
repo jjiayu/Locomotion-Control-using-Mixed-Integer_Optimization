@@ -297,7 +297,7 @@ for runIdx = 1:NumofRuns
                         PHx,        PHy,        PHxdot,         PHydot,...
                         FFx,        FFy,...
                         FHx,        FHy,...
-                        Ts];%,...
+                        Ts};%,...
 %                        CF,         CH}; 
     end
     
@@ -1434,9 +1434,15 @@ for runIdx = 1:NumofRuns
     PHydot_result = res(find(VarNamesList == 'PHydot_0'):find(VarNamesList == PHydot_label(end)));
 
     % Contact Configuration
-    CF_result = res(find(VarNamesList == CF_label(1)):find(VarNamesList == CF_label(end)));
-    CH_result = res(find(VarNamesList == CH_label(1)):find(VarNamesList == CH_label(end)));
 
+    if Fixed_FreeGait_flag == 1 %Free Gait Discovery using MINLP
+        CF_result = res(find(VarNamesList == CF_label(1)):find(VarNamesList == CF_label(end)));
+        CH_result = res(find(VarNamesList == CH_label(1)):find(VarNamesList == CH_label(end)));
+    elseif Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
+        CF_result = CF;%res(find(VarNamesList == CF_label(1)):find(VarNamesList == CF_label(end)));
+        CH_result = CH;%res(find(VarNamesList == CH_label(1)):find(VarNamesList == CH_label(end)));
+    end
+    
     % Contact force result
     FFx_result = res(find(VarNamesList == 'FFx_0'):find(VarNamesList == FFx_label(end)));
     FFy_result = res(find(VarNamesList == 'FFy_0'):find(VarNamesList == FFy_label(end)));

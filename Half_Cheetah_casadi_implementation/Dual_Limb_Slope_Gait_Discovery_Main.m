@@ -13,6 +13,8 @@ clc;
 
 diary off
 
+addpath(pwd)
+
 % Import CasADi related packages
 import casadi.*
 
@@ -59,6 +61,13 @@ if Fixed_FreeGait_flag == 2 %fixed gait optimization
     [CF,CH,GaitName] = Gait_Selection(user_defined_gait);
 end
 
+if (Fixed_FreeGait_flag ~= 1) && (Fixed_FreeGait_flag ~= 2)
+    ME_Fixed_FreeGait = MException('Initialization:Fixed_FreeGait','Wrong Flag or Undefined fFlag for selecting fixed gait optimization or free gait discovery');
+    throw(ME_Fixed_FreeGait)
+end
+
+
+%=====================================================================
 
 % Display Pre-defined Setup or Input Parameters
 %----------------------------------------------------------------------
@@ -81,11 +90,11 @@ if Paras_Define_Method == 1 %load parameter from file
                 ExpDirectory = [ParamFileDir,'/4Phases_StridePeriod_',num2str(Tend)];
             end
         elseif Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
-            if exist([ParamFileDir,'/',GaitName,'StridePeriod_',num2str(Tend)],'dir') == 1
-                ExpDirectory = [ParamFileDir,'/',GaitName,'StridePeriod_',num2str(Tend)];
+            if exist([ParamFileDir,'/','StridePeriod_',num2str(Tend)],'dir') == 1
+                ExpDirectory = [ParamFileDir,'/','StridePeriod_',num2str(Tend)];
             else %or mkdir
-                mkdir([ParamFileDir,'/',GaitName,'StridePeriod_',num2str(Tend)]);
-                ExpDirectory = [ParamFileDir,'/',GaitName,'StridePeriod_',num2str(Tend)];
+                mkdir([ParamFileDir,'/','StridePeriod_',num2str(Tend)]);
+                ExpDirectory = [ParamFileDir,'/','StridePeriod_',num2str(Tend)];
             end
         end
  

@@ -4,6 +4,24 @@
     import casadi.*
     
     %======================================================================
+    % Optimization Type Set up
+    % Fixed_FreeGait_flag = 1 -> Free Gait Discovery
+    % Fixed_FreeGait_flag = 2 -> Fixed Gait Optimization
+       
+    Fixed_FreeGait_flag = 1;
+    
+    if Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
+        %1 -> Walking-D
+        %2 -> Trotting
+        %3 -> Galloping
+        %4 -> Bounding-D (Symmetric Bounding)
+        %5 -> Pronking
+        %6-> Walking-S (Asymmetric Walking/Galloping without flying phase) (3-Phases)
+        %7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) (3Phases)
+        user_defined_gait = 1;
+    end
+    
+    %======================================================================
     %Inertia Parameters(Information from MIT Cheetah 3)
     m = 45; %kg
     I = 2.1; %kg m^2 Izz
@@ -148,7 +166,12 @@
     % Time Step and Discretization Parameter Settings
     %----------------------------------------------------------------------
     %   Number of Phases
-    NumPhases = 4;
+    if Fixed_FreeGait_flag == 1 %Free Gait Optimization
+        NumPhases = 4; 
+    elseif Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
+        [CF_Sequence, ~, ~] = Gait_Selection(user_defined_gait);
+        NumPhases = length(CF_Sequence);
+    end
     %   Number of timesteps for each phase
     NumLocalKnots = 10;
     %----------------------------------------------------------------------
