@@ -72,7 +72,6 @@ end
 
 
 %=====================================================================
-
 % Display Pre-defined Setup or Input Parameters
 %----------------------------------------------------------------------
 %   Terminal time Setup (Only for Cases when load parameter from File)
