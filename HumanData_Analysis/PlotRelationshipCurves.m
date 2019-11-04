@@ -18,8 +18,8 @@ load(full_data_file_path)
 GaitofInterest = 'Walking-D';
 %-------------------------------------------------------------------------
 % Define StridePeriod Range of interest
-StridePeriod_Start = 0.4;
-StridePeriod_End   = 0.4;
+StridePeriod_Start = 0.8;
+StridePeriod_End   = 0.8;
 %Search for Stride Period Start and End Index, because of technical
 %problem, has to write in this way.....
 for StridePeriodLoop_Idx = 1:length(StridePeriod_List)
@@ -70,11 +70,43 @@ for iterate_idx = 1:length(Result_GaitofInterest_List)
     %NOTE: Currently for Walking Gait Only
     
     DataAnalysisResult{iterate_idx}.OptimalGait = gait;
+    DataAnalysisResult{iterate_idx}.OptimalFilePath = [data_file_path,'4Phases_StridePeriod_',num2str(Result_GaitofInterest_List{iterate_idx}.strideperiod_speed_pair(1)),'/',OptimalTraFileName];
     
-    DataAnalysisResult{iterate_idx}.Front_Leg_StepPeriod = gait(find(gait(:,1)==0),3);
-    DataAnalysisResult{iterate_idx}.Front_Leg_StepFrequency = 1/DataAnalysisResult{iterate_idx}.Front_Leg_StepPeriod;
-    DataAnalysisResult{iterate_idx}.Hind_Leg_StepPeriod = gait(find(gait(:,2)==0),3);
-    DataAnalysisResult{iterate_idx}.Hind_Leg_StepFrequency = 1/DataAnalysisResult{iterate_idx}.Hind_Leg_StepPeriod;
+    % Step Frequency
+    % How fast the leg breaks contacts
+    DataAnalysisResult{iterate_idx}.Front_Leg_SWingPeriod = gait(find(gait(:,1)==0),3);
+    DataAnalysisResult{iterate_idx}.Front_Leg_StepFrequency = 1/(DataAnalysisResult{iterate_idx}.StridePeriod - DataAnalysisResult{iterate_idx}.Front_Leg_SWingPeriod);
+    DataAnalysisResult{iterate_idx}.Hind_Leg_SwingPeriod = gait(find(gait(:,2)==0),3);
+    DataAnalysisResult{iterate_idx}.Hind_Leg_StepFrequency = 1/(DataAnalysisResult{iterate_idx}.StridePeriod - DataAnalysisResult{iterate_idx}.Hind_Leg_SwingPeriod);
+    
+    
+    FrontLeg_SwingKnot_Idxs = find(abs(diff(PFx_result))>=0.001);
+    HindLeg_SwingKnot_Idxs = find(abs(diff(PHx_result))>=0.001);
+    
+     if sum(diff(FrontLeg_SwingKnot_Idxs)) == length(FrontLeg_SwingKnot_Idxs) - 1
+         FrontLeg_SwingStart_Idx = max(FrontLeg_SwingKnot_Idxs(1) - 1,1);
+         FrontLeg_SwingEnd_Idx   = min(FrontLeg_SwingKnot_Idxs(end) + 1,length(PFx_result));
+         DataAnalysisResult{iterate_idx}.Front_Leg_Step_Length = PFx_result(FrontLeg_SwingEnd_Idx) - PFx_result(FrontLeg_SwingStart_Idx);
+     else
+         DataAnalysisResult{iterate_idx}.Front_Leg_Step_Length = inf;
+     end
+     
+     if sum(diff(HindLeg_SwingKnot_Idxs)) == length(HindLeg_SwingKnot_Idxs) - 1
+         HindLeg_SwingStart_Idx = max(HindLeg_SwingKnot_Idxs(1) - 1,1);
+         HindLeg_SwingEnd_Idx   = min(HindLeg_SwingKnot_Idxs(end) + 1,length(PFx_result));
+         DataAnalysisResult{iterate_idx}.Hind_Leg_Step_Length = PHx_result(HindLeg_SwingEnd_Idx) - PHx_result(HindLeg_SwingStart_Idx);
+     else
+         DataAnalysisResult{iterate_idx}.Hind_Leg_Step_Length = inf;
+     end
+     
+     DataAnalysisResult{iterate_idx}.Front_Leg_Step_Length
+     DataAnalysisResult{iterate_idx}.Hind_Leg_Step_Length
+     
+%      if diff(HindLeg_Swing_Idx) == 1
+%          
+%      end
+    
+    %double check the index are continuous
     
 end
 
