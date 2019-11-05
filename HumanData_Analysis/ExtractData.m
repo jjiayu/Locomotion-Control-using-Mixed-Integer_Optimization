@@ -74,11 +74,13 @@ for iterate_idx = 1:length(Result_GaitofInterest_List)
     
     % Step Frequency
     % How fast the leg breaks contacts
-    DataAnalysisResult{iterate_idx}.Front_Leg_SWingPeriod = gait(find(gait(:,1)==0),3);
-    DataAnalysisResult{iterate_idx}.Front_Leg_StepFrequency = 1/(DataAnalysisResult{iterate_idx}.StridePeriod - DataAnalysisResult{iterate_idx}.Front_Leg_SWingPeriod);
-    DataAnalysisResult{iterate_idx}.Hind_Leg_SwingPeriod = gait(find(gait(:,2)==0),3);
-    DataAnalysisResult{iterate_idx}.Hind_Leg_StepFrequency = 1/(DataAnalysisResult{iterate_idx}.StridePeriod - DataAnalysisResult{iterate_idx}.Hind_Leg_SwingPeriod);
+    %DataAnalysisResult{iterate_idx}.Front_Leg_SWingPeriod = gait(find(gait(:,1)==0),3);
+    %DataAnalysisResult{iterate_idx}.Front_Leg_StepFrequency = 1/(DataAnalysisResult{iterate_idx}.StridePeriod - DataAnalysisResult{iterate_idx}.Front_Leg_SWingPeriod);
+    %DataAnalysisResult{iterate_idx}.Hind_Leg_SwingPeriod = gait(find(gait(:,2)==0),3);
+    %DataAnalysisResult{iterate_idx}.Hind_Leg_StepFrequency = 1/(DataAnalysisResult{iterate_idx}.StridePeriod - DataAnalysisResult{iterate_idx}.Hind_Leg_SwingPeriod);
     
+    DataAnalysisResult{iterate_idx}.Front_Leg_StepFrequency = 2*1/DataAnalysisResult{iterate_idx}.StridePeriod;
+    DataAnalysisResult{iterate_idx}.Hind_Leg_StepFrequency = 2*1/DataAnalysisResult{iterate_idx}.StridePeriod;
     
     FrontLeg_SwingKnot_Idxs = find(abs(diff(PFx_result))>=0.001);
     HindLeg_SwingKnot_Idxs = find(abs(diff(PHx_result))>=0.001);
