@@ -84,26 +84,38 @@ for iterate_idx = 1:length(Result_GaitofInterest_List)
     HindLeg_SwingKnot_Idxs = find(abs(diff(PHx_result))>=0.001);
     
      if sum(diff(FrontLeg_SwingKnot_Idxs)) == length(FrontLeg_SwingKnot_Idxs) - 1
-         FrontLeg_SwingStart_Idx = max(FrontLeg_SwingKnot_Idxs(1) - 1,0);
-         FrontLeg_SwingEnd_Idx   = min(FrontLeg_SwingKnot_Idxs(1) + 1,length(PFx_result));
-         DataAnalysisResult{iterate_idx}.Front_Leg_Step_Length = PFx_result(FrontLeg_SwingEnd_Idx - FrontLeg_SwingStart_Idx);
+         FrontLeg_SwingStart_Idx = max(FrontLeg_SwingKnot_Idxs(1) - 1,1);
+         FrontLeg_SwingEnd_Idx   = min(FrontLeg_SwingKnot_Idxs(end) + 1,length(PFx_result));
+         DataAnalysisResult{iterate_idx}.Front_Leg_Step_Length = PFx_result(FrontLeg_SwingEnd_Idx) - PFx_result(FrontLeg_SwingStart_Idx);
      else
-         %disp('good')
+         DataAnalysisResult{iterate_idx}.Front_Leg_Step_Length = inf;
      end
      
      if sum(diff(HindLeg_SwingKnot_Idxs)) == length(HindLeg_SwingKnot_Idxs) - 1
-         HindLeg_SwingStart_Idx = max(HindLeg_SwingKnot_Idxs(1) - 1,0);
-         HindLeg_SwingEnd_Idx   = min(HindLeg_SwingKnot_Idxs(1) + 1,length(PFx_result));
-         DataAnalysisResult{iterate_idx}.Hind_Leg_Step_Length = PHx_result(HindLeg_SwingEnd_Idx - HindLeg_SwingStart_Idx);
+         HindLeg_SwingStart_Idx = max(HindLeg_SwingKnot_Idxs(1) - 1,1);
+         HindLeg_SwingEnd_Idx   = min(HindLeg_SwingKnot_Idxs(end) + 1,length(PFx_result));
+         DataAnalysisResult{iterate_idx}.Hind_Leg_Step_Length = PHx_result(HindLeg_SwingEnd_Idx) - PHx_result(HindLeg_SwingStart_Idx);
      else
-         %disp('good')
+         DataAnalysisResult{iterate_idx}.Hind_Leg_Step_Length = inf;
      end
-     
-%      if diff(HindLeg_Swing_Idx) == 1
-%          
-%      end
+%      
+%      DataAnalysisResult{iterate_idx}.Front_Leg_Step_Length
+%      DataAnalysisResult{iterate_idx}.Hind_Leg_Step_Length
     
     %double check the index are continuous
     
 end
 
+speed_vector = [];
+FrontLeg_StepFrequency_vector = [];
+HindLeg_StepFrequency_vector = [];
+FrontLeg_StepLength_vector = [];
+HindLeg_StepLength_vector = [];
+
+for itr_idx = 1:length(DataAnalysisResult)
+    speed_vector(itr_idx) = DataAnalysisResult.speed;
+    FrontLeg_StepFrequency_vector(itr_idx) = DataAnalysisResult.Front_Leg_StepFrequency;
+    HindLeg_StepFrequency_vector(itr_idx) = DataAnalysisResult.Hind_Leg_StepFrequency;
+    FrontLeg_StepLength_vector(itr_idx) = DataAnalysisResult.Front_Leg_Step_Length;
+    HindLeg_StepLength_vector(itr_idx) = DataAnalysisResult.Hind_Leg_Step_Length;
+end

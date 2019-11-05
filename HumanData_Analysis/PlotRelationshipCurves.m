@@ -18,8 +18,8 @@ load(full_data_file_path)
 GaitofInterest = 'Walking-D';
 %-------------------------------------------------------------------------
 % Define StridePeriod Range of interest
-StridePeriod_Start = 0.8;
-StridePeriod_End   = 0.8;
+StridePeriod_Start = 1.6;
+StridePeriod_End   = 1.6;
 %Search for Stride Period Start and End Index, because of technical
 %problem, has to write in this way.....
 for StridePeriodLoop_Idx = 1:length(StridePeriod_List)
@@ -98,15 +98,25 @@ for iterate_idx = 1:length(Result_GaitofInterest_List)
      else
          DataAnalysisResult{iterate_idx}.Hind_Leg_Step_Length = inf;
      end
-     
-     DataAnalysisResult{iterate_idx}.Front_Leg_Step_Length
-     DataAnalysisResult{iterate_idx}.Hind_Leg_Step_Length
-     
-%      if diff(HindLeg_Swing_Idx) == 1
-%          
-%      end
+%      
+%      DataAnalysisResult{iterate_idx}.Front_Leg_Step_Length
+%      DataAnalysisResult{iterate_idx}.Hind_Leg_Step_Length
     
     %double check the index are continuous
     
+end
+
+speed_vector = [];
+FrontLeg_StepFrequency_vector = [];
+HindLeg_StepFrequency_vector = [];
+FrontLeg_StepLength_vector = [];
+HindLeg_StepLength_vector = [];
+
+for itr_idx = 1:length(DataAnalysisResult)
+    speed_vector(itr_idx) = DataAnalysisResult{itr_idx}.speed;
+    FrontLeg_StepFrequency_vector(itr_idx) = DataAnalysisResult{itr_idx}.Front_Leg_StepFrequency;
+    HindLeg_StepFrequency_vector(itr_idx) = DataAnalysisResult{itr_idx}.Hind_Leg_StepFrequency;
+    FrontLeg_StepLength_vector(itr_idx) = DataAnalysisResult{itr_idx}.Front_Leg_Step_Length;
+    HindLeg_StepLength_vector(itr_idx) = DataAnalysisResult{itr_idx}.Hind_Leg_Step_Length;
 end
 
