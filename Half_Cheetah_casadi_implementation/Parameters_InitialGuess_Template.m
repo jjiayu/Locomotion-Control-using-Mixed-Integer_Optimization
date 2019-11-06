@@ -3,12 +3,14 @@
     % Import CasADi related packages
     import casadi.*
     
+    % 1->Perform Initial Guess Exp ; 2-> Not to perform initial guess Exp
+    InitialGuessExp = 1;
+
     %======================================================================
     % Optimization Type Set up
     % Fixed_FreeGait_flag = 1 -> Free Gait Discovery
     % Fixed_FreeGait_flag = 2 -> Fixed Gait Optimization
-       
-    Fixed_FreeGait_flag = 1;
+    Fixed_FreeGait_flag = 2; 
     
     if Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
         %1 -> Walking-D
@@ -20,6 +22,16 @@
         %7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) (3Phases)
         user_defined_gait = 1;
     end
+    
+    %======================================================================
+    %   Correct the Optimization Type Set up based on the Initial Guess Exp
+    %   Flag
+    %======================================================================
+    %--------------
+    if InitialGuessExp == 1 %Initial Guess Story, has to be fixed gait
+        Fixed_FreeGait_flag = 2; 
+    end
+    %--------------
     
     %======================================================================
     %Inertia Parameters(Information from MIT Cheetah 3)
@@ -169,8 +181,12 @@
     if Fixed_FreeGait_flag == 1 %Free Gait Optimization
         NumPhases = 4; 
     elseif Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
-        [CF_Sequence, ~, ~] = Gait_Selection(user_defined_gait);
-        NumPhases = length(CF_Sequence);
+        if InitialGuessExp == 1 %InitialGuess Exp Flag On
+            NumPhases = length(InitialGuessTrajectory.CF_result);
+        elseif InitialGuessExp == 2 %Not do the Initial Guess Exp
+            [CF_Sequence, ~, ~] = Gait_Selection(user_defined_gait);
+            NumPhases = length(CF_Sequence);
+        end
     end
     %   Number of timesteps for each phase
     NumLocalKnots = 10;

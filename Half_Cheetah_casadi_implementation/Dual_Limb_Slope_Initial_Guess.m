@@ -34,7 +34,7 @@ StartingPhase = StartingPhase + 4; %Shift the column
 SelectedInitialGuess = cell2table({InitialGuess_StridePeriod,InitialGuess_Speed},'VariableNames',["StridePeriod","Speed"]);
 InitialGuessesDatabase = readtable([InitialGuess_ExpDirectory,'/Initial_Guess_Galloping.csv']);
 [~,Idx_InitialGuessDatabase,~]=intersect(InitialGuessesDatabase(:,1:2),SelectedInitialGuess);
-InitialGuessFileName = table2array(InitialGuessesDatabase(Idx_InitialGuessDatabase,StartingPhase))
+InitialGuessFileName = table2array(InitialGuessesDatabase(Idx_InitialGuessDatabase,StartingPhase));
 
 %   Load and the Initial Guess
 %       need to have InitialGuessFileName{:}, because InitialGuessFileName
@@ -57,3 +57,11 @@ InitialGuessVector = [InitialGuessTrajectory.x_result;      InitialGuessTrajecto
                       InitialGuessTrajectory.FFx_result;    InitialGuessTrajectory.FFy_result;...
                       InitialGuessTrajectory.FHx_result;    InitialGuessTrajectory.FHy_result;...
                       InitialGuessTrajectory.PhaseSwitchingTime];
+                  
+% Build task Vectors
+Stride_Period_Vector = table2array(InitialGuessesDatabase(:,1));
+Speed_Vector = table2array(InitialGuessesDatabase(:,2));
+
+% Load Parameters
+run([InitialGuess_ExpDirectory,'/','Parameters_InitialGuess.m']);
+
