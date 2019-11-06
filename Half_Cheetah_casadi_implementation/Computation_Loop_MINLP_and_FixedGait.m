@@ -443,10 +443,12 @@ for runIdx = 1:NumofRuns
     if Fixed_FreeGait_flag == 1 %Free Gait Discovery using MINLP
         DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))));
         DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
-        DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))));
+        DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PFydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PFydot_label(end))));
+        DecisionVarsInit(find(VarNamesList == PHxdot_label(1)):find(VarNamesList == PHydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PHxdot_label(1)):find(VarNamesList == PHydot_label(end))));
     elseif Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
         DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))));
-        DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PHydot_label(end))));
+        DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PFydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PFydot_label(end))));
+        DecisionVarsInit(find(VarNamesList == PHxdot_label(1)):find(VarNamesList == PHydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PHxdot_label(1)):find(VarNamesList == PHydot_label(end))));
     end
     
     %DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == x_label(end))) = linspace(0,speed*Tend,length(x_label));
