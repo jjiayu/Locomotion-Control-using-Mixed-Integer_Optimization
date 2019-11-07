@@ -7,6 +7,13 @@
 clear;
 clc;
 
+diary off
+addpath(pwd)
+
+%==========================================================================
+Paras_Define_Method = 1; %Take from file, load parameters
+%==========================================================================
+
 % Set up Working Directories, where the gait discovery results store
 disp('===================================================================')
 disp('Decide Working Directories, where the Initial Guess Story Happens')
@@ -21,6 +28,11 @@ GaitDiscoveryResult_Path = pwd;
 disp('Gait Discovery Result Path:')
 disp(GaitDiscoveryResult_Path)
 disp('===================================================================')
+
+% Start Logging
+%TaskParameterLog_filename = strcat('Initial_Guess-Periodical-Loco-log-', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
+%diary([InitialGuess_ExpDirectory, '/', TaskParameterLog_filename]);
+
 % Load Initial Guess mapping
 %   Define the Initial Guess point
 InitialGuess_StridePeriod = input('Define the Stride Period for Extracting the Initial Guess (i.e. 0.8): \n');
@@ -56,7 +68,7 @@ InitialGuessVector = [InitialGuessTrajectory.x_result;      InitialGuessTrajecto
                       InitialGuessTrajectory.PHx_result;    InitialGuessTrajectory.PHy_result;      InitialGuessTrajectory.PHxdot_result;       InitialGuessTrajectory.PHydot_result;...
                       InitialGuessTrajectory.FFx_result;    InitialGuessTrajectory.FFy_result;...
                       InitialGuessTrajectory.FHx_result;    InitialGuessTrajectory.FHy_result;...
-                      InitialGuessTrajectory.PhaseSwitchingTime];
+                      InitialGuessTrajectory.PhaseSwitchingTime]';
                   
 % Build task Vectors
 Stride_Period_Vector = table2array(InitialGuessesDatabase(:,1));
@@ -65,3 +77,24 @@ Speed_Vector = table2array(InitialGuessesDatabase(:,2));
 % Load Parameters
 run([InitialGuess_ExpDirectory,'/','Parameters_InitialGuess.m']);
 
+% Save Parameter Setup
+save([InitialGuess_ExpDirectory,'/','ParameterSetUp.mat']);
+
+%Copy Variables
+SpeedList = Speed_Vector;
+ExpDirectory = [InitialGuess_ExpDirectory,'/','InitialGuess_StridePeriod_',num2str(InitialGuess_StridePeriod),'_Speed_',num2str(InitialGuess_Speed)];
+if exist(ExpDirectory,'dir') == 0
+    mkdir([InitialGuess_ExpDirectory,'/','InitialGuess_StridePeriod_',num2str(InitialGuess_StridePeriod),'_Speed_',num2str(InitialGuess_Speed)]);
+end
+CF = InitialGuessTrajectory.CF_result;
+CH = InitialGuessTrajectory.CH_result;
+%======================================================================
+%   Run the big computation loop
+%======================================================================
+run('Computation_Loop_InitialGuess.m');
+%======================================================================
+save([ExpDirectory,'/Success_Vector.mat'],'success_vector','Stride_Period_Vector','Speed_Vector')
+
+disp('===================================================');
+disp('All Experiments Finished')
+disp('===================================================');
