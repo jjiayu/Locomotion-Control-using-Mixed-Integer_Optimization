@@ -49,7 +49,8 @@ for InitialGuessFolderIdx = 1:length(StridePeriodVector)
                                     'FFx_result', 'FFy_result',...
                                     'FHx_result', 'FHy_result',...
                                     'PhaseSwitchingTime',... %Note, Phase Switching Time Start from a constant zero
-                                    'CF_result',   'CH_result');
+                                    'CF_result',   'CH_result',...
+                                    'result_cost');
         MINLP_OptResult.PhaseSwitchingTime = MINLP_OptResult.PhaseSwitchingTime(2:end);
         
         Trajectory_MINLP  = [MINLP_OptResult.x_result;      MINLP_OptResult.y_result;        MINLP_OptResult.theta_result;...
@@ -70,7 +71,8 @@ for InitialGuessFolderIdx = 1:length(StridePeriodVector)
                                     'PHx_result', 'PHy_result', 'PHxdot_result',   'PHydot_result',...
                                     'FFx_result', 'FFy_result',...
                                     'FHx_result', 'FHy_result',...
-                                    'PhaseSwitchingTime');
+                                    'PhaseSwitchingTime',...
+                                    'result_cost');
         Result_withInitialGuess.PhaseSwitchingTime = Result_withInitialGuess.PhaseSwitchingTime(2:end);
         Trajectory_withInitialGuess = [Result_withInitialGuess.x_result;      Result_withInitialGuess.y_result;        Result_withInitialGuess.theta_result;...
                                        Result_withInitialGuess.xdot_result;   Result_withInitialGuess.ydot_result;     Result_withInitialGuess.thetadot_result;...
@@ -81,6 +83,8 @@ for InitialGuessFolderIdx = 1:length(StridePeriodVector)
                                        Result_withInitialGuess.PhaseSwitchingTime]';
         %Compare Trajecoties
         DistanceVector(InitialGuessExpIdx) = sum((Trajectory_withInitialGuess - Trajectory_MINLP).^2);
+        %Compare Cost
+        CostDiffVector(InitialGuessExpIdx) = (Result_withInitialGuess.result_cost - MINLP_OptResult.result_cost)/Result_withInitialGuess.result_cost*100;
     end
     
     distanceCell = {};
@@ -93,8 +97,15 @@ for InitialGuessFolderIdx = 1:length(StridePeriodVector)
         else
             distanceCell{loopIdx,4} = '-';
         end
+        distanceCell{loopIdx,5} = CostDiffVector(loopIdx);
+        if abs(CostDiffVector(loopIdx)) >= 0.1
+            distanceCell{loopIdx,6} = 'BigCostDifference';
+        else
+            distanceCell{loopIdx,6} = '-';
+        end
     end
-    distanceTable = cell2table(distanceCell,'VariableNames',["StridePeriod","Speed","DistancetoMINLP","SignificanceFlag"])
+    
+    distanceTable = cell2table(distanceCell,'VariableNames',["StridePeriod","Speed","DistancetoMINLP","SignificanceFlag","CostDifference","CostDifference_SignificanceFlag"])
     save([InitialGuess_ExpDirectory,'/InitialGuess_StridePeriod_',num2str(StridePeriodVector(InitialGuessFolderIdx)),'_Speed_',num2str(SpeedVector(InitialGuessFolderIdx)),'/DistanceTabletoMINLP.mat'],'distanceTable');
     disp('----------------------------------------------------------------')
     

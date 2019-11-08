@@ -1,3 +1,4 @@
+% Currently only for galloping gait
 clear;
 clc;
 
@@ -26,12 +27,13 @@ SpeedVector = table2array(InitialGuessesDatabase(:,2));
 
 Trajectories = [];
 
+MINLP_Result_DataBase = {};
 for loopIdx = 1:length(StridePeriodVector)
-    TaskSpec = cell2table({StridePeriodVector(InitialGuessExpIdx),SpeedVector(InitialGuessExpIdx)},'VariableNames',["StridePeriod","Speed"]);
+    TaskSpec = cell2table({StridePeriodVector(loopIdx),SpeedVector(loopIdx)},'VariableNames',["StridePeriod","Speed"]);
     [~,Idx_InitialGuessDatabase,~]=intersect(InitialGuessesDatabase(:,1:2),TaskSpec);
     InitialGuessFileName = table2array(InitialGuessesDatabase(Idx_InitialGuessDatabase,StartingPhase+4));
     %Extract MINLP trajectory
-    MINLP_OptResult = load([GaitDiscoveryResult_Path,'/4Phases_StridePeriod_',num2str(StridePeriodVector(InitialGuessExpIdx)),'/',InitialGuessFileName{:}],...
+    MINLP_OptResult = load([GaitDiscoveryResult_Path,'/4Phases_StridePeriod_',num2str(StridePeriodVector(loopIdx)),'/',InitialGuessFileName{:}],...
                                     'x_result',   'y_result',   'theta_result',...
                                     'xdot_result','ydot_result','thetadot_result',...
                                     'PFx_result', 'PFy_result', 'PFxdot_result',   'PFydot_result',...
@@ -39,7 +41,8 @@ for loopIdx = 1:length(StridePeriodVector)
                                     'FFx_result', 'FFy_result',...
                                     'FHx_result', 'FHy_result',...
                                     'PhaseSwitchingTime',... %Note, Phase Switching Time Start from a constant zero
-                                    'CF_result',   'CH_result');
+                                    'CF_result',   'CH_result',...
+                                    'result_cost');
     MINLP_OptResult.PhaseSwitchingTime = MINLP_OptResult.PhaseSwitchingTime(2:end);
     Trajectory_MINLP  = [MINLP_OptResult.x_result;      MINLP_OptResult.y_result;        MINLP_OptResult.theta_result;...
                      MINLP_OptResult.xdot_result;   MINLP_OptResult.ydot_result;     MINLP_OptResult.thetadot_result;...
@@ -48,7 +51,8 @@ for loopIdx = 1:length(StridePeriodVector)
                      MINLP_OptResult.FFx_result;    MINLP_OptResult.FFy_result;...
                      MINLP_OptResult.FHx_result;    MINLP_OptResult.FHy_result;...
                      MINLP_OptResult.PhaseSwitchingTime]';
-    ()Trajectories
+   MINLP_Result_DataBase{loopIdx} = MINLP_OptResult;
+   Trajectories(loopIdx,:) = Trajectory_MINLP';
 end
 
-
+save([GaitDiscoveryResult_Path,'/MINLP_Trajectories_Galloping_GaitStartfrom_Phase',num2str(StartingPhase),'.mat'], 'MINLP_Result_DataBase','StridePeriodVector','SpeedVector');
