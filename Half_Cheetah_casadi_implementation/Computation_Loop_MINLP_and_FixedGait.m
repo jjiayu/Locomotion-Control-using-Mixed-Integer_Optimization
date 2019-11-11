@@ -253,12 +253,7 @@ for runIdx = 1:NumofRuns
     Pyk    = SX.sym('Py[k]');
     Pk     = [Pxk,Pyk];
     %       Build Function
-    %kinematics = [cos(thetak), -sin(thetak); sin(thetak), cos(thetak)]'*(Pk' - [xk,yk]') - Pc';
-    %----------------------------
-    %!!!No Inverse Rotation!!! the rotation matrix from world frame to the
-    %robot frame
-    %----------------------------
-    kinematics = [cos(thetak), -sin(thetak); sin(thetak), cos(thetak)]*(Pk' - [xk,yk]') - Pc'; 
+    kinematics = [cos(thetak), -sin(thetak); sin(thetak), cos(thetak)]'*(Pk' - [xk,yk]') - Pc';
     KinematicsConstraint = Function('KinematicsConstraint',{rk, Pk, Pc},{kinematics});
     %-----------------------------------------------------------------------
 %     %   Friction Cones (In 2D, Flat Terrain) -->
@@ -777,33 +772,29 @@ for runIdx = 1:NumofRuns
             %---------------------------------------------------------
             %       Set (2): Speed Ranges
             %---------------------------------------------------------
-            %           Equation :   |R(theta)*(Pdot - Pdot_body)| <= Mvel_x/y -->
+            %           Equation :   |Pdot - Pdot_body| <= Mvel_x/y -->
             %                 -Mvel_x/y <= Pdot - Pdot_body <= Mvel_x/y
             %           lbg = -inf
             %           ubg = Mvel_x/y
             %---------------------------------------------------------
-            %   NOTE!!!!
-            %   The rotation matrix is from world frame to the robot frame
-            %   R(theta) = [cost(theta),-sin(theta);sin(theta),cos(theta)]
-            %---------------------------------------------------------
             %           Front Leg x-axis
-                EqTemp = cos(theta(k))*(PFxdot(k) - xdot(k)) - sin(theta(k))*(PFydot(k) - ydot(k));
+                EqTemp = cos(theta(k))*(PFxdot(k) - xdot(k)) + sin(theta(k))*(PFydot(k) - ydot(k));
                 %EqTemp = PFxdot(k) - xdot(k);
                 g   = {g{:}, EqTemp};
                 lbg = [lbg; -Mvelx];
                 ubg = [ubg; Mvelx];
             %           Front Leg y-axis
-                EqTemp = sin(theta(k))*(PFxdot(k) - xdot(k)) + cos(theta(k))*(PFydot(k) - ydot(k));
+                EqTemp = -sin(theta(k))*(PFxdot(k) - xdot(k)) + cos(theta(k))*(PFydot(k) - ydot(k));
                 g   = {g{:}, EqTemp};
                 lbg = [lbg; -Mvely];
                 ubg = [ubg; Mvely];
             %           Hind Leg x-axis
-                EqTemp = cos(theta(k))*(PHxdot(k) - xdot(k)) - sin(theta(k))*(PHydot(k) - ydot(k));
+                EqTemp = cos(theta(k))*(PHxdot(k) - xdot(k)) + sin(theta(k))*(PHydot(k) - ydot(k));
                 g   = {g{:}, EqTemp};
                 lbg = [lbg; -Mvelx];
                 ubg = [ubg; Mvelx];
             %           Hind Leg y-axis
-                EqTemp = sin(theta(k))*(PHxdot(k) - xdot(k)) + cos(theta(k))*(PHydot(k) - ydot(k));
+                EqTemp = -sin(theta(k))*(PHxdot(k) - xdot(k)) + cos(theta(k))*(PHydot(k) - ydot(k));
                 g   = {g{:}, EqTemp};
                 lbg = [lbg; -Mvely];
                 ubg = [ubg; Mvely];
