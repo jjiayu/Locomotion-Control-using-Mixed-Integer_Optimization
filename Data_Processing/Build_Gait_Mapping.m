@@ -206,7 +206,10 @@ for StridePeriodLoop_Idx = 1:size(resultMatrix,2)
     end
 end
 
-save([directory,strcat('/Gait_Mapping_result-',datestr(datetime('now'), 30),'.mat')]);
+save([directory,strcat('/FullWorkSpace_Gait_Mapping_result-',datestr(datetime('now'), 30),'.mat')]);
+save([directory,strcat('/SelectedVars_Gait_Mapping_result-',datestr(datetime('now'), 30),'.mat')],...
+    'resultMatrix','GaitNameMatrix_withAllLocalMinima','GaitNameMatrix',...
+    'StridePeriod_List','Speed_List');
 
 diary off
 
