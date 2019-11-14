@@ -150,6 +150,8 @@ disp(datetime('now'));
 disp('----------------------------------------------------');
 disp(['Correspondent Log File Name: ', TaskParameterLog_filename, 'in the Directory: ', ExpDirectory]);
 disp('====================================================');
+disp('Using Rotated Force Limits')
+disp('====================================================');
 disp(' ');
 %=====================================================================
 
