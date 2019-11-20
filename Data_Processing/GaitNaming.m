@@ -7,7 +7,7 @@ GaitName = "";
 
 %duplicate the gait matrix, only take integer variables
 gaitMatrix_doublephase = [gait(:,1:2);gait(:,1:2)];
-
+%%%
 
 if (mod(sum(gait(:,1)),1) ~= 0) && (mod(sum(gait(:,2)),1) ~= 0)
     GaitName = "N/A"; %No feasible results
