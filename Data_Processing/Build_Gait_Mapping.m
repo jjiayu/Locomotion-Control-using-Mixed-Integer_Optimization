@@ -22,6 +22,15 @@ Speed_List = min_Speed:Speed_Resolution:max_Speed;
 GaitMappingGenerationLog = strcat('Gait-Mapping-Generation-Results', datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
 diary([directory, '/', GaitMappingGenerationLog]);
 
+%Set-up Cost Difference Threshold
+CostDiffThreshold = 0.5;
+disp(' ')
+disp('===========================================================')
+disp(['Cost Different THreshold: ',num2str(CostDiffThreshold*100),'%']);
+disp('===========================================================')
+disp(' ')
+
+%Initialise var containers
 resultMatrix = cell(length(Speed_List),length(StridePeriod_List));
 
 FileMatrix = strings(length(Speed_List),length(StridePeriod_List));
@@ -127,7 +136,7 @@ for StridePeriod_Idx = 1:length(StridePeriod_List)
                 gait_results{fileIdx}
                 disp(['Optimal Cost: ', num2str(cost_results(fileIdx))])
                 disp(['Difference to Minimum Cost (Current Cost - Minimum Cost): ', num2str(cost_results(fileIdx) - min_cost),' In Percentage: ',num2str((cost_results(fileIdx) - min_cost)/min_cost*100),'%'])
-                if ((cost_results(fileIdx) - min_cost)/min_cost*100 <= 0.1) && (fileIdx ~= min_cost_Idx)
+                if ((cost_results(fileIdx) - min_cost)/min_cost*100 <= CostDiffThreshold) && (fileIdx ~= min_cost_Idx)
                     disp('Cost Value is Equivalent to the Minimum Cost? -> YES')
                     result_collection.SimilarLocalMinimaFileNames = {result_collection.SimilarLocalMinimaFileNames{:},CleanFiles{fileIdx}.name};
                 else
