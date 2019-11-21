@@ -31,6 +31,7 @@ for runIdx = 1:1
     disp('====================================================');
     disp(['Gait Search for ', num2str(NumPhases),'Phases Motion(', num2str(NumLocalKnots),'Knots per Phase),',' Locomotion Speed ', num2str(speed), ' m/s', ' Round ', num2str(runIdx)])
     disp(['Experiment Directory: ', ExpDirectory])
+    disp(['Exp Start Time: ',datestr(datetime('now'), 30)])
     disp('====================================================');
 
     %=======================================================================
