@@ -76,7 +76,33 @@ for resultIdx = 1:size(resultMatrix,1)*size(resultMatrix,2)
     TraGroupsMatrix{resultIdx} = TraGroupTemp;
     
 end
+
+%   Save Data
+save([data_file_path,'/TrajectorywithGroupLabels',datestr(datetime('now'), 30),'.mat']);
+
+%-------------------------------------------------------------------
+%   Make Tables
+%-------------------------------------------------------------------
+GroupedTrajectoriesCollection = {};
+for TaskIdx = 1:size(TraGroupsMatrix,1)*size(TraGroupsMatrix,2)
+    disp(['Stride Period: ', num2str(TraGroupsMatrix{TaskIdx}.StridePeriod),' Speed: ', num2str(TraGroupsMatrix{TaskIdx}.Speed)]);
     
+    for traIdx = 1:length(TraGroupsMatrix{TaskIdx}.GaitGroupNameList)
+        TempLine = {TraGroupsMatrix{TaskIdx}.StridePeriod,TraGroupsMatrix{TaskIdx}.Speed,...
+                    TraGroupsMatrix{TaskIdx}.GaitGroupNameList{traIdx},...
+                    TraGroupsMatrix{TaskIdx}.DiscoveredTrajectoryFileNameList{traIdx},...
+                    TraGroupsMatrix{TaskIdx}.ExpFilePathList{traIdx}};
+                
+        GroupedTrajectoriesCollection(size(GroupedTrajectoriesCollection,1)+1,:) = TempLine;
+    end
+end
+
+GroupedTrajectoriesCollectionTable = cell2table(GroupedTrajectoriesCollection,'VariableNames',["StridePeriod","Speed",...
+                                                                                "GaitGroupName",...
+                                                                                "ExpFileName",...
+                                                                                "ExpFilePath"]);
+writetable(GroupedTrajectoriesCollectionTable,[data_file_path,'/TableForm_TrajectorywithGroupLabels_',datestr(datetime('now'), 30),'.csv']);
+
 disp('-------------------------------------------------------------------')
 disp('Data Extraction For Half-Cheetah Finished')
 disp('-------------------------------------------------------------------')

@@ -410,7 +410,7 @@ function [GaitName, GroupName] = TrajectoryGroupClassifier(DiscoveredGaitName, D
     else
         
         GaitName = 'Unknown';
-        GroupName = 'Unknown Gait Group in Unknown Gait';
+        GroupName = 'Unknown_Gait_Group_in_Unknown_Gait';
 
     %elseif contains(GaitNameTemp,'Pronking') == 1
 
