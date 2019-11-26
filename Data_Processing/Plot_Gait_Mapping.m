@@ -19,9 +19,13 @@ for outerloop_idx = 1:size(resultMatrix,1)
             elseif contains(GaitNameTemp,'Gallop') == 1
                 %plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'m-h','MarkerSize',30, 'LineWidth',2.5, 'LineStyle','none', 'MarkerEdgeColor','m')
                 gallop_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
-            elseif contains(GaitNameTemp,'Bounding-S') == 1
+            %elseif contains(GaitNameTemp,'Bounding-S') == 1
                 %plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'-o','MarkerSize',30,'LineWidth',4, 'MarkerEdgeColor','#A2142F','LineStyle','none')
-                bounding_s_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
+            %    bounding_s_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
+            elseif contains(GaitNameTemp,'Bounding-S_H-FLY-F') == 1
+                bounding_s_h_fly_f_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
+            elseif contains(GaitNameTemp,'Bounding-S_H-F-FLY') == 1
+                bounding_s_h_f_fly_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
             elseif contains(GaitNameTemp,'Bounding-D') == 1
                 %plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'r-+','MarkerSize',30, 'LineWidth',4, 'LineStyle','none')
                 bounding_d_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
@@ -56,9 +60,17 @@ if exist('gallop_sample','var') == 1
     plot(gallop_sample(1),gallop_sample(2),'m-h','MarkerSize',30, 'LineWidth',2.5, 'LineStyle','none', 'MarkerEdgeColor','m')
     legend_vector = [legend_vector,"Galloping"];
 end
-if exist('bounding_s_sample','var') == 1
-    plot(bounding_s_sample(1),bounding_s_sample(2),'-o','MarkerSize',30,'LineWidth',4, 'MarkerEdgeColor','#A2142F','LineStyle','none')
-    legend_vector = [legend_vector,"Bounding-S"];
+% if exist('bounding_s_sample','var') == 1
+%     plot(bounding_s_sample(1),bounding_s_sample(2),'-o','MarkerSize',30,'LineWidth',4, 'MarkerEdgeColor','#A2142F','LineStyle','none')
+%     legend_vector = [legend_vector,"Bounding-S"];
+% end
+if exist('bounding_s_h_fly_f_sample','var') == 1
+    plot(bounding_s_h_fly_f_sample(1),bounding_s_h_fly_f_sample(2),'-o','MarkerSize',30,'LineWidth',4, 'MarkerEdgeColor','#A2142F','LineStyle','none')
+    legend_vector = [legend_vector,"Bounding-S_H_FLY_F"];
+end
+if exist('bounding_s_h_f_fly_sample','var') == 1
+    plot(bounding_s_h_f_fly_sample(1),bounding_s_h_f_fly_sample(2),'-p','MarkerSize',30,'LineWidth',4, 'MarkerEdgeColor','#A2142F','LineStyle','none')
+    legend_vector = [legend_vector,"Bounding-S_H_F_FLY"];
 end
 if exist('bounding_d_sample','var') == 1
     plot(bounding_d_sample(1),bounding_d_sample(2),'r-+','MarkerSize',30, 'LineWidth',4, 'LineStyle','none')
@@ -105,9 +117,13 @@ for outerloop_idx = 1:size(resultMatrix,1)
             elseif contains(GaitNameTemp,'Gallop') == 1
                 plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'m-h','MarkerSize',30, 'LineWidth',2.5, 'LineStyle','none', 'MarkerEdgeColor','m')
                 %gallop_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
-            elseif contains(GaitNameTemp,'Bounding-S') == 1
+%             elseif contains(GaitNameTemp,'Bounding-S') == 1
+%                 plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'-o','MarkerSize',30,'LineWidth',4, 'MarkerEdgeColor','#A2142F','LineStyle','none')
+%                 %bounding_s_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
+            elseif contains(GaitNameTemp,'Bounding-S_H-FLY-F') == 1
                 plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'-o','MarkerSize',30,'LineWidth',4, 'MarkerEdgeColor','#A2142F','LineStyle','none')
-                %bounding_s_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
+            elseif contains(GaitNameTemp,'Bounding-S_H-F-FLY') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'-p','MarkerSize',30,'LineWidth',4, 'MarkerEdgeColor','#A2142F','LineStyle','none')
             elseif contains(GaitNameTemp,'Bounding-D') == 1
                 plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'r-+','MarkerSize',30, 'LineWidth',4, 'LineStyle','none')
                 %bounding_d_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];

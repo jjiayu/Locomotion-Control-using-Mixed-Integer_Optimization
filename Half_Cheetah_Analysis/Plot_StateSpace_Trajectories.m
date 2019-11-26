@@ -5,14 +5,24 @@ function [] = Plot_StateSpace_Trajectories(MINLP_Result_DataBase, x_axis_name, y
     %Redesign some variables in the MINLP_Result_DataBase
     for idx = 1:length(MINLP_Result_DataBase)
         %   Align with same length
-        MINLP_Result_DataBase{idx}.FFx_result = [MINLP_Result_DataBase{idx}.FFx_result;MINLP_Result_DataBase{idx}.FFx_result(end)];
-        MINLP_Result_DataBase{idx}.FFy_result = [MINLP_Result_DataBase{idx}.FFy_result;MINLP_Result_DataBase{idx}.FFy_result(end)];
-        MINLP_Result_DataBase{idx}.FHx_result = [MINLP_Result_DataBase{idx}.FHx_result;MINLP_Result_DataBase{idx}.FHx_result(end)];
-        MINLP_Result_DataBase{idx}.FHy_result = [MINLP_Result_DataBase{idx}.FHy_result;MINLP_Result_DataBase{idx}.FHy_result(end)];
-        MINLP_Result_DataBase{idx}.PFxdot_result = [MINLP_Result_DataBase{idx}.PFxdot_result;MINLP_Result_DataBase{idx}.PFxdot_result(end)];
-        MINLP_Result_DataBase{idx}.PFydot_result = [MINLP_Result_DataBase{idx}.PFydot_result;MINLP_Result_DataBase{idx}.PFydot_result(end)];
-        MINLP_Result_DataBase{idx}.PHxdot_result = [MINLP_Result_DataBase{idx}.PHxdot_result;MINLP_Result_DataBase{idx}.PHxdot_result(end)];
-        MINLP_Result_DataBase{idx}.PHydot_result = [MINLP_Result_DataBase{idx}.PHydot_result;MINLP_Result_DataBase{idx}.PHydot_result(end)];
+        %       Extend with Last - 1 Knot
+%         MINLP_Result_DataBase{idx}.FFx_result = [MINLP_Result_DataBase{idx}.FFx_result;MINLP_Result_DataBase{idx}.FFx_result(end)];
+%         MINLP_Result_DataBase{idx}.FFy_result = [MINLP_Result_DataBase{idx}.FFy_result;MINLP_Result_DataBase{idx}.FFy_result(end)];
+%         MINLP_Result_DataBase{idx}.FHx_result = [MINLP_Result_DataBase{idx}.FHx_result;MINLP_Result_DataBase{idx}.FHx_result(end)];
+%         MINLP_Result_DataBase{idx}.FHy_result = [MINLP_Result_DataBase{idx}.FHy_result;MINLP_Result_DataBase{idx}.FHy_result(end)];
+%         MINLP_Result_DataBase{idx}.PFxdot_result = [MINLP_Result_DataBase{idx}.PFxdot_result;MINLP_Result_DataBase{idx}.PFxdot_result(end)];
+%         MINLP_Result_DataBase{idx}.PFydot_result = [MINLP_Result_DataBase{idx}.PFydot_result;MINLP_Result_DataBase{idx}.PFydot_result(end)];
+%         MINLP_Result_DataBase{idx}.PHxdot_result = [MINLP_Result_DataBase{idx}.PHxdot_result;MINLP_Result_DataBase{idx}.PHxdot_result(end)];
+%         MINLP_Result_DataBase{idx}.PHydot_result = [MINLP_Result_DataBase{idx}.PHydot_result;MINLP_Result_DataBase{idx}.PHydot_result(end)];
+        %       More correct -> Extend with The first Knot (the state of the last knot is the same as the first knot)
+        MINLP_Result_DataBase{idx}.FFx_result = [MINLP_Result_DataBase{idx}.FFx_result;MINLP_Result_DataBase{idx}.FFx_result(1)];
+        MINLP_Result_DataBase{idx}.FFy_result = [MINLP_Result_DataBase{idx}.FFy_result;MINLP_Result_DataBase{idx}.FFy_result(1)];
+        MINLP_Result_DataBase{idx}.FHx_result = [MINLP_Result_DataBase{idx}.FHx_result;MINLP_Result_DataBase{idx}.FHx_result(1)];
+        MINLP_Result_DataBase{idx}.FHy_result = [MINLP_Result_DataBase{idx}.FHy_result;MINLP_Result_DataBase{idx}.FHy_result(1)];
+        MINLP_Result_DataBase{idx}.PFxdot_result = [MINLP_Result_DataBase{idx}.PFxdot_result;MINLP_Result_DataBase{idx}.PFxdot_result(1)];
+        MINLP_Result_DataBase{idx}.PFydot_result = [MINLP_Result_DataBase{idx}.PFydot_result;MINLP_Result_DataBase{idx}.PFydot_result(1)];
+        MINLP_Result_DataBase{idx}.PHxdot_result = [MINLP_Result_DataBase{idx}.PHxdot_result;MINLP_Result_DataBase{idx}.PHxdot_result(1)];
+        MINLP_Result_DataBase{idx}.PHydot_result = [MINLP_Result_DataBase{idx}.PHydot_result;MINLP_Result_DataBase{idx}.PHydot_result(1)];
         %   Normalized time and x-axis
         MINLP_Result_DataBase{idx}.NormalisedTimeSeries_result = MINLP_Result_DataBase{idx}.TimeSeries./MINLP_Result_DataBase{idx}.TimeSeries(end);
         MINLP_Result_DataBase{idx}.Normalised_x_result = MINLP_Result_DataBase{idx}.x_result./MINLP_Result_DataBase{idx}.x_result(end);

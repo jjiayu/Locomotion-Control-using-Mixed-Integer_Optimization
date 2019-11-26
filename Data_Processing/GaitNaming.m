@@ -71,7 +71,7 @@ else
                 elseif isequal(clean_Gait_from_HindSupport(2,:),[0,0]) && isequal(clean_Gait_from_HindSupport(3,:),[1,0])
                     GaitName = "Bounding-S_H-FLY-F";
                 elseif isequal(clean_Gait_from_HindSupport(2,:),[1,0]) && isequal(clean_Gait_from_HindSupport(3,:),[0,0])
-                    GaitName = "Bounding-S_H-F-FLY";
+                   GaitName = "Bounding-S_H-F-FLY";
                 else
                     GaitName = "Unknown";
                 end

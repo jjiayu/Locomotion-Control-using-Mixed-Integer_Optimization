@@ -73,58 +73,90 @@ function [GaitName, GroupName] = TrajectoryGroupClassifier(DiscoveredGaitName, D
     Walking_S_Group_C_3 = Walking_S_Group_C_TemplateDouble(3:6,:);
     Walking_S_Group_C_4 = Walking_S_Group_C_TemplateDouble(4:7,:);
 
-    %   For Bounding-S
-    Bounding_S_3Phases_Template = [0,1;...
-                                  1,0;...
-                                  0,0];
+    %   For Bounding-S_H_F_FLY
+    Bounding_S_H_F_FLY_3Phases_Template = [0,1;...
+                                           1,0;...
+                                           0,0];
     %       Group A -> duplicate phase 1                          
-    Bounding_S_Group_A_Template = [Bounding_S_3Phases_Template(1,:);Bounding_S_3Phases_Template];
-    Bounding_S_Group_A_TemplateDouble = [Bounding_S_Group_A_Template;Bounding_S_Group_A_Template];
+    Bounding_S_H_F_FLY_Group_A_Template = [Bounding_S_H_F_FLY_3Phases_Template(1,:);Bounding_S_H_F_FLY_3Phases_Template];
+    Bounding_S_H_F_FLY_Group_A_TemplateDouble = [Bounding_S_H_F_FLY_Group_A_Template;Bounding_S_H_F_FLY_Group_A_Template];
 
-    Bounding_S_Group_A_1 = Bounding_S_Group_A_TemplateDouble(1:4,:);
-    Bounding_S_Group_A_2 = Bounding_S_Group_A_TemplateDouble(2:5,:);
-    Bounding_S_Group_A_3 = Bounding_S_Group_A_TemplateDouble(3:6,:);
-    Bounding_S_Group_A_4 = Bounding_S_Group_A_TemplateDouble(4:7,:);
+    Bounding_S_H_F_FLY_Group_A_1 = Bounding_S_H_F_FLY_Group_A_TemplateDouble(1:4,:);
+    Bounding_S_H_F_FLY_Group_A_2 = Bounding_S_H_F_FLY_Group_A_TemplateDouble(2:5,:);
+    Bounding_S_H_F_FLY_Group_A_3 = Bounding_S_H_F_FLY_Group_A_TemplateDouble(3:6,:);
+    Bounding_S_H_F_FLY_Group_A_4 = Bounding_S_H_F_FLY_Group_A_TemplateDouble(4:7,:);
 
     %       Group B -> duplicate phase 2      
-    Bounding_S_Group_B_Template = [Bounding_S_3Phases_Template(1,:);Bounding_S_3Phases_Template(2,:);Bounding_S_3Phases_Template(2,:);Bounding_S_3Phases_Template(3,:)];
-    Bounding_S_Group_B_TemplateDouble = [Bounding_S_Group_B_Template;Bounding_S_Group_B_Template];
+    Bounding_S_H_F_FLY_Group_B_Template = [Bounding_S_H_F_FLY_3Phases_Template(1,:);Bounding_S_H_F_FLY_3Phases_Template(2,:);Bounding_S_H_F_FLY_3Phases_Template(2,:);Bounding_S_H_F_FLY_3Phases_Template(3,:)];
+    Bounding_S_H_F_FLY_Group_B_TemplateDouble = [Bounding_S_H_F_FLY_Group_B_Template;Bounding_S_H_F_FLY_Group_B_Template];
 
-    Bounding_S_Group_B_1 = Bounding_S_Group_B_TemplateDouble(1:4,:);
-    Bounding_S_Group_B_2 = Bounding_S_Group_B_TemplateDouble(2:5,:);
-    Bounding_S_Group_B_3 = Bounding_S_Group_B_TemplateDouble(3:6,:);
-    Bounding_S_Group_B_4 = Bounding_S_Group_B_TemplateDouble(4:7,:);
+    Bounding_S_H_F_FLY_Group_B_1 = Bounding_S_H_F_FLY_Group_B_TemplateDouble(1:4,:);
+    Bounding_S_H_F_FLY_Group_B_2 = Bounding_S_H_F_FLY_Group_B_TemplateDouble(2:5,:);
+    Bounding_S_H_F_FLY_Group_B_3 = Bounding_S_H_F_FLY_Group_B_TemplateDouble(3:6,:);
+    Bounding_S_H_F_FLY_Group_B_4 = Bounding_S_H_F_FLY_Group_B_TemplateDouble(4:7,:);
 
     %       Group C -> duplicated phase 3
-    Bounding_S_Group_C_Template = [Bounding_S_3Phases_Template(1:2,:);Bounding_S_3Phases_Template(3,:);Bounding_S_3Phases_Template(3,:)];
-    Bounding_S_Group_C_TemplateDouble = [Bounding_S_Group_C_Template;Bounding_S_Group_C_Template];
+    Bounding_S_H_F_FLY_Group_C_Template = [Bounding_S_H_F_FLY_3Phases_Template(1:2,:);Bounding_S_H_F_FLY_3Phases_Template(3,:);Bounding_S_H_F_FLY_3Phases_Template(3,:)];
+    Bounding_S_H_F_FLY_Group_C_TemplateDouble = [Bounding_S_H_F_FLY_Group_C_Template;Bounding_S_H_F_FLY_Group_C_Template];
 
-    Bounding_S_Group_C_1 = Bounding_S_Group_C_TemplateDouble(1:4,:);
-    Bounding_S_Group_C_2 = Bounding_S_Group_C_TemplateDouble(2:5,:);
-    Bounding_S_Group_C_3 = Bounding_S_Group_C_TemplateDouble(3:6,:);
-    Bounding_S_Group_C_4 = Bounding_S_Group_C_TemplateDouble(4:7,:);
+    Bounding_S_H_F_FLY_Group_C_1 = Bounding_S_H_F_FLY_Group_C_TemplateDouble(1:4,:);
+    Bounding_S_H_F_FLY_Group_C_2 = Bounding_S_H_F_FLY_Group_C_TemplateDouble(2:5,:);
+    Bounding_S_H_F_FLY_Group_C_3 = Bounding_S_H_F_FLY_Group_C_TemplateDouble(3:6,:);
+    Bounding_S_H_F_FLY_Group_C_4 = Bounding_S_H_F_FLY_Group_C_TemplateDouble(4:7,:);
+    
+    %   For Bounding_S_H_FLY_F
+    Bounding_S_H_FLY_F_3Phases_Template = [0,1;...
+                                           0,0;...
+                                           1,0];
+    %       Group A -> duplicate phase 1                          
+    Bounding_S_H_FLY_F_Group_A_Template = [Bounding_S_H_FLY_F_3Phases_Template(1,:);Bounding_S_H_FLY_F_3Phases_Template];
+    Bounding_S_H_FLY_F_Group_A_TemplateDouble = [Bounding_S_H_FLY_F_Group_A_Template;Bounding_S_H_FLY_F_Group_A_Template];
 
+    Bounding_S_H_FLY_F_Group_A_1 = Bounding_S_H_FLY_F_Group_A_TemplateDouble(1:4,:);
+    Bounding_S_H_FLY_F_Group_A_2 = Bounding_S_H_FLY_F_Group_A_TemplateDouble(2:5,:);
+    Bounding_S_H_FLY_F_Group_A_3 = Bounding_S_H_FLY_F_Group_A_TemplateDouble(3:6,:);
+    Bounding_S_H_FLY_F_Group_A_4 = Bounding_S_H_FLY_F_Group_A_TemplateDouble(4:7,:);
+
+    %       Group B -> duplicate phase 2      
+    Bounding_S_H_FLY_F_Group_B_Template = [Bounding_S_H_FLY_F_3Phases_Template(1,:);Bounding_S_H_FLY_F_3Phases_Template(2,:);Bounding_S_H_FLY_F_3Phases_Template(2,:);Bounding_S_H_FLY_F_3Phases_Template(3,:)];
+    Bounding_S_H_FLY_F_Group_B_TemplateDouble = [Bounding_S_H_FLY_F_Group_B_Template;Bounding_S_H_FLY_F_Group_B_Template];
+
+    Bounding_S_H_FLY_F_Group_B_1 = Bounding_S_H_FLY_F_Group_B_TemplateDouble(1:4,:);
+    Bounding_S_H_FLY_F_Group_B_2 = Bounding_S_H_FLY_F_Group_B_TemplateDouble(2:5,:);
+    Bounding_S_H_FLY_F_Group_B_3 = Bounding_S_H_FLY_F_Group_B_TemplateDouble(3:6,:);
+    Bounding_S_H_FLY_F_Group_B_4 = Bounding_S_H_FLY_F_Group_B_TemplateDouble(4:7,:);
+
+    %       Group C -> duplicated phase 3
+    Bounding_S_H_FLY_F_Group_C_Template = [Bounding_S_H_FLY_F_3Phases_Template(1:2,:);Bounding_S_H_FLY_F_3Phases_Template(3,:);Bounding_S_H_FLY_F_3Phases_Template(3,:)];
+    Bounding_S_H_FLY_F_Group_C_TemplateDouble = [Bounding_S_H_FLY_F_Group_C_Template;Bounding_S_H_FLY_F_Group_C_Template];
+
+    Bounding_S_H_FLY_F_Group_C_1 = Bounding_S_H_FLY_F_Group_C_TemplateDouble(1:4,:);
+    Bounding_S_H_FLY_F_Group_C_2 = Bounding_S_H_FLY_F_Group_C_TemplateDouble(2:5,:);
+    Bounding_S_H_FLY_F_Group_C_3 = Bounding_S_H_FLY_F_Group_C_TemplateDouble(3:6,:);
+    Bounding_S_H_FLY_F_Group_C_4 = Bounding_S_H_FLY_F_Group_C_TemplateDouble(4:7,:);
+    
     %--------------------------------------------------------------------------
     if PrintGroups == 1
-
+        
+        diary off
         diary('Gait_Pattern_Groups.txt');
 
         disp('===============================================================')
         disp('Galloping')
         disp('===============================================================')
-        disp('Galloping Group A:')
+        disp('Galloping_Group_A:')
         disp('---------------------------------------------------------------')
         disp(Galloping_Group_A)
         disp('---------------------------------------------------------------')
-        disp('Galloping Group B:')
+        disp('Galloping_Group_B:')
         disp('---------------------------------------------------------------')
         disp(Galloping_Group_B)
         disp('---------------------------------------------------------------')
-        disp('Galloping Group C:')
+        disp('Galloping_Group_C:')
         disp('---------------------------------------------------------------')
         disp(Galloping_Group_C)
         disp('---------------------------------------------------------------')
-        disp('Galloping Group D:')
+        disp('Galloping_Group_D:')
         disp('---------------------------------------------------------------')
         disp(Galloping_Group_D)
         disp('---------------------------------------------------------------')
@@ -133,19 +165,19 @@ function [GaitName, GroupName] = TrajectoryGroupClassifier(DiscoveredGaitName, D
         disp('===============================================================')
         disp('Walking_D')
         disp('===============================================================')
-        disp('Walking_D Group A:')
+        disp('Walking_D_Group_A:')
         disp('---------------------------------------------------------------')
         disp(Walking_D_Group_A)
         disp('---------------------------------------------------------------')
-        disp('Walking_D Group B:')
+        disp('Walking_D_Group_B:')
         disp('---------------------------------------------------------------')
         disp(Walking_D_Group_B)
         disp('---------------------------------------------------------------')
-        disp('Walking_D Group C:')
+        disp('Walking_D_Group_C:')
         disp('---------------------------------------------------------------')
         disp(Walking_D_Group_C)
         disp('---------------------------------------------------------------')
-        disp('Walking_D Group D:')
+        disp('Walking_D_Group_D:')
         disp('---------------------------------------------------------------')
         disp(Walking_D_Group_D)
         disp('---------------------------------------------------------------')
@@ -154,19 +186,19 @@ function [GaitName, GroupName] = TrajectoryGroupClassifier(DiscoveredGaitName, D
         disp('===============================================================')
         disp('Bounding_D')
         disp('===============================================================')
-        disp('Bounding_D Group A:')
+        disp('Bounding_D_Group_A:')
         disp('---------------------------------------------------------------')
         disp(Bounding_D_Group_A)
         disp('---------------------------------------------------------------')
-        disp('Bounding_D Group B:')
+        disp('Bounding_D_Group_B:')
         disp('---------------------------------------------------------------')
         disp(Bounding_D_Group_B)
         disp('---------------------------------------------------------------')
-        disp('Bounding_D Group C:')
+        disp('Bounding_D_Group_C:')
         disp('---------------------------------------------------------------')
         disp(Bounding_D_Group_C)
         disp('---------------------------------------------------------------')
-        disp('Bounding_D Group D:')
+        disp('Bounding_D_Group_D:')
         disp('---------------------------------------------------------------')
         disp(Bounding_D_Group_D)
         disp('---------------------------------------------------------------')
@@ -175,113 +207,169 @@ function [GaitName, GroupName] = TrajectoryGroupClassifier(DiscoveredGaitName, D
         disp('===============================================================')
         disp('Walking_S')
         disp('===============================================================')
-        disp('Walking_S Group A1:')
+        disp('Walking_S_Group_A1:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_A_1)
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group A2:')
+        disp('Walking_S_Group_A2:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_A_2)
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group A3:')
+        disp('Walking_S_Group_A3:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_A_3)
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group A4:')
+        disp('Walking_S_Group_A4:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_A_4)
         disp('---------------------------------------------------------------')
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group B1:')
+        disp('Walking_S_Group_B1:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_B_1)
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group B2:')
+        disp('Walking_S_Group_B2:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_B_2)
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group B3:')
+        disp('Walking_S_Group_B3:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_B_3)
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group B4:')
+        disp('Walking_S_Group_B4:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_B_4)
         disp('---------------------------------------------------------------')
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group C1:')
+        disp('Walking_S_Group_C1:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_C_1)
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group C2:')
+        disp('Walking_S_Group_C2:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_C_2)
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group C3:')
+        disp('Walking_S_Group_C3:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_C_3)
         disp('---------------------------------------------------------------')
-        disp('Walking_S Group C4:')
+        disp('Walking_S_Group_C4:')
         disp('---------------------------------------------------------------')
         disp(Walking_S_Group_C_4)
         disp('---------------------------------------------------------------')
         disp(' ')
 
         disp('===============================================================')
-        disp('Bounding_S')
+        disp('Bounding_S_H_F_FLY')
         disp('===============================================================')
-        disp('Bounding_S Group A1:')
+        disp('Bounding_S_H_F_FLY_Group_A1:')
         disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_A_1)
+        disp(Bounding_S_H_F_FLY_Group_A_1)
         disp('---------------------------------------------------------------')
-        disp('Bounding_S Group A2:')
+        disp('Bounding_S_H_F_FLY_Group_A2:')
         disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_A_2)
+        disp(Bounding_S_H_F_FLY_Group_A_2)
         disp('---------------------------------------------------------------')
-        disp('Bounding_S Group A3:')
+        disp('Bounding_S_H_F_FLY_Group_A3:')
         disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_A_3)
+        disp(Bounding_S_H_F_FLY_Group_A_3)
         disp('---------------------------------------------------------------')
-        disp('Bounding_S Group A4:')
+        disp('Bounding_S_H_F_FLY_Group_A4:')
         disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_A_4)
-        disp('---------------------------------------------------------------')
-        disp('---------------------------------------------------------------')
-        disp('Bounding_S Group B1:')
-        disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_B_1)
-        disp('---------------------------------------------------------------')
-        disp('Bounding_S Group B2:')
-        disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_B_2)
-        disp('---------------------------------------------------------------')
-        disp('Bounding_S Group B3:')
-        disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_B_3)
-        disp('---------------------------------------------------------------')
-        disp('Bounding_S Group B4:')
-        disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_B_4)
+        disp(Bounding_S_H_F_FLY_Group_A_4)
         disp('---------------------------------------------------------------')
         disp('---------------------------------------------------------------')
-        disp('Bounding_S Group C1:')
+        disp('Bounding_S_H_F_FLY_Group_B1:')
         disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_C_1)
+        disp(Bounding_S_H_F_FLY_Group_B_1)
         disp('---------------------------------------------------------------')
-        disp('Bounding_S Group C2:')
+        disp('Bounding_S_H_F_FLY_Group_B2:')
         disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_C_2)
+        disp(Bounding_S_H_F_FLY_Group_B_2)
         disp('---------------------------------------------------------------')
-        disp('Bounding_S Group C3:')
+        disp('Bounding_S_H_F_FLY_Group_B3:')
         disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_C_3)
+        disp(Bounding_S_H_F_FLY_Group_B_3)
         disp('---------------------------------------------------------------')
-        disp('Bounding_S Group C4:')
+        disp('Bounding_S_H_F_FLY_Group_B4:')
         disp('---------------------------------------------------------------')
-        disp(Bounding_S_Group_C_4)
+        disp(Bounding_S_H_F_FLY_Group_B_4)
         disp('---------------------------------------------------------------')
         disp('---------------------------------------------------------------')
-
+        disp('Bounding_S_H_F_FLY_Group_C1:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_F_FLY_Group_C_1)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_F_FLY_Group_C2:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_F_FLY_Group_C_2)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_F_FLY_Group_C3:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_F_FLY_Group_C_3)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_F_FLY_Group_C4:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_F_FLY_Group_C_4)
+        disp('---------------------------------------------------------------')
+        disp('---------------------------------------------------------------')
+        
+        disp('===============================================================')
+        disp('Bounding_S_H_FLY_F')
+        disp('===============================================================')
+        disp('Bounding_S_H_FLY_F_Group_A1:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_A_1)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_A2:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_A_2)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_A3:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_A_3)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_A4:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_A_4)
+        disp('---------------------------------------------------------------')
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_B1:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_B_1)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_B2:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_B_2)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_B3:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_B_3)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_B4:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_B_4)
+        disp('---------------------------------------------------------------')
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_C1:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_C_1)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_C2:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_C_2)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_C3:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_C_3)
+        disp('---------------------------------------------------------------')
+        disp('Bounding_S_H_FLY_F_Group_C4:')
+        disp('---------------------------------------------------------------')
+        disp(Bounding_S_H_FLY_F_Group_C_4)
+        disp('---------------------------------------------------------------')
+        disp('---------------------------------------------------------------')
+        
+        diary off
     end
     %--------------------------------------------------------------------------
 
@@ -359,38 +447,70 @@ function [GaitName, GroupName] = TrajectoryGroupClassifier(DiscoveredGaitName, D
             GroupName = 'Unknown_Group_Name_for_Galloping';
         end
         
-    elseif contains(DiscoveredGaitName,'Bounding-S') == 1
+    elseif contains(DiscoveredGaitName,'Bounding_S_H_F_FLY') == 1
         
-        GaitName = 'Bounding-S';
+        GaitName = 'Bounding_S_H_F_FLY';
         
-        if isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_A_1)
-            GroupName = 'Bounding_S_Group_A1';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_A_2)
-            GroupName = 'Bounding_S_Group_A2';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_A_3)
-            GroupName = 'Bounding_S_Group_A3';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_A_4)
-            GroupName = 'Bounding_S_Group_A4';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_B_1)
-            GroupName = 'Bounding_S_Group_B1';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_B_2)
-            GroupName = 'Bounding_S_Group_B2';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_B_3)
-            GroupName = 'Bounding_S_Group_B3';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_B_4)
-            GroupName = 'Bounding_S_Group_B4';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_C_1)
-            GroupName = 'Bounding_S_Group_C1';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_C_2)
-            GroupName = 'Bounding_S_Group_C2';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_C_3)
-            GroupName = 'Bounding_S_Group_C3';
-        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_Group_C_4)
-            GroupName = 'Bounding_S_Group_C4';
+        if isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_A_1)
+            GroupName = 'Bounding_S_H_F_FLY_Group_A1';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_A_2)
+            GroupName = 'Bounding_S_H_F_FLY_Group_A2';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_A_3)
+            GroupName = 'Bounding_S_H_F_FLY_Group_A3';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_A_4)
+            GroupName = 'Bounding_S_H_F_FLY_Group_A4';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_B_1)
+            GroupName = 'Bounding_S_H_F_FLY_Group_B1';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_B_2)
+            GroupName = 'Bounding_S_H_F_FLY_Group_B2';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_B_3)
+            GroupName = 'Bounding_S_H_F_FLY_Group_B3';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_B_4)
+            GroupName = 'Bounding_S_H_F_FLY_Group_B4';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_C_1)
+            GroupName = 'Bounding_S_H_F_FLY_Group_C1';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_C_2)
+            GroupName = 'Bounding_S_H_F_FLY_Group_C2';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_C_3)
+            GroupName = 'Bounding_S_H_F_FLY_Group_C3';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_F_FLY_Group_C_4)
+            GroupName = 'Bounding_S_H_F_FLY_Group_C4';
         else
-            GroupName = 'Unknown_Group_Name_for_Bounding_S';
+            GroupName = 'Unknown_Group_Name_for_Bounding_S_H_F_FLY';
         end
-
+        
+    elseif contains(DiscoveredGaitName,'Bounding_S_H_FLY_F') == 1
+        
+        GaitName = 'Bounding_S_H_FLY_F';
+        
+        if isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_A_1)
+            GroupName = 'Bounding_S_H_FLY_F_Group_A1';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_A_2)
+            GroupName = 'Bounding_S_H_FLY_F_Group_A2';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_A_3)
+            GroupName = 'Bounding_S_H_FLY_F_Group_A3';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_A_4)
+            GroupName = 'Bounding_S_H_FLY_F_Group_A4';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_B_1)
+            GroupName = 'Bounding_S_H_FLY_F_Group_B1';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_B_2)
+            GroupName = 'Bounding_S_H_FLY_F_Group_B2';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_B_3)
+            GroupName = 'Bounding_S_H_FLY_F_Group_B3';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_B_4)
+            GroupName = 'Bounding_S_H_FLY_F_Group_B4';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_C_1)
+            GroupName = 'Bounding_S_H_FLY_F_Group_C1';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_C_2)
+            GroupName = 'Bounding_S_H_FLY_F_Group_C2';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_C_3)
+            GroupName = 'Bounding_S_H_FLY_F_Group_C3';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Bounding_S_H_FLY_F_Group_C_4)
+            GroupName = 'Bounding_S_H_FLY_F_Group_C4';
+        else
+            GroupName = 'Unknown_Group_Name_for_Bounding_S_H_FLY_F';
+        end
+        
     elseif contains(DiscoveredGaitName,'Bounding-D') == 1
         
         GaitName = 'Bounding-D';
