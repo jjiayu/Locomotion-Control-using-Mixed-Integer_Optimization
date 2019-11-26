@@ -138,6 +138,6 @@ xlim([0.3,1.7])
 ylabel('Speed (m/s)');
 ylim([0.1,max_Speed+0.3])
 title(strcat(cost_name_vector(cost_flag),' Slope:',num2str(terrain_slope_degrees), '  Degrees'));
-legend(legend_vector)
+legend(legend_vector,'Location','northeastoutside')
 set(gca,'FontSize',24)
 hold off
