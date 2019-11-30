@@ -7,7 +7,7 @@ clear;
 %-------------------------------------------------------------------------
 disp('Select the path where contains the xls file containing Trajectories with same group label:')
 GroupTrajectoryFilePath = uigetdir();
-GroupLabel = input('Specify the group label (with '', like Galloping_Group_A): \n');
+GroupLabel = input('Specify the group label (with '', like Galloping_Group_A_MeanInitCollection): \n');
 FilePostFix = input('Specify the Post Fix of the Group Labeling File (with '', like xlsx): \n');
 GroupLabelsFileName = strcat(GroupLabel,'.',FilePostFix);
 

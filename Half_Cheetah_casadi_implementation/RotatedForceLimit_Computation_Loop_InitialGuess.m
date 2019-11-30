@@ -8,7 +8,7 @@ import casadi.*
 %
 success_vector = [];
 
-for speedIdx = 1:length(SpeedList)
+for conditionIdx = 1:size(ConditionArray,1)
 %for runIdx = 1:NumofRuns
 
 %======================================================================
@@ -20,16 +20,17 @@ for runIdx = 1:1
     %Missing Parameter Setup
     Tend_flag = 1; %Fixed Time Interval
 
-    %Scan the speed
-    speed = SpeedList(speedIdx);
-    Tend = Stride_Period_Vector(speedIdx);
+    %Get Speed and Stride Period
+    Tend = ConditionArray(conditionIdx,1);
+    speed = ConditionArray(conditionIdx,2);
+
     
     diary off
     ExpLog_filename = strcat(['StridePeriod-',num2str(Tend),'-Speed-', num2str(speed), '-'], datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
     diary([ExpDirectory, '/', ExpLog_filename]);
     
     disp('====================================================');
-    disp(['Gait Search for ', num2str(NumPhases),'Phases Motion(', num2str(NumLocalKnots),'Knots per Phase),',' Locomotion Speed ', num2str(speed), ' m/s', ' Round ', num2str(runIdx)])
+    disp(['Gait Search for ', num2str(NumPhases),'Phases Motion(', num2str(NumLocalKnots),'Knots per Phase),','Stride Period:', num2str(Tend), ' Locomotion Speed ', num2str(speed), ' m/s', ' Round ', num2str(runIdx)])
     disp(['Experiment Directory: ', ExpDirectory])
     disp(['Exp Start Time: ',datestr(datetime('now'), 30)])
     disp('====================================================');
@@ -1694,7 +1695,7 @@ for runIdx = 1:1
     save([ExpDirectory, '/', ExpLog_filename, '.mat']);
     warning('on')
     
-    success_vector(speedIdx) = return_status.success;
+    success_vector(conditionIdx) = return_status.success;
 
 end
 
