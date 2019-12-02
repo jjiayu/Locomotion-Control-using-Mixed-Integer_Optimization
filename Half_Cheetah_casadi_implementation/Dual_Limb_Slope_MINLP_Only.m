@@ -371,9 +371,20 @@ if Paras_Define_Method == 1 %Take fro file
     %----------------------------------------------------------------------
     %   Specify Desired Speed
     %----------------------------------------------------------------------
-    disp(['Minimal Speed: ',num2str(MinSpeed)]);
-    disp(['Maximum Speed: ',num2str(MaxSpeed)]);
-    disp(['Speed Resolution: ',num2str(SpeedResolution)])
+    disp(['Minimal Speed in Parameter File: ',num2str(MinSpeed)]);
+    disp(['Maximum Speed in Parameter File: ',num2str(MaxSpeed)]);
+    disp(['Speed Resolution in Parameter File: ',num2str(SpeedResolution)])
+    
+    ChangSpeedFlag = input('Decide if we want to change the desired speed: 1-> Yes 2->No \n');
+    if ChangSpeedFlag ==1
+        MinSpeed = input('Specify the MINIMUM Desired Speed along X-axis (m/s): \n');
+        disp('----------------------------------------------------');
+        MaxSpeed = input('Specify the MAXIMUM Desired Speed along X-axis (m/s): \n');
+        disp('----------------------------------------------------');
+        SpeedResolution = input('Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):\n');
+        disp('----------------------------------------------------');
+        SpeedList = MinSpeed:SpeedResolution:MaxSpeed;
+    end
     %----------------------------------------------------------------------
     %   Terminal time
     %----------------------------------------------------------------------
