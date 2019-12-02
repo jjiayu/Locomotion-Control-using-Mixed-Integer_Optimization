@@ -150,7 +150,7 @@ cost_name_vector = ["1-> Minimize Force Squared (Energy Loss)",...
                     "6-> Feet Velocity"];
 
 xlabel('Stride Period (s)');
-xlim([0.3,1.7])
+xlim([min_StridePeriod-0.1,max_StridePeriod+0.1])
 ylabel('Speed (m/s)');
 ylim([0.1,max_Speed+0.3])
 title(strcat(cost_name_vector(cost_flag),' Slope:',num2str(terrain_slope_degrees), '  Degrees'));
