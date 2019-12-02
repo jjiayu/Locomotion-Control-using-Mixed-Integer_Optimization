@@ -23,7 +23,7 @@ GaitMappingGenerationLog = strcat('Gait-Mapping-Generation-Results', datestr(dat
 diary([directory, '/', GaitMappingGenerationLog]);
 
 %Set-up Cost Difference Threshold
-CostDiffThreshold = 0.5;
+CostDiffThreshold = 0.25;
 disp(' ')
 disp('===========================================================')
 disp(['Cost Different THreshold: ',num2str(CostDiffThreshold*100),'%']);
