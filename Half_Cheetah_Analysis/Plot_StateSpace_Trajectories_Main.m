@@ -5,7 +5,7 @@ clc;
 %-------------------------------------------------------------------------
 % Load Result File
 %-------------------------------------------------------------------------
-disp('Load Trajectory Grouping Results')
+disp('Load Trajectory Grouping Results (i.e. Group_Label_MINLP_Trajectories)')
 [MINLPtrajectoryFile,MINLPtrajectoryPath] = uigetfile();
 full_MINLPTrajectory_file_path = [MINLPtrajectoryPath,MINLPtrajectoryFile];
 disp(['Selected File: ',full_MINLPTrajectory_file_path]);
