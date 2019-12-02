@@ -71,6 +71,29 @@ for loopIdx = 1:size(TrajectoryTable)
     end
     
     
+    %Build the trajectories        MINLP_OptResult.PFy_result_Robot(knotIdx) = FrontLeg_Position_Temp(2);
+        
+        %Hind Leg Position
+        HindLeg_Position_Temp = [cos(MINLP_OptResult.theta_result(knotIdx)),sin(MINLP_OptResult.theta_result(knotIdx));-sin(MINLP_OptResult.theta_result(knotIdx)),cos(MINLP_OptResult.theta_result(knotIdx))]*([MINLP_OptResult.PHx_result(knotIdx);MINLP_OptResult.PHy_result(knotIdx)] - [MINLP_OptResult.x_result(knotIdx);MINLP_OptResult.y_result(knotIdx)]);
+        MINLP_OptResult.PHx_result_Robot(knotIdx) = HindLeg_Position_Temp(1);
+        MINLP_OptResult.PHy_result_Robot(knotIdx) = HindLeg_Position_Temp(2);
+        
+
+    %   Feet Velocities
+    for knotIdx = 1:length(MINLP_OptResult.theta_result) - 1      
+        %Front Leg Velocity
+        FrontLeg_Velo_Temp = [cos(MINLP_OptResult.theta_result(knotIdx)),-sin(MINLP_OptResult.theta_result(knotIdx));sin(MINLP_OptResult.theta_result(knotIdx)),cos(MINLP_OptResult.theta_result(knotIdx))]*([MINLP_OptResult.PFxdot_result(knotIdx);MINLP_OptResult.PFydot_result(knotIdx)] - [MINLP_OptResult.xdot_result(knotIdx);MINLP_OptResult.ydot_result(knotIdx)]);
+        MINLP_OptResult.PFxdot_result_Robot(knotIdx) = FrontLeg_Velo_Temp(1);
+        MINLP_OptResult.PFydot_result_Robot(knotIdx) = FrontLeg_Velo_Temp(2);
+        
+        %Hind Leg Velocity
+        HindLeg_Velo_Temp = [cos(MINLP_OptResult.theta_result(knotIdx)),-sin(MINLP_OptResult.theta_result(knotIdx));sin(MINLP_OptResult.theta_result(knotIdx)),cos(MINLP_OptResult.theta_result(knotIdx))]*([MINLP_OptResult.PHxdot_result(knotIdx);MINLP_OptResult.PHydot_result(knotIdx)] - [MINLP_OptResult.xdot_result(knotIdx);MINLP_OptResult.ydot_result(knotIdx)]);
+        MINLP_OptResult.PHxdot_result_Robot(knotIdx) = HindLeg_Velo_Temp(1);
+        MINLP_OptResult.PHydot_result_Robot(knotIdx) = HindLeg_Velo_Temp(2);       
+    end
+    
+    
+    
     %Build the trajectories
     FullTrajectory_MINLP  = [MINLP_OptResult.TimeSeries;...
                              MINLP_OptResult.x_result;      MINLP_OptResult.y_result;        MINLP_OptResult.theta_result;...
@@ -92,9 +115,9 @@ for loopIdx = 1:size(TrajectoryTable)
     MINLP_Result_DataBase{loopIdx} = MINLP_OptResult;
     FullTrajectoriesCollection(loopIdx,:) = FullTrajectory_MINLP';
     FullTrajectoriesCollection_NoTimeSeries(loopIdx,:) = FullTrajectory_MINLP_NoTimeSeries;
-    
-end
 
+end
+ 
 %--------------------------------------------------------------------------
 % Save Data
 save([GroupTrajectoryFilePath,'/',GroupLabel,'_MINLP_Trajectories','.mat'])
