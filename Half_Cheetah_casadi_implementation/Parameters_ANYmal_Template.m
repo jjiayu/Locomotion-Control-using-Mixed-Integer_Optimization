@@ -23,8 +23,8 @@
     
     %======================================================================
     %Inertia Parameters(Information from MIT Cheetah 3)
-    m = 20.642; %kg
-    I = 0.65; %kg m^2 Izz
+    m = 34.7; %kg
+    I = 2.3; %kg m^2 Izz
     G = 9.80665; %m/s^2
     %======================================================================
 
@@ -32,10 +32,10 @@
     %   Kinematics Constraint Parameters
     %======================================================================
     %       Body Size
-    BodyLength = 0.64;
+    BodyLength = 0.63;
     BodyHeight = 0.24;
     %       Default foot position in Local robot frame
-    DefaultLegLength = 0.385; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
+    DefaultLegLength = 0.34; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
     
     %-------------------------------
     %   Morphology Definition: Morpho_change_flag
@@ -61,8 +61,8 @@
     
     %       Kinematics Bounding Box Constraint
     %Setup Robot Kinematics Properties
-    BoundingBox_Width  = 0.45;
-    BoundingBox_Height = 0.15;
+    BoundingBox_Width  = 0.5;
+    BoundingBox_Height = 0.14;
 
     %======================================================================
     %Setup Cost
@@ -158,7 +158,7 @@
 
     %======================================================================
     %   Phase Lower Bound setup
-    phase_lower_bound_portion = 5; %in Percentage
+    phase_lower_bound_portion = 10; %in Percentage
     phase_lower_bound_portion = phase_lower_bound_portion/100;
     %======================================================================
     
@@ -200,12 +200,12 @@
     %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in X-axis (In Robot Frame)
     Mvelx = 2.5;
     %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Y-axis (In Robot Frame)
-    Mvely = 1;
+    Mvely = 2.5;
     %----------------------------------------------------------------------
     %   Big-M/Boundaries for Foot-Ground Reaction Forces
     %----------------------------------------------------------------------
-    Mfx = 400;
-    Mfy = 400;
+    Mfx = 1000;
+    Mfy = 1000;
     %=======================================================================
 
     %=====================================================================
