@@ -29,7 +29,7 @@ if showTras == 1
 end
 
 saveTras = input(['Decide if SAVE the trajectories with label -> ',Desired_Group_Label,' : 1-> Yes 2-> No \n']);
-if showTras == 1
+if saveTras == 1
     %save files and write tables
     save([tragroup_file_path,'/',Desired_Group_Label,'.mat'],'Tra_with_Specific_label');
     writetable(Tra_with_Specific_label,[tragroup_file_path,'/',Desired_Group_Label,'.xlsx']);
@@ -49,7 +49,7 @@ if showTras == 1
 end
 
 saveTras = input(['Decide if SAVE the trajectories with label -> ',Desired_Group_Label,' With Single Entry: 1-> Yes 2-> No \n']);
-if showTras == 1
+if saveTras == 1
     %save files and write tables
     save([tragroup_file_path,'/',Desired_Group_Label,'_MeanInitCollection.mat'],'Tra_with_Specific_label_SingleEntry');
     writetable(Tra_with_Specific_label_SingleEntry,[tragroup_file_path,'/',Desired_Group_Label,'_MeanInitCollection.xlsx']);

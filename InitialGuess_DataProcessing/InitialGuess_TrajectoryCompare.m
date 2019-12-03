@@ -27,8 +27,8 @@ GroupLabelsFileName = strcat(GroupLabel,'_MeanInitCollection','.',FilePostFix);
 TrajectoryCollection = readtable([GaitDiscoveryResult_Path,'/',GroupLabelsFileName]);
 
 disp('Success Rate:')
-success_rate = load([InitialGuess_ExpDirectory,'/Success_Vector.mat'],'success_vector');
-sum(success_rate.success_vector)/size(TrajectoryCollection,1)
+success_stats = load([InitialGuess_ExpDirectory,'/Success_Vector.mat'],'success_vector');
+success_rate = sum(success_stats.success_vector)/size(TrajectoryCollection,1)
 
 DistanceVector = [];
 CostDiffVector = [];
@@ -103,5 +103,11 @@ for ExpIdx = 1:size(TrajectoryCollection,1)
 end
 
 distanceTable = cell2table(distanceCell,'VariableNames',["StridePeriod","Speed","DistancetoMINLP","SignificanceFlag","CostDifference","CostDifference_SignificanceFlag"])
-% save([InitialGuess_ExpDirectory,'/InitialGuess_StridePeriod_',num2str(StridePeriodVector(InitialGuessFolderIdx)),'_Speed_',num2str(SpeedVector(InitialGuessFolderIdx)),'/DistanceTabletoMINLP.mat'],'distanceTable');
+
+saveCmpResults = input('Decide if we want to save the resultant distance table :\n');
+
+if saveCmpResults == 1
+    save([InitialGuess_ExpDirectory,'/','DistanceTabletoMINLP.mat'],'distanceTable','success_rate')
+end
+%save([InitialGuess_ExpDirectory,'/InitialGuess_StridePeriod_',num2str(StridePeriodVector(InitialGuessFolderIdx)),'_Speed_',num2str(SpeedVector(InitialGuessFolderIdx)),'/DistanceTabletoMINLP.mat'],'distanceTable');
 % disp('----------------------------------------------------------------')

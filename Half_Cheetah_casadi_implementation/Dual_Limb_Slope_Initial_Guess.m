@@ -51,7 +51,7 @@ elseif InitialGuessType == 2
     IntialGuessSubfolderName = 'Random';
 elseif InitialGuessType == 3
     IntialGuessSubfolderName = 'Mean';    
-elseif InitialGuessType == 4
+elseif InitialGuessType == 4 %Discovered Trajecotires
     IntialGuessSubfolderNameTemp = strcat('Discovered_StridePeriod_',num2str(TrajectoriesinGaitGroups.StridePeriod(ConditionNumberasTemplate)),'_Speed_',num2str(TrajectoriesinGaitGroups.Speed(ConditionNumberasTemplate)),'/',TrajectoriesinGaitGroups.ExpFileName(ConditionNumberasTemplate));
     IntialGuessSubfolderName = IntialGuessSubfolderNameTemp{:}; %remove .mat
     IntialGuessSubfolderName = IntialGuessSubfolderName(1:end-4);
@@ -71,7 +71,7 @@ end
 InitialGuessLog_filename = strcat('InitialGuess-Log-',datestr(datetime('now'), 30));
 diary([ExpDirectory,'/',InitialGuessLog_filename]);
 
-% Start Building Initial Guess
+% Start Building Initial Guess -> Make a container
 MINLP_Discovered_Trajectory = load([TrajectoriesinGaitGroups.ExpFilePath{ConditionNumberasTemplate}],...
                                   'x_result',   'y_result',   'theta_result',...
                                   'xdot_result','ydot_result','thetadot_result',...
