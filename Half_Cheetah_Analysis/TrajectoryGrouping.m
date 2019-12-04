@@ -101,9 +101,10 @@ GroupedTrajectoriesCollectionTable = cell2table(GroupedTrajectoriesCollection,'V
                                                                                 "GaitGroupName",...
                                                                                 "ExpFileName",...
                                                                                 "ExpFilePath"]);
+%Save Data
+save([data_file_path,'/TabelForm_TrajectorywithGroupLabels',datestr(datetime('now'), 30),'.mat'],'GroupedTrajectoriesCollectionTable')
+                                                                            
 writetable(GroupedTrajectoriesCollectionTable,[data_file_path,'/TableForm_TrajectorywithGroupLabels_',datestr(datetime('now'), 30),'.xls']);
-
-save([data_file_path,'/TabelForm_TrajectorywithGroupLabels',datestr(datetime('now'), 30),'.mat'])
 
 disp('-------------------------------------------------------------------')
 disp('Data Extraction For Half-Cheetah Finished')
