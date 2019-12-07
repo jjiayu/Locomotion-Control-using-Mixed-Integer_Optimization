@@ -19,8 +19,8 @@ import casadi.*
 %==========================================================================
 %   Display Info
 disp('====================================================');
-disp('Generate Decision Variables Vectors/Lists:')
-disp('----------------------------------------------------');
+disp('Generate Decision Variables Vectors/Lists')
+disp('====================================================');
 %--------------------------------------------------------------------------
 %   Torso Variables [In World Frame]
 %--------------------------------------------------------------------------
@@ -260,40 +260,12 @@ end
 %--------------------------------------------------------------------------
 % Build Decision Variables List for Optimization
 %--------------------------------------------------------------------------
-% Collect copntinuous variables -> For Fixed Gait Computation
-DecisionVars = {x,        z,        theta,...
-               xdot,      zdot,     thetadot,...
-               Plfx,      Plfz,...
-               Plhx,      Plhz,...
-               Prfx,      Prfz,...
-               Prhx,      Prhz,...
-               Plfxdot,   Plfzdot,...
-               Plhxdot,   Plhzdot,...
-               Prfxdot,   Prfzdot,...
-               Prhxdot,   Prhzdot,...
-               Flfx,      Flfz,...
-               Flhx,      Flhz,...
-               Frfx,      Frfz,...
-               Frhx,      Frhz,...
-               Ts};
-% Add contact configurations into the list if we want gait discovery
-if gait_discovery_switch == 1 %Yes, we want free gait discovery
-    DecisionVars{end+1} = Clf;
-    DecisionVars{end+1} = Clh;
-    DecisionVars{end+1} = Crf;
-    DecisionVars{end+1} = Crh;
-end
-
-DecisionVars = vertcat(DecisionVars{:}); %make a vertical vector
+DecisionVars = 
 
 %--------------------------------------------------------------------------
 % Verification Step
 %--------------------------------------------------------------------------
-if sum(VarNamesList == CreateVarsNameList(DecisionVars)) == sum(VarLengthList)
-    disp('Decision Variable List Built Successfully')
-else
-    error('Decision Variable List does not match with Variable Name List');
-end
-disp('====================================================');
-disp(' ')
+%Full = CreateVarsNameList([x;z;theta;xdot;zdot;thetadot;Plfx;Plfz;Plhx;Plhz;Prfx;Prfz;Prhx;Prhz;Plfxdot;Plfzdot;Plhxdot;Plhzdot;Prfxdot;Prfzdot;Prhxdot;Prhzdot;Flfx;Flfz;Flhx;Flhz;Frfx;Frfz;Frhx;Frhz;Ts;Clf;Clh;Crf;Crh])
+
+
 
