@@ -1354,8 +1354,13 @@ for runIdx = 1:NumofRuns
     ub_DecisionVars(find(VarNamesList == ['x_',num2str(0)])) = 0;
     %           Terminal X-axis Position
     if Tend_flag == 1 %specified Tend
-       lb_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = speed*Tend;
-       ub_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = speed*Tend; 
+       if SpeedDirection == 1 %Target Speed Direction is Horizontal
+            lb_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = speed*Tend;
+            ub_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = speed*Tend; 
+       elseif SpeedDirection == 2 %Target Speed Direction is Tangential to the Slope
+            lb_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = speed*Tend*cos(terrain_slope_rad);
+            ub_DecisionVars(find(VarNamesList == ['x_',num2str(NumKnots)])) = speed*Tend*cos(terrain_slope_rad); 
+       end
     elseif Tend_flag == 2 %Bounded Terminal Time -> x_end = speed*Tend -> x_end - speed*Tend = 0
         EqTemp = x(end) - speed*Ts(end);
         g = {g{:}, EqTemp};

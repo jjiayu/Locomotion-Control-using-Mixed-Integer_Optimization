@@ -408,12 +408,18 @@ if Paras_Define_Method == 1 %Take fro file
     %----------------------------------------------------------------------
     %   Specify Desired Speed
     %----------------------------------------------------------------------
+    if SpeedDirection == 1
+        disp('Desired Velocity Direction along Horizontal Axis');        
+    elseif SpeedDirection == 2
+        disp('Desired Velocity Direction along Tangential Axis of the Terrain'); 
+    end
     disp(['Minimal Speed in Parameter File: ',num2str(MinSpeed)]);
     disp(['Maximum Speed in Parameter File: ',num2str(MaxSpeed)]);
     disp(['Speed Resolution in Parameter File: ',num2str(SpeedResolution)])
     
     ChangSpeedFlag = input('Decide if we want to change the desired speed: 1-> Yes 2->No \n');
     if ChangSpeedFlag ==1
+        SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope');
         MinSpeed = input('Specify the MINIMUM Desired Speed along X-axis (m/s): \n');
         disp('----------------------------------------------------');
         MaxSpeed = input('Specify the MAXIMUM Desired Speed along X-axis (m/s): \n');

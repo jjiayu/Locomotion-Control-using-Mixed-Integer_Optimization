@@ -145,6 +145,10 @@
     %----------------------------------------------------------------------
     %   Specify Desired Speed
     %----------------------------------------------------------------------
+    %       Specify the Speed Direction
+    %       1-> Horizontal
+    %       2-> Tangential to the slope
+    SpeedDirection = 1;
     %       Specify the MINIMUM Desired Speed along X-axis (m/s)
     MinSpeed = 0.3;
     %       Specify the MAXIMUM Desired Speed along X-axis (m/s)
