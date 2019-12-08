@@ -177,7 +177,6 @@ for k = 1:tauSeriesLength
         g   = {g{:},g_temp{:}}; %Add to constraint container
         lbg = [lbg; lbg_temp];
         ubg = [ubg; ubg_temp];
-        
         %----------------------------------
         %   Feet Velocity Ranges
         %----------------------------------
@@ -199,72 +198,6 @@ for k = 1:tauSeriesLength
         
         %    Right Front (rf)
         [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Prfxdot,Prfzdot,xdot,zdot,theta,k,Vmax);
-        g   = {g{:},g_temp{:}}; %Add to constraint container
-        lbg = [lbg; lbg_temp];
-        ubg = [ubg; ubg_temp];
-        
-        %    Right Hind (rh)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Prhxdot,Prhzdot,xdot,zdot,theta,k,Vmax);
-        g   = {g{:},g_temp{:}}; %Add to constraint container
-        lbg = [lbg; lbg_temp];
-        ubg = [ubg; ubg_temp];
-        
-        %----------------------------------
-        %   Force Activation/Deactivation
-        %----------------------------------
-                %!!!!!!!!!!!!!
-        %Temporary Parameter
-        Mf = [150;250];
-        terrain_slope_rad = 20/180*pi;
-        %!!!!!!!!!!!!!
-        %    Left Front (lf)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Flfx,Flfz,Clf,k,PhaseIdx,terrain_slope_rad,Mf);
-        g   = {g{:},g_temp{:}}; %Add to constraint container
-        lbg = [lbg; lbg_temp];
-        ubg = [ubg; ubg_temp];
-        
-        %    Left Hind (lh)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Flhx,Flhz,Clh,k,PhaseIdx,terrain_slope_rad,Mf);
-        g   = {g{:},g_temp{:}}; %Add to constraint container
-        lbg = [lbg; lbg_temp];
-        ubg = [ubg; ubg_temp];
-        
-        %    Right Front (rf)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Frfx,Frfz,Crf,k,PhaseIdx,terrain_slope_rad,Mf);
-        g   = {g{:},g_temp{:}}; %Add to constraint container
-        lbg = [lbg; lbg_temp];
-        ubg = [ubg; ubg_temp];
-        
-        %    Right Hind (rh)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Frhx,Frhz,Crh,k,PhaseIdx,terrain_slope_rad,Mf);
-        g   = {g{:},g_temp{:}}; %Add to constraint container
-        lbg = [lbg; lbg_temp];
-        ubg = [ubg; ubg_temp];
-        
-        %----------------------------------
-        %   Unilateral Constraint of (Foot-Ground Reaction Forces)
-        %----------------------------------
-        %!!!!!!!!!!!!!
-        %Temporary Parameter
-        TerrainNorm = [0;1];
-        %!!!!!!!!!!!!!
-        %    Left Front (lf)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_UnilateralForce(Flfx,Flfz,k,TerrainNorm);
-        g   = {g{:},g_temp{:}}; %Add to constraint container
-        lbg = [lbg; lbg_temp];
-        ubg = [ubg; ubg_temp];
-        %    Left Hind (lh)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_UnilateralForce(Flhx,Flhz,k,TerrainNorm);
-        g   = {g{:},g_temp{:}}; %Add to constraint container
-        lbg = [lbg; lbg_temp];
-        ubg = [ubg; ubg_temp];
-        %    Right Front (rf)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_UnilateralForce(Frfx,Frfz,k,TerrainNorm);
-        g   = {g{:},g_temp{:}}; %Add to constraint container
-        lbg = [lbg; lbg_temp];
-        ubg = [ubg; ubg_temp];
-        %    Right Hind (rh)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_UnilateralForce(Frhx,Frhz,k,TerrainNorm);
         g   = {g{:},g_temp{:}}; %Add to constraint container
         lbg = [lbg; lbg_temp];
         ubg = [ubg; ubg_temp];
