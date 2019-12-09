@@ -98,28 +98,28 @@ function [g, lbg, ubg] = Constraint_Task_and_Periodicity(x,         z,        th
              [cos(theta(end)),  sin(theta(end));    -sin(theta(end)),   cos(theta(end))]*([Plfx(end);   Plfz(end)]  - [x(end);  z(end)]);
     g = {g{:}, EqTemp(1), EqTemp(2)};
     lbg = [lbg;   0;          0];
-    ubg = [ubg;   0           0];
+    ubg = [ubg;   0;          0];
     
     %   Left Hind (lh)
     EqTemp = [cos(theta(1)),    sin(theta(1));      -sin(theta(1)),     cos(theta(1))]  *([Plhx(1);     Plhz(1)]    - [x(1);    z(1)]) - ...
              [cos(theta(end)),  sin(theta(end));    -sin(theta(end)),   cos(theta(end))]*([Plhx(end);   Plhz(end)]  - [x(end);  z(end)]);
     g = {g{:}, EqTemp(1), EqTemp(2)};
     lbg = [lbg;   0;          0];
-    ubg = [ubg;   0           0];
+    ubg = [ubg;   0;          0];
     
     %   Right Front (rf)
     EqTemp = [cos(theta(1)),    sin(theta(1));      -sin(theta(1)),     cos(theta(1))]  *([Prfx(1);     Prfz(1)]    - [x(1);    z(1)]) - ...
              [cos(theta(end)),  sin(theta(end));    -sin(theta(end)),   cos(theta(end))]*([Prfx(end);   Prfz(end)]  - [x(end);  z(end)]);
     g = {g{:}, EqTemp(1), EqTemp(2)};
     lbg = [lbg;   0;          0];
-    ubg = [ubg;   0           0];
+    ubg = [ubg;   0;          0];
     
     %   Right Hind (rh)
     EqTemp = [cos(theta(1)),    sin(theta(1));      -sin(theta(1)),     cos(theta(1))]  *([Prhx(1);     Prhz(1)]    - [x(1);    z(1)]) - ...
              [cos(theta(end)),  sin(theta(end));    -sin(theta(end)),   cos(theta(end))]*([Prhx(end);   Prhz(end)]  - [x(end);  z(end)]);
     g = {g{:}, EqTemp(1), EqTemp(2)};
     lbg = [lbg;   0;          0];
-    ubg = [ubg;   0           0];
+    ubg = [ubg;   0;          0];
          
     %---------------
     % Periodicity in Contact Configurations
