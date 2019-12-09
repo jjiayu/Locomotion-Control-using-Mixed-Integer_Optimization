@@ -1384,7 +1384,11 @@ for runIdx = 1:NumofRuns
     if TerrainType == 1 %Flat Terrain
         EqTemp = y(1) - y(end);
     elseif TerrainType == 2 %Slope Terrain
-        EqTemp = y(end) - y(1) - speed*Tend*tan(terrain_slope_rad); 
+        if SpeedDirection == 1 %Target Speed Direction is Horizontal
+            EqTemp = y(end) - y(1) - speed*Tend*tan(terrain_slope_rad); 
+        elseif SpeedDirection == 2 %Target Speed Direction is Horizontal
+            EqTemp = y(end) - y(1) - speed*Tend*sin(terrain_slope_rad); 
+        end
     end
     g = {g{:}, EqTemp};
     lbg = [lbg; 0];

@@ -39,19 +39,11 @@ import casadi.*
 m = 21;
 Iyy = 2.3;
 G = 9.8;
-tauSeriesLength = 2
-NumPhases = 1
+tauSeriesLength = 41
+NumPhases = 4
 gait_discovery_switch = 1
 
 run('VariableSetUp.m')
-
-%--------------------------------------------------------------------------
-% Set-up Variable Bounds
-%--------------------------------------------------------------------------
-
-%--------------------------------------------------------------------------
-% Set-up Initial Guesses
-%--------------------------------------------------------------------------
 
 %--------------------------------------------------------------------------
 % Set-up Constraints
@@ -65,7 +57,7 @@ J = 0; %Cost Function Initialization
 %   Create Time Step Variables for each phase
 % %!!!!!!!!!!!!!!!!!!! Temp Variable -> Remove when Finish
 tauStepLength = 0.1;
-NumLocalKnots = 1;
+NumLocalKnots = 10;
 % %!!!!!!!!!!!!!!!!!!!
 PhaseDurationVector = [Ts(1)-0;diff(Ts)];
 hVector = tauStepLength*NumPhases*PhaseDurationVector;
@@ -301,42 +293,6 @@ for k = 1:tauSeriesLength
         lbg = [lbg; lbg_temp];
         ubg = [ubg; ubg_temp];
         
-        %----------------------------------
-        %   Build Cost Function within this big loop
-        %----------------------------------
-            Scale_Factor = 1000; %difference below 1e-3 are treated as the same
-            if cost_flag == 1 %Minimize Force Squared (Energy Loss)
-                J = J + h*(Flfx(k)^2) + h*(Flfz^2) + ... Left Front (lf)
-                        h*(Flhx(k)^2) + h*(Flhz^2) + ... Left Hind (lh)
-                        h*(Frfx(k)^2) + h*(Frfz^2) + ... Right Front (rf)
-                        h*(Frhx(k)^2) + h*(Frhz^2);     %Right Hind (rh)
-            elseif cost_flag == 2 %Minimize Tangential Force (Maximize Robustness)
-                error('No.2 Cost Not Implemented');
-            elseif cost_flag == 3 %Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero)
-                % Time Integral and Scaled
-                J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
-                        h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
-                        h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
-            elseif cost_flag == 4 %5 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)
-                error('No.4 Cost is Redundant');
-            elseif cost_flag == 5 %Minimize Vibration (Cost 3) with Constant Tangential Velocity (at Every Knot)
-                % Build Cost First -> Time Integral and Scaled
-                J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
-                        h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
-                        h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
-                % Add Constant Tangential Velocity (at Every Knot) Term -> Depends on which direction the desired speed is defined
-                if SpeedDirection == 1 %speed is defind along horizontal direction
-                    %A simpler form
-                    %J = J + h*(((xdot(k)-speed)*Scale_Factor)^2)
-                    J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2);
-                elseif SpeedDirection == 2 %speed is defined along tangential direction
-                    J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed)*Scale_Factor)^2);
-                end
-            elseif cost_flag == 6 %Feet Velocity (Pending)
-                error('No.6 Cost is not implemented')
-            end
-        %----------------------------------
-        end
     end
     
     %----------------------------------
@@ -374,6 +330,7 @@ for k = 1:tauSeriesLength
     g   = {g{:},g_temp{:}}; %Add to constraint container
     lbg = [lbg; lbg_temp];
     ubg = [ubg; ubg_temp]; 
+
 end
 
 %----------------------------------
@@ -389,10 +346,94 @@ g   = {g{:},g_temp{:}}; %Add to constraint container
 lbg = [lbg; lbg_temp];
 ubg = [ubg; ubg_temp]; 
 
+%----------------------------------
+%   Task and Peiodicity Constraint
+%----------------------------------
+%!!!!!!!!!!!!!
+%Temporary Parameter
+speed = 0.4;
+SpeedDirection = 1;%Percentage Portion
+%!!!!!!!!!!!!!
+[g_temp,lbg_temp, ubg_temp] = Constraint_Task_and_Periodicity(x,         z,        theta,...     %Decision Variables
+                                                              xdot,      zdot,     thetadot,...
+                                                              Plfx,      Plfz,...
+                                                              Plhx,      Plhz,...
+                                                              Prfx,      Prfz,...
+                                                              Prhx,      Prhz,...
+                                                              Clf,...
+                                                              Clh,...
+                                                              Crf,...
+                                                              Crh,...
+                                                              Ts,        Tend,...
+                                                              speed,     SpeedDirection,...
+                                                              terrain_slope_rad);
+g   = {g{:},g_temp{:}}; %Add to constraint container
+lbg = [lbg; lbg_temp];
+ubg = [ubg; ubg_temp]; 
+
 %--------------------------------------------------------------------------
+
 
 %--------------------------------------------------------------------------
 % Set-up Cost Functions
+%--------------------------------------------------------------------------
+%!!!!!!!!!!!!!
+%Temporary Parameter
+cost_flag = 5;
+%!!!!!!!!!!!!!
+Scale_Factor = 1000; %difference below 1e-3 are treated as the same
+for k = 1:tauSeriesLength - 1
+    
+    %--------------------------------------
+    % Extract Phase Index
+    %--------------------------------------
+    PhaseIdx = floor((k-1)/NumLocalKnots) + 1; % k-1 is the time step enumeration
+    %--------------------------------------
+    %----------------------------------
+    % Get time step
+    %----------------------------------
+    h = hVector(PhaseIdx);
+    %----------------------------------
+    
+    if cost_flag == 1 %Minimize Force Squared (Energy Loss)
+        J = J + h*(Flfx(k)^2) + h*(Flfz(k)^2) + ... Left Front (lf)
+                h*(Flhx(k)^2) + h*(Flhz(k)^2) + ... Left Hind (lh)
+                h*(Frfx(k)^2) + h*(Frfz(k)^2) + ... Right Front (rf)
+                h*(Frhx(k)^2) + h*(Frhz(k)^2);     %Right Hind (rh)
+    elseif cost_flag == 2 %Minimize Tangential Force (Maximize Robustness)
+        error('No.2 Cost Not Implemented');
+    elseif cost_flag == 3 %Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero)
+        % Time Integral and Scaled
+        J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
+                h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
+                h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
+    elseif cost_flag == 4 %5 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)
+        error('No.4 Cost is Redundant');
+    elseif cost_flag == 5 %Minimize Vibration (Cost 3) with Constant Tangential Velocity (at Every Knot)
+        % Add Constant Tangential Velocity (at Every Knot) Term -> Depends on which direction the desired speed is defined
+        if SpeedDirection == 1 %speed is defind along horizontal direction
+            %A simpler form
+            %J = J + h*(((xdot(k)-speed)*Scale_Factor)^2)
+            J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2);
+        elseif SpeedDirection == 2 %speed is defined along tangential direction
+            J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed)*Scale_Factor)^2);
+        end
+        % Build Cost First -> Time Integral and Scaled
+        J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
+                h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
+                h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
+    elseif cost_flag == 6 %Feet Velocity (Pending)
+        error('No.6 Cost is not implemented')
+    end
+end
+%----------------------------------
+
+%--------------------------------------------------------------------------
+% Set-up Variable Bounds
+%--------------------------------------------------------------------------
+
+%--------------------------------------------------------------------------
+% Set-up Initial Guesses
 %--------------------------------------------------------------------------
 
 %--------------------------------------------------------------------------
