@@ -39,8 +39,8 @@ import casadi.*
 m = 21;
 Iyy = 2.3;
 G = 9.8;
-tauSeriesLength = 41
-NumPhases = 4
+tauSeriesLength = 2
+NumPhases = 1
 gait_discovery_switch = 1
 
 run('VariableSetUp.m')
@@ -60,11 +60,12 @@ run('VariableSetUp.m')
 g   = {}; %Constraint Function Container
 lbg = []; %Lower Bound of Constraint Function
 ubg = []; %Upper Bound of Constraint Function
+J = 0; %Cost Function Initialization
 
 %   Create Time Step Variables for each phase
 % %!!!!!!!!!!!!!!!!!!! Temp Variable -> Remove when Finish
 tauStepLength = 0.1;
-NumLocalKnots = 10;
+NumLocalKnots = 1;
 % %!!!!!!!!!!!!!!!!!!!
 PhaseDurationVector = [Ts(1)-0;diff(Ts)];
 hVector = tauStepLength*NumPhases*PhaseDurationVector;
@@ -191,6 +192,8 @@ for k = 1:tauSeriesLength
         lbg = [lbg; lbg_temp];
         ubg = [ubg; ubg_temp];
         
+
+        
         %    Left Hind (lh)
         [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Plhxdot,Plhzdot,xdot,zdot,theta,k,Vmax);
         g   = {g{:},g_temp{:}}; %Add to constraint container
@@ -269,12 +272,123 @@ for k = 1:tauSeriesLength
         lbg = [lbg; lbg_temp];
         ubg = [ubg; ubg_temp];
         
+        %----------------------------------
+        %   Friction Cone
+        %----------------------------------
+        %!!!!!!!!!!!!!
+        %Temporary Parameter
+        miu = 0.6;
+        TerrainTangent = [1;0];
+        %!!!!!!!!!!!!!
+        %    Left Front (lf)
+        [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Flfx,Flfz,k,TerrainTangent,TerrainNorm,miu);
+        g   = {g{:},g_temp{:}}; %Add to constraint container
+        lbg = [lbg; lbg_temp];
+        ubg = [ubg; ubg_temp];
+        %    Left Hind (lh)
+        [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Flhx,Flhz,k,TerrainTangent,TerrainNorm,miu);
+        g   = {g{:},g_temp{:}}; %Add to constraint container
+        lbg = [lbg; lbg_temp];
+        ubg = [ubg; ubg_temp];
+        %    Right Front (rf)
+        [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Frfx,Frfz,k,TerrainTangent,TerrainNorm,miu);
+        g   = {g{:},g_temp{:}}; %Add to constraint container
+        lbg = [lbg; lbg_temp];
+        ubg = [ubg; ubg_temp];
+        %    Right Hind (rh)
+        [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Frhx,Frhz,k,TerrainTangent,TerrainNorm,miu);
+        g   = {g{:},g_temp{:}}; %Add to constraint container
+        lbg = [lbg; lbg_temp];
+        ubg = [ubg; ubg_temp];
+        
+        %----------------------------------
+        %   Build Cost Function within this big loop
+        %----------------------------------
+            Scale_Factor = 1000; %difference below 1e-3 are treated as the same
+            if cost_flag == 1 %Minimize Force Squared (Energy Loss)
+                J = J + h*(Flfx(k)^2) + h*(Flfz^2) + ... Left Front (lf)
+                        h*(Flhx(k)^2) + h*(Flhz^2) + ... Left Hind (lh)
+                        h*(Frfx(k)^2) + h*(Frfz^2) + ... Right Front (rf)
+                        h*(Frhx(k)^2) + h*(Frhz^2);     %Right Hind (rh)
+            elseif cost_flag == 2 %Minimize Tangential Force (Maximize Robustness)
+                error('No.2 Cost Not Implemented');
+            elseif cost_flag == 3 %Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero)
+                % Time Integral and Scaled
+                J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
+                        h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
+                        h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
+            elseif cost_flag == 4 %5 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)
+                error('No.4 Cost is Redundant');
+            elseif cost_flag == 5 %Minimize Vibration (Cost 3) with Constant Tangential Velocity (at Every Knot)
+                % Build Cost First -> Time Integral and Scaled
+                J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
+                        h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
+                        h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
+                % Add Constant Tangential Velocity (at Every Knot) Term -> Depends on which direction the desired speed is defined
+                if SpeedDirection == 1 %speed is defind along horizontal direction
+                    %A simpler form
+                    %J = J + h*(((xdot(k)-speed)*Scale_Factor)^2)
+                    J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2);
+                elseif SpeedDirection == 2 %speed is defined along tangential direction
+                    J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed)*Scale_Factor)^2);
+                end
+            elseif cost_flag == 6 %Feet Velocity (Pending)
+                error('No.6 Cost is not implemented')
+            end
+        %----------------------------------
+        end
     end
     
-                                              
+    %----------------------------------
+    %   Kinematics Constraint
+    %----------------------------------
+    %!!!!!!!!!!!!!
+    %Temporary Parameter
+    PlfCenter = [0;1];
+    PlhCenter = [1;1];
+    PrfCenter = [1;1.5];
+    PrhCenter = [2;1];
+    BoundingBoxWidth = 0.4;
+    BoundingBoxHeight = 0.4;
+    %!!!!!!!!!!!!!
+    %    Left Front (lf)
+    [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Plfx,Plfz,x,z,theta,k,PlfCenter,BoundingBoxWidth,BoundingBoxHeight);
+    g   = {g{:},g_temp{:}}; %Add to constraint container
+    lbg = [lbg; lbg_temp];
+    ubg = [ubg; ubg_temp];                                   
 
+    %    Left Hind (lh)
+    [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Plhx,Plhz,x,z,theta,k,PlhCenter,BoundingBoxWidth,BoundingBoxHeight);
+    g   = {g{:},g_temp{:}}; %Add to constraint container
+    lbg = [lbg; lbg_temp];
+    ubg = [ubg; ubg_temp];
     
+    %    Right Front (rf)
+    [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Prfx,Prfz,x,z,theta,k,PrfCenter,BoundingBoxWidth,BoundingBoxHeight);
+    g   = {g{:},g_temp{:}}; %Add to constraint container
+    lbg = [lbg; lbg_temp];
+    ubg = [ubg; ubg_temp]; 
+    
+    %    Right Hind (rh)
+    [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Prhx,Prhz,x,z,theta,k,PrhCenter,BoundingBoxWidth,BoundingBoxHeight);
+    g   = {g{:},g_temp{:}}; %Add to constraint container
+    lbg = [lbg; lbg_temp];
+    ubg = [ubg; ubg_temp]; 
 end
+
+%----------------------------------
+%   Switching Time Constraint
+%----------------------------------
+%!!!!!!!!!!!!!
+%Temporary Parameter
+Tend = 0.4;
+Phaselb = Tend*10/100;%Percentage Portion
+%!!!!!!!!!!!!!
+[g_temp,lbg_temp, ubg_temp] = Constraint_SwitchingTime(Ts,Phaselb,Tend);
+g   = {g{:},g_temp{:}}; %Add to constraint container
+lbg = [lbg; lbg_temp];
+ubg = [ubg; ubg_temp]; 
+
 %--------------------------------------------------------------------------
 
 %--------------------------------------------------------------------------

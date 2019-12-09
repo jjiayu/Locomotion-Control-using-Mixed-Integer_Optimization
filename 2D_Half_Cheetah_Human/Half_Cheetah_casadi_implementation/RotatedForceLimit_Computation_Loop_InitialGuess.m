@@ -1189,7 +1189,11 @@ for runIdx = 1:1
                 if cost_type_flag == 1 %with Time Integral
                     J = J + h*(([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2) + h*(([xdot(k),ydot(k)]*TerrainNorm)^2) + h*(thetadot(k)^2);
                 elseif cost_type_flag == 2 %with Time Integral - Scaled
-                    J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
+                    if SpeedDirection == 1 %speed is defind along horizontal direction
+                        J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
+                    elseif SpeedDirection == 2 %speed is defined along tangential direction
+                        J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed)*Scale_Factor)^2)                        + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
+                    end
                     %J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
                 elseif cost_type_flag == 3 %No Time Integral
                     J = J + ([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2 + ([xdot(k),ydot(k)]*TerrainNorm)^2 + thetadot(k)^2;
@@ -1202,7 +1206,11 @@ for runIdx = 1:1
                 if cost_type_flag == 1 %with Time Integral
                     J = J + h*(([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2) + h*(([xdot(k),ydot(k)]*TerrainNorm)^2) + h*(thetadot(k)^2) + h*((theta(k)-terrain_slope_rad)^2);
                 elseif cost_type_flag == 2 %with Time Integral - Scaled
-                    J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2) + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2);
+                    if SpeedDirection == 1 %speed is defind along horizontal direction
+                        J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2) + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2);
+                    elseif SpeedDirection == 2 %speed is defined along tangential direction
+                        J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed)*Scale_Factor)^2)                        + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2) + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2);
+                    end
                     %J = J + h*((([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2) + h*((([xdot(k),ydot(k)]*TerrainNorm)*Scale_Factor)^2) + h*((thetadot(k)*Scale_Factor)^2);
                 elseif cost_type_flag == 3 %No Time Integral
                     J = J + ([xdot(k),ydot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))^2 + ([xdot(k),ydot(k)]*TerrainNorm)^2 + thetadot(k)^2 + (theta(k)-terrain_slope_rad)^2;
