@@ -1466,11 +1466,11 @@ for runIdx = 1:NumofRuns
     end
     
     g = {g{:},FrontLeg_Contact};
-    lbg = [lbg;1];
+    lbg = [lbg;0];
     ubg = [ubg;2];
     
     g = {g{:},HindLeg_Contact};
-    lbg = [lbg;1];
+    lbg = [lbg;0];
     ubg = [ubg;2];
     
     disp('Constraints and Objetive Function Constructed')

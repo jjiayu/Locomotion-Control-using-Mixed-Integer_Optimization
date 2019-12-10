@@ -20,7 +20,7 @@ import casadi.*
 % Define Robot Parameters
 %==========================================================================
 
-% 1-> Load from FIle
+% 1-> Load from File
 
 % 2-> Specify Maunually
 
