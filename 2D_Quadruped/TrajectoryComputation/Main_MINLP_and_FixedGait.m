@@ -39,8 +39,8 @@ import casadi.*
 m = 21;
 Iyy = 2.3;
 G = 9.8;
-tauSeriesLength = 5
-NumPhases = 2
+tauSeriesLength = 41
+NumPhases = 4
 gait_discovery_switch = 1
 
 run('VariableSetUp.m')
@@ -56,8 +56,8 @@ J = 0; %Cost Function Initialization
 
 %   Create Time Step Variables for each phase
 % %!!!!!!!!!!!!!!!!!!! Temp Variable -> Remove when Finish
-tauStepLength = 0.1;
-NumLocalKnots = 2;
+tauStepLength = 0.25;
+NumLocalKnots = 10;
 % %!!!!!!!!!!!!!!!!!!!
 PhaseDurationVector = [Ts(1)-0;diff(Ts)];
 hVector = tauStepLength*NumPhases*PhaseDurationVector;
@@ -118,7 +118,7 @@ for k = 1:tauSeriesLength
         %----------------------------------
         %!!!!!!!!!!!!!
         %Change to function -> height(x)
-        height = 0;
+        height = 10;
         %!!!!!!!!!!!!!
         %Temporary Parameter
         M_pos = 100;
@@ -148,8 +148,9 @@ for k = 1:tauSeriesLength
         %----------------------------------
         %!!!!!!!!!!!!!
         %Temporary Parameter
-        Mvel = 100;
+        Mvel = [200;500];
         %!!!!!!!!!!!!!
+        %!!Mvel is a column vector
         %    Left Front (lf)
         [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVeloActivation(Plfxdot,Plfzdot,Clf,k,PhaseIdx,Mvel);
         g   = {g{:},g_temp{:}}; %Add to constraint container
@@ -176,15 +177,14 @@ for k = 1:tauSeriesLength
         %----------------------------------
         %!!!!!!!!!!!!!
         %Temporary Parameter
-        Vmax = 100;
+        Vmax = [2.5;5];
         %!!!!!!!!!!!!!
+        %!! Vmax is a columbn vector
         %    Left Front (lf)
         [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Plfxdot,Plfzdot,xdot,zdot,theta,k,Vmax);
         g   = {g{:},g_temp{:}}; %Add to constraint container
         lbg = [lbg; lbg_temp];
         ubg = [ubg; ubg_temp];
-        
-
         
         %    Left Hind (lh)
         [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Plhxdot,Plhzdot,xdot,zdot,theta,k,Vmax);
@@ -212,6 +212,7 @@ for k = 1:tauSeriesLength
         Mf = [150;250];
         terrain_slope_rad = 20/180*pi;
         %!!!!!!!!!!!!!
+        %!! Mf is a column vector
         %    Left Front (lf)
         [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Flfx,Flfz,Clf,k,PhaseIdx,terrain_slope_rad,Mf);
         g   = {g{:},g_temp{:}}; %Add to constraint container
@@ -300,12 +301,12 @@ for k = 1:tauSeriesLength
     %----------------------------------
     %!!!!!!!!!!!!!
     %Temporary Parameter
-    PlfCenter = [0;1];
-    PlhCenter = [1;1];
-    PrfCenter = [1;1.5];
-    PrhCenter = [2;1];
-    BoundingBoxWidth = 0.4;
-    BoundingBoxHeight = 0.4;
+    PlfCenter = [1;-1];
+    PlhCenter = [-1;-1];
+    PrfCenter = [1;-1];
+    PrhCenter = [-1;-1];
+    BoundingBoxWidth = 0.5;
+    BoundingBoxHeight = 0.2;
     %!!!!!!!!!!!!!
     %    Left Front (lf)
     [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Plfx,Plfz,x,z,theta,k,PlfCenter,BoundingBoxWidth,BoundingBoxHeight);
@@ -338,7 +339,7 @@ end
 %----------------------------------
 %!!!!!!!!!!!!!
 %Temporary Parameter
-Tend = 0.4;
+Tend = 0.8;
 Phaselb = Tend*10/100;%Percentage Portion
 %!!!!!!!!!!!!!
 [g_temp,lbg_temp, ubg_temp] = Constraint_SwitchingTime(Ts,Phaselb,Tend);
@@ -351,7 +352,7 @@ ubg = [ubg; ubg_temp];
 %----------------------------------
 %!!!!!!!!!!!!!
 %Temporary Parameter
-speed = 0.4;
+speed = 1;
 SpeedDirection = 1;%Percentage Portion
 %!!!!!!!!!!!!!
 [g_temp,lbg_temp, ubg_temp] = Constraint_Task_and_Periodicity(x,         z,        theta,...     %Decision Variables
