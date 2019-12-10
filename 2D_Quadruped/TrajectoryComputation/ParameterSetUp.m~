@@ -362,7 +362,7 @@ if Paras_Define_Method == 1 % Parameter Loaded from File
     
     ChangSpeedFlag = input('Decide if we want to change the desired speed: 1-> Yes 2->No \n');
     if ChangSpeedFlag ==1
-        SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope\n');
+        SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope');
         MinSpeed = input('Specify the MINIMUM Desired Speed along X-axis (m/s): \n');
         disp('----------------------------------------------------');
         MaxSpeed = input('Specify the MAXIMUM Desired Speed along X-axis (m/s): \n');
@@ -387,7 +387,7 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
     %----------------------------------------------------------------------
     %   Specify Desired Speed
     %----------------------------------------------------------------------
-    SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope \n');
+    SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope');
     MinSpeed = input('Specify the MINIMUM Desired Speed along X-axis (m/s): \n');
     disp('----------------------------------------------------');
     MaxSpeed = input('Specify the MAXIMUM Desired Speed along X-axis (m/s): \n');
@@ -507,7 +507,7 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     disp('====================================================');
     %----------------------------------------------------------------------
     %   Big-M for foot positions in y-axis (meters)
-    M_pos = 100; 
+    Mpos_y = 100; 
     %   ------------------------------------------------------
     %   Big-M for feet velocities
     Mvel = 100;
@@ -515,15 +515,13 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     %   Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame)
     disp('Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame')
     disp('----------------------------------------------------');
-    Vmax = [0;0];
     Vmax(1) = input('Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in X-axis (In Robot Frame): \n');
-    Vmax(2) = input('Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Z-axis (In Robot Frame): \n');
+    Vmax(2) = input('Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Y-axis (In Robot Frame): \n');
     disp('----------------------------------------------------');
     disp('Big-M for Contact Forces')
-    Mf = [0;0];
-    Mf(1) = input('Input Big-M/Boundaries for Foot-Ground Reaction Forces along X-axis (in World Frame) (e.g. 200,300,1000,1e5):\n');
+    Mfx = input('Input Big-M/Boundaries for Foot-Ground Reaction Forces along X-axis (in World Frame) (e.g. 200,300,1000,1e5):\n');
     disp('----------------------------------------------------');
-    Mf(2) = input('Input Big-M/Boundaries for Foot-Ground Reaction Forces along Z-axis (in WOrld Frame) (e.g. 200,300,1000,1e5):\n');
+    Mfy = input('Input Big-M/Boundaries for Foot-Ground Reaction Forces along Y-axis (in WOrld Frame) (e.g. 200,300,1000,1e5):\n');
     disp('====================================================');
 end
 
@@ -562,76 +560,3 @@ elseif Paras_Define_Method == 2 %Manually Define Variables
     cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n [Not Implemented] 2-> Minimize Tangential Force (Maximize Robustness) \n 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero) \n [Not Implemented] 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n 5-> Smooth Motion (tangential speed is constant and close to the desired velocity in tangential direction \ntheta close to theta_slope \nthetadot close to 0 normal velocity close to 0)\n [Not Implemented] 6-> Feet Velocity \n [Not Implemented] 7-> Humanoid Smooth Motion (theta, thetadot towards zero) \n');
     disp('====================================================');
 end
-
-%--------------------------------------------------------------------------
-% Solver SetUp
-%--------------------------------------------------------------------------
-disp('====================================================');
-disp('Solver Setups:')
-disp('====================================================');
-if Paras_Define_Method == 1 %Take fro file
-    %---------------------------------
-    %   Choose Solver
-    disp('Solver Selection: ')
-    if SolverNum == 1
-        disp('Solver Selected: Knitro');
-    elseif SolverNum == 2
-        disp('Solver Selected: Bonmin');
-    end
-    disp('----------------------------------------------------');
-    %   Solver Dependent Options
-    disp('Solver Dependent Options:')
-    disp('----------------------------------------------------');
-    disp(['Number of Maximum Nodes to be solved: ',num2str(NumMaxNodes)]);
-    disp(['NUmber of Maximum Optimization Runes: ',num2str(NumofRuns)]);
-    %-----------------------------------------------------------
-    Continue_flag = input('Satisfied with the paramter setting? 1-> yes, 2-> no \n');
-    if Continue_flag == 2
-        error('User is unsatified with the parameter setup')
-    end
-elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
-    disp('Solver Selection: ')
-    SolverNum = input('1 -> Knitro; 2 -> Bonmin \n');
-    if SolverNum == 1
-        SolverSelected = 'knitro';
-    elseif SolverNum == 2
-        SolverSelected = 'bonmin';
-    else
-        error('Unknown Solver Flag')
-    end
-    disp(['Selected Solver: ', SolverSelected])
-    disp('----------------------------------------------------');
-    %---------------------------------------------------------------------
-    %   Solver Dependent Options
-    disp('Solver Dependent Options:')
-    disp('----------------------------------------------------');
-    %       Define maximum nodes to be explored
-    NumMaxNodesCases = input('Define Number of Max Nodes to be Explored: \n 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value\n');
-    if NumMaxNodesCases == 1  %Worst-case Scenario
-        %-------------------------------------------
-        %   (Place Holder) Need to change the exponential base when have more
-        %   legs in 3D
-        %-------------------------------------------
-        NumMaxNodes = (2*2)^(NumPhases+1);
-        disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
-    elseif NumMaxNodesCases == 2 %User-specified
-        NumMaxNodes = input('Input number of maximum node to be explored: \n');
-    elseif NumMaxNodesCases == 3 %Default Value
-        NumMaxNodes = 1e5;
-        disp(['Selected Default Case to Explore ', num2str(NumMaxNodes), ' Nodes'])
-    else
-        error('Unknow Max Number of Nodes Flag')
-    end
-    disp('----------------------------------------------------');
-    %       Define number of multistart solves for each sub-nonlinear
-    %       optimizaiton problem
-    NumofRuns = input('Specify Number of Runs for the MINLP Programming (i.e. 1, 10, 25, 50, 100): \n');
-    disp('====================================================');
-    disp(' ')
-    %======================================================================
-end
-
-%--------------------------------------------------------------------------
-%   Stop the Diary Logging
-diary off
-%--------------------------------------------------------------------------

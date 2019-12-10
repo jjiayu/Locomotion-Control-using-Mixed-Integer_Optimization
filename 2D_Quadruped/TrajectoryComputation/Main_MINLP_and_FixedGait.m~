@@ -20,7 +20,9 @@ import casadi.*
 % Define Robot Parameters
 %==========================================================================
 
-run('ParameterSetUp.m')
+% 1-> Load from File
+
+% 2-> Specify Maunually
 
 %==========================================================================
 % Computation Loop
@@ -31,6 +33,12 @@ run('ParameterSetUp.m')
 %   Build Decision Variable List for Optimization and Variable Name List
 %   for future look-up
 %--------------------------------------------------------------------------
+%!!!!!!!!!!!!!!!!!
+%Temp Parameters -> Remove When finish
+%!!!!!!!!!!!!!!!!!
+tauSeriesLength = 41
+NumPhases = 4
+gait_discovery_switch = 1
 
 run('VariableSetUp.m')
 
@@ -44,12 +52,17 @@ ubg = []; %Upper Bound of Constraint Function
 J = 0; %Cost Function Initialization
 
 %   Create Time Step Variables for each phase
+% %!!!!!!!!!!!!!!!!!!! Temp Variable -> Remove when Finish
+tauStepLength = 0.25;
+NumLocalKnots = 10;
+% %!!!!!!!!!!!!!!!!!!!
 PhaseDurationVector = [Ts(1)-0;diff(Ts)];
 hVector = tauStepLength*NumPhases*PhaseDurationVector;
 
 %   Task/Scenario-Independent Constraints
 %       Problem Formulations that do not change with respect to the change
 %       of task/scenario specifications
+
 for k = 1:tauSeriesLength
     
     %--------------------------------------
@@ -100,7 +113,15 @@ for k = 1:tauSeriesLength
         %----------------------------------
         %   Feet Position
         %----------------------------------
+        %!!!!!!!!!!!!!
+        %Change to function -> height(x)
+        height = 10;
+        %!!!!!!!!!!!!!
+        %Temporary Parameter
+        M_pos = 100;
+        %!!!!!!!!!!!!!
         %    Left Front (lf)
+        height = ;
         [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Plfz, M_pos, Clf, TerrainModel(Plfx(k)), k, PhaseIdx);
         g   = {g{:},g_temp{:}}; %Add to constraint container
         lbg = [lbg; lbg_temp];
@@ -111,18 +132,22 @@ for k = 1:tauSeriesLength
         lbg = [lbg; lbg_temp];
         ubg = [ubg; ubg_temp];
         %    Right Front (rf)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Prfz, M_pos, Crf, TerrainModel(Prfx(k)), k, PhaseIdx);
+        [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Prfz, M_pos, Crf, TerrainModel(Plfx(k)), k, PhaseIdx);
         g   = {g{:},g_temp{:}}; %Add to constraint container
         lbg = [lbg; lbg_temp];
         ubg = [ubg; ubg_temp];
         %    Right Hind (rh)
-        [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Prhz, M_pos, Crh, TerrainModel(Prhx(k)), k, PhaseIdx);
+        [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Prhz, M_pos, Crh, height, k, PhaseIdx);
         g   = {g{:},g_temp{:}}; %Add to constraint container
         lbg = [lbg; lbg_temp];
         ubg = [ubg; ubg_temp];
         %----------------------------------
         %   Feet Velocity Activation/Deactivation
         %----------------------------------
+        %!!!!!!!!!!!!!
+        %Temporary Parameter
+        Mvel = [200;500];
+        %!!!!!!!!!!!!!
         %!!Mvel is a column vector
         %    Left Front (lf)
         [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVeloActivation(Plfxdot,Plfzdot,Clf,k,PhaseIdx,Mvel);
@@ -148,6 +173,10 @@ for k = 1:tauSeriesLength
         %----------------------------------
         %   Feet Velocity Ranges
         %----------------------------------
+        %!!!!!!!!!!!!!
+        %Temporary Parameter
+        Vmax = [2.5;5];
+        %!!!!!!!!!!!!!
         %!! Vmax is a columbn vector
         %    Left Front (lf)
         [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Plfxdot,Plfzdot,xdot,zdot,theta,k,Vmax);
@@ -176,6 +205,11 @@ for k = 1:tauSeriesLength
         %----------------------------------
         %   Force Activation/Deactivation
         %----------------------------------
+                %!!!!!!!!!!!!!
+        %Temporary Parameter
+        Mf = [150;250];
+        terrain_slope_rad = 20/180*pi;
+        %!!!!!!!!!!!!!
         %!! Mf is a column vector
         %    Left Front (lf)
         [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Flfx,Flfz,Clf,k,PhaseIdx,terrain_slope_rad,Mf);
@@ -204,6 +238,10 @@ for k = 1:tauSeriesLength
         %----------------------------------
         %   Unilateral Constraint of (Foot-Ground Reaction Forces)
         %----------------------------------
+        %!!!!!!!!!!!!!
+        %Temporary Parameter
+        TerrainNorm = [0;1];
+        %!!!!!!!!!!!!!
         %    Left Front (lf)
         [g_temp,lbg_temp, ubg_temp] = Constraint_UnilateralForce(Flfx,Flfz,k,TerrainNorm);
         g   = {g{:},g_temp{:}}; %Add to constraint container
@@ -228,6 +266,11 @@ for k = 1:tauSeriesLength
         %----------------------------------
         %   Friction Cone
         %----------------------------------
+        %!!!!!!!!!!!!!
+        %Temporary Parameter
+        miu = 0.6;
+        TerrainTangent = [1;0];
+        %!!!!!!!!!!!!!
         %    Left Front (lf)
         [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Flfx,Flfz,k,TerrainTangent,TerrainNorm,miu);
         g   = {g{:},g_temp{:}}; %Add to constraint container
@@ -283,6 +326,11 @@ end
 %----------------------------------
 %   Switching Time Constraint
 %----------------------------------
+%!!!!!!!!!!!!!
+%Temporary Parameter
+Tend = 0.8;
+Phaselb = Tend*10/100;%Percentage Portion
+%!!!!!!!!!!!!!
 [g_temp,lbg_temp, ubg_temp] = Constraint_SwitchingTime(Ts,Phaselb,Tend);
 g   = {g{:},g_temp{:}}; %Add to constraint container
 lbg = [lbg; lbg_temp];
@@ -291,6 +339,11 @@ ubg = [ubg; ubg_temp];
 %----------------------------------
 %   Task and Peiodicity Constraint
 %----------------------------------
+%!!!!!!!!!!!!!
+%Temporary Parameter
+speed = 1;
+SpeedDirection = 1;%Percentage Portion
+%!!!!!!!!!!!!!
 [g_temp,lbg_temp, ubg_temp] = Constraint_Task_and_Periodicity(x,         z,        theta,...     %Decision Variables
                                                               xdot,      zdot,     thetadot,...
                                                               Plfx,      Plfz,...
@@ -314,6 +367,10 @@ ubg = [ubg; ubg_temp];
 %--------------------------------------------------------------------------
 % Set-up Cost Functions
 %--------------------------------------------------------------------------
+%!!!!!!!!!!!!!
+%Temporary Parameter
+cost_flag = 5;
+%!!!!!!!!!!!!!
 Scale_Factor = 1000; %difference below 1e-3 are treated as the same
 for k = 1:tauSeriesLength - 1
     

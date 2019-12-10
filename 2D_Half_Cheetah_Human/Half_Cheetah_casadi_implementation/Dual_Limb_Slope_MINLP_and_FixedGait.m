@@ -419,7 +419,7 @@ if Paras_Define_Method == 1 %Take fro file
     
     ChangSpeedFlag = input('Decide if we want to change the desired speed: 1-> Yes 2->No \n');
     if ChangSpeedFlag ==1
-        SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope');
+        SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope\n');
         MinSpeed = input('Specify the MINIMUM Desired Speed along X-axis (m/s): \n');
         disp('----------------------------------------------------');
         MaxSpeed = input('Specify the MAXIMUM Desired Speed along X-axis (m/s): \n');
@@ -444,6 +444,7 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     %----------------------------------------------------------------------
     %   Specify Desired Speed
     %----------------------------------------------------------------------
+    SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope\n');
     MinSpeed = input('Specify the MINIMUM Desired Speed along X-axis (m/s): \n');
     disp('----------------------------------------------------');
     MaxSpeed = input('Specify the MAXIMUM Desired Speed along X-axis (m/s): \n');
