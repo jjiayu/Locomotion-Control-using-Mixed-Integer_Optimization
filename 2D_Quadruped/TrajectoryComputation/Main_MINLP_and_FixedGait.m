@@ -39,8 +39,8 @@ import casadi.*
 m = 21;
 Iyy = 2.3;
 G = 9.8;
-tauSeriesLength = 41
-NumPhases = 4
+tauSeriesLength = 5
+NumPhases = 2
 gait_discovery_switch = 1
 
 run('VariableSetUp.m')
@@ -57,7 +57,7 @@ J = 0; %Cost Function Initialization
 %   Create Time Step Variables for each phase
 % %!!!!!!!!!!!!!!!!!!! Temp Variable -> Remove when Finish
 tauStepLength = 0.1;
-NumLocalKnots = 10;
+NumLocalKnots = 2;
 % %!!!!!!!!!!!!!!!!!!!
 PhaseDurationVector = [Ts(1)-0;diff(Ts)];
 hVector = tauStepLength*NumPhases*PhaseDurationVector;
