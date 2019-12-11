@@ -9,13 +9,13 @@ function [g,lbg,ubg] = Constraint_FeetVeloActivation(Pxdot,Pzdot,C,k,PhaseIdx,Mv
     Eqtemp = [Pxdot(k);Pzdot(k)] + Mvel*C(PhaseIdx);
     g = {g{:},      Eqtemp(1),  Eqtemp(2)};
     lbg = [lbg;     -inf;       -inf];
-    ubg = [ubg;     Mvel];
+    ubg = [ubg;     Mvel;       Mvel];
     
     %Set 2:
     Eqtemp = [Pxdot(k);Pzdot(k)] - Mvel*C(PhaseIdx);
     g = {g{:},  Eqtemp(1),  Eqtemp(2)};
-    lbg = [lbg; -Mvel];
-    ubg = [ubg; inf;        inf ];
+    lbg = [lbg; -Mvel; -Mvel];
+    ubg = [ubg;   inf;  inf ];
 
 end
 

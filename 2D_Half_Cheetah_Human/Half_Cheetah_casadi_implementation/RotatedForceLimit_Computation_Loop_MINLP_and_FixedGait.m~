@@ -339,10 +339,11 @@ for runIdx = 1:NumofRuns
                 lb_DecisionVars = [lb_DecisionVars, lb_x];  
                 if SpeedDirection == 1 %Horizontal Speed
                     ub_x = repmat( 1.5*speed*Tend, 1, VarLengthList(i));
+                    ub_DecisionVars = [ub_DecisionVars, ub_x];
                 elseif SpeedDirection == 2 %Tangential Speed
                     ub_x = repmat( 1.5*speed*Tend*cos(terrain_slope_rad), 1, VarLengthList(i));
+                    ub_DecisionVars = [ub_DecisionVars, ub_x];
                 end
-                ub_DecisionVars = [ub_DecisionVars, ub_x];
 
             elseif strcmp(varList(i),'y') == 1
                 if TerrainType == 1 %Flat Terrain
@@ -384,17 +385,28 @@ for runIdx = 1:NumofRuns
                 lb_DecisionVars = [lb_DecisionVars, lb_y + repmat(-2*BoundingBox_Height, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, ub_y + repmat( 2*BoundingBox_Height, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PFxdot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-5*speed - 5*Mvelx, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 5*speed + 5*Mvelx, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-5*speed -5*Mvelx, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
+                
+                lb_Plfxdot = lb_xdot(1:end-1) + repmat(-5*Vmax(1), 1, VarLengthList(VarCategoryList == "Plfxdot"));
+ub_Plfxdot = ub_xdot(1:end-1) + repmat( 5*Vmax(1), 1, VarLengthList(VarCategoryList == "Plfxdot"));
+                
+
             elseif strcmp(varList(i),'PFydot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-25 - 5*Mvely, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 25 + 5*Mvely, 1, VarLengthList(i))];
+               lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely - 0.1*Mvely, 1, VarLengthList(i))];    
+               ub_DecisionVars = [ub_DecisionVars, repmat( Mvely + 0.1*Mvely, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-50, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 50, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PHxdot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-5*speed - 5*Mvelx, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 5*speed + 5*Mvelx, 1, VarLengthList(i))];
+               lb_DecisionVars = [lb_DecisionVars, repmat(-Mvelx - 0.1*Mvelx, 1, VarLengthList(i))];    
+               ub_DecisionVars = [ub_DecisionVars, repmat( Mvelx + 0.1*Mvelx, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-50, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 50, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PHydot') == 1
-                lb_DecisionVars = [lb_DecisionVars, repmat(-25 - 5*Mvely, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, repmat( 25 + 5*Mvely, 1, VarLengthList(i))];
+               lb_DecisionVars = [lb_DecisionVars, repmat(-Mvely - 0.1*Mvely, 1, VarLengthList(i))];    
+               ub_DecisionVars = [ub_DecisionVars, repmat( Mvely + 0.1*Mvely, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, repmat(-50, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, repmat( 50, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'FFx') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-Mfx - 0.1*Mfx, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( Mfx + 0.1*Mfx, 1, VarLengthList(i))];
@@ -425,8 +437,12 @@ for runIdx = 1:NumofRuns
     if Fixed_FreeGait_flag == 1 %Free Gait Discovery using MINLP
         DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))));
         DecisionVarsInit(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))) = randi([0,1],length(find(VarNamesList == CF_label(1)):find(VarNamesList == CH_label(end))),1);
+        DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PFydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PFydot_label(end))));
+        DecisionVarsInit(find(VarNamesList == PHxdot_label(1)):find(VarNamesList == PHydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PHxdot_label(1)):find(VarNamesList == PHydot_label(end))));
     elseif Fixed_FreeGait_flag == 2 %Fixed Gait Optimization
         DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) = lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))) + (ub_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))-lb_DecisionVars(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(find(VarNamesList == x_label(1)):find(VarNamesList == Ts_label(end))));
+        DecisionVarsInit(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PFydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PFxdot_label(1)):find(VarNamesList == PFydot_label(end))));
+        DecisionVarsInit(find(VarNamesList == PHxdot_label(1)):find(VarNamesList == PHydot_label(end))) = -5 + (10)*rand(1,length(find(VarNamesList == PHxdot_label(1)):find(VarNamesList == PHydot_label(end))));
     end
     
     %DecisionVarsInit(find(VarNamesList == x_label(1)):find(VarNamesList == x_label(end))) = linspace(0,speed*Tend,length(x_label));

@@ -175,7 +175,7 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     %m = 45; %kg
     %I = 2.1; %kg m^2 Izz
     m = input('Input Body Mass (i.e. 21) (kg): \n');
-    I = input('Input Body Inertia (i.e. 2.3): \n');  
+    Iyy = input('Input Body Inertia (i.e. 2.3): \n');  
     G = 9.80665; %m/s^2
 end
 
@@ -228,10 +228,10 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     elseif Morpho_change_flag == 2 %No Morphology Change
         Morpho_Percentage = 100/100;
         disp('No Morphology Change')
-        Morpho_Percentage
     else
         error('Unknown Morphology Change Flag')
     end
+    Morpho_Percentage
     
     %   Left Front (lf)
     PlfCenter = [Morpho_Percentage*(1/2*BodyLength);  -(1/2*BodyHeight + DefaultLegLength)];
@@ -612,7 +612,7 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
         %   (Place Holder) Need to change the exponential base when have more
         %   legs in 3D
         %-------------------------------------------
-        NumMaxNodes = (2*2)^(NumPhases+1);
+        NumMaxNodes = (2^4)^(NumPhases+1);
         disp(['Selected Worst-case Scenarios to Explore ', num2str(NumMaxNodes), ' Nodes']);
     elseif NumMaxNodesCases == 2 %User-specified
         NumMaxNodes = input('Input number of maximum node to be explored: \n');
