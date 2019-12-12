@@ -1,0 +1,132 @@
+====================================================
+Genearl Information:
+====================================================
+Parameter Defined Manually
+====================================================
+CasADi Implementation
+2D Quadruped Gait Discovery using Mixed-integer Nonlinear Optimization
+With a Particular Emphasis on Periodical Motions
+Multi-Phase Formulation:
+Optimize over State, Control, and Switching Time, and (Gait Sequence if we select to optimize)
+----------------------------------------------------
+Date and Time:
+   11-Dec-2019 22:12:13
+
+----------------------------------------------------
+Correspondent Log File Name: GaitDiscoveryMINLP-Periodical-Loco-log-20191211T221213in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/2D_Quadruped/Test
+====================================================
+Using Rotated Force Limits with respect to the slope of the environment
+====================================================
+ 
+====================================================
+Inertial Parameters
+====================================================
+Input Body Mass (i.e. 21) (kg): 
+21
+Input Body Inertia (i.e. 2.3): 
+2.3
+====================================================
+Kinematics Parameters
+====================================================
+Input Body Length (i.e. 0.6): 
+0.6
+Input Body Height (i.e. 0.2): 
+0.2
+Input Default Leg Length (i.e. 0.45): 
+0.45
+Decide if we allow morphology change (range from humanoid to half-cheetah): 1-> Yes, Alllow Mophorlogy change 2-> No Morphology change (Default: Half-CHeetah)
+1
+Input How much mophorlogy change (displacement from center to edge of the body) is allowed (i.e. 0 - 100%, from humanoid to half_cheetah, Do Not Type Percentage Symbol):
+100
+
+Morpho_Percentage =
+
+     1
+
+====================================================
+Setup Bounding Box for Feet Reachability: 
+----------------------------------------------------
+Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):
+0.4
+----------------------------------------------------
+Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):
+0.4
+----------------------------------------------------
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify the Terrain Type: 1 -> Flat Terrain (Use this if Terrain Slope = 0); 2 -> Slopes
+1
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+2
+Terrain Norm is: 
+
+TerrainNorm =
+
+     0
+     1
+
+Terrain Tangent is: 
+
+TerrainTangent =
+
+     1
+     0
+
+----------------------------------------------------
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope 
+1
+Specify the MINIMUM Desired Speed along X-axis (m/s): 
+1.5
+----------------------------------------------------
+Specify the MAXIMUM Desired Speed along X-axis (m/s): 
+1.5
+----------------------------------------------------
+Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):
+0.1
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Pre-defined (Fixed), 2 -> Left as Free Variable 
+1
+Input Termianl Time (e.g. 1s): 
+1
+====================================================
+Temporal and Discretization Setup:
+----------------------------------------------------
+Input Number of Phases: 
+10
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+10
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.01
+Number of Knots/Discretization of tau (from 0 to 1: 101) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+----------------------------------------------------
+Input Phase Lower Bound (in percentage of total motion duration: 2.5% - no need to type percentage symbol): 
+10
+
+phase_lower_bound_portion =
+
+    0.1000
+
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ParameterSetUp', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/2D_Quadruped/TrajectoryComputation/ParameterSetUp.m', 476)" style="font-weight:bold">ParameterSetUp</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/2D_Quadruped/TrajectoryComputation/ParameterSetUp.m',476,0)">line 476</a>)
+Minimum Phase Duration is invalid -> Total Minimum Phase duration is larger than the Allowed Termianl Time
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019a/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+evalin('caller', strcat(script, ';'));
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/2D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 23)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/2D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',23,0)">line 23</a>)
+run('ParameterSetUp.m')
+} 
+Main_MINLP_and_FixedGait

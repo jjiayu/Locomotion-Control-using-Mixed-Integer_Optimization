@@ -1,0 +1,180 @@
+====================================================
+Genearl Information:
+====================================================
+Parameter Defined Manually
+====================================================
+CasADi Implementation
+2D Quadruped Gait Discovery using Mixed-integer Nonlinear Optimization
+With a Particular Emphasis on Periodical Motions
+Multi-Phase Formulation:
+Optimize over State, Control, and Switching Time, and (Gait Sequence if we select to optimize)
+----------------------------------------------------
+Date and Time:
+   12-Dec-2019 11:19:51
+
+----------------------------------------------------
+Correspondent Log File Name: GaitDiscoveryMINLP-Periodical-Loco-log-20191212T111951in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/2D_Quadruped/Test
+====================================================
+Using Rotated Force Limits with respect to the slope of the environment
+====================================================
+ 
+====================================================
+Inertial Parameters
+====================================================
+Input Body Mass (i.e. 21) (kg): 
+21
+Input Body Inertia (i.e. 2.3): 
+2.3
+====================================================
+Kinematics Parameters
+====================================================
+Input Body Length (i.e. 0.6): 
+0.6
+Input Body Height (i.e. 0.2): 
+0.2
+Input Default Leg Length (i.e. 0.45): 
+0.45
+Decide if we allow morphology change (range from humanoid to half-cheetah): 1-> Yes, Alllow Mophorlogy change 2-> No Morphology change (Default: Half-CHeetah)
+2
+No Morphology Change
+
+Morpho_Percentage =
+
+     1
+
+====================================================
+Setup Bounding Box for Feet Reachability: 
+----------------------------------------------------
+Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):
+0.4
+----------------------------------------------------
+Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):
+0.4
+----------------------------------------------------
+====================================================
+Setup Terrain Model: 
+----------------------------------------------------
+Specify the Terrain Type: 1 -> Flat Terrain (Use this if Terrain Slope = 0); 2 -> Slopes
+1
+Selected Flat Terrain
+----------------------------------------------------
+Plot the Terrain Model? 1 -> Yes; 2 -> No
+2
+Terrain Norm is: 
+
+TerrainNorm =
+
+     0
+     1
+
+Terrain Tangent is: 
+
+TerrainTangent =
+
+     1
+     0
+
+----------------------------------------------------
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope 
+1
+Specify the MINIMUM Desired Speed along X-axis (m/s): 
+1
+----------------------------------------------------
+Specify the MAXIMUM Desired Speed along X-axis (m/s): 
+1
+----------------------------------------------------
+Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):
+0.1
+----------------------------------------------------
+Terminal Time:
+Optimization of Terminal Time (Tend): 
+1 -> Pre-defined (Fixed), 2 -> Left as Free Variable 
+1
+Input Termianl Time (e.g. 1s): 
+1
+====================================================
+Temporal and Discretization Setup:
+----------------------------------------------------
+Input Number of Phases: 
+8
+----------------------------------------------------
+Input Number of Knots for Each Phase: 
+10
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.0125
+Number of Knots/Discretization of tau (from 0 to 1: 81) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+----------------------------------------------------
+Input Phase Lower Bound (in percentage of total motion duration: 2.5% - no need to type percentage symbol): 
+5
+
+phase_lower_bound_portion =
+
+    0.0500
+
+Phase Duration Lower Bound: 5%
+----------------------------------------------------
+ 
+====================================================
+ 
+====================================================
+Big-M Setup/Limits of Feet Velocity and Forces
+====================================================
+====================================================
+Big-M Setup/Limits of Feet Velocity and Forces
+====================================================
+Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame
+----------------------------------------------------
+Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in X-axis (In Robot Frame): 
+2.5
+Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Z-axis (In Robot Frame): 
+2.5
+----------------------------------------------------
+Big-M for Contact Forces
+Input Big-M/Boundaries for Foot-Ground Reaction Forces along X-axis (in World Frame) (e.g. 200,300,1000,1e5):
+1000
+----------------------------------------------------
+Input Big-M/Boundaries for Foot-Ground Reaction Forces along Z-axis (in WOrld Frame) (e.g. 200,300,1000,1e5):
+1000
+====================================================
+====================================================
+Set up Cost Terms:
+----------------------------------------------------
+Decide Cost: 
+ 1-> Minimize Force Squared (Energy Loss) 
+ [Not Implemented] 2-> Minimize Tangential Force (Maximize Robustness) 
+ 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero) 
+ [Not Implemented] 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) 
+ 5-> Smooth Motion (tangential speed is constant and close to the desired velocity in tangential direction 
+theta close to theta_slope 
+thetadot close to 0 normal velocity close to 0)
+ [Not Implemented] 6-> Feet Velocity 
+ [Not Implemented] 7-> Humanoid Smooth Motion (theta, thetadot towards zero) 
+1
+====================================================
+====================================================
+Solver Setups:
+====================================================
+Solver Selection: 
+1 -> Knitro; 2 -> Bonmin 
+1
+Selected Solver: knitro
+----------------------------------------------------
+Solver Dependent Options:
+----------------------------------------------------
+Define Number of Max Nodes to be Explored: 
+ 1--> Worst Case Scenario; 2 --> User Specified; 3 --> Default Value
+1
+Selected Worst-case Scenarios to Explore 68719476736 Nodes
+----------------------------------------------------
+Specify Number of Runs for the MINLP Programming (i.e. 1, 10, 25, 50, 100): 
+1
+====================================================
+ 

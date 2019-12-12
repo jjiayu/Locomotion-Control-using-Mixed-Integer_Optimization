@@ -1,5 +1,7 @@
 % Call the Solver to Solver the Optimization Problem
 
+import casadi.*
+
 %   Display some Info
 disp('===================================================')
 disp('Optimization Started')
