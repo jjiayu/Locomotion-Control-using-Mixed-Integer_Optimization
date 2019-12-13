@@ -64,11 +64,8 @@ if Paras_Define_Method == 2 %Specify Paramters Manually
             Crh = input('Input Contact Sequence for Right Hind  (RH) Foot (i.e. a column vector):\n');
         else
             error('Optimiation using gait from pre-defined gait library is not implemented for 2D quadruped')
+            %[Clf,Clh,Crf,Crh,GaitName] = Gait_Selection(UserDefinedGaitNumber);
         end
-        
-        %user_defined_gait = input('Select the gait: \n 1 -> Walking-D (Symmetric Walking) \n 2 -> Trotting \n 3 -> Galloping \n 4 -> Bounding-D (Symmetric Bounding) \n 5 -> Pronking \n 6-> Walking-S (Asymmetric Walking/Galloping without flying phase) (3-Phases) \n 7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) (3Phases) \n');
-        %[CF,CH,GaitName] = Gait_Selection(user_defined_gait);
-        %We need to defin Clf,Clh,Crf,Crh
     end
 end
 
@@ -371,9 +368,9 @@ if Paras_Define_Method == 1 % Parameter Loaded from File
     ChangSpeedFlag = input('Decide if we want to change the desired speed: 1-> Yes 2->No \n');
     if ChangSpeedFlag ==1
         SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope\n');
-        MinSpeed = input('Specify the MINIMUM Desired Speed along X-axis (m/s): \n');
+        MinSpeed = input('Specify the MINIMUM Desired Speed along the Desired Direction (m/s): \n');
         disp('----------------------------------------------------');
-        MaxSpeed = input('Specify the MAXIMUM Desired Speed along X-axis (m/s): \n');
+        MaxSpeed = input('Specify the MAXIMUM Desired Speed along the Desired Direction (m/s): \n');
         disp('----------------------------------------------------');
         SpeedResolution = input('Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):\n');
         disp('----------------------------------------------------');
@@ -396,9 +393,9 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
     %   Specify Desired Speed
     %----------------------------------------------------------------------
     SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope \n');
-    MinSpeed = input('Specify the MINIMUM Desired Speed along X-axis (m/s): \n');
+    MinSpeed = input('Specify the MINIMUM Desired Speed along the Desired Direction (m/s): \n');
     disp('----------------------------------------------------');
-    MaxSpeed = input('Specify the MAXIMUM Desired Speed along X-axis (m/s): \n');
+    MaxSpeed = input('Specify the MAXIMUM Desired Speed along Desired Direction (m/s): \n');
     disp('----------------------------------------------------');
     SpeedResolution = input('Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):\n');
     disp('----------------------------------------------------');
