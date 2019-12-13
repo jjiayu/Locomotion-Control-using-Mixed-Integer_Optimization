@@ -20,7 +20,7 @@ if Paras_Define_Method == 1 %Load Parameters from files
     if Remote_Computing_Flag == 1 %Laptop/Desktop
         ParamFileDir = uigetdir;
     elseif Remote_Computing_Flag == 2 %Remote Computer
-        ParamFileDir = input('Manually Define Folder Path Storing Parameter File (quote with /'/'): \n');
+        ParamFileDir = input('Manually Define Folder Path Storing Parameter File (quote with \''): \n');
         %get screen number for future use of sending finishing emails
         [cmd_status,cmdoutput] = system('screen -ls')
     else
@@ -56,8 +56,17 @@ if Paras_Define_Method == 2 %Specify Paramters Manually
     gait_discovery_switch = input('Decide 1-> Gait Discovery via MINLP; 2-> Computing Locomotion Plans for a Fixed Gait Sequence: \n');
     
     if gait_discovery_switch == 2 %fixed gait optimization
-        user_defined_gait = input('Select the gait: \n 1 -> Walking-D (Symmetric Walking) \n 2 -> Trotting \n 3 -> Galloping \n 4 -> Bounding-D (Symmetric Bounding) \n 5 -> Pronking \n 6-> Walking-S (Asymmetric Walking/Galloping without flying phase) (3-Phases) \n 7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) (3Phases) \n');
-        error('Fixed Gait Optimization is not Impelemented')
+        UserDefinedGaitNumber = input('Select the gait: \n 0 -> User Input \n 1-> Walking ....\n');
+        if UserDefinedGaitNumber == 0
+            Clf = input('Input Contact Sequence for Left Front  (LF) Foot (i.e. a column vector):\n');
+            Clh = input('Input Contact Sequence for Left Hind   (LH) Foot (i.e. a column vector):\n');
+            Crf = input('Input Contact Sequence for Right Front (RF) Foot (i.e. a column vector):\n');
+            Crh = input('Input Contact Sequence for Right Hind  (RH) Foot (i.e. a column vector):\n');
+        else
+            error('Optimiation using gait from pre-defined gait library is not implemented for 2D quadruped')
+        end
+        
+        %user_defined_gait = input('Select the gait: \n 1 -> Walking-D (Symmetric Walking) \n 2 -> Trotting \n 3 -> Galloping \n 4 -> Bounding-D (Symmetric Bounding) \n 5 -> Pronking \n 6-> Walking-S (Asymmetric Walking/Galloping without flying phase) (3-Phases) \n 7-> Bounding-S (Asymmetric Bounding/Galloping without double support phase) (3Phases) \n');
         %[CF,CH,GaitName] = Gait_Selection(user_defined_gait);
         %We need to defin Clf,Clh,Crf,Crh
     end
@@ -142,7 +151,6 @@ if gait_discovery_switch == 1
     disp('2D Quadruped Gait Discovery using Mixed-integer Nonlinear Optimization');
 elseif gait_discovery_switch ==2
     disp('2D Quadruped Motion Optimization using Fixed Gait');
-    error('Optimization using Fixed Gait is not implemented -> Gait Selection Function is not implemented')
 end
 disp('With a Particular Emphasis on Periodical Motions');
 disp('Multi-Phase Formulation:');

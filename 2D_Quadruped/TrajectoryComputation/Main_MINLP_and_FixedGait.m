@@ -36,7 +36,7 @@ for speedIdx = 1:length(SpeedList)
     speed = SpeedList(speedIdx);
     %Tend = Tend; %Needed if we want to change Tend
     
-    for rundIdx = 1:NumofRuns
+    for runIdx = 1:NumofRuns
 
         %--------------------------------------------------------------------------
         % Logging of the Computation
