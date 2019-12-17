@@ -38,7 +38,7 @@ for knotIdx = 1:length(TimeSeries)
     fprintf(fid, '       ignore_contact: true\n');
     fprintf(fid, '       ignore_for_pose_adaptation: true\n');
     fprintf(fid, '       trajectory:\n');
-    fprintf(fid, '         frame: odom:\n');
+    fprintf(fid, '         frame: odom\n');
     fprintf(fid, '         knots:\n');
     %Select Motion from Double Support Phase
     %Arrive first Knot Using some time (1s,2s)
@@ -47,7 +47,7 @@ for knotIdx = 1:length(TimeSeries)
     else
         fprintf(fid, ['           - time: ',num2str(TimeSeries(knotIdx)-TimeSeries(knotIdx-1)),'\n']);
     end
-    fprintf(fid, ['             position:  [',num2str(PFx_result(knotIdx)),', 0.0, ',num2str(PFy_result(knotIdx)),']\n']);
+    fprintf(fid, ['             position:  [',num2str(PFx_result(knotIdx)),', 0.1175, ',num2str(PFy_result(knotIdx)),']\n']);
     
     % Left Hind (lh) - Use Hind Leg Quantities
     fprintf(fid, '    - end_effector_trajectory:\n');
@@ -55,7 +55,7 @@ for knotIdx = 1:length(TimeSeries)
     fprintf(fid, '       ignore_contact: true\n');
     fprintf(fid, '       ignore_for_pose_adaptation: true\n');
     fprintf(fid, '       trajectory:\n');
-    fprintf(fid, '         frame: odom:\n');
+    fprintf(fid, '         frame: odom\n');
     fprintf(fid, '         knots:\n');
     %Select Motion from Double Support Phase
     %Arrive first Knot Using some time (1s,2s)
@@ -64,7 +64,7 @@ for knotIdx = 1:length(TimeSeries)
     else
         fprintf(fid, ['           - time: ',num2str(TimeSeries(knotIdx)-TimeSeries(knotIdx-1)),'\n']);
     end
-    fprintf(fid, ['             position:  [',num2str(PHx_result(knotIdx)),', 0.0, ',num2str(PHy_result(knotIdx)),']\n']);
+    fprintf(fid, ['             position:  [',num2str(PHx_result(knotIdx)),', 0.1175, ',num2str(PHy_result(knotIdx)),']\n']);
 
     % Right Front (rf) - Use Front Leg Quantities
     fprintf(fid, '    - end_effector_trajectory:\n');
@@ -72,7 +72,7 @@ for knotIdx = 1:length(TimeSeries)
     fprintf(fid, '       ignore_contact: true\n');
     fprintf(fid, '       ignore_for_pose_adaptation: true\n');
     fprintf(fid, '       trajectory:\n');
-    fprintf(fid, '         frame: odom:\n');
+    fprintf(fid, '         frame: odom\n');
     fprintf(fid, '         knots:\n');
     %Select Motion from Double Support Phase
     %Arrive first Knot Using some time (1s,2s)
@@ -81,7 +81,7 @@ for knotIdx = 1:length(TimeSeries)
     else
         fprintf(fid, ['           - time: ',num2str(TimeSeries(knotIdx)-TimeSeries(knotIdx-1)),'\n']);
     end
-    fprintf(fid, ['             position:  [',num2str(PFx_result(knotIdx)),', 0.0, ',num2str(PFy_result(knotIdx)),']\n']);
+    fprintf(fid, ['             position:  [',num2str(PFx_result(knotIdx)),', -0.1175, ',num2str(PFy_result(knotIdx)),']\n']);
 
     % Right Hind (rh) - Use Front Leg Quantities
     fprintf(fid, '    - end_effector_trajectory:\n');
@@ -89,7 +89,7 @@ for knotIdx = 1:length(TimeSeries)
     fprintf(fid, '       ignore_contact: true\n');
     fprintf(fid, '       ignore_for_pose_adaptation: true\n');
     fprintf(fid, '       trajectory:\n');
-    fprintf(fid, '         frame: odom:\n');
+    fprintf(fid, '         frame: odom\n');
     fprintf(fid, '         knots:\n');
     %Select Motion from Double Support Phase
     %Arrive first Knot Using some time (1s,2s)
@@ -98,7 +98,7 @@ for knotIdx = 1:length(TimeSeries)
     else
         fprintf(fid, ['           - time: ',num2str(TimeSeries(knotIdx)-TimeSeries(knotIdx-1)),'\n']);
     end
-    fprintf(fid, ['             position:  [',num2str(PHx_result(knotIdx)),', 0.0, ',num2str(PHy_result(knotIdx)),']\n']);
+    fprintf(fid, ['             position:  [',num2str(PHx_result(knotIdx)),', -0.1175, ',num2str(PHy_result(knotIdx)),']\n']);
     
     %Robot Torso
     fprintf(fid, '    - base_trajectory:\n');
@@ -110,8 +110,8 @@ for knotIdx = 1:length(TimeSeries)
     else
         fprintf(fid, ['           - time: ',num2str(TimeSeries(knotIdx)-TimeSeries(knotIdx-1)),'\n']);
     end
-    fprintf(fid, ['            position:  [',num2str(x_result(knotIdx)),', 0.0, ',num2str(y_result(knotIdx)),']\n']);
-    fprintf(fid, ['            orientation: [deg(0), deg(',num2str(theta_result(knotIdx)/pi*180),'), deg(0)]\n']);
+    fprintf(fid, ['             position:  [',num2str(x_result(knotIdx)),', 0.0, ',num2str(y_result(knotIdx)),']\n']);
+    fprintf(fid, ['             orientation: [deg(0), deg(',num2str(theta_result(knotIdx)/pi*180),'), deg(0)]\n']);
     
     %A gap
     fprintf(fid, '\n');
