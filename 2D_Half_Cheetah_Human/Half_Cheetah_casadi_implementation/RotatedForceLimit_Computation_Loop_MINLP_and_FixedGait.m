@@ -350,11 +350,11 @@ for runIdx = 1:NumofRuns
                     ub_y = repmat( 5, 1, VarLengthList(i));
                 elseif TerrainType == 2 %slope
                     if SpeedDirection == 1 %Horizontal Desired Speed
-                        lb_y = repmat(-1.5*abs(speed*Tend*tan(terrain_slope_rad)), 1, VarLengthList(i));    
-                        ub_y = repmat( 1.5*abs(speed*Tend*tan(terrain_slope_rad)), 1, VarLengthList(i));
+                        lb_y = repmat(-5 - 2*abs(speed*Tend*tan(terrain_slope_rad)), 1, VarLengthList(i));    
+                        ub_y = repmat( 5 + 2*abs(speed*Tend*tan(terrain_slope_rad)), 1, VarLengthList(i));
                     elseif SpeedDirection == 2 %Tangential Desired Speed
-                        lb_y = repmat(-1.5*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(i));    
-                        ub_y = repmat( 1.5*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(i));
+                        lb_y = repmat(-5 - 2*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(i));    
+                        ub_y = repmat(-5 + 2*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(i));
                     end
                 end
                 lb_DecisionVars = [lb_DecisionVars,lb_y];
@@ -372,17 +372,17 @@ for runIdx = 1:NumofRuns
                 lb_DecisionVars = [lb_DecisionVars, repmat(-5*pi, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( 5*pi, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PFx') == 1
-                lb_DecisionVars = [lb_DecisionVars, lb_x + repmat(-2*BoundingBox_Width, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, ub_x + repmat( 2*BoundingBox_Width, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, lb_x + repmat(-5*BoundingBox_Width, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, ub_x + repmat( 5*BoundingBox_Width, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PFy') == 1
-                lb_DecisionVars = [lb_DecisionVars, lb_y + repmat(-2*BoundingBox_Height, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, ub_y + repmat( 2*BoundingBox_Height, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, lb_y + repmat(-5*BoundingBox_Height, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, ub_y + repmat( 5*BoundingBox_Height, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PHx') == 1
-                lb_DecisionVars = [lb_DecisionVars, lb_x + repmat(-2*BoundingBox_Width, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, ub_x + repmat( 2*BoundingBox_Width, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, lb_x + repmat(-5*BoundingBox_Width, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, ub_x + repmat( 5*BoundingBox_Width, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PHy') == 1
-                lb_DecisionVars = [lb_DecisionVars, lb_y + repmat(-2*BoundingBox_Height, 1, VarLengthList(i))];    
-                ub_DecisionVars = [ub_DecisionVars, ub_y + repmat( 2*BoundingBox_Height, 1, VarLengthList(i))];
+                lb_DecisionVars = [lb_DecisionVars, lb_y + repmat(-5*BoundingBox_Height, 1, VarLengthList(i))];    
+                ub_DecisionVars = [ub_DecisionVars, ub_y + repmat( 5*BoundingBox_Height, 1, VarLengthList(i))];
             elseif strcmp(varList(i),'PFxdot') == 1
                 lb_DecisionVars = [lb_DecisionVars, repmat(-5*speed - 5*Mvelx, 1, VarLengthList(i))];    
                 ub_DecisionVars = [ub_DecisionVars, repmat( 5*speed + 5*Mvelx, 1, VarLengthList(i))];
@@ -1234,6 +1234,7 @@ for runIdx = 1:NumofRuns
                 %J = J + ((xdot(k)-speed)*Scale_Factor)^2 + ((ydot(k)-speed*tan(terrain_slope_rad))*Scale_Factor)^2 + ((ydot(k)/cos(terrain_slope_rad))*Scale_Factor)^2 + (thetadot(k)*Scale_Factor)^2;
                 %-----------------
             end
+            
             %VelCostWweight = 500;
             %J = J + h*FFx(k)^2 + h*FFy(k)^2 + h*FHx(k)^2 + h*FHy(k)^2 + VelCostWweight*h*PFxdot(k)^2 + VelCostWweight*h*PFydot(k)^2 + VelCostWweight*h*PHxdot(k)^2 + VelCostWweight*h*PHydot(k)^2;
             %J = J + h*xdot(k)^2;%h*ydot(k)^2 + h*thetadot(k)^2;% + h*thetadot(k)^2; h*xdot(k)^2 + 

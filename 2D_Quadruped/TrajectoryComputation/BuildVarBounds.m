@@ -34,11 +34,11 @@ if TerrainType == 1 %Flat Terrain
     ub_z = repmat( 5, 1, VarLengthList(VarCategoryList == "z"));
 elseif TerrainType == 2 %slope
     if SpeedDirection == 1 %Horizontal Desired Speed
-        lb_z = repmat(-1.5*abs(speed*Tend*tan(terrain_slope_rad)), 1, VarLengthList(VarCategoryList == "z"));  
-        ub_z = repmat( 1.5*abs(speed*Tend*tan(terrain_slope_rad)), 1, VarLengthList(VarCategoryList == "z"));
+        lb_z = repmat(-5 - 2*abs(speed*Tend*tan(terrain_slope_rad)), 1, VarLengthList(VarCategoryList == "z"));  
+        ub_z = repmat( 5 + 2*abs(speed*Tend*tan(terrain_slope_rad)), 1, VarLengthList(VarCategoryList == "z"));
     elseif SpeedDirection == 2 %Tangential Desired Speed
-        lb_z = repmat(-1.5*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(VarCategoryList == "z"));    
-        ub_z = repmat( 1.5*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(VarCategoryList == "z"));
+        lb_z = repmat(-5 - 2*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(VarCategoryList == "z"));    
+        ub_z = repmat( 5 + 2*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(VarCategoryList == "z"));
     end
 end
 %       theta
@@ -54,29 +54,29 @@ ub_zdot = repmat( 25, 1, VarLengthList(VarCategoryList == "zdot"));
 lb_thetadot = repmat(-5*pi, 1, VarLengthList(VarCategoryList == "thetadot"));    
 ub_thetadot = repmat( 5*pi, 1, VarLengthList(VarCategoryList == "thetadot"));
 %       Plfx
-lb_Plfx = lb_x + repmat(-2*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Plfx"));  
-ub_Plfx = ub_x + repmat( 2*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Plfx"));
+lb_Plfx = lb_x + repmat(-5*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Plfx"));  
+ub_Plfx = ub_x + repmat( 5*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Plfx"));
 %       Plfz
-lb_Plfz = lb_z + repmat(-2*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Plfz"));  
-ub_Plfz = ub_z + repmat( 2*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Plfz"));
+lb_Plfz = lb_z + repmat(-5*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Plfz"));  
+ub_Plfz = ub_z + repmat( 5*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Plfz"));
 %       Plhx
-lb_Plhx = lb_x + repmat(-2*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Plhx"));  
-ub_Plhx = ub_x + repmat( 2*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Plhx"));
+lb_Plhx = lb_x + repmat(-5*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Plhx"));  
+ub_Plhx = ub_x + repmat( 5*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Plhx"));
 %       Plhz
-lb_Plhz = lb_z + repmat(-2*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Plhz"));  
-ub_Plhz = ub_z + repmat( 2*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Plhz"));
+lb_Plhz = lb_z + repmat(-5*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Plhz"));  
+ub_Plhz = ub_z + repmat( 5*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Plhz"));
 %       Prfx
-lb_Prfx = lb_x + repmat(-2*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Prfx"));  
-ub_Prfx = ub_x + repmat( 2*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Prfx"));
+lb_Prfx = lb_x + repmat(-5*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Prfx"));  
+ub_Prfx = ub_x + repmat( 5*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Prfx"));
 %       Prfz
-lb_Prfz = lb_z + repmat(-2*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Prfz"));  
-ub_Prfz = ub_z + repmat( 2*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Prfz"));
+lb_Prfz = lb_z + repmat(-5*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Prfz"));  
+ub_Prfz = ub_z + repmat( 5*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Prfz"));
 %       Prhx
-lb_Prhx = lb_x + repmat(-2*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Prhx"));  
-ub_Prhx = ub_x + repmat( 2*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Prhx"));
+lb_Prhx = lb_x + repmat(-5*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Prhx"));  
+ub_Prhx = ub_x + repmat( 5*BoundingBox_Width, 1, VarLengthList(VarCategoryList == "Prhx"));
 %       Prhz
-lb_Prhz = lb_z + repmat(-2*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Prhz"));  
-ub_Prhz = ub_z + repmat( 2*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Prhz"));
+lb_Prhz = lb_z + repmat(-5*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Prhz"));  
+ub_Prhz = ub_z + repmat( 5*BoundingBox_Height, 1, VarLengthList(VarCategoryList == "Prhz"));
 %       Plfxdot
 lb_Plfxdot = lb_xdot(1:end-1) + repmat(-5*Vmax(1), 1, VarLengthList(VarCategoryList == "Plfxdot"));
 ub_Plfxdot = ub_xdot(1:end-1) + repmat( 5*Vmax(1), 1, VarLengthList(VarCategoryList == "Plfxdot"));
