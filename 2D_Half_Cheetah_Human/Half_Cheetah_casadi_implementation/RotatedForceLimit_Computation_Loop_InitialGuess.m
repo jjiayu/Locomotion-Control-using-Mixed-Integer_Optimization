@@ -361,7 +361,7 @@ for runIdx = 1:1
                         ub_y = repmat( 5 + 2*abs(speed*Tend*tan(terrain_slope_rad)), 1, VarLengthList(i));
                     elseif SpeedDirection == 2 %Tangential Desired Speed
                         lb_y = repmat(-5 - 2*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(i));    
-                        ub_y = repmat(-5 + 2*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(i));
+                        ub_y = repmat( 5 + 2*abs(speed*Tend*sin(terrain_slope_rad)), 1, VarLengthList(i));
                     end
                 end
                 lb_DecisionVars = [lb_DecisionVars,lb_y];
