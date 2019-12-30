@@ -1,4 +1,4 @@
-% Main Script for Computing Motion Plans/Trajectories for 2D Quadruped
+% Main Script for Computing Motion Plans/Trajectories for 3D Quadruped
 %   Two Functionalities:
 %       (1) MINLP to discover gait
 %       (2) Continuous Optimization with Fixed Gait (for fixed gait evaluation and initial guess investigation)

@@ -66,19 +66,19 @@ Prhz = SX.sym('Prhz',tauSeriesLength);
 %       NOTE: As inputs to the system and we use Euler integration, the
 %       length of Feet Velocity vector is "tauSeriesLength - 1"
 %--------------------------------------------------------------------------
-% Left Front (lf) Feet Velocity Vector -> Plfdot = [Plfxdot, Plfzdot]:
+% Left Front (lf) Feet Velocity Vector -> Plfdot = [Plfxdot, Plfydot, Plfzdot]:
 Plfxdot = SX.sym('Plfxdot',tauSeriesLength - 1);
 Plfzdot = SX.sym('Plfzdot',tauSeriesLength - 1);
 
-% Left Hind (lh) Feet Position Vector -> Plh = [Plhx, Plhz]:
+% Left Hind (lh) Feet Position Vector -> Plhdot = [Plhxdot, Plhydot, Plhzdot]:
 Plhxdot = SX.sym('Plhxdot',tauSeriesLength - 1);
 Plhzdot = SX.sym('Plhzdot',tauSeriesLength - 1);
 
-% Right Front (rf) Feet Position Vector -> Prf = [Prfx, Prfz]:
+% Right Front (rf) Feet Position Vector -> Prfdot = [Prfxdot, Prfydot, Prfzdot]:
 Prfxdot = SX.sym('Prfxdot',tauSeriesLength - 1);
 Prfzdot = SX.sym('Prfzdot',tauSeriesLength - 1);
 
-% Right Hind (rh) Feet Position Vector -> Prh = [Prhx, Prhz]:
+% Right Hind (rh) Feet Position Vector -> Prhdot = [Prhxdot, Prhydot, Prhzdot]:
 Prhxdot = SX.sym('Prhxdot',tauSeriesLength - 1);
 Prhzdot = SX.sym('Prhzdot',tauSeriesLength - 1);
 
