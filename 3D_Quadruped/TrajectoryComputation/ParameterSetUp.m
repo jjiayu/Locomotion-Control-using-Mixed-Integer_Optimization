@@ -343,6 +343,8 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
     TerrainTangentX = [1;0;0];
     TerrainTangentY = [0;1;0];
     % Rotate Terrain Tangent and Terrain Norm with respect to slopes
+    % For 3D case, slope up/down need to rotated the vector around y-axis
+    % with down/up degrees (-theta_slope_rad)
     TerrainNorm = ElementaryRotation_Y(-terrain_slope_rad)*TerrainNorm;
     TerrainTangentX = ElementaryRotation_Y(-terrain_slope_rad)*TerrainTangentX;
     TerrainTangentY = ElementaryRotation_Y(-terrain_slope_rad)*TerrainTangentY;
