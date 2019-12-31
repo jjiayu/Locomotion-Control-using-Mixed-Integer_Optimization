@@ -1,4 +1,4 @@
-function [g, lbg, ubg] = Constraint_FeetPosition(Pz,M_pos,C,height,k, PhaseIdx)
+function [g, lbg, ubg] = Constraint_FeetPosition(Pz, M_pos, C, height, k, PhaseIdx)
 %CONSTRAINT_FEETPOSITION Part of Complementarity Constraint
 
     g = {};

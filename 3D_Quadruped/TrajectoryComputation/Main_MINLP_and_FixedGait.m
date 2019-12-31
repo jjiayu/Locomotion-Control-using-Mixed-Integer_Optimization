@@ -150,22 +150,22 @@ for speedIdx = 1:length(SpeedList)
                 %----------------------------------
                 %!!Mvel is a column vector
                 %    Left Front (lf)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVeloActivation(Plfxdot,Plfzdot,Clf,k,PhaseIdx,Mvel);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVeloActivation(Plfxdot,Plfydot,Plfzdot,Clf,k,PhaseIdx,Mvel);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
                 %    Left Hind (lh)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVeloActivation(Plhxdot,Plhzdot,Clh,k,PhaseIdx,Mvel);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVeloActivation(Plhxdot,Plhydot,Plhzdot,Clh,k,PhaseIdx,Mvel);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
                 %    Right Front (rf)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVeloActivation(Prfxdot,Prfzdot,Crf,k,PhaseIdx,Mvel);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVeloActivation(Prfxdot,Prfydot,Prfzdot,Crf,k,PhaseIdx,Mvel);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
                 %    Right Hind (rh)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVeloActivation(Prhxdot,Prhzdot,Crh,k,PhaseIdx,Mvel);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVeloActivation(Prhxdot,Prhydot,Prhzdot,Crh,k,PhaseIdx,Mvel);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
