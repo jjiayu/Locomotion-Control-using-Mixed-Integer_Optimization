@@ -1,4 +1,4 @@
-% Parameter Template for 2D Quadruped --> Use ANYmal Parameters
+% Parameter Template for 3D Quadruped --> Use ANYmal Parameters
 %   Sections wrapped by "<--------->" lines are the parameter places
 
 import casadi.*
@@ -38,7 +38,9 @@ end
 %<---------------------------------------------------------->
 % Inertia Parameters
 m = 34.7; %kg
-Iyy = 2.3; %kg m^2
+I = [1.06933, 0,       0;...
+     0,       2.12851, 0;...
+     0,       0,       2.17389]; %kg m^2
 G = 9.80665; %m/s^2
 %<---------------------------------------------------------->
 %==========================================================================
@@ -48,6 +50,7 @@ G = 9.80665; %m/s^2
 %<---------------------------------------------------------->
 %   Body Size
 BodyLength = 0.63;
+BodyWidth = 0.235;
 BodyHeight = 0.24;
 %       Default foot position in Local robot frame
 DefaultLegLength = 0.34; %default leg length , distance from the default Leg Y to Torso (LOWER BORDER of the TORSO)
@@ -70,21 +73,24 @@ else %No morphology change (Default Half_Cheetah)
     Morpho_Percentage = 100;
     Morpho_Percentage = Morpho_Percentage/100;
 end
-%<---------------------------------------------------------->
-%   Kinematics Bounding Box Constraint
-BoundingBox_Width  = 0.5;
-BoundingBox_Height = 0.14;
-%<---------------------------------------------------------->
 
 %   Default Foot Positions
 %   Left Front (lf)
-PlfCenter = [Morpho_Percentage*(1/2*BodyLength);  -(1/2*BodyHeight + DefaultLegLength)];
+PlfCenter = [Morpho_Percentage*(1/2*BodyLength);  1/2*BodyWidth;   -(1/2*BodyHeight + DefaultLegLength)];
 %   Left Hind (lh)
-PlhCenter = [-Morpho_Percentage*(1/2*BodyLength); -(1/2*BodyHeight + DefaultLegLength)];
+PlhCenter = [-Morpho_Percentage*(1/2*BodyLength); 1/2*BodyWidth;   -(1/2*BodyHeight + DefaultLegLength)];
 %   Right Front (rf)
-PrfCenter = [Morpho_Percentage*(1/2*BodyLength);  -(1/2*BodyHeight + DefaultLegLength)];
+PrfCenter = [Morpho_Percentage*(1/2*BodyLength);  -1/2*BodyWidth;  -(1/2*BodyHeight + DefaultLegLength)];
 %   Right Hind (rh)
-PrhCenter = [-Morpho_Percentage*(1/2*BodyLength); -(1/2*BodyHeight + DefaultLegLength)];
+PrhCenter = [-Morpho_Percentage*(1/2*BodyLength); -1/2*BodyWidth;  -(1/2*BodyHeight + DefaultLegLength)];
+
+%<---------------------------------------------------------->
+%   Kinematics Bounding Box Constraint
+BoundingBox_Length  = 0.5;
+BoundingBox_Width   = 0.2;
+BoundingBox_Height  = 0.14;
+%<---------------------------------------------------------->
+
 %==========================================================================
 
 %==========================================================================
@@ -114,18 +120,24 @@ end
 
 %Other Parameters
 if TerrainType == 1 %Flat Terrain
-    TerrainNorm = [0;1];
-    TerrainTangent = [1;0];
+    TerrainNorm = [0;0;1];
+    TerrainTangentX = [1;0;0];
+    TerrainTangentY = [0;1;0];
 elseif TerrainType == 2 % if Stairs, over-write the terrain norm with 
-    TerrainNorm = [0;1];
-    TerrainNorm = [cos(terrain_slope_rad), -sin(terrain_slope_rad); sin(terrain_slope_rad), cos(terrain_slope_rad)]*TerrainNorm;
-    TerrainTangent = [1;0];
-    TerrainTangent = [cos(terrain_slope_rad),-sin(terrain_slope_rad);sin(terrain_slope_rad),cos(terrain_slope_rad)]*TerrainTangent;
+    TerrainNorm = [0;0;1];
+    TerrainTangentX = [1;0;0];
+    TerrainTangentY = [0;1;0];
+    TerrainNorm = ElementaryRotation_Y(-terrain_slope_rad)*TerrainNorm;
+    TerrainTangentX = ElementaryRotation_Y(-terrain_slope_rad)*TerrainTangentX;
+    TerrainTangentY = ElementaryRotation_Y(-terrain_slope_rad)*TerrainTangentY;
 end
 
 %Build Terrain Model
 x_query   = SX.sym('x_query', 1);
-h_terrain = terrain_slope*x_query;
+if TerrainType == 2
+    error('Terrain Plotting Function for Slope is not implemented for 3D case')
+end
+h_terrain = 0;
 TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
 
 %<---------------------------------------------------------->
@@ -178,7 +190,7 @@ tauSeriesLength = length(tauSeries);
 
 %<---------------------------------------------------------->
 %   Phase Lower Bound setup
-phase_lower_bound_portion = 10; %in Percentage
+phase_lower_bound_portion = 5; %in Percentage
 phase_lower_bound_portion = phase_lower_bound_portion/100;
 %<---------------------------------------------------------->
 
@@ -198,21 +210,25 @@ Mvel = 100;
 %<---------------------------------------------------------->
 
 %   Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame)
-Vmax = [0;0];
+Vmax = [0;0;0];
 %<---------------------------------------------------------->
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in X-axis (In Robot Frame)
 Vmax(1) = 2.5;
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Y-axis (In Robot Frame)
 Vmax(2) = 2.5;
+%       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Z-axis (In Robot Frame)
+Vmax(3) = 2.5;
 %<---------------------------------------------------------->
 
 %   Big-M/Boundaries for Foot-Ground Reaction Forces
-Mf = [0;0];
+Mf = [0;0;0];
 %<---------------------------------------------------------->
 %Big-M/Boundaries for Foot-Ground Reaction Forces along X-axis (in World Frame)
 Mf(1) = 500;
-%Big-M/Boundaries for Foot-Ground Reaction Forces along Z-axis (in WOrld Frame)
+%Big-M/Boundaries for Foot-Ground Reaction Forces along Y-axis (in World Frame)
 Mf(2) = 500;
+%Big-M/Boundaries for Foot-Ground Reaction Forces along Z-axis (in World Frame)
+Mf(3) = 500;
 %<---------------------------------------------------------->
 %==========================================================================
 
@@ -220,12 +236,12 @@ Mf(2) = 500;
 % Cost Function
 %<---------------------------------------------------------->
 %   cost_flag = 1 -> Minimize Force Squared
-%   [Not Implemented] cost_flag = 2 -> Minimize Tangential Force (Maximize Robustness)
-%   cost_flag = 3 -> Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero)
-%   [Not Implemented] cost_flag == 4 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)
-%   cost_flag = 5 -> Smooth Motion: 1)tangential speed is constant and close to the desired velocity in tangential direction 2)theta close to theta_slope 3)thetadot close to 0 normal velocity close to 0
-%   cost_flag = 6 -> Feet Velocity
-%   cost_flag = 7 -> Humanoid Smooth Motion
+%   [Not Implemented]cost_flag = 2 -> Minimize Tangential Force (Maximize Robustness)
+%   [Not Implemented]cost_flag = 3 -> Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero)
+%   [Not Implemented]cost_flag == 4 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)
+%   [Not Implemented]cost_flag = 5 -> Smooth Motion: 1)tangential speed is constant and close to the desired velocity in tangential direction 2)theta close to theta_slope 3)thetadot close to 0 normal velocity close to 0
+%   [Not Implemented]cost_flag = 6 -> Feet Velocity
+%   [Not Implemented]cost_flag = 7 -> Humanoid Smooth Motion
 cost_flag = 1;
 %<---------------------------------------------------------->
 %==========================================================================
