@@ -92,6 +92,12 @@ for speedIdx = 1:length(SpeedList)
             %----------------------------------
             h = hVector(PhaseIdx);
             %----------------------------------
+            
+            %----------------------------------
+            % Get the Orientation of the Torso (Euler Angle to Rotation Matrix)
+            %----------------------------------
+            RTheta = EulerAngle_to_RotationMatrix(phi, theta, psi, k);
+            %----------------------------------
 
             if k <= tauSeriesLength - 1
                 %----------------------------------
@@ -175,25 +181,25 @@ for speedIdx = 1:length(SpeedList)
                 %----------------------------------
                 %!! Vmax is a columbn vector
                 %    Left Front (lf)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Plfxdot,Plfzdot,xdot,zdot,theta,k,Vmax);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Plfxdot,Plfydot,Plfzdot,xdot,ydot,zdot,RTheta,k,Vmax);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
 
                 %    Left Hind (lh)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Plhxdot,Plhzdot,xdot,zdot,theta,k,Vmax);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Plhxdot,Plhydot,Plhzdot,xdot,ydot,zdot,RTheta,k,Vmax);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
 
                 %    Right Front (rf)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Prfxdot,Prfzdot,xdot,zdot,theta,k,Vmax);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Prfxdot,Prfydot,Prfzdot,xdot,ydot,zdot,RTheta,k,Vmax);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
 
                 %    Right Hind (rh)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Prhxdot,Prhzdot,xdot,zdot,theta,k,Vmax);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetVelocityRange(Prhxdot,Prhydot,Prhzdot,xdot,ydot,zdot,RTheta,k,Vmax);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
