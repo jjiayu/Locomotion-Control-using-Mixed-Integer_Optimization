@@ -209,25 +209,25 @@ for speedIdx = 1:length(SpeedList)
                 %----------------------------------
                 %!! Mf is a column vector
                 %    Left Front (lf)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Flfx,Flfz,Clf,k,PhaseIdx,terrain_slope_rad,Mf);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Flfx,Flfy,Flfz,Clf,k,PhaseIdx,terrain_slope_rad,Mf);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
 
                 %    Left Hind (lh)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Flhx,Flhz,Clh,k,PhaseIdx,terrain_slope_rad,Mf);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Flhx,Flhy,Flhz,Clh,k,PhaseIdx,terrain_slope_rad,Mf);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
 
                 %    Right Front (rf)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Frfx,Frfz,Crf,k,PhaseIdx,terrain_slope_rad,Mf);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Frfx,Frfy,Frfz,Crf,k,PhaseIdx,terrain_slope_rad,Mf);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
 
                 %    Right Hind (rh)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Frhx,Frhz,Crh,k,PhaseIdx,terrain_slope_rad,Mf);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_ForceActivation(Frhx,Frhy,Frhz,Crh,k,PhaseIdx,terrain_slope_rad,Mf);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
