@@ -104,23 +104,28 @@ for speedIdx = 1:length(SpeedList)
                 %Build Constraint for System Dynamics
                 %----------------------------------
                 % Generate Constraints
-                [g_temp,lbg_temp, ubg_temp] = Constraint_SystemDynamics(m,         Iyy,        G,...           %Inertia Info
-                                                                        x,         z,        theta,...     %Decision Variables
-                                                                        xdot,      zdot,     thetadot,...
-                                                                        Plfx,      Plfz,...
-                                                                        Plhx,      Plhz,...
-                                                                        Prfx,      Prfz,...
-                                                                        Prhx,      Prhz,...
-                                                                        Plfxdot,   Plfzdot,...
-                                                                        Plhxdot,   Plhzdot,...
-                                                                        Prfxdot,   Prfzdot,...
-                                                                        Prhxdot,   Prhzdot,...
-                                                                        Flfx,      Flfz,...
-                                                                        Flhx,      Flhz,...
-                                                                        Frfx,      Frfz,...
-                                                                        Frhx,      Frhz,...
+                [g_temp,lbg_temp, ubg_temp] = Constraint_SystemDynamics(m,         Ib,        G,...           %Inertia Info
+                                                                        x,         y,         z,...           %Linear Position
+                                                                        xdot,      ydot,      zdot,...        %Linear Velocity
+                                                                        phi,       theta,     psi,...         %Orientation
+                                                                        phidot,    thetadot,  psidot,...      %Euler Angle Rate
+                                                                        Plfx,      Plfy,      Plfz,...        %Left Front Feet Location (lf)
+                                                                        Plhx,      Plhy,      Plhz,...        %Left Hind Feet Location (lh)
+                                                                        Prfx,      Prfy,      Prfz,...        %Right Front Feet Location (rf)
+                                                                        Prhx,      Prhy,      Prhz,...        %Right Hind Feet Location (rh)
+                                                                        Plfxdot,   Plfydot,   Plfzdot,...     %Left Front Feet Velocity (lf)
+                                                                        Plhxdot,   Plhydot,   Plhzdot,...     %Left Hind Feet Velocity (lh)
+                                                                        Prfxdot,   Prfydot,   Prfzdot,...     %Right Front Feet Velocity (rf)
+                                                                        Prhxdot,   Prhydot,   Prhzdot,...     %Right Hind Feet Velocity (rh)
+                                                                        Flfx,      Flfy,      Flfz,...        %Left Front Feet Force (lf)
+                                                                        Flhx,      Flhy,      Flhz,...        %Left Hind Feet Force (lh)
+                                                                        Frfx,      Frfy,      Frfz,...        %Right Front Feet Force (rf)
+                                                                        Frhx,      Frhy,      Frhz,...        %Right Hind Feet Force (rh)
                                                                         h,...                             %No Switching time vector, instead put Time Steps
-                                                                        k);                                %Knot Number
+                                                                        RTheta,...                        %Rotated Matrix Converted from Euler Angles
+                                                                        k)                                %Knot Number
+
+                                                                    
                 % Add to the constraint container
                 g   = {g{:},g_temp{:}};
                 lbg = [lbg; lbg_temp];
@@ -286,25 +291,25 @@ for speedIdx = 1:length(SpeedList)
             %   Kinematics Constraint
             %----------------------------------
             %    Left Front (lf)
-            [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Plfx,Plfz,x,z,theta,k,PlfCenter,BoundingBox_Width,BoundingBox_Height);
+            [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Plfx,Plfy,Plfz,x,y,z,RTheta,k,PlfCenter,BoundingBox_Length,BoundingBox_Width,BoundingBox_Height);
             g   = {g{:},g_temp{:}}; %Add to constraint container
             lbg = [lbg; lbg_temp];
             ubg = [ubg; ubg_temp];                                   
 
             %    Left Hind (lh)
-            [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Plhx,Plhz,x,z,theta,k,PlhCenter,BoundingBox_Width,BoundingBox_Height);
+            [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Plhx,Plhy,Plhz,x,y,z,RTheta,k,PlhCenter,BoundingBox_Length,BoundingBox_Width,BoundingBox_Height);
             g   = {g{:},g_temp{:}}; %Add to constraint container
             lbg = [lbg; lbg_temp];
             ubg = [ubg; ubg_temp];
 
             %    Right Front (rf)
-            [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Prfx,Prfz,x,z,theta,k,PrfCenter,BoundingBox_Width,BoundingBox_Height);
+            [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Prfx,Prfy,Prfz,x,y,z,RTheta,k,PrfCenter,BoundingBox_Length,BoundingBox_Width,BoundingBox_Height);
             g   = {g{:},g_temp{:}}; %Add to constraint container
             lbg = [lbg; lbg_temp];
             ubg = [ubg; ubg_temp]; 
 
             %    Right Hind (rh)
-            [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Prhx,Prhz,x,z,theta,k,PrhCenter,BoundingBox_Width,BoundingBox_Height);
+            [g_temp,lbg_temp, ubg_temp] = Constraint_Kinematics(Prhx,Prhy,Prhz,x,y,z,RTheta,k,PrhCenter,BoundingBox_Length,BoundingBox_Width,BoundingBox_Height);
             g   = {g{:},g_temp{:}}; %Add to constraint container
             lbg = [lbg; lbg_temp];
             ubg = [ubg; ubg_temp]; 

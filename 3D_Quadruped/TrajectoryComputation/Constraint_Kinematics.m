@@ -1,14 +1,14 @@
-function [g, lbg, ubg] = Constraint_Kinematics(Px,Pz,x,z,theta,k,PCenter,bw,bh)
+function [g, lbg, ubg] = Constraint_Kinematics(Px,Py,Pz,x,y,z,RTheta,k,PCenter,bl,bw,bh)
 %CONSTRAINT_KINEMATICS Kinematics Constraint
 
     g = {};
     lbg = [];
     ubg = [];
     
-    Eqtemp = [cos(theta(k)), sin(theta(k)); -sin(theta(k)), cos(theta(k))]*([Px(k);Pz(k)] - [x(k);z(k)]) - PCenter;
-    g = {g{:}, Eqtemp(1), Eqtemp(2)};
-    lbg = [lbg; -bw/2; -bh/2];
-    ubg = [ubg;  bw/2;  bh/2];
+    Eqtemp = RTheta'*([Px(k);Py(k);Pz(k)] - [x(k);y(k);z(k)]) - PCenter; %Transpose of the Rotation Matrix because we want quantities in robot frame
+    g = {g{:}, Eqtemp(1), Eqtemp(2), Eqtemp(3)};
+    lbg = [lbg; -bl/2; -bw/2; -bh/2];
+    ubg = [ubg;  bl/2;  bw/2;  bh/2];
 
 end
 
