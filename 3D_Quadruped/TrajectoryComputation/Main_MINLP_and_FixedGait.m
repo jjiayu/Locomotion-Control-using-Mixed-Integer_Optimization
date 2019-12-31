@@ -104,7 +104,7 @@ for speedIdx = 1:length(SpeedList)
                 %Build Constraint for System Dynamics
                 %----------------------------------
                 % Generate Constraints
-                [g_temp,lbg_temp, ubg_temp] = Constraint_SystemDynamics(m,         Ib,        G,...           %Inertia Info
+                [g_temp,lbg_temp, ubg_temp] = Constraint_SystemDynamics(m,         I,        G,...           %Inertia Info
                                                                         x,         y,         z,...           %Linear Position
                                                                         xdot,      ydot,      zdot,...        %Linear Velocity
                                                                         phi,       theta,     psi,...         %Orientation

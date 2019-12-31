@@ -1,0 +1,67 @@
+====================================================
+Gait Search for 4Phases Motion(10Knots per Phase), Locomotion Speed 1 m/s Round 1
+Experiment Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/test
+Exp Start Time: 20191231T182625
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Decision Variable List Built Successfully
+====================================================
+ 
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.SparsityInterfaceCommon/mtimes', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/SparsityInterfaceCommon.m', 176)" style="font-weight:bold"> * </a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/SparsityInterfaceCommon.m',176,0)">line 176</a>)
+.../casadi/core/sparsity.cpp:409: Assertion "x.size2()==y.size1()" failed:
+Matrix product with incompatible dimensions. Lhs is 1x9 and rhs is 3x1.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Constraint_SystemDynamics', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Constraint_SystemDynamics.m', 137)" style="font-weight:bold">Constraint_SystemDynamics</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Constraint_SystemDynamics.m',137,0)">line 137</a>)
+    omega_k = C_k*Thetadot_k;
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 107)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',107,0)">line 107</a>)
+                [g_temp,lbg_temp, ubg_temp] = Constraint_SystemDynamics(m,         I,        G,...           %Inertia Info
+} 
+opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Constraint_SystemDynamics.m',137,0)
+    Cdot_k = [-sin(theta(k))*cos(psi(k))*thetadot(k)-cos(theta(k))*sin(psi(k))*psidot(k),  -cos(psi(k))*psidot(k),   0;...
+            -sin(theta(k))*sin(psi(k))*thetadot(k)+cos(theta(k))*cos(psi(k))*psidot(k),  -sin(psi(k))*psidot(k),   0;...
+                                     -cos(theta(k))*thetadot(k),                              0,                   0]; 
+Cdot_k
+
+Cdot_k = 
+
+@1=0, 
+[[(-(((sin(theta_0)*cos(psi_0))*thetadot_0)+((cos(theta_0)*sin(psi_0))*psidot_0))), (-(cos(psi_0)*psidot_0)), @1], 
+ [(((cos(theta_0)*cos(psi_0))*psidot_0)-((sin(theta_0)*sin(psi_0))*thetadot_0)), (-(sin(psi_0)*psidot_0)), @1], 
+ [(-(cos(theta_0)*thetadot_0)), @1, @1]]
+size(Cdot_k)
+
+ans =
+
+     3     3
+
+Thetadot_k
+{Undefined function or variable 'Thetadot_k'.
+} 
+Thetadot_k      = [phidot(k);  thetadot(k);  psidot(k)]; %Euler Angle Rate -> The current time step k
+Thetadot_k
+
+Thetadot_k = 
+
+[phidot_0, thetadot_0, psidot_0]
+size(Thetadot_k)
+
+ans =
+
+     3     1
+
+Cdot_k*Thetadot_k
+
+ans = 
+
+[(-(((((sin(theta_0)*cos(psi_0))*thetadot_0)+((cos(theta_0)*sin(psi_0))*psidot_0))*phidot_0)+((cos(psi_0)*psidot_0)*thetadot_0))), (((((cos(theta_0)*cos(psi_0))*psidot_0)-((sin(theta_0)*sin(psi_0))*thetadot_0))*phidot_0)-((sin(psi_0)*psidot_0)*thetadot_0)), (-((cos(theta_0)*thetadot_0)*phidot_0))]
+length(ans)
+
+ans =
+
+     3
+
+opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Constraint_SystemDynamics.m',137,0)
+Main_MINLP_and_FixedGait

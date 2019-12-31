@@ -287,7 +287,7 @@ VarCategoryList = ["x",         "y",         "z",... Linear Position
                    "Plfx",      "Plfy",      "Plfz",...Left Front (lf) Feet Location
                    "Plhx",      "Plhy",      "Plhz",...Left Hind (lh) Feet Location
                    "Prfx",      "Prfy",      "Prfz",...Right Front (rf) Feet Location
-                   "Prhx",      "Prhy",      "Prhy",...Right Hind (rh) Feet Location
+                   "Prhx",      "Prhy",      "Prhz",...Right Hind (rh) Feet Location
                    "Plfxdot",   "Plfydot",   "Plfzdot",...Left Front (lf) Feet Velocity
                    "Plhxdot",   "Plhydot",   "Plhzdot"...Left Hind (lh) Feet Velocity
                    "Prfxdot",   "Prfydot",   "Prfzdot",...Right Front (rf) Feet Velocity

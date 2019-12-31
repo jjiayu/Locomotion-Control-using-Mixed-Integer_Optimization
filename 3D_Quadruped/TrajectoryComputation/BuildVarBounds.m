@@ -76,7 +76,7 @@ ub_psi = repmat( pi, 1, VarLengthList(VarCategoryList == "psi"));
 
 %       phi dot
 lb_phidot = repmat(-5*pi, 1, VarLengthList(VarCategoryList == "phidot"));    
-ub_phidpt = repmat( 5*pi, 1, VarLengthList(VarCategoryList == "phidot"));
+ub_phidot = repmat( 5*pi, 1, VarLengthList(VarCategoryList == "phidot"));
 
 %       theta dot
 lb_thetadot = repmat(-5*pi, 1, VarLengthList(VarCategoryList == "thetadot"));    
@@ -84,7 +84,7 @@ ub_thetadot = repmat( 5*pi, 1, VarLengthList(VarCategoryList == "thetadot"));
 
 %       psi dot
 lb_psidot = repmat(-5*pi, 1, VarLengthList(VarCategoryList == "psidot"));    
-ub_psidpt = repmat( 5*pi, 1, VarLengthList(VarCategoryList == "psidot"));
+ub_psidot = repmat( 5*pi, 1, VarLengthList(VarCategoryList == "psidot"));
 
 %       Plfx
 lb_Plfx = lb_x + repmat(-5*BoundingBox_Length, 1, VarLengthList(VarCategoryList == "Plfx"));  

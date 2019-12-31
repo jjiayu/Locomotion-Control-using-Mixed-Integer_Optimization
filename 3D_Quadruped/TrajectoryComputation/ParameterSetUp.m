@@ -180,7 +180,7 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     %m = 45; %kg
     %I = 2.1; %kg m^2 Izz
     m = input('Input Body Mass (i.e. 21) (kg): \n');
-    Iyy = input('Input Body Inertia Tensor (i.e. diagonal matrix 3x3): \n');  
+    I = input('Input Body Inertia Tensor (i.e. diagonal matrix 3x3): \n');  
     G = 9.80665; %m/s^2
 end
 
@@ -329,7 +329,9 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
     %   Plot Terrain Model
     PlotTerrainFlag = input('Plot the Terrain Model? 1 -> Yes; 2 -> No\n');
     if PlotTerrainFlag == 1 %Yes, Plot the terrain model    
-        error('Terrain Plotting Function is not implemented for 3D case')
+        if TerrainType == 2
+            error('Terrain Plotting Function for Slope is not implemented for 3D case')
+        end
         terrainx = linspace(-2, 10, 1e4);
         terrainy = full(TerrainModel(terrainx));
         plot(terrainx,terrainy,'LineWidth',2)
