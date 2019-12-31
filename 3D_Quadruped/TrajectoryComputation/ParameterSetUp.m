@@ -145,9 +145,9 @@ end
 disp('====================================================');
 disp('CasADi Implementation');
 if gait_discovery_switch == 1
-    disp('2D Quadruped Gait Discovery using Mixed-integer Nonlinear Optimization');
+    disp('*3D* Quadruped Gait Discovery using Mixed-integer Nonlinear Optimization');
 elseif gait_discovery_switch ==2
-    disp('2D Quadruped Motion Optimization using Fixed Gait');
+    disp('*3D* Quadruped Motion Optimization using Fixed Gait');
 end
 disp('With a Particular Emphasis on Periodical Motions');
 disp('Multi-Phase Formulation:');
@@ -170,17 +170,17 @@ disp(' ');
 %   Inertial Parameters
 %--------------------------------------------------------------------------
 disp('====================================================');
-disp(['Inertial Parameters'])
+disp(['Inertial Parameters']);
 disp('====================================================');
 if Paras_Define_Method == 1 %Parameters Load from File
     disp(['mass: ',num2str(m),'(kg)']);
-    disp(['y-axis Inertial - Iyy: ',num2str(Iyy), '(kg m^2)']);
+    disp(['Inertia tensor: ',num2str(I)]);
     disp(['Gravaty: ',num2str(G), 'm/s']);
 elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     %m = 45; %kg
     %I = 2.1; %kg m^2 Izz
     m = input('Input Body Mass (i.e. 21) (kg): \n');
-    Iyy = input('Input Body Inertia (i.e. 2.3): \n');  
+    Iyy = input('Input Body Inertia Tensor (i.e. diagonal matrix 3x3): \n');  
     G = 9.80665; %m/s^2
 end
 
@@ -195,12 +195,13 @@ if Paras_Define_Method == 1 %Load Parameters from File
     disp('Body Size')
     disp('----------------------------------------------------');
     disp(['Body Length: ',num2str(BodyLength),' (m)']);
+    disp(['Body Width: ', num2str(BodyWidth), ' (m)']);
     disp(['Body Height: ',num2str(BodyHeight),' (m)']);
     disp('----------------------------------------------------');
     disp(['Default Limb Length:', num2str(DefaultLegLength)]);
     disp('----------------------------------------------------');
     disp('Morphology Set up:')
-    if Morpho_change_flag == 1 %Allow Morphology Change
+    if Morpho_change_flag == 1 %Allow Morphology Change, only along local x-axis
         if Morpho_Percentage == 0
             disp(['Use A Humanoid Model; Morphology Percentage = ', num2str(Morpho_Percentage*100),'%']);
         else
@@ -210,12 +211,14 @@ if Paras_Define_Method == 1 %Load Parameters from File
     disp('----------------------------------------------------');
     disp('Robot Kinematics Bounding Box')
     disp('----------------------------------------------------');
-    disp(['Bounding Box Width: ',num2str(BoundingBox_Width),' (m)']);
+    disp(['Bounding Box Length: ',num2str(BoundingBox_Length),' (m)']);
+    disp(['Bounding Box Width: ', num2str(BoundingBox_Width), ' (m)']);
     disp(['Bounding Box Height: ',num2str(BoundingBox_Height),' (m)']);
     disp('----------------------------------------------------');
 elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     %       Body Size
     BodyLength = input('Input Body Length (i.e. 0.6): \n');
+    BodyWidth  = input('Input Body Width (i.e. 0.2): \n');
     BodyHeight = input('Input Body Height (i.e. 0.2): \n');
     %       Default foot position in Local robot frame
     DefaultLegLength = input('Input Default Leg Length (i.e. 0.45): \n');
@@ -239,19 +242,21 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     Morpho_Percentage
     
     %   Left Front (lf)
-    PlfCenter = [Morpho_Percentage*(1/2*BodyLength);  -(1/2*BodyHeight + DefaultLegLength)];
+    PlfCenter = [Morpho_Percentage*(1/2*BodyLength);  1/2*BodyWidth;   -(1/2*BodyHeight + DefaultLegLength)];
     %   Left Hind (lh)
-    PlhCenter = [-Morpho_Percentage*(1/2*BodyLength); -(1/2*BodyHeight + DefaultLegLength)];
+    PlhCenter = [-Morpho_Percentage*(1/2*BodyLength); 1/2*BodyWidth;   -(1/2*BodyHeight + DefaultLegLength)];
     %   Right Front (rf)
-    PrfCenter = [Morpho_Percentage*(1/2*BodyLength);  -(1/2*BodyHeight + DefaultLegLength)];
+    PrfCenter = [Morpho_Percentage*(1/2*BodyLength);  -1/2*BodyWidth;  -(1/2*BodyHeight + DefaultLegLength)];
     %   Right Hind (rh)
-    PrhCenter = [-Morpho_Percentage*(1/2*BodyLength); -(1/2*BodyHeight + DefaultLegLength)];
+    PrhCenter = [-Morpho_Percentage*(1/2*BodyLength); -1/2*BodyWidth;  -(1/2*BodyHeight + DefaultLegLength)];
     
     %       Kinematics Bounding Box Constraint
     disp('====================================================');
     disp('Setup Bounding Box for Feet Reachability: ')
     disp('----------------------------------------------------');
-    BoundingBox_Width  = input('Define Kinematics Bounding Box Width (i.e. 0.4, 0.6):\n');
+    BoundingBox_Length  = input('Define Kinematics Bounding Box Length (i.e. 0.4, 0.6):\n');
+    disp('----------------------------------------------------');
+    BoundingBox_Width  = input('Define Kinematics Bounding Box Width (i.e. 0.1):\n');
     disp('----------------------------------------------------');
     BoundingBox_Height = input('Define Kinematics Bounding Box Hiehgt (i.e. 0.2, 0.25, 0.3):\n');
     disp('----------------------------------------------------');
@@ -272,8 +277,10 @@ if Paras_Define_Method == 1 %Load Parameters from File
     disp('Terrain Norm is: ');
     TerrainNorm
     %TerrainTangent = [cos(terrain_slope_rad),-sin(terrain_slope_rad);sin(terrain_slope_rad),cos(terrain_slope_rad)]*[1;0];
-    disp('Terrain Tangent is: ');
-    TerrainTangent
+    disp('Terrain Tangent along Environment X-axis is: ');
+    TerrainTangentX
+    disp('Terrain Tangent along Environment Y-axis is: ');
+    TerrainTangentY
     disp('----------------------------------------------------');
     disp('----------------------------------------------------');
     disp(['Friction Cone: ', num2str(miu)]);
@@ -312,12 +319,17 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
 
     %Build Terrain Model
     x_query   = SX.sym('x_query', 1);
-    h_terrain = terrain_slope*x_query;
+    if TerrainType == 2 %Slope
+        error('Terrain Height Function is not implemented for 3D Slope')
+    end
+    %h_terrain = terrain_slope*x_query;
+    h_terrain = 0;
     TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
     %-----------------------------------------------------------------------
     %   Plot Terrain Model
     PlotTerrainFlag = input('Plot the Terrain Model? 1 -> Yes; 2 -> No\n');
     if PlotTerrainFlag == 1 %Yes, Plot the terrain model    
+        error('Terrain Plotting Function is not implemented for 3D case')
         terrainx = linspace(-2, 10, 1e4);
         terrainy = full(TerrainModel(terrainx));
         plot(terrainx,terrainy,'LineWidth',2)
@@ -327,17 +339,19 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
     %-----------------------------------------------------------------------
     %Other Parameters
     % For Flat Terrain
-    TerrainNorm = [0;1];
-    TerrainTangent = [1;0];
-    % Rotate Terrain Tangent and Terrain Norm
-    TerrainNorm = [0;1];
-    TerrainNorm = [cos(terrain_slope_rad), -sin(terrain_slope_rad); sin(terrain_slope_rad), cos(terrain_slope_rad)]*TerrainNorm;
-    TerrainTangent = [1;0];
-    TerrainTangent = [cos(terrain_slope_rad),-sin(terrain_slope_rad);sin(terrain_slope_rad),cos(terrain_slope_rad)]*TerrainTangent;
+    TerrainNorm = [0;0;1];
+    TerrainTangentX = [1;0;0];
+    TerrainTangentY = [0;1;0];
+    % Rotate Terrain Tangent and Terrain Norm with respect to slopes
+    TerrainNorm = ElementaryRotation_Y(-terrain_slope_rad)*TerrainNorm;
+    TerrainTangentX = ElementaryRotation_Y(-terrain_slope_rad)*TerrainTangentX;
+    TerrainTangentY = ElementaryRotation_Y(-terrain_slope_rad)*TerrainTangentY;
     disp('Terrain Norm is: ');
     TerrainNorm
-    disp('Terrain Tangent is: ');
-    TerrainTangent
+    disp('Terrain Tangent along Environment X-axis is: ');
+    TerrainTangentX
+    disp('Terrain Tangent along Environment Y-axis is: ');
+    TerrainTangentY
     disp('----------------------------------------------------');
     miu = 0.6; %friction coefficient
     disp('----------------------------------------------------');
@@ -357,9 +371,9 @@ if Paras_Define_Method == 1 % Parameter Loaded from File
     %   Specify Desired Speed
     %----------------------------------------------------------------------
     if SpeedDirection == 1
-        disp('Desired Velocity Direction along Horizontal Axis');        
+        disp('Desired Velocity Direction along Horizontal x-Axis');        
     elseif SpeedDirection == 2
-        disp('Desired Velocity Direction along Tangential Axis of the Terrain'); 
+        disp('Desired Velocity Direction along Tangential x-Axis of the Terrain'); 
     end
     disp(['Minimal Speed in Parameter File: ',num2str(MinSpeed)]);
     disp(['Maximum Speed in Parameter File: ',num2str(MaxSpeed)]);
@@ -367,7 +381,7 @@ if Paras_Define_Method == 1 % Parameter Loaded from File
     
     ChangSpeedFlag = input('Decide if we want to change the desired speed: 1-> Yes 2->No \n');
     if ChangSpeedFlag ==1
-        SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope\n');
+        SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal x-axis2-> Tangential x-axis to the Slope\n');
         MinSpeed = input('Specify the MINIMUM Desired Speed along the Desired Direction (m/s): \n');
         disp('----------------------------------------------------');
         MaxSpeed = input('Specify the MAXIMUM Desired Speed along the Desired Direction (m/s): \n');
@@ -392,7 +406,7 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
     %----------------------------------------------------------------------
     %   Specify Desired Speed
     %----------------------------------------------------------------------
-    SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal 2-> Tangential to the Slope \n');
+    SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal x-axis 2-> Tangential x-axis to the Slope \n');
     MinSpeed = input('Specify the MINIMUM Desired Speed along the Desired Direction (m/s): \n');
     disp('----------------------------------------------------');
     MaxSpeed = input('Specify the MAXIMUM Desired Speed along Desired Direction (m/s): \n');
@@ -496,15 +510,17 @@ disp('====================================================');
 disp('Big-M Setup/Limits of Feet Velocity and Forces')
 disp('====================================================');
 if Paras_Define_Method == 1 %Take fro file
-    disp(['Big-M for Foot/End-Effector Velocities: ', num2str(Mvel)]);
+    disp(['Big-M for Foot/End-Effector Velocities (a single value): ', num2str(Mvel)]);
     disp('----------------------------------------------------');
     disp(['Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame): ',num2str(Vmax(1))]);
-    disp(['Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in Z-axis (In Robot Frame): ',num2str(Vmax(2))]);
+    disp(['Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in Y-axis (In Robot Frame): ',num2str(Vmax(2))]);
+    disp(['Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in Z-axis (In Robot Frame): ',num2str(Vmax(3))]);
     disp('----------------------------------------------------');
     disp('Big-M for Contact Forces');
     disp('----------------------------------------------------');
     disp(['Big-M for Foot/End-Effector Forces in X-axis: ',num2str(Mf(1))]);
-    disp(['Big-M for Foot/End-Effector Forces in Z-axis: ',num2str(Mf(2))]);
+    disp(['Big-M for Foot/End-Effector Forces in Y-axis: ',num2str(Mf(2))]);
+    disp(['Big-M for Foot/End-Effector Forces in Z-axis: ',num2str(Mf(3))]);
     disp('====================================================');
 elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     disp('====================================================');
@@ -520,15 +536,16 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     %   Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame)
     disp('Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame')
     disp('----------------------------------------------------');
-    Vmax = [0;0];
+    Vmax = [0;0;0];
     Vmax(1) = input('Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in X-axis (In Robot Frame): \n');
-    Vmax(2) = input('Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Z-axis (In Robot Frame): \n');
+    Vmax(2) = input('Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Y-axis (In Robot Frame): \n');
+    Vmax(3) = input('Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Z-axis (In Robot Frame): \n');
     disp('----------------------------------------------------');
     disp('Big-M for Contact Forces')
-    Mf = [0;0];
+    Mf = [0;0;0];
     Mf(1) = input('Input Big-M/Boundaries for Foot-Ground Reaction Forces along X-axis (in World Frame) (e.g. 200,300,1000,1e5):\n');
-    disp('----------------------------------------------------');
-    Mf(2) = input('Input Big-M/Boundaries for Foot-Ground Reaction Forces along Z-axis (in WOrld Frame) (e.g. 200,300,1000,1e5):\n');
+    Mf(2) = input('Input Big-M/Boundaries for Foot-Ground Reaction Forces along Y-axis (in WOrld Frame) (e.g. 200,300,1000,1e5):\n');
+    Mf(3) = input('Input Big-M/Boundaries for Foot-Ground Reaction Forces along Z-axis (in WOrld Frame) (e.g. 200,300,1000,1e5):\n');
     disp('====================================================');
 end
 
@@ -546,12 +563,14 @@ if Paras_Define_Method == 1 %Load Parameters from File
         error('Not Implemented')
         %disp('2-> Minimize Tangential Force (Maximize Robustness)');
     elseif cost_flag == 3
-        disp('3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero)');
+        error('Not Implemented, need adaptation')
+        %disp('3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero)');
     elseif cost_flag == 4
         error('Not Implemented')
         %disp('4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)');
     elseif cost_flag == 5
-        disp('5-> Smooth Motion: \ntangential speed is constant and close to the desired velocity in tangential direction \ntheta close to theta_slope \nthetadot close to 0 normal velocity close to 0)')
+        error('Not Implemented, need adaptation')
+        %disp('5-> Smooth Motion: \ntangential speed is constant and close to the desired velocity in tangential direction \ntheta close to theta_slope \nthetadot close to 0 normal velocity close to 0)')
     elseif cost_flag == 6
         error('Not Implemented')
         %disp('6-> Feet Velocity');
@@ -564,7 +583,7 @@ elseif Paras_Define_Method == 2 %Manually Define Variables
     disp('====================================================');
     disp('Set up Cost Terms:')
     disp('----------------------------------------------------');
-    cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n [Not Implemented] 2-> Minimize Tangential Force (Maximize Robustness) \n 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero) \n [Not Implemented] 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n 5-> Smooth Motion (tangential speed is constant and close to the desired velocity in tangential direction \ntheta close to theta_slope \nthetadot close to 0 normal velocity close to 0)\n [Not Implemented] 6-> Feet Velocity \n [Not Implemented] 7-> Humanoid Smooth Motion (theta, thetadot towards zero) \n');
+    cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n [Not Implemented] 2-> Minimize Tangential Force (Maximize Robustness) \n [Not Implemented] 3-> Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero) \n [Not Implemented] 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n [Not Implemented] 5-> Smooth Motion (tangential speed is constant and close to the desired velocity in tangential direction \ntheta close to theta_slope \nthetadot close to 0 normal velocity close to 0)\n [Not Implemented] 6-> Feet Velocity \n [Not Implemented] 7-> Humanoid Smooth Motion (theta, thetadot towards zero) \n');
     disp('====================================================');
 end
 
