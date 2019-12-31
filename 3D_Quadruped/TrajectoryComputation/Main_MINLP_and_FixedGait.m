@@ -123,7 +123,7 @@ for speedIdx = 1:length(SpeedList)
                                                                         Frhx,      Frhy,      Frhz,...        %Right Hind Feet Force (rh)
                                                                         h,...                             %No Switching time vector, instead put Time Steps
                                                                         RTheta,...                        %Rotated Matrix Converted from Euler Angles
-                                                                        k)                                %Knot Number
+                                                                        k);                               %Knot Number
 
                                                                     
                 % Add to the constraint container
@@ -328,12 +328,14 @@ for speedIdx = 1:length(SpeedList)
         %----------------------------------
         %   Task and Peiodicity Constraint
         %----------------------------------
-        [g_temp,lbg_temp, ubg_temp] = Constraint_Task_and_Periodicity(x,         z,        theta,...     %Decision Variables
-                                                                      xdot,      zdot,     thetadot,...
-                                                                      Plfx,      Plfz,...
-                                                                      Plhx,      Plhz,...
-                                                                      Prfx,      Prfz,...
-                                                                      Prhx,      Prhz,...
+        [g_temp,lbg_temp, ubg_temp] = Constraint_Task_and_Periodicity(x,         y,         z,...           %Linear Position
+                                                                      xdot,      ydot,      zdot,...        %Linear Velocity
+                                                                      phi,       theta,     psi,...         %Orientation
+                                                                      phidot,    thetadot,  psidot,...      %Euler Angle Rate
+                                                                      Plfx,      Plfy,      Plfz,...        %Left Front Feet Location (lf)
+                                                                      Plhx,      Plhy,      Plhz,...        %Left Hind Feet Location (lh)
+                                                                      Prfx,      Prfy,      Prfz,...        %Right Front Feet Location (rf)
+                                                                      Prhx,      Prhy,      Prhz,...        %Right Hind Feet Location (rh)
                                                                       Clf,...
                                                                       Clh,...
                                                                       Crf,...
@@ -366,32 +368,34 @@ for speedIdx = 1:length(SpeedList)
             %----------------------------------
 
             if cost_flag == 1 %Minimize Force Squared (Energy Loss)
-                J = J + h*(Flfx(k)^2) + h*(Flfz(k)^2) + ... Left Front (lf)
-                        h*(Flhx(k)^2) + h*(Flhz(k)^2) + ... Left Hind (lh)
-                        h*(Frfx(k)^2) + h*(Frfz(k)^2) + ... Right Front (rf)
-                        h*(Frhx(k)^2) + h*(Frhz(k)^2);     %Right Hind (rh)
+                J = J + h*(Flfx(k)^2) + h*(Flfy(k)^2) + h*(Flfz(k)^2) +... Left Front (lf)
+                        h*(Flhx(k)^2) + h*(Flhy(k)^2) + h*(Flhz(k)^2) +... Left Hind (lh)
+                        h*(Frfx(k)^2) + h*(Frfy(k)^2) + h*(Frfz(k)^2) +... Right Front (rf)
+                        h*(Frhx(k)^2) + h*(Frhy(k)^2) + h*(Frhz(k)^2);     %Right Hind (rh)
             elseif cost_flag == 2 %Minimize Tangential Force (Maximize Robustness)
                 error('No.2 Cost Not Implemented');
             elseif cost_flag == 3 %Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero)
+                error('No.3 Cost Need Adaptations')
                 % Time Integral and Scaled
-                J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
-                        h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
-                        h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
+%                 J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
+%                         h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
+%                         h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
             elseif cost_flag == 4 %5 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)
                 error('No.4 Cost is Redundant');
             elseif cost_flag == 5 %Minimize Vibration (Cost 3) with Constant Tangential Velocity (at Every Knot)
-                % Add Constant Tangential Velocity (at Every Knot) Term -> Depends on which direction the desired speed is defined
-                if SpeedDirection == 1 %speed is defind along horizontal direction
-                    %A simpler form
-                    %J = J + h*(((xdot(k)-speed)*Scale_Factor)^2)
-                    J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2);
-                elseif SpeedDirection == 2 %speed is defined along tangential direction
-                    J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed)*Scale_Factor)^2);
-                end
-                % Build Cost First -> Time Integral and Scaled
-                J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
-                        h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
-                        h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
+                error('No.3 Cost Need Adaptations')
+%               % Add Constant Tangential Velocity (at Every Knot) Term -> Depends on which direction the desired speed is defined
+%                 if SpeedDirection == 1 %speed is defind along horizontal direction
+%                     %A simpler form
+%                     %J = J + h*(((xdot(k)-speed)*Scale_Factor)^2)
+%                     J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2);
+%                 elseif SpeedDirection == 2 %speed is defined along tangential direction
+%                     J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed)*Scale_Factor)^2);
+%                 end
+%                 % Build Cost First -> Time Integral and Scaled
+%                 J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
+%                         h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
+%                         h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
             elseif cost_flag == 6 %Feet Velocity (Pending)
                 error('No.6 Cost is not implemented')
             end
