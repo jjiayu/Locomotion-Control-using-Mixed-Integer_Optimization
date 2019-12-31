@@ -260,22 +260,22 @@ for speedIdx = 1:length(SpeedList)
                 %   Friction Cone
                 %----------------------------------
                 %    Left Front (lf)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Flfx,Flfz,k,TerrainTangent,TerrainNorm,miu);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Flfx,Flfy,Flfz,k,TerrainTangentX,TerrainTangentY,TerrainNorm,miu);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
                 %    Left Hind (lh)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Flhx,Flhz,k,TerrainTangent,TerrainNorm,miu);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Flhx,Flhy,Flhz,k,TerrainTangentX,TerrainTangentY,TerrainNorm,miu);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
                 %    Right Front (rf)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Frfx,Frfz,k,TerrainTangent,TerrainNorm,miu);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Frfx,Frfy,Frfz,k,TerrainTangentX,TerrainTangentY,TerrainNorm,miu);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
                 %    Right Hind (rh)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Frhx,Frhz,k,TerrainTangent,TerrainNorm,miu);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FrictionCone(Frhx,Frhy,Frhz,k,TerrainTangentX,TerrainTangentY,TerrainNorm,miu);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];

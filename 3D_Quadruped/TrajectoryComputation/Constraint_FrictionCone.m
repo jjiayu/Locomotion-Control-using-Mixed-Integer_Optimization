@@ -6,16 +6,26 @@ function [g, lbg, ubg] = Constraint_FrictionCone(Fx,Fy,Fz,k,TerrainTangentX,Terr
     lbg = [];
     ubg = [];
     
-    %Group 1: Tangential x-axis along the terrain
-    
-    %Set 1:
-    Eqtemp = [Fx(k),Fy(k),Fz(k)]*TerrainTangent - miu*[Fx(k),Fy(k),Fz(k)]*TerrainNorm;
+    %Group 1: Tangential X-axis along the terrain
+    %   Set 1:
+    Eqtemp = [Fx(k),Fy(k),Fz(k)]*TerrainTangentX - miu*[Fx(k),Fy(k),Fz(k)]*TerrainNorm;
     g   = {g{:}, Eqtemp};
     lbg = [lbg;  -inf];
     ubg = [ubg;  0];
+    %   Set 2:
+    Eqtemp = [Fx(k),Fy(k),Fz(k)]*TerrainTangentX + miu*[Fx(k),Fy(k),Fz(k)]*TerrainNorm;
+    g   = {g{:}, Eqtemp};
+    lbg = [lbg;  0];
+    ubg = [ubg;  inf];
     
-    %Set 2:
-    Eqtemp = [Fx(k),Fz(k)]*TerrainTangent + miu*[Fx(k),Fz(k)]*TerrainNorm;
+    %Group 2: Tangential Y-axis along the terrain
+    %   Set 1:
+    Eqtemp = [Fx(k),Fy(k),Fz(k)]*TerrainTangentY - miu*[Fx(k),Fy(k),Fz(k)]*TerrainNorm;
+    g   = {g{:}, Eqtemp};
+    lbg = [lbg;  -inf];
+    ubg = [ubg;  0];
+    %   Set 2:
+    Eqtemp = [Fx(k),Fy(k),Fz(k)]*TerrainTangentY + miu*[Fx(k),Fy(k),Fz(k)]*TerrainNorm;
     g   = {g{:}, Eqtemp};
     lbg = [lbg;  0];
     ubg = [ubg;  inf];
