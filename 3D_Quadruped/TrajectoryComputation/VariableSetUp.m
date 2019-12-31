@@ -52,24 +52,24 @@ zdot = SX.sym('zdot', tauSeriesLength);
 %       elementary rotations, but not important when we place them in a
 %       vector
 
-% phi: roll
+% roll
 phi   = SX.sym('phi', tauSeriesLength);
 
-% theta: pitch
+% pitch
 theta = SX.sym('theta', tauSeriesLength);
 
-% psi: yaw
+% yaw
 psi   = SX.sym('psi', tauSeriesLength);
 
 %   Euler Angle Rates
 
-% phidot: roll dot
+% roll dot
 phidot   = SX.sym('phidot', tauSeriesLength);
 
-% thetadot: pitch dot
+% pitch dot
 thetadot = SX.sym('thetadot', tauSeriesLength);
 
-% yawdot: yaw dot
+% yaw dot
 psidot   = SX.sym('psidot', tauSeriesLength);
 
 %--------------------------------------------------------------------------
@@ -299,37 +299,41 @@ VarCategoryList = ["x",         "y",         "z",... Linear Position
                    "Ts"];
 %-------------
 %   varLengthList -> List of lengths of each quantity
-VarLengthList = [length(x_label),       length(z_label),        length(theta_label),...
-                 length(xdot_label),    length(zdot_label),     length(thetadot_label),...
-                 length(Plfx_label),    length(Plfz_label),...
-                 length(Plhx_label),    length(Plhz_label),...
-                 length(Prfx_label),    length(Prfz_label),...
-                 length(Prhx_label),    length(Prhz_label),...
-                 length(Plfxdot_label), length(Plfzdot_label),...
-                 length(Plhxdot_label), length(Plhzdot_label),...
-                 length(Prfxdot_label), length(Prfzdot_label),...
-                 length(Prhxdot_label), length(Prhzdot_label),...
-                 length(Flfx_label),    length(Flfz_label),...
-                 length(Flhx_label),    length(Flhz_label),...
-                 length(Frfx_label),    length(Frfz_label),...
-                 length(Frhx_label),    length(Frhz_label),...
+VarLengthList = [length(x_label),       length(y_label),        length(z_label),...Linear Position
+                 length(xdot_label),    length(ydot_label),     length(zdot_label),...Linear Velocity
+                 length(phi_label),     length(theta_label),    length(psi_label),...Orientation
+                 length(phidot_label),  length(thetadot_label), length(psidot_label),...Euler Angle Rate
+                 length(Plfx_label),    length(Plfy_label),     length(Plfz_label),...Left Front (lf) Feet Location
+                 length(Plhx_label),    length(Plhy_label),     length(Plhz_label),...Left Hind (lh) Feet Location
+                 length(Prfx_label),    length(Prfy_label),     length(Prfz_label),...Right Front (rf) Feet Location
+                 length(Prhx_label),    length(Prhy_label),     length(Prhz_label),...Right Hind (rh) Feet Location
+                 length(Plfxdot_label), length(Plfydot_label),  length(Plfzdot_label),...Left Front (lf) Feet Velocity
+                 length(Plhxdot_label), length(Plhydot_label),  length(Plhzdot_label),...Left Hind (lh) Feet Velocity
+                 length(Prfxdot_label), length(Prfydot_label),  length(Prfzdot_label),...Right Front (rf) Feet Velocity
+                 length(Prhxdot_label), length(Prhydot_label),  length(Prhzdot_label),...Right Hind (rh) Feet Velocity
+                 length(Flfx_label),    length(Flfy_label),     length(Flfz_label),...Left Front (lf) Feet Forces
+                 length(Flhx_label),    length(Flhy_label),     length(Flhz_label),...Left Hind (lh) Feet Forces
+                 length(Frfx_label),    length(Frfy_label),     length(Frfz_label),...Right Front (rf) Feet Forces
+                 length(Frhx_label),    length(Frhy_label),     length(Frhz_label),...Right Hind (rh) Feet Forces
                  length(Ts_label)];
 %-------------
 %   Full Deicision Variable Name List
-VarNamesList = [x_label,        z_label,        theta_label,...
-                xdot_label,     zdot_label,     thetadot_label,...
-                Plfx_label,     Plfz_label,...
-                Plhx_label,     Plhz_label,...
-                Prfx_label,     Prfz_label,...
-                Prhx_label,     Prhz_label,...
-                Plfxdot_label,  Plfzdot_label,...
-                Plhxdot_label,  Plhzdot_label,...
-                Prfxdot_label,  Prfzdot_label,...
-                Prhxdot_label,  Prhzdot_label,...
-                Flfx_label,     Flfz_label,...
-                Flhx_label,     Flhz_label,...
-                Frfx_label,     Frfz_label,...
-                Frhx_label,     Frhz_label,...
+VarNamesList = [x_label,        y_label,        z_label,...Linear Position
+                xdot_label,     ydot_label,     zdot_label,...Linear Velocity
+                phi_label,      theta_label,    psi_label,...Orientation
+                phidot_label,   thetadot_label, psidot_label,...Euler Angle Rate
+                Plfx_label,     Plfy_label,     Plfz_label,...Left Front (lf) Feet Location
+                Plhx_label,     Plhy_label,     Plhz_label,...Left Hind (lh) Feet Location
+                Prfx_label,     Prfy_label,     Prfz_label,...Right Front (rf) Feet Location
+                Prhx_label,     Prhy_label,     Prhz_label,...Right Hind (rh) Feet Location
+                Plfxdot_label,  Plfydot_label,  Plfzdot_label,...Left Front (lf) Feet Velocity
+                Plhxdot_label,  Plhydot_label,  Plhzdot_label,...Left Hind (lh) Feet Velocity
+                Prfxdot_label,  Prfydot_label,  Prfzdot_label,...Right Front (rf) Feet Velocity
+                Prhxdot_label,  Prhydot_label,  Prhzdot_label,...Right Hind (rh) Feet Velocity
+                Flfx_label,     Flfy_label,     Flfz_label,...Left Front (lf) Feet Forces
+                Flhx_label,     Flhy_label,     Flhz_label,...Left Hind (lh) Feet Forces
+                Frfx_label,     Frfy_label,     Frfz_label,...Right Front (rf) Feet Forces
+                Frhx_label,     Frhy_label,     Frhz_label,...Right Hind (rh) Feet Forces
                 Ts_label];
 %-------------
 % Extend the list with contact configurations if we perform gait discovery
@@ -360,21 +364,23 @@ end
 % Build Decision Variables List for Optimization
 %--------------------------------------------------------------------------
 % Collect copntinuous variables -> For Fixed Gait Computation
-DecisionVars = {x,        z,        theta,...
-               xdot,      zdot,     thetadot,...
-               Plfx,      Plfz,...
-               Plhx,      Plhz,...
-               Prfx,      Prfz,...
-               Prhx,      Prhz,...
-               Plfxdot,   Plfzdot,...
-               Plhxdot,   Plhzdot,...
-               Prfxdot,   Prfzdot,...
-               Prhxdot,   Prhzdot,...
-               Flfx,      Flfz,...
-               Flhx,      Flhz,...
-               Frfx,      Frfz,...
-               Frhx,      Frhz,...
-               Ts};
+DecisionVars = {x,          y,          z,...Linear Position
+                xdot,       ydot,       zdot,...Linear Velocity
+                phi,        theta,      psi,...Orientation
+                phidot,     thetadot,   psidot,...Euler Angle Rate
+                Plfx,       Plfy,       Plfz,...Left Front (lf) Feet Location
+                Plhx,       Plhy,       Plhz,...Left Hind (lh) Feet Location
+                Prfx,       Prfy,       Prfz,...Right Front (rf) Feet Location
+                Prhx,       Prhy,       Prhz,...Right Hind (rh) Feet Location
+                Plfxdot,    Plfydot,    Plfzdot,...Left Front (lf) Feet Velocity
+                Plhxdot,    Plhydot,    Plhzdot,...Left Hind (lh) Feet Location
+                Prfxdot,    Prfydot,    Prfzdot,...Right Front (rf) Feet Velocity
+                Prhxdot,    Prhydot,    Prhzdot,...Right Hind (rh) Feet Velocity
+                Flfx,       Flfy,       Flfz,...Left Front (lf) Feet Forces
+                Flhx,       Flhy,       Flhz,...Left Hind (lh) Feet Forces
+                Frfx,       Frfy,       Frfz,...Right Front (rf) Feet Forces
+                Frhx,       Frhy,       Frhz,...Right Hind (rh) Feet Forces
+                Ts};
 % Add contact configurations into the list if we want gait discovery
 if gait_discovery_switch == 1 %Yes, we want free gait discovery
     DecisionVars{end+1} = Clf;
