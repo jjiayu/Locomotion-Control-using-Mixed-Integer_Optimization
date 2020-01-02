@@ -112,22 +112,22 @@ function [g, lbg, ubg] = Constraint_Task_and_Periodicity(x,         y,         z
     %---------------
     % Yaw - Orientations
     %---------------
-    %     EqTemp = psi(1) - psi(end);
-    %     g = {g{:}, EqTemp};
-    %     lbg = [lbg; 0];
-    %     ubg = [ubg; 0];
-    
     %   Set 1: psi(0) = 0
-    EqTemp = psi(1);
+    EqTemp = psi(1)
     g = {g{:}, EqTemp};
-    lbg = [lbg; 0];
+    lbg = [lbg; 0;];
     ubg = [ubg; 0];
     
     %   Set 2: psi(T) = 0
-    EqTemp = psi(end);
+    EqTemp = psi(end)
     g = {g{:}, EqTemp};
-    lbg = [lbg; 0];
+    lbg = [lbg; 0;];
     ubg = [ubg; 0];
+    
+%     EqTemp = psi(1) - psi(end);
+%     g = {g{:}, EqTemp};
+%     lbg = [lbg; 0];
+%     ubg = [ubg; 0];
     
     %---------------
     % Roll dot - Euler Angle Rate
