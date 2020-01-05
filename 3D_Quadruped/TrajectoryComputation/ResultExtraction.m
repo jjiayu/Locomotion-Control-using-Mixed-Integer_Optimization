@@ -120,7 +120,7 @@ for ResKnotIdx = 1:length(theta_result)
     PlfxCenter_result_world(ResKnotIdx) = PlfCenter_k_result_world(1);
     PlfyCenter_result_world(ResKnotIdx) = PlfCenter_k_result_world(2);
     PlfzCenter_result_world(ResKnotIdx) = PlfCenter_k_result_world(3);
-    
+
     %   Left Hind (lh)
     PlhxCenter_result_world(ResKnotIdx) = PlhCenter_k_result_world(1);
     PlhyCenter_result_world(ResKnotIdx) = PlhCenter_k_result_world(2);

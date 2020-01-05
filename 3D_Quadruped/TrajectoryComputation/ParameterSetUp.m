@@ -174,7 +174,8 @@ disp(['Inertial Parameters']);
 disp('====================================================');
 if Paras_Define_Method == 1 %Parameters Load from File
     disp(['mass: ',num2str(m),'(kg)']);
-    disp(['Inertia tensor: ',num2str(I)]);
+    disp('Inertia tensor: ')
+    I
     disp(['Gravaty: ',num2str(G), 'm/s']);
 elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     %m = 45; %kg
