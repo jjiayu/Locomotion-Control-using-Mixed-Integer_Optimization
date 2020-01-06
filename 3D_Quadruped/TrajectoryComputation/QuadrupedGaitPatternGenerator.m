@@ -14,6 +14,11 @@ function [Clf,Clh,Crf,Crh, GaitName] = QuadrupedGaitPatternGenerator(GaitNumber)
 %   8  -> Canter
 %   9  -> Transverse Gallop
 %   10 -> Rotary Gallop
+%   11 -> Bounding
+%   12 -> Half Cheetah Walking D (Mirrored)
+%   13 -> Half Cheetah Galloping (Mirrored)
+%   14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)
+%   15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)
 
     %Note the Sequence we assign the gait sequece becomes *Clh*,*Clf*,Crf,Crh
     %But the output of the function becomese *Clf*,*Clh*,Crf,Crh, which is
@@ -86,6 +91,36 @@ function [Clf,Clh,Crf,Crh, GaitName] = QuadrupedGaitPatternGenerator(GaitNumber)
         Crf = [1,1,0,0,0,0,0,0]';
         Crh = [0,0,0,0,1,1,0,0]';
         GaitName = "Bounding";
+    elseif GaitNumber == 12 % Half Cheetah Walking-D (Mirrored)
+        Clh = [1,1,1,1,1,1,0,0]';
+        Clf = [1,1,0,0,0,0,1,1]';
+        Crf = [1,1,0,0,0,0,1,1]';
+        Crh = [1,1,1,1,1,1,0,0]';
+        GaitName = "HalfCheetahWalkingD";
+    elseif GaitNumber == 13 % Half Cheetah Galloping (Mirrored)
+        Clh = [1,1,0,0,0,0,1,1]';
+        Clf = [1,1,1,1,0,0,0,0]';
+        Crf = [1,1,1,1,0,0,0,0]';
+        Crh = [1,1,0,0,0,0,1,1]';
+        GaitName = "HalfCheetahGalloping";
+    elseif GaitNumber == 14 % Half Cheetah Walking-S (Mirrored) (6 Phases)
+        Clh = [1,1,0,0,1,1]';
+        Clf = [1,1,1,1,0,0]';
+        Crf = [1,1,1,1,0,0]';
+        Crh = [1,1,0,0,1,1]';
+        GaitName = "HalfCheetahWalkingS";
+    elseif GaitNumber == 15 % Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)
+        Clh = [1,1,0,0,0,0]';
+        Clf = [0,0,1,1,0,0]';
+        Crf = [0,0,1,1,0,0]';
+        Crh = [1,1,0,0,0,0]';
+        GaitName = "HalfCheetahBuondingS_H_F_FLY";
+    elseif GaitNumber == 16 % Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)
+        Clh = [1,1,0,0,0,0]';
+        Clf = [0,0,0,0,1,1]';
+        Crf = [0,0,0,0,1,1]';
+        Crh = [1,1,0,0,0,0]';
+        GaitName = "HalfCheetahBuondingS_H_FLY_F";
     end
 
     %Display Gait Pattern
