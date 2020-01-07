@@ -124,12 +124,18 @@ if Paras_Define_Method == 1 %Load Parameters from File
                 ExpDirectory = [ParamFileDir,'/StridePeriod_',num2str(Tend)];
             end
         elseif gait_discovery_switch == 2 %Motion Optimization with Fixed Gait
-            if exist([ParamFileDir,'/','StridePeriod_',num2str(Tend)],'dir') == 1
-                ExpDirectory = [ParamFileDir,'/','StridePeriod_',num2str(Tend)];
+            if exist([ParamFileDir,'/','StridePeriod_',num2str(Tend),'/',num2str(UserDefinedGaitNumber),'_',GaitName],'dir') == 1
+                ExpDirectory = [ParamFileDir,'/','StridePeriod_',num2str(Tend),'/',num2str(UserDefinedGaitNumber),'_',GaitName];
             else %or mkdir
-                mkdir([ParamFileDir,'/','StridePeriod_',num2str(Tend)]);
-                ExpDirectory = [ParamFileDir,'/','StridePeriod_',num2str(Tend)];
+                mkdir([ParamFileDir,'/','StridePeriod_',num2str(Tend),'/',num2str(UserDefinedGaitNumber),'_',GaitName]);
+                ExpDirectory = [ParamFileDir,'/','StridePeriod_',num2str(Tend),'/',num2str(UserDefinedGaitNumber),'_',GaitName];
             end
+%             if exist([ParamFileDir,'/','StridePeriod_',num2str(Tend)],'dir') == 1
+%                 ExpDirectory = [ParamFileDir,'/','StridePeriod_',num2str(Tend)];
+%             else %or mkdir
+%                 mkdir([ParamFileDir,'/','StridePeriod_',num2str(Tend)]);
+%                 ExpDirectory = [ParamFileDir,'/','StridePeriod_',num2str(Tend)];
+%             end
         end
     elseif Tend_flag == 2
         error('Optimization with free Terminal Time is not implemented')
@@ -356,9 +362,10 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
             error('Terrain Plotting Function for Slope is not implemented for 3D case')
         end
         terrainx = linspace(-2, 10, 1e4);
-        terrainy = full(TerrainModel(terrainx));
-        plot(terrainx,terrainy,'LineWidth',2)
-        ylim([min(terrainy)-1,max(terrainy)+1])
+        terrainy = linspace(-2, 10, 1e4);
+        terrainz = full(TerrainModel(terrainx,terrainy));
+        plot(terrainx,terrainz,'LineWidth',2)
+        ylim([min(terrainz)-1,max(terrainz)+1])
         disp('----------------------------------------------------');
     end
     %-----------------------------------------------------------------------
@@ -528,7 +535,7 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     % Phase Duration Lower Bound
     disp('----------------------------------------------------');
     disp('Decide Phase Duration Lower Bound')
-    phaselb_type = input('Define How the Phase Duration Lower Bound is Defined: \n1 -> Using Percentage of Total Duration \n2 -> Fixed Values');
+    phaselb_type = input('Define How the Phase Duration Lower Bound is Defined: \n1 -> Using Percentage of Total Duration \n2 -> Fixed Values \n');
     if phaselb_type == 1 %Using Percentage of Total Duration
         phase_lower_bound_portion = input('Input Phase Lower Bound (in percentage of total motion duration: 5% - no need to type percentage symbol): \n');
         phase_lower_bound_portion = phase_lower_bound_portion/100;
@@ -576,10 +583,10 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     disp('====================================================');
     %----------------------------------------------------------------------
     %   Big-M for foot positions in y-axis (meters)
-    M_pos = 50; 
+    M_pos = 100; 
     %   ------------------------------------------------------
     %   Big-M for feet velocities
-    Mvel = 50;
+    Mvel = 100;
     %   ------------------------------------------------------
     %   Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame)
     disp('Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame')

@@ -10,10 +10,10 @@ Multi-Phase Formulation:
 Optimize over State, Control, and Switching Time, and (Gait Sequence if we select to optimize)
 ----------------------------------------------------
 Date and Time:
-   06-Jan-2020 19:52:26
+   07-Jan-2020 12:59:52
 
 ----------------------------------------------------
-Correspondent Log File Name: FixedGait-Periodical-Loco-log-20200106T195226in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/test/FixedGait/withParameterTemplate/StridePeriod_1
+Correspondent Log File Name: FixedGait-Periodical-Loco-log-20200107T125952in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/test/StridePeriod_1
 ====================================================
 Using Rotated Force Limits with respect to the slope of the environment
 ====================================================
@@ -46,9 +46,9 @@ Morphology Set up:
 ----------------------------------------------------
 Robot Kinematics Bounding Box
 ----------------------------------------------------
-Bounding Box Length: 0.4 (m)
+Bounding Box Length: 0.5 (m)
 Bounding Box Width: 0.2 (m)
-Bounding Box Height: 0.14 (m)
+Bounding Box Height: 0.2 (m)
 ----------------------------------------------------
 ====================================================
 Terrain Model: 
@@ -91,7 +91,18 @@ Minimal Speed in Parameter File: 0.3
 Maximum Speed in Parameter File: 3.5
 Speed Resolution in Parameter File: 0.2
 Decide if we want to change the desired speed: 1-> Yes 2->No 
-2
+1
+Decide what Direction the Desired Velocity should be? 1-> Horizontal x-axis2-> Tangential x-axis to the Slope
+1
+Specify the MINIMUM Desired Speed along the Desired Direction (m/s): 
+1
+----------------------------------------------------
+Specify the MAXIMUM Desired Speed along the Desired Direction (m/s): 
+1
+----------------------------------------------------
+Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):
+1
+----------------------------------------------------
 Fixed Terminal Time: 1
 ----------------------------------------------------
  
@@ -106,17 +117,20 @@ Resultant Discretization:
 Knot/Discretization Step Size of tau: 0.0125
 Number of Knots/Discretization of tau (from 0 to 1: 81) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
 ----------------------------------------------------
-Phase Duration Lower Bound: 5%
+Phase Duration Lower Bound
+Phase Duration Lower Bound is a Fixed Value: 0.025
+----------------------------------------------------
+ 
 ====================================================
  
 ====================================================
 Big-M Setup/Limits of Feet Velocity and Forces
 ====================================================
-Big-M for Foot/End-Effector Velocities (a single value): 100
+Big-M for Foot/End-Effector Velocities (a single value): 50
 ----------------------------------------------------
-Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame): 3.5
-Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in Y-axis (In Robot Frame): 3.5
-Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in Z-axis (In Robot Frame): 3.5
+Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame): 5
+Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in Y-axis (In Robot Frame): 5
+Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in Z-axis (In Robot Frame): 5
 ----------------------------------------------------
 Big-M for Contact Forces
 ----------------------------------------------------
@@ -139,6 +153,6 @@ Solver Selected: Knitro
 Solver Dependent Options:
 ----------------------------------------------------
 Number of Maximum Nodes to be solved: 68719476736
-NUmber of Maximum Optimization Runes: 15
+NUmber of Maximum Optimization Runes: 30
 Satisfied with the paramter setting? 1-> yes, 2-> no 
 1

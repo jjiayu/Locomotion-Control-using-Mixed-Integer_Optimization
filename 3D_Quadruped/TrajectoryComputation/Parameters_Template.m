@@ -15,7 +15,6 @@ gait_discovery_switch = 1;
 %==========================================================================
 % Retrive Gait Sequence if we choose to have fixed gait optimization
 if gait_discovery_switch == 2
-    %<---------------------------------------------------------->
     % List of Gaits
     %   1  -> Lateral Sequence Walk from WikiPedia
     %   2  -> Four-Beat Walking from Remy's Group
@@ -33,9 +32,29 @@ if gait_discovery_switch == 2
     %   14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)
     %   15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)
     %   16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)
+    %UserDefinedGaitNumber = 0;
     
-    UserDefinedGaitNumber = 0;
-    %<---------------------------------------------------------->
+    %Decide the GaitNumber 
+        disp('Manually Define the Gait:')
+        disp(['Gait Library: ',newline,...
+              '0  -> User Input',newline,...
+              '1  -> Lateral Sequence Walk from WikiPedia',newline,...
+              '2  -> Four-Beat Walking from Remy''s Group',newline,...
+              '3  -> Walking Trot (Also Called Two-Beat Walking from Remy''s Paper)',newline,...
+              '4  -> Running Trot (Trotting with a Flying Phase)',newline,...
+              '5  -> Tolting from Remy''s Paper',newline,...
+              '6  -> Pacing',newline,...
+              '7  -> Amble',newline,...
+              '8  -> Canter',newline,...
+              '9  -> Transverse Gallop',newline,...
+              '10 -> Rotary Gallop',newline,...
+              '11 -> Bounding',newline,...
+              '12 -> Half Cheetah Walking D (Mirrored)',newline,...
+              '13 -> Half Cheetah Galloping (Mirrored)',newline,...
+              '14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)',newline,...
+              '15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)',newline,...
+              '16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)',newline])
+        UserDefinedGaitNumber = input('Specify the Gait Number: \n');
     
     %Build Gait Sequence
     if UserDefinedGaitNumber == 0
@@ -45,6 +64,7 @@ if gait_discovery_switch == 2
         Crh = input('Input Contact Sequence for Right Hind  (RH) Foot (i.e. a column vector):\n');
     else
         %error('Optimiation using gait from pre-defined gait library is not implemented for 2D quadruped')
+        
         [Clf,Clh,Crf,Crh,GaitName] = QuadrupedGaitPatternGenerator(UserDefinedGaitNumber);
         %[Clf,Clh,Crf,Crh,GaitName] = Gait_Selection(UserDefinedGaitNumber);
     end
@@ -103,9 +123,9 @@ PrhCenter = [-Morpho_Percentage*(1/2*BodyLength); -1/2*BodyWidth;  -(1/2*BodyHei
 
 %<---------------------------------------------------------->
 %   Kinematics Bounding Box Constraint
-BoundingBox_Length  = 0.4;
+BoundingBox_Length  = 0.5;
 BoundingBox_Width   = 0.2;
-BoundingBox_Height  = 0.14;
+BoundingBox_Height  = 0.14;%0.14;
 %<---------------------------------------------------------->
 
 %==========================================================================
@@ -228,20 +248,20 @@ end
 % Big-M Parameters for Complementarity Constraints
 %<---------------------------------------------------------->
 %   Big-M for foot positions in y-axis (meters)
-M_pos = 50; 
+M_pos = 100; 
 %   Big-M for feet velocities
-Mvel = 50;
+Mvel = 100;
 %<---------------------------------------------------------->
 
 %   Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame)
 Vmax = [0;0;0];
 %<---------------------------------------------------------->
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in X-axis (In Robot Frame)
-Vmax(1) = 3.5;
+Vmax(1) = 5;
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Y-axis (In Robot Frame)
-Vmax(2) = 3.5;
+Vmax(2) = 5;
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Z-axis (In Robot Frame)
-Vmax(3) = 3.5;
+Vmax(3) = 5;
 %<---------------------------------------------------------->
 
 %   Big-M/Boundaries for Foot-Ground Reaction Forces
