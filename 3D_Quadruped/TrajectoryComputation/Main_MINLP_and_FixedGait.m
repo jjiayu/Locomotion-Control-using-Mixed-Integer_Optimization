@@ -137,22 +137,22 @@ for speedIdx = 1:length(SpeedList)
                 %   Feet Position
                 %----------------------------------
                 %    Left Front (lf)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Plfz, M_pos, Clf, TerrainModel(Plfx(k)), k, PhaseIdx);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Plfz, M_pos, Clf, TerrainModel(Plfx(k),Plfy(k)), k, PhaseIdx);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
                 %    Left Hind (lh)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Plhz, M_pos, Clh, TerrainModel(Plhx(k)), k, PhaseIdx);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Plhz, M_pos, Clh, TerrainModel(Plhx(k),Plhy(k)), k, PhaseIdx);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
                 %    Right Front (rf)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Prfz, M_pos, Crf, TerrainModel(Prfx(k)), k, PhaseIdx);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Prfz, M_pos, Crf, TerrainModel(Prfx(k),Prfy(k)), k, PhaseIdx);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
                 %    Right Hind (rh)
-                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Prhz, M_pos, Crh, TerrainModel(Prhx(k)), k, PhaseIdx);
+                [g_temp,lbg_temp, ubg_temp] = Constraint_FeetPosition(Prhz, M_pos, Crh, TerrainModel(Prhx(k),Prhy(k)), k, PhaseIdx);
                 g   = {g{:},g_temp{:}}; %Add to constraint container
                 lbg = [lbg; lbg_temp];
                 ubg = [ubg; ubg_temp];
@@ -319,7 +319,7 @@ for speedIdx = 1:length(SpeedList)
         %----------------------------------
         %   Switching Time Constraint
         %----------------------------------
-        Phaselb = phase_lower_bound_portion*Tend;
+        %Phaselb = phase_lower_bound_portion*Tend;
         [g_temp,lbg_temp, ubg_temp] = Constraint_SwitchingTime(Ts,Phaselb,Tend);
         g   = {g{:},g_temp{:}}; %Add to constraint container
         lbg = [lbg; lbg_temp];

@@ -8,7 +8,7 @@ import casadi.*
 %<---------------------------------------------------------->
 %   gait_discovery_switch = 1 -> Discover Gait using MINLP
 %   gait_discovery_switch = 2 -> Fixed Gait Optimization
-gait_discovery_switch = 1;
+gait_discovery_switch = 2;
 %<---------------------------------------------------------->
 %==========================================================================
 
@@ -34,7 +34,7 @@ if gait_discovery_switch == 2
     %   15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)
     %   16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)
     
-    UserDefinedGaitNumber = 0;
+    UserDefinedGaitNumber = 15;
     %<---------------------------------------------------------->
     
     %Build Gait Sequence

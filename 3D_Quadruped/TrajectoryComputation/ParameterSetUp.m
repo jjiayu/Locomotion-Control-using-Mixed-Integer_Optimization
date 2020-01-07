@@ -341,12 +341,13 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
 
     %Build Terrain Model
     x_query   = SX.sym('x_query', 1);
+    y_query   = SX.sym('y_query', 1);
     if TerrainType == 2 %Slope
         error('Terrain Height Function is not implemented for 3D Slope')
     end
     %h_terrain = terrain_slope*x_query;
     h_terrain = 0;
-    TerrainModel = Function('TerrainModel', {x_query}, {h_terrain});
+    TerrainModel = Function('TerrainModel', {x_query,y_query}, {h_terrain});
     %-----------------------------------------------------------------------
     %   Plot Terrain Model
     PlotTerrainFlag = input('Plot the Terrain Model? 1 -> Yes; 2 -> No\n');
@@ -479,11 +480,22 @@ if Paras_Define_Method == 1 %Load Parameter From File
     disp(['Knot/Discretization Step Size of tau: ', num2str(tauStepLength)]);
     disp(['Number of Knots/Discretization of tau (from 0 to ', num2str(tau_upper_limit), ': ', num2str(tauSeriesLength), ') (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)']);
     %   Phase Duration Lower Bound
-    disp('----------------------------------------------------');    
-    disp(['Phase Duration Lower Bound: ',num2str(phase_lower_bound_portion*100),'%'])
-    if phase_lower_bound_portion*NumPhases >= 1
+    disp('----------------------------------------------------');
+    disp('Phase Duration Lower Bound')
+    if phaselb_type == 1 %Using Percentage of Total Duration
+        disp('Phase Duration Lower Bound is defined as *Percentage* of Total Duration')
+        disp(['Phase Duration Lower Bound (Percentage): ',num2str(phase_lower_bound_portion*100),'%'])
+    elseif phaselb_type == 2 %Using Percentage of Total Duration
+        disp(['Phase Duration Lower Bound is a Fixed Value: ', num2str(Phaselb)])
+    end
+
+    if Phaselb*NumPhases > Tend
+        %phase_lower_bound_portion*NumPhases >= 1
         error('Minimum Phase Duration is invalid -> Total Minimum Phase duration is larger than the Allowed Termianl Time')
     end
+    
+    disp('----------------------------------------------------');
+    disp(' ')
     disp('====================================================');
     disp(' ')
 elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
@@ -515,12 +527,22 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     disp(['Number of Knots/Discretization of tau (from 0 to ', num2str(tau_upper_limit), ': ', num2str(tauSeriesLength), ') (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)']);
     % Phase Duration Lower Bound
     disp('----------------------------------------------------');
-    phase_lower_bound_portion = input('Input Phase Lower Bound (in percentage of total motion duration: 2.5% - no need to type percentage symbol): \n');
-    phase_lower_bound_portion = phase_lower_bound_portion/100
-    if phase_lower_bound_portion*NumPhases >= 1
+    disp('Decide Phase Duration Lower Bound')
+    phaselb_type = input('Define How the Phase Duration Lower Bound is Defined: \n1 -> Using Percentage of Total Duration \n2 -> Fixed Values');
+    if phaselb_type == 1 %Using Percentage of Total Duration
+        phase_lower_bound_portion = input('Input Phase Lower Bound (in percentage of total motion duration: 5% - no need to type percentage symbol): \n');
+        phase_lower_bound_portion = phase_lower_bound_portion/100;
+        Phaselb = phase_lower_bound_portion*Tend;
+        disp(['Phase Duration Lower Bound: ',num2str(phase_lower_bound_portion*100),'%'])
+    elseif phaselb_type == 2 %Using Percentage of Total Duration
+        Phaselb = input('Define the Value of Phase Lower Bound (i.e. 0.025s, 0.05s, etc.): \n');
+    end
+
+    if Phaselb*NumPhases > Tend
+        %phase_lower_bound_portion*NumPhases >= 1
         error('Minimum Phase Duration is invalid -> Total Minimum Phase duration is larger than the Allowed Termianl Time')
     end
-    disp(['Phase Duration Lower Bound: ',num2str(phase_lower_bound_portion*100),'%'])
+    
     disp('----------------------------------------------------');
     disp(' ')
     disp('====================================================');
@@ -554,10 +576,10 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     disp('====================================================');
     %----------------------------------------------------------------------
     %   Big-M for foot positions in y-axis (meters)
-    M_pos = 100; 
+    M_pos = 50; 
     %   ------------------------------------------------------
     %   Big-M for feet velocities
-    Mvel = 100;
+    Mvel = 50;
     %   ------------------------------------------------------
     %   Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame)
     disp('Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame')
