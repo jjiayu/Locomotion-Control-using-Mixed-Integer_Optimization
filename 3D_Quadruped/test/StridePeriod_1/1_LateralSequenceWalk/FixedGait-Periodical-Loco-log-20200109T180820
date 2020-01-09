@@ -1,0 +1,147 @@
+====================================================
+Genearl Information:
+====================================================
+Parameter Loaded From File
+====================================================
+CasADi Implementation
+*3D* Quadruped Motion Optimization using Fixed Gait
+With a Particular Emphasis on Periodical Motions
+Multi-Phase Formulation:
+Optimize over State, Control, and Switching Time, and (Gait Sequence if we select to optimize)
+----------------------------------------------------
+Date and Time:
+   09-Jan-2020 18:08:20
+
+----------------------------------------------------
+Correspondent Log File Name: FixedGait-Periodical-Loco-log-20200109T180820in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/test/StridePeriod_1/1_LateralSequenceWalk
+====================================================
+Using Rotated Force Limits with respect to the slope of the environment
+====================================================
+ 
+====================================================
+Inertial Parameters
+====================================================
+mass: 34.7(kg)
+Inertia tensor: 
+
+I =
+
+    1.0693         0         0
+         0    2.1285         0
+         0         0    2.1739
+
+Gravaty: 9.8066m/s
+====================================================
+Kinematics Parameters
+====================================================
+Body Size
+----------------------------------------------------
+Body Length: 0.63 (m)
+Body Width: 0.235 (m)
+Body Height: 0.24 (m)
+----------------------------------------------------
+Default Limb Length:0.34
+----------------------------------------------------
+Morphology Set up:
+----------------------------------------------------
+Robot Kinematics Bounding Box
+----------------------------------------------------
+Bounding Box Length: 0.5 (m)
+Bounding Box Width: 0.2 (m)
+Bounding Box Height: 0.14 (m)
+----------------------------------------------------
+====================================================
+Terrain Model: 
+----------------------------------------------------
+Flat Terrain
+Terrain Norm is: 
+
+TerrainNorm =
+
+     0
+     0
+     1
+
+Terrain Tangent along Environment X-axis is: 
+
+TerrainTangentX =
+
+     1
+     0
+     0
+
+Terrain Tangent along Environment Y-axis is: 
+
+TerrainTangentY =
+
+     0
+     1
+     0
+
+----------------------------------------------------
+----------------------------------------------------
+Friction Cone: 0.6
+====================================================
+ 
+====================================================
+Task Specification:
+----------------------------------------------------
+Desired Velocity Direction along Horizontal x-Axis
+Minimal Speed in Parameter File: 0.3
+Maximum Speed in Parameter File: 3.5
+Speed Resolution in Parameter File: 0.2
+Decide if we want to change the desired speed: 1-> Yes 2->No 
+2
+Fixed Terminal Time: 1
+----------------------------------------------------
+ 
+====================================================
+Temporal and Discretization Setup:
+----------------------------------------------------
+Number of Phase: 8
+----------------------------------------------------
+Number of Knots for each phase:10
+----------------------------------------------------
+Resultant Discretization:
+Knot/Discretization Step Size of tau: 0.0125
+Number of Knots/Discretization of tau (from 0 to 1: 81) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+----------------------------------------------------
+Phase Duration Lower Bound
+Phase Duration Lower Bound is a Fixed Value: 0.025
+----------------------------------------------------
+ 
+====================================================
+ 
+====================================================
+Big-M Setup/Limits of Feet Velocity and Forces
+====================================================
+Big-M for Foot/End-Effector Velocities (a single value): 100
+----------------------------------------------------
+Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in X-axis (In Robot Frame): 3.5
+Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in Y-axis (In Robot Frame): 3.5
+Velocity Boundary (Abusolute Value) for Foot/End-Effector Velocity in Z-axis (In Robot Frame): 3.5
+----------------------------------------------------
+Big-M for Contact Forces
+----------------------------------------------------
+Big-M for Foot/End-Effector Forces in X-axis: 500
+Big-M for Foot/End-Effector Forces in Y-axis: 500
+Big-M for Foot/End-Effector Forces in Z-axis: 500
+====================================================
+====================================================
+Cost Setup
+----------------------------------------------------
+Selected Cost:
+1-> Minimize Force Squared (Energy Loss)
+====================================================
+====================================================
+Solver Setups:
+====================================================
+Solver Selection: 
+Solver Selected: Knitro
+----------------------------------------------------
+Solver Dependent Options:
+----------------------------------------------------
+Number of Maximum Nodes to be solved: 68719476736
+NUmber of Maximum Optimization Runes: 30
+Satisfied with the paramter setting? 1-> yes, 2-> no 
+1
