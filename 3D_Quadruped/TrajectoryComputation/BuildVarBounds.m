@@ -63,16 +63,16 @@ lb_zdot = repmat(-25, 1, VarLengthList(VarCategoryList == "zdot"));
 ub_zdot = repmat( 25, 1, VarLengthList(VarCategoryList == "zdot"));
 
 %       phi
-lb_phi = repmat(-pi/2, 1, VarLengthList(VarCategoryList == "phi"));    
-ub_phi = repmat( pi/2, 1, VarLengthList(VarCategoryList == "phi"));
+lb_phi = repmat(-pi/4, 1, VarLengthList(VarCategoryList == "phi"));    
+ub_phi = repmat( pi/4, 1, VarLengthList(VarCategoryList == "phi"));
 
 %       theta
-lb_theta = repmat(-pi/2,          1, VarLengthList(VarCategoryList == "theta"));    
-ub_theta = repmat( 90/100*(pi/2), 1, VarLengthList(VarCategoryList == "theta")); %90% of pi/2
+lb_theta = repmat(-pi/3,          1, VarLengthList(VarCategoryList == "theta"));    
+ub_theta = repmat( pi/3, 1, VarLengthList(VarCategoryList == "theta")); %90% of pi/2 -> 90/100*(pi/2)
 
 %       psi
-lb_psi = repmat(-pi/2, 1, VarLengthList(VarCategoryList == "psi"));    
-ub_psi = repmat( pi/2, 1, VarLengthList(VarCategoryList == "psi")); 
+lb_psi = repmat(-pi/4, 1, VarLengthList(VarCategoryList == "psi"));    
+ub_psi = repmat( pi/4, 1, VarLengthList(VarCategoryList == "psi")); 
 
 %       phi dot
 lb_phidot = repmat(-5*pi, 1, VarLengthList(VarCategoryList == "phidot"));    
