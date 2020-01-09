@@ -160,7 +160,7 @@ if TerrainType == 1 %Flat Terrain
     TerrainNorm = [0;0;1];
     TerrainTangentX = [1;0;0];
     TerrainTangentY = [0;1;0];
-elseif TerrainType == 2 % %Slope
+elseif TerrainType == 2 % %Slope, rotation is inverse in terms of slope up/down
     TerrainNorm = [0;0;1];
     TerrainTangentX = [1;0;0];
     TerrainTangentY = [0;1;0];
