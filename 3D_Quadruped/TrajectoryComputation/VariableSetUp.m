@@ -280,23 +280,23 @@ end
 %-------------
 %   varCategoryList -> list quantities and their sequence placed in the
 %   decision varibale vector
-VarCategoryList = ["x",         "y",         "z",... Linear Position
-                   "xdot",      "ydot",      "zdot",... Linear Velocity
-                   "phi",       "theta",     "psi",...Orientation
-                   "phidot",    "thetadot",  "psidot",...Orientation Rate
-                   "Plfx",      "Plfy",      "Plfz",...Left Front (lf) Feet Location
-                   "Plhx",      "Plhy",      "Plhz",...Left Hind (lh) Feet Location
-                   "Prfx",      "Prfy",      "Prfz",...Right Front (rf) Feet Location
-                   "Prhx",      "Prhy",      "Prhz",...Right Hind (rh) Feet Location
-                   "Plfxdot",   "Plfydot",   "Plfzdot",...Left Front (lf) Feet Velocity
-                   "Plhxdot",   "Plhydot",   "Plhzdot"...Left Hind (lh) Feet Velocity
-                   "Prfxdot",   "Prfydot",   "Prfzdot",...Right Front (rf) Feet Velocity
-                   "Prhxdot",   "Prhydot",   "Prhzdot",...Right Hind (rh) Feet Velocity
-                   "Flfx",      "Flfy",      "Flfz",...Left Front (lf) Feet Forces
-                   "Flhx",      "Flhy",      "Flhz",...Left Hind (lh) Feet Forces
-                   "Frfx",      "Frfy",      "Frfz",...Right Front (rf) Feet Forces
-                   "Frhx",      "Frhy",      "Frhz",...Right Hind (rh) Feet Forces
-                   "Ts"];
+VarCategoryList = {'x',         'y',         'z',... Linear Position
+                   'xdot',      'ydot',      'zdot',... Linear Velocity
+                   'phi',       'theta',     'psi',...Orientation
+                   'phidot',    'thetadot',  'psidot',...Orientation Rate
+                   'Plfx',      'Plfy',      'Plfz',...Left Front (lf) Feet Location
+                   'Plhx',      'Plhy',      'Plhz',...Left Hind (lh) Feet Location
+                   'Prfx',      'Prfy',      'Prfz',...Right Front (rf) Feet Location
+                   'Prhx',      'Prhy',      'Prhz',...Right Hind (rh) Feet Location
+                   'Plfxdot',   'Plfydot',   'Plfzdot',...Left Front (lf) Feet Velocity
+                   'Plhxdot',   'Plhydot',   'Plhzdot'...Left Hind (lh) Feet Velocity
+                   'Prfxdot',   'Prfydot',   'Prfzdot',...Right Front (rf) Feet Velocity
+                   'Prhxdot',   'Prhydot',   'Prhzdot',...Right Hind (rh) Feet Velocity
+                   'Flfx',      'Flfy',      'Flfz',...Left Front (lf) Feet Forces
+                   'Flhx',      'Flhy',      'Flhz',...Left Hind (lh) Feet Forces
+                   'Frfx',      'Frfy',      'Frfz',...Right Front (rf) Feet Forces
+                   'Frhx',      'Frhy',      'Frhz',...Right Hind (rh) Feet Forces
+                   'Ts'};
 %-------------
 %   varLengthList -> List of lengths of each quantity
 VarLengthList = [length(x_label),       length(y_label),        length(z_label),...Linear Position
@@ -340,11 +340,11 @@ VarNamesList = [x_label,        y_label,        z_label,...Linear Position
 %-------------
 if gait_discovery_switch == 1 %Yes, we want free gait discovery
     
-    VarCategoryList = [VarCategoryList,...
-                       "Clf",...
-                       "Clh",...
-                       "Crf",...
-                       "Crh"];
+    VarCategoryList = [VarCategoryList(:)',...
+                       {'Clf'},...
+                       {'Clh'},...
+                       {'Crf'},...
+                       {'Crh'}];
                    
     VarLengthList = [VarLengthList,...
                      length(Clf_label),...
