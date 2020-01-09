@@ -160,7 +160,7 @@ if TerrainType == 1 %Flat Terrain
     TerrainNorm = [0;0;1];
     TerrainTangentX = [1;0;0];
     TerrainTangentY = [0;1;0];
-elseif TerrainType == 2 % if Stairs, over-write the terrain norm with 
+elseif TerrainType == 2 % %Slope
     TerrainNorm = [0;0;1];
     TerrainTangentX = [1;0;0];
     TerrainTangentY = [0;1;0];
@@ -172,10 +172,7 @@ end
 %Build Terrain Model
 x_query   = SX.sym('x_query', 1);
 y_query   = SX.sym('y_query', 1);
-if TerrainType == 2
-    error('Terrain Plotting Function for Slope is not implemented for 3D case')
-end
-h_terrain = 0;
+h_terrain = (-TerrainNorm(1)*x_query - TerrainNorm(2)*y_query)/TerrainNorm(3);
 TerrainModel = Function('TerrainModel', {x_query,y_query}, {h_terrain});
 
 %<---------------------------------------------------------->

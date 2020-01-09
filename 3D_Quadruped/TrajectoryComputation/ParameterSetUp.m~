@@ -366,7 +366,7 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
     %Build Terrain Model
     x_query   = SX.sym('x_query', 1);
     y_query   = SX.sym('y_query', 1);
-    h_terrain = (-TerrainNorm(1)*x_query - TerrainNorm(2)*y_query)/TerrainNorm(3);
+    h_terrain = -TerrainNorm(1)*x_query - TerrainNorm(2)*y_query
     TerrainModel = Function('TerrainModel', {x_query,y_query}, {h_terrain});
     %-----------------------------------------------------------------------
     %   Plot Terrain Model
