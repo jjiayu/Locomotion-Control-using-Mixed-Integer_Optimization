@@ -8,7 +8,7 @@ import casadi.*
 %<---------------------------------------------------------->
 %   gait_discovery_switch = 1 -> Discover Gait using MINLP
 %   gait_discovery_switch = 2 -> Fixed Gait Optimization
-gait_discovery_switch = 1;
+gait_discovery_switch = 2;
 %<---------------------------------------------------------->
 %==========================================================================
 
