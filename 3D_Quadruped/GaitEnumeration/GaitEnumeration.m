@@ -15,6 +15,10 @@ for GaitDecCode = 0:(2^4)^8-1 %GaitDecCode: Gait Number Encoded using Decimals
         disp([num2str(GaitDecCode/(2^4)^8*100),'%']);
     end
     
+    if mod(GaitDecCode,10000000) == 0
+        clc
+    end
+    
     %Convert into Binary
     GaitBinCode = dec2bin(GaitDecCode,32) - '0';
     %Make Gait Matrix Format
