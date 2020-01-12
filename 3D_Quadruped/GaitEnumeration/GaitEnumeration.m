@@ -40,7 +40,7 @@ parfor i = 0:255
     end
     
     GaitMatrixResult = GaitMatrixResult(1:GaitSavingNum-1,:);
-    parsave(i,gait_matrix_result);
+    parsave(i,GaitMatrixResult);
     
 end
 
