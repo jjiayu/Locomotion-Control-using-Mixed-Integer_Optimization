@@ -32,6 +32,7 @@ if gait_discovery_switch == 2
     %   14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)
     %   15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)
     %   16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)
+    %   17 -> Pronking
     %UserDefinedGaitNumber = 0;
     
     %Decide the GaitNumber 
