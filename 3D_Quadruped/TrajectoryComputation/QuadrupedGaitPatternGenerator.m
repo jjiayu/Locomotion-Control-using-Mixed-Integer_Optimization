@@ -136,6 +136,7 @@ function [Clf,Clh,Crf,Crh, GaitName] = QuadrupedGaitPatternGenerator(GaitNumber)
         Clf = [1,1,0,0,0,0,1,1]';
         Crf = [1,1,0,0,0,0,1,1]';
         Crh = [1,1,0,0,0,0,1,1]';
+        GaitName = 'Pronking';
     end
 
     %Display Gait Pattern
