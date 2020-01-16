@@ -20,6 +20,7 @@ function [Clf,Clh,Crf,Crh, GaitName] = QuadrupedGaitPatternGenerator(GaitNumber)
 %   14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)
 %   15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)
 %   16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)
+%   17 -> Pronking
 
     %Note the Sequence we assign the gait sequece becomes *Clh*,*Clf*,Crf,Crh
     %But the output of the function becomese *Clf*,*Clh*,Crf,Crh, which is
@@ -130,6 +131,12 @@ function [Clf,Clh,Crf,Crh, GaitName] = QuadrupedGaitPatternGenerator(GaitNumber)
         Crf = [0,0,0,0,1,1]';
         Crh = [1,1,0,0,0,0]';
         GaitName = 'HalfCheetahBuondingS_H_FLY_F';
+    elseif GaitNumber == 17 % Pronking
+        Clh = [1,1,0,0,0,0,1,1]';
+        Clf = [1,1,0,0,0,0,1,1]';
+        Crf = [1,1,0,0,0,0,1,1]';
+        Crh = [1,1,0,0,0,0,1,1]';
+        GaitName = 'Pronking';
     end
 
     %Display Gait Pattern
