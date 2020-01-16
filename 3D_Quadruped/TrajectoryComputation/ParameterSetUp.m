@@ -58,26 +58,6 @@ if Paras_Define_Method == 2 %Specify Paramters Manually
     if gait_discovery_switch == 2 %fixed gait optimization
         %List all possible gait we have
         disp('Manually Define the Gait:')
-<<<<<<< HEAD
-        disp('Gait Library: ');
-        disp('  0  -> User Input');
-        disp('  1  -> Lateral Sequence Walk from WikiPedia');
-        disp('  2  -> Four-Beat Walking from Remy''s Group');
-        disp('  3  -> Walking Trot (Also Called Two-Beat Walking from Remy''s Paper)');
-        disp('  4  -> Running Trot (Trotting with a Flying Phase)');
-        disp('  5  -> Tolting from Remy''s Paper');
-        disp('  6  -> Pacing');
-        disp('  7  -> Amble');
-        disp('  8  -> Canter');
-        disp('  9  -> Transverse Gallop');
-        disp('  10 -> Rotary Gallop');
-        disp('  11 -> Bounding');
-        disp('  12 -> Half Cheetah Walking D (Mirrored)');
-        disp('  13 -> Half Cheetah Galloping (Mirrored)');
-        disp('  14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)');
-        disp('  15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)');
-        disp('  16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)');
-=======
         disp(['Gait Library: ',newline,...
                '0  -> User Input',newline,...
                '1  -> Lateral Sequence Walk from WikiPedia',newline,...
@@ -97,7 +77,6 @@ if Paras_Define_Method == 2 %Specify Paramters Manually
                '15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)',newline,...
                '16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)',newline,...
                '17 -> Pronking'])
->>>>>>> 0bca699628e6e9c15e206b35082750d26afed653
         UserDefinedGaitNumber = input('Specify the Gait Number: \n');
         
         if UserDefinedGaitNumber == 0
