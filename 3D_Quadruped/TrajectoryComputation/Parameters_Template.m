@@ -32,6 +32,7 @@ if gait_discovery_switch == 2
     %   14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)
     %   15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)
     %   16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)
+    %   17 -> Pronking
     %UserDefinedGaitNumber = 0;
     
     %Decide the GaitNumber 
@@ -160,7 +161,7 @@ if TerrainType == 1 %Flat Terrain
     TerrainNorm = [0;0;1];
     TerrainTangentX = [1;0;0];
     TerrainTangentY = [0;1;0];
-elseif TerrainType == 2 % if Stairs, over-write the terrain norm with 
+elseif TerrainType == 2 % %Slope, rotation is inverse in terms of slope up/down
     TerrainNorm = [0;0;1];
     TerrainTangentX = [1;0;0];
     TerrainTangentY = [0;1;0];
@@ -172,10 +173,7 @@ end
 %Build Terrain Model
 x_query   = SX.sym('x_query', 1);
 y_query   = SX.sym('y_query', 1);
-if TerrainType == 2
-    error('Terrain Plotting Function for Slope is not implemented for 3D case')
-end
-h_terrain = 0;
+h_terrain = (-TerrainNorm(1)*x_query - TerrainNorm(2)*y_query)/TerrainNorm(3);
 TerrainModel = Function('TerrainModel', {x_query,y_query}, {h_terrain});
 
 %<---------------------------------------------------------->
@@ -257,22 +255,22 @@ Mvel = 100;
 Vmax = [0;0;0];
 %<---------------------------------------------------------->
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in X-axis (In Robot Frame)
-Vmax(1) = 5;
+Vmax(1) = 3.5;
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Y-axis (In Robot Frame)
-Vmax(2) = 5;
+Vmax(2) = 3.5;
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Z-axis (In Robot Frame)
-Vmax(3) = 5;
+Vmax(3) = 3.5;
 %<---------------------------------------------------------->
 
 %   Big-M/Boundaries for Foot-Ground Reaction Forces
 Mf = [0;0;0];
 %<---------------------------------------------------------->
 %Big-M/Boundaries for Foot-Ground Reaction Forces along X-axis (in World Frame)
-Mf(1) = 1000;
+Mf(1) = 500;
 %Big-M/Boundaries for Foot-Ground Reaction Forces along Y-axis (in World Frame)
-Mf(2) = 1000;
+Mf(2) = 500;
 %Big-M/Boundaries for Foot-Ground Reaction Forces along Z-axis (in World Frame)
-Mf(3) = 1000;
+Mf(3) = 500;
 %<---------------------------------------------------------->
 %==========================================================================
 

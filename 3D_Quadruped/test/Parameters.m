@@ -257,22 +257,22 @@ Mvel = 100;
 Vmax = [0;0;0];
 %<---------------------------------------------------------->
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in X-axis (In Robot Frame)
-Vmax(1) = 5;
+Vmax(1) = 3.5;
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Y-axis (In Robot Frame)
-Vmax(2) = 5;
+Vmax(2) = 3.5;
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Z-axis (In Robot Frame)
-Vmax(3) = 5;
+Vmax(3) = 3.5;
 %<---------------------------------------------------------->
 
 %   Big-M/Boundaries for Foot-Ground Reaction Forces
 Mf = [0;0;0];
 %<---------------------------------------------------------->
 %Big-M/Boundaries for Foot-Ground Reaction Forces along X-axis (in World Frame)
-Mf(1) = 1000;
+Mf(1) = 500;
 %Big-M/Boundaries for Foot-Ground Reaction Forces along Y-axis (in World Frame)
-Mf(2) = 1000;
+Mf(2) = 500;
 %Big-M/Boundaries for Foot-Ground Reaction Forces along Z-axis (in World Frame)
-Mf(3) = 1000;
+Mf(3) = 500;
 %<---------------------------------------------------------->
 %==========================================================================
 

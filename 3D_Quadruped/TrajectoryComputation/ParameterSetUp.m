@@ -58,6 +58,7 @@ if Paras_Define_Method == 2 %Specify Paramters Manually
     if gait_discovery_switch == 2 %fixed gait optimization
         %List all possible gait we have
         disp('Manually Define the Gait:')
+<<<<<<< HEAD
         disp('Gait Library: ');
         disp('  0  -> User Input');
         disp('  1  -> Lateral Sequence Walk from WikiPedia');
@@ -76,6 +77,27 @@ if Paras_Define_Method == 2 %Specify Paramters Manually
         disp('  14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)');
         disp('  15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)');
         disp('  16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)');
+=======
+        disp(['Gait Library: ',newline,...
+               '0  -> User Input',newline,...
+               '1  -> Lateral Sequence Walk from WikiPedia',newline,...
+               '2  -> Four-Beat Walking from Remy''s Group',newline,...
+               '3  -> Walking Trot (Also Called Two-Beat Walking from Remy''s Paper)',newline,...
+               '4  -> Running Trot (Trotting with a Flying Phase)',newline,...
+               '5  -> Tolting from Remy''s Paper',newline,...
+               '6  -> Pacing',newline,...
+               '7  -> Amble',newline,...
+               '8  -> Canter',newline,...
+               '9  -> Transverse Gallop',newline,...
+               '10 -> Rotary Gallop',newline,...
+               '11 -> Bounding',newline,...
+               '12 -> Half Cheetah Walking D (Mirrored)',newline,...
+               '13 -> Half Cheetah Galloping (Mirrored)',newline,...
+               '14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)',newline,...
+               '15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)',newline,...
+               '16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)',newline,...
+               '17 -> Pronking'])
+>>>>>>> 0bca699628e6e9c15e206b35082750d26afed653
         UserDefinedGaitNumber = input('Specify the Gait Number: \n');
         
         if UserDefinedGaitNumber == 0
@@ -344,15 +366,29 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
     else %Unknown Scenario
         error('Unknow Terrain Type Flag')
     end
-
+    
+    % Terrain Tangents and Terrain Norm   
+    %   For Flat Terrain
+    TerrainNorm = [0;0;1];
+    TerrainTangentX = [1;0;0];
+    TerrainTangentY = [0;1;0];
+    % Rotate Terrain Tangent and Terrain Norm with respect to slopes
+    % For 3D case, slope up/down need to rotated the vector around y-axis
+    % with down/up degrees (-theta_slope_rad)
+    TerrainNorm = ElementaryRotation_Y(-terrain_slope_rad)*TerrainNorm;
+    TerrainTangentX = ElementaryRotation_Y(-terrain_slope_rad)*TerrainTangentX;
+    TerrainTangentY = ElementaryRotation_Y(-terrain_slope_rad)*TerrainTangentY;
+    disp('Terrain Norm is: ');
+    TerrainNorm
+    disp('Terrain Tangent along Environment X-axis is: ');
+    TerrainTangentX
+    disp('Terrain Tangent along Environment Y-axis is: ');
+    TerrainTangentY
+    
     %Build Terrain Model
     x_query   = SX.sym('x_query', 1);
     y_query   = SX.sym('y_query', 1);
-    if TerrainType == 2 %Slope
-        error('Terrain Height Function is not implemented for 3D Slope')
-    end
-    %h_terrain = terrain_slope*x_query;
-    h_terrain = 0;
+    h_terrain = (-TerrainNorm(1)*x_query - TerrainNorm(2)*y_query)/TerrainNorm(3);
     TerrainModel = Function('TerrainModel', {x_query,y_query}, {h_terrain});
     %-----------------------------------------------------------------------
     %   Plot Terrain Model
@@ -369,23 +405,7 @@ elseif Paras_Define_Method == 2 %Manually Define Parameters
         disp('----------------------------------------------------');
     end
     %-----------------------------------------------------------------------
-    %Other Parameters
-    % For Flat Terrain
-    TerrainNorm = [0;0;1];
-    TerrainTangentX = [1;0;0];
-    TerrainTangentY = [0;1;0];
-    % Rotate Terrain Tangent and Terrain Norm with respect to slopes
-    % For 3D case, slope up/down need to rotated the vector around y-axis
-    % with down/up degrees (-theta_slope_rad)
-    TerrainNorm = ElementaryRotation_Y(-terrain_slope_rad)*TerrainNorm;
-    TerrainTangentX = ElementaryRotation_Y(-terrain_slope_rad)*TerrainTangentX;
-    TerrainTangentY = ElementaryRotation_Y(-terrain_slope_rad)*TerrainTangentY;
-    disp('Terrain Norm is: ');
-    TerrainNorm
-    disp('Terrain Tangent along Environment X-axis is: ');
-    TerrainTangentX
-    disp('Terrain Tangent along Environment Y-axis is: ');
-    TerrainTangentY
+    %Fricition Coeficient
     disp('----------------------------------------------------');
     miu = 0.6; %friction coefficient
     disp('----------------------------------------------------');
