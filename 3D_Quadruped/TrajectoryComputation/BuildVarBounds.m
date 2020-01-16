@@ -71,8 +71,8 @@ lb_theta = repmat(-pi/3,          1, VarLengthList(VarCategoryList == "theta"));
 ub_theta = repmat( pi/3, 1, VarLengthList(VarCategoryList == "theta")); %90% of pi/2 -> 90/100*(pi/2)
 
 %       psi
-lb_psi = repmat(-pi/4, 1, VarLengthList(VarCategoryList == "psi"));    
-ub_psi = repmat( pi/4, 1, VarLengthList(VarCategoryList == "psi")); 
+lb_psi = repmat(-pi*10/180, 1, VarLengthList(VarCategoryList == "psi")); %10 degree  
+ub_psi = repmat( pi*10/180, 1, VarLengthList(VarCategoryList == "psi")); %10 degrees
 
 %       phi dot
 lb_phidot = repmat(-5*pi, 1, VarLengthList(VarCategoryList == "phidot"));    
