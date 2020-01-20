@@ -185,6 +185,7 @@ RightFrontTorqueZ_result = zeros(size(Flfx_result));
 RightHindTorqueX_result = zeros(size(Flfx_result));
 RightHindTorqueY_result = zeros(size(Flfx_result));
 RightHindTorqueZ_result = zeros(size(Flfx_result));
+
 for ResKnotIdx = 1:length(theta_result)-1 %NumKnot-1 is the length of system inputs
     r_result_k = [x_result(ResKnotIdx);y_result(ResKnotIdx);z_result(ResKnotIdx)]; %torso result at times step KnotIdx
     Plf_result_k = [Plfx_result(ResKnotIdx); Plfy_result(ResKnotIdx); Plfz_result(ResKnotIdx)];
@@ -248,6 +249,10 @@ elseif gait_discovery_switch == 2 %Fixed Gait Optimization
     %   Right Hind (rh)
     Crh_result = Crh;
 end
+
+% Intial Angular Velocity of the Body
+omega0 = EulerRate_to_AngularVelocity(phi_result(1),theta_result(1),psi_result(1),phidot_result(1),thetadot_result(1),psidot_result(1));
+
 
 disp('Result Variables Extracted')
 

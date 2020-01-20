@@ -52,11 +52,23 @@ function [g, lbg, ubg] = Constraint_Task_and_Periodicity(x,         y,         z
     %---------------
     % Y-axis Positions
     %---------------
-    EqTemp = y(1) - y(end);
+%     EqTemp = y(1) - y(end);
+%     g = {g{:}, EqTemp};
+%     lbg = [lbg; 0];
+%     ubg = [ubg; 0];
+
+    %   Set 1: y(0) = 0
+    EqTemp = y(1);
     g = {g{:}, EqTemp};
     lbg = [lbg; 0];
     ubg = [ubg; 0];
     
+    %   Set 2: y(T) = 0
+    EqTemp = y(end);
+    g = {g{:}, EqTemp};
+    lbg = [lbg; 0];
+    ubg = [ubg; 0];
+        
     %---------------
     % Z-axis Positions
     %---------------
