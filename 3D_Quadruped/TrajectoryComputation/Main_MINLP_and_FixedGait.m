@@ -66,7 +66,6 @@ for speedIdx = 1:length(SpeedList)
         g   = {}; %Constraint Function Container
         lbg = []; %Lower Bound of Constraint Function
         ubg = []; %Upper Bound of Constraint Function
-        J = 0; %Cost Function Initialization
 
         %   Create Time Step Variables for each phase
         PhaseDurationVector = [Ts(1)-0;diff(Ts)];
@@ -353,6 +352,7 @@ for speedIdx = 1:length(SpeedList)
         %--------------------------------------------------------------------------
         % Set-up Cost Functions
         %--------------------------------------------------------------------------
+        J = 0; %Cost Function Initialization
         Scale_Factor = 1000; %difference below 1e-3 are treated as the same
         for k = 1:tauSeriesLength - 1
 
@@ -372,14 +372,20 @@ for speedIdx = 1:length(SpeedList)
                         h*(Flhx(k)^2) + h*(Flhy(k)^2) + h*(Flhz(k)^2) +... Left Hind (lh)
                         h*(Frfx(k)^2) + h*(Frfy(k)^2) + h*(Frfz(k)^2) +... Right Front (rf)
                         h*(Frhx(k)^2) + h*(Frhy(k)^2) + h*(Frhz(k)^2);     %Right Hind (rh)
-            elseif cost_flag == 2 %Minimize Tangential Force (Maximize Robustness)
-                error('No.2 Cost Not Implemented');
-            elseif cost_flag == 3 %Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero)
-                error('No.3 Cost Need Adaptations')
-                % Time Integral and Scaled
-%                 J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
-%                         h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
-%                         h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
+            elseif cost_flag == 2 %Minimize Lateral Displacement with Force Regularization
+                J = J + 1/10000*(h*(Flfx(k)^2) + h*(Flfy(k)^2) + h*(Flfz(k)^2)  +... Left Front (lf)
+                                 h*(Flhx(k)^2) + h*(Flhy(k)^2) + h*(Flhz(k)^2)  +... Left Hind (lh)
+                                 h*(Frfx(k)^2) + h*(Frfy(k)^2) + h*(Frfz(k)^2)  +... Right Front (rf)
+                                 h*(Frhx(k)^2) + h*(Frhy(k)^2) + h*(Frhz(k)^2)) +... Right Hind (rh)
+                          10000*h*(y(k)^2);
+            elseif cost_flag == 3 %Smoothness of Force Profile
+                if k<=tauSeriesLength - 2
+                    J = J + ((Flfx(k+1)-Flfx(k))/h)^2 + ((Flfy(k+1)-Flfy(k))/h)^2 + ((Flfz(k+1)-Flfz(k))/h)^2 +... Left Front (lf)
+                            ((Flhx(k+1)-Flhx(k))/h)^2 + ((Flhy(k+1)-Flhy(k))/h)^2 + ((Flhz(k+1)-Flhz(k))/h)^2 +... Left Hind (lh)
+                            ((Frfx(k+1)-Frfx(k))/h)^2 + ((Frfy(k+1)-Frfy(k))/h)^2 + ((Frfz(k+1)-Frfz(k))/h)^2 +... Right Front (rf)
+                            ((Frhx(k+1)-Frhx(k))/h)^2 + ((Frhy(k+1)-Frhy(k))/h)^2 + ((Frhz(k+1)-Frhz(k))/h)^2;    %Right Hind (rh)
+                end
+
             elseif cost_flag == 4 %5 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)
                 error('No.4 Cost is Redundant');
             elseif cost_flag == 5 %Minimize Vibration (Cost 3) with Constant Tangential Velocity (at Every Knot)

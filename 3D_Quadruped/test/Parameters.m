@@ -279,13 +279,13 @@ Mf(3) = 500;
 % Cost Function
 %<---------------------------------------------------------->
 %   cost_flag = 1 -> Minimize Force Squared
-%   [Not Implemented]cost_flag = 2 -> Minimize Tangential Force (Maximize Robustness)
-%   [Not Implemented]cost_flag = 3 -> Minimize Vibration (theta towards terrain slope, thetadot towards zero, normal velocity towards zero)
+%   cost_flag = 2 -> Minimize Lateral Displacement with Force Regularization
+%   cost_flag = 3 -> Smooth Force Profile
 %   [Not Implemented]cost_flag == 4 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)
 %   [Not Implemented]cost_flag = 5 -> Smooth Motion: 1)tangential speed is constant and close to the desired velocity in tangential direction 2)theta close to theta_slope 3)thetadot close to 0 normal velocity close to 0
 %   [Not Implemented]cost_flag = 6 -> Feet Velocity
 %   [Not Implemented]cost_flag = 7 -> Humanoid Smooth Motion
-cost_flag = 1;
+cost_flag = 3;
 %<---------------------------------------------------------->
 %==========================================================================
 
