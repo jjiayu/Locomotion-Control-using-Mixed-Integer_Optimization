@@ -32,6 +32,7 @@ if gait_discovery_switch == 2
     %   14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)
     %   15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)
     %   16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)
+    %   17 -> Pronking
     %UserDefinedGaitNumber = 0;
     
     %Decide the GaitNumber 
@@ -54,6 +55,7 @@ if gait_discovery_switch == 2
         disp('  14 -> Half Cheetah Walking-S (Mirrored) (6 Phases)');
         disp('  15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)');
         disp('  16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)');
+        disp('  17 -> Pronking');
         UserDefinedGaitNumber = input('Specify the Gait Number: \n');
     
     %Build Gait Sequence
@@ -123,7 +125,7 @@ PrhCenter = [-Morpho_Percentage*(1/2*BodyLength); -1/2*BodyWidth;  -(1/2*BodyHei
 
 %<---------------------------------------------------------->
 %   Kinematics Bounding Box Constraint
-BoundingBox_Length  = 0.5;
+BoundingBox_Length  = 0.45;
 BoundingBox_Width   = 0.2;
 BoundingBox_Height  = 0.14;%0.14;
 %<---------------------------------------------------------->
@@ -160,7 +162,7 @@ if TerrainType == 1 %Flat Terrain
     TerrainNorm = [0;0;1];
     TerrainTangentX = [1;0;0];
     TerrainTangentY = [0;1;0];
-elseif TerrainType == 2 % if Stairs, over-write the terrain norm with 
+elseif TerrainType == 2 % %Slope, rotation is inverse in terms of slope up/down
     TerrainNorm = [0;0;1];
     TerrainTangentX = [1;0;0];
     TerrainTangentY = [0;1;0];
@@ -172,10 +174,7 @@ end
 %Build Terrain Model
 x_query   = SX.sym('x_query', 1);
 y_query   = SX.sym('y_query', 1);
-if TerrainType == 2
-    error('Terrain Plotting Function for Slope is not implemented for 3D case')
-end
-h_terrain = 0;
+h_terrain = (-TerrainNorm(1)*x_query - TerrainNorm(2)*y_query)/TerrainNorm(3);
 TerrainModel = Function('TerrainModel', {x_query,y_query}, {h_terrain});
 
 %<---------------------------------------------------------->
@@ -257,11 +256,11 @@ Mvel = 100;
 Vmax = [0;0;0];
 %<---------------------------------------------------------->
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in X-axis (In Robot Frame)
-Vmax(1) = 3.5;
+Vmax(1) = 2.5;
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Y-axis (In Robot Frame)
-Vmax(2) = 3.5;
+Vmax(2) = 2.5;
 %       Decide Velocity Boundary (Abusolute Value) for Foot/End-Effector in Robot frame in Z-axis (In Robot Frame)
-Vmax(3) = 3.5;
+Vmax(3) = 2.5;
 %<---------------------------------------------------------->
 
 %   Big-M/Boundaries for Foot-Ground Reaction Forces
@@ -327,6 +326,6 @@ end
 %<---------------------------------------------------------->
 %	Define number of multistart solves for each sub-nonlinear
 %	optimizaiton problem, (i.e. 1, 10, 25, 50, 100)
-NumofRuns = 30;
+NumofRuns = 15;
 %<---------------------------------------------------------->
 %==========================================================================
