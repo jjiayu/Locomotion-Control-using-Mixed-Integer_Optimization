@@ -63,16 +63,16 @@ lb_zdot = repmat(-25, 1, VarLengthList(VarCategoryList == "zdot"));
 ub_zdot = repmat( 25, 1, VarLengthList(VarCategoryList == "zdot"));
 
 %       phi
-lb_phi = repmat(-pi*15/180, 1, VarLengthList(VarCategoryList == "phi"));  %15 degrees  
-ub_phi = repmat( pi*15/180, 1, VarLengthList(VarCategoryList == "phi"));  %15 degrees
+lb_phi = repmat(-pi*30/180, 1, VarLengthList(VarCategoryList == "phi"));  %30 degrees  
+ub_phi = repmat( pi*30/180, 1, VarLengthList(VarCategoryList == "phi"));  %30 degrees
 
 %       theta
 lb_theta = repmat(-pi/3,          1, VarLengthList(VarCategoryList == "theta"));    
 ub_theta = repmat( pi/3, 1, VarLengthList(VarCategoryList == "theta")); %90% of pi/2 -> 90/100*(pi/2)
 
 %       psi
-lb_psi = repmat(-pi*5/180, 1, VarLengthList(VarCategoryList == "psi")); %5 degree  
-ub_psi = repmat( pi*5/180, 1, VarLengthList(VarCategoryList == "psi")); %5 degrees
+lb_psi = repmat(-pi*15/180, 1, VarLengthList(VarCategoryList == "psi")); %15 degree  
+ub_psi = repmat( pi*15/180, 1, VarLengthList(VarCategoryList == "psi")); %15 degrees
 
 %       phi dot
 lb_phidot = repmat(-5*pi, 1, VarLengthList(VarCategoryList == "phidot"));    
