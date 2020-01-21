@@ -380,10 +380,10 @@ for speedIdx = 1:length(SpeedList)
                           10000*h*(y(k)^2);
             elseif cost_flag == 3 %Smoothness of Force Profile
                 if k<=tauSeriesLength - 2
-                    J = J + ((Flfx(k+1)-Flfx(k))/h)^2 + ((Flfy(k+1)-Flfy(k))/h)^2 + ((Flfz(k+1)-Flfz(k))/h)^2 +... Left Front (lf)
-                            ((Flhx(k+1)-Flhx(k))/h)^2 + ((Flhy(k+1)-Flhy(k))/h)^2 + ((Flhz(k+1)-Flhz(k))/h)^2 +... Left Hind (lh)
-                            ((Frfx(k+1)-Frfx(k))/h)^2 + ((Frfy(k+1)-Frfy(k))/h)^2 + ((Frfz(k+1)-Frfz(k))/h)^2 +... Right Front (rf)
-                            ((Frhx(k+1)-Frhx(k))/h)^2 + ((Frhy(k+1)-Frhy(k))/h)^2 + ((Frhz(k+1)-Frhz(k))/h)^2;    %Right Hind (rh)
+                    J = J + (Flfx(k+1)-Flfx(k))^2/h + (Flfy(k+1)-Flfy(k))^2/h + (Flfz(k+1)-Flfz(k))^2/h +... Left Front (lf)
+                            (Flhx(k+1)-Flhx(k))^2/h + (Flhy(k+1)-Flhy(k))^2/h + (Flhz(k+1)-Flhz(k))^2/h +... Left Hind (lh)
+                            (Frfx(k+1)-Frfx(k))^2/h + (Frfy(k+1)-Frfy(k))^2/h + (Frfz(k+1)-Frfz(k))^2/h +... Right Front (rf)
+                            (Frhx(k+1)-Frhx(k))^2/h + (Frhy(k+1)-Frhy(k))^2/h + (Frhz(k+1)-Frhz(k))^2/h;    %Right Hind (rh)
                 end
 
             elseif cost_flag == 4 %5 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)

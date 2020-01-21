@@ -12,9 +12,9 @@ end
 %Deal with Initial Guess of Switching times
 %   Random Numbers sort in a specific order
 Ts_init = lb_ContinuousDecisionVars(find(VarNamesList == Ts_label(1)):find(VarNamesList == Ts_label(end))) + ...
-          (ub_ContinuousDecisionVars(find(VarNamesList == Ts_label(1)):find(VarNamesList == Ts_label(end))) - lb_ContinuousDecisionVars(find(VarNamesList == Ts_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(Ts_label));
-Ts_init = sort(Ts_init,'ascend');
-DecisionVarsInit(find(VarNamesList == Ts_label(1)):find(VarNamesList == Ts_label(end))) = Ts_init;
+          (ub_ContinuousDecisionVars(find(VarNamesList == Ts_label(1)):find(VarNamesList == Ts_label(end))) - lb_ContinuousDecisionVars(find(VarNamesList == Ts_label(1)):find(VarNamesList == Ts_label(end)))).*rand(1,length(Ts_label))
+Ts_init = sort((b-a)*rand(n,1)+a,'ascend');
+DecisionVarsInit(find(VarNamesList == Ts_label(1)):find(VarNamesList == Ts_label(end))) = 
 
 %DecisionVarsInit has to be column vector
 DecisionVarsInit = DecisionVarsInit';

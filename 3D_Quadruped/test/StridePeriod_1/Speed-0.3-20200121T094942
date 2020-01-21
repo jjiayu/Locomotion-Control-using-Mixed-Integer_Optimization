@@ -1,0 +1,186 @@
+====================================================
+Gait Search for 8Phases Motion(10Knots per Phase), Locomotion Speed 0.3 m/s Round 1
+Experiment Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/test/StridePeriod_1
+Exp Start Time: 20200121T094942
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Decision Variable List Built Successfully
+====================================================
+ 
+=====================================================
+All Constraint Set up
+=====================================================
+ 
+=====================================================
+Boundaries of Decision Variables Build
+=====================================================
+ 
+=====================================================
+Initial Guess Build
+=====================================================
+ 
+===================================================
+Optimization Start
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+hessopt:                 1
+mip_branchrule:          2
+mip_maxnodes:            0
+mip_outinterval:         100
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                               3904
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                       3904
+    fixed:                                            0
+    free:                                             0
+Number of binary variables:                          32
+Number of integer variables:                          0
+Number of constraints:                             9972
+    linear equalities:                               16
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                     1932
+    linear one-sided inequalities:                 6080
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    8
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:         1936
+Number of nonzeros in Jacobian:                   44384
+Number of nonzeros in Hessian:                    21941
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 4160 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+   iter =      1: Iinf =      9, FeasError =   2.000e+00
+   iter =      2: Iinf =     32, FeasError =   6.000e+00
+   iter =      3: Iinf =     32, FeasError =   1.000e+00
+*  iter =      4: Iinf =      0, FeasError =   2.129e-08, Obj =   6.812e+07
+Knitro found integer feasible point in 4 heuristic iterations
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+*      1       0       0  -1.80e+308     -1.80e+308    6.81e+07      41.276
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CallSolver', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/CallSolver.m', 27)" style="font-weight:bold">CallSolver</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/CallSolver.m',27,0)">line 27</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+evalin('caller', strcat(script, ';'));
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 443)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',443,0)">line 443</a>)
+        run('CallSolver.m')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CallSolver', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/CallSolver.m', 27)" style="font-weight:bold">CallSolver</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/CallSolver.m',27,0)">line 27</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+evalin('caller', strcat(script, ';'));
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 443)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',443,0)">line 443</a>)
+        run('CallSolver.m')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CallSolver', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/CallSolver.m', 27)" style="font-weight:bold">CallSolver</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/CallSolver.m',27,0)">line 27</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+evalin('caller', strcat(script, ';'));
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 443)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',443,0)">line 443</a>)
+        run('CallSolver.m')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CallSolver', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/CallSolver.m', 27)" style="font-weight:bold">CallSolver</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/CallSolver.m',27,0)">line 27</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+evalin('caller', strcat(script, ';'));
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 443)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',443,0)">line 443</a>)
+        run('CallSolver.m')
+} 
+       Could not evaluate first derivatives at the current point.
+ERROR: User routine for grad_callback returned -504.
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/call', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 735)" style="font-weight:bold">casadi.Function/call</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',735,0)">line 735</a>)
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/paren', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1429)" style="font-weight:bold">casadi.Function/paren</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1429,0)">line 1429</a>)
+        res = self.call(arg);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('casadi.Function/subsref', '/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m', 1414)" style="font-weight:bold">casadi.Function/subsref</a> (<a href="matlab: opentoline('/home/jiayu/bin/casadi-linux-matlabR2014b-v3.4.5/+casadi/Function.m',1414,0)">line 1414</a>)
+        [varargout{1:nargout}]= paren(self, s.subs{:});
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CallSolver', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/CallSolver.m', 27)" style="font-weight:bold">CallSolver</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/CallSolver.m',27,0)">line 27</a>)
+sol = solver('x0',  DecisionVarsInit, ...
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+evalin('caller', strcat(script, ';'));
+
+In <a href="matlab:matlab.internal.language.introspective.errorD
