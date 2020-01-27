@@ -378,16 +378,70 @@ for speedIdx = 1:length(SpeedList)
                                  h*(Frfx(k)^2) + h*(Frfy(k)^2) + h*(Frfz(k)^2)  +... Right Front (rf)
                                  h*(Frhx(k)^2) + h*(Frhy(k)^2) + h*(Frhz(k)^2)) +... Right Hind (rh)
                           10000*h*(y(k)^2);
-            elseif cost_flag == 3 %Smoothness of Force Profile
+            elseif cost_flag == 3 %Minimize Force Squared and Angular Momentum *Rates*
+                Torquelf_k = cross(([Plfx(k); Plfy(k); Plfz(k)] - [x(k); y(k); z(k)]),[Flfx(k); Flfy(k); Flfz(k)]);
+                Torquelh_k = cross(([Plhx(k); Plhy(k); Plhz(k)] - [x(k); y(k); z(k)]),[Flhx(k); Flhy(k); Flhz(k)]);
+                Torquerf_k = cross(([Prfx(k); Prfy(k); Prfz(k)] - [x(k); y(k); z(k)]),[Frfx(k); Frfy(k); Frfz(k)]);
+                Troquerh_k = cross(([Prhx(k); Prhy(k); Prhz(k)] - [x(k); y(k); z(k)]),[Frhx(k); Frhy(k); Frhz(k)]);
+
+                R_k = EulerAngle_to_RotationMatrix(phi, theta, psi, k); %Rotation Matrix at time k
+                omega_k = EulerRate_to_AngularVelocity(phi,theta,psi,phidot,thetadot,psidot,k); %angular velocity at time k
+                L_k = R_k*I*R_k'*omega_k; %angular momentum at time k
+                
+                J = J + h*((m*xdot(k))^2) + h*((m*ydot(k))^2) + h*((m*zdot(k))^2) + ...
+                        h*((L_k(1))^2) + h*((L_k(2))^2) + h*((L_k(3))^2) +...
+                        h*((Flfx(k) + Flhx(k) + Frfx(k) + Frhx(k))^2) +...x-axis
+                        h*((Flfy(k) + Flhy(k) + Frfy(k) + Frhy(k))^2) +...y-axis
+                        h*((Flfz(k) + Flhz(k) + Frfz(k) + Frhz(k) - m*G)^2) +... %z-axis
+                        h*sum((Torquelf_k + Torquelh_k + Torquerf_k + Troquerh_k).^2);
+%                                 Torquelf_k = cross(([Plfx(k); Plfy(k); Plfz(k)] - [x(k); y(k); z(k)]),[Flfx(k); Flfy(k); Flfz(k)]);
+%                 Torquelh_k = cross(([Plhx(k); Plhy(k); Plhz(k)] - [x(k); y(k); z(k)]),[Flhx(k); Flhy(k); Flhz(k)]);
+%                 Torquerf_k = cross(([Prfx(k); Prfy(k); Prfz(k)] - [x(k); y(k); z(k)]),[Frfx(k); Frfy(k); Frfz(k)]);
+%                 Troquerh_k = cross(([Prhx(k); Prhy(k); Prhz(k)] - [x(k); y(k); z(k)]),[Frhx(k); Frhy(k); Frhz(k)]);
+% 
+%                 J = J + h*((Flfx(k)/100)^2) + h*((Flfy(k)/100)^2) + h*((Flfz(k)/100)^2) +... Left Front (lf)
+%                         h*((Flhx(k)/100)^2) + h*((Flhy(k)/100)^2) + h*((Flhz(k)/100)^2) +... Left Hind (lh)
+%                         h*((Frfx(k)/100)^2) + h*((Frfy(k)/100)^2) + h*((Frfz(k)/100)^2) +... Right Front (rf)
+%                         h*((Frhx(k)/100)^2) + h*((Frhy(k)/100)^2) + h*((Frhz(k)/100)^2) +... Right Hind (rh)
+%                         h*(sum((Torquelf_k*100).^2)) + ...
+%                         h*(sum((Torquelh_k*100).^2)) + ...
+%                         h*(sum((Torquerf_k*100).^2)) + ...
+%                         h*(sum((Troquerh_k*100).^2));
+                
+%                 J = J + h*((xdot(k)*1000)^2) + h*((ydot(k)*1000)^2) + h*((zdot(k)*1000)^2) + ...
+%                         h*((phidot(k)*1000)^2) + h*((thetadot(k)*1000)^2) + h*((psidot(k)*1000)^2);
+                
+%                 R_k = EulerAngle_to_RotationMatrix(phi, theta, psi, k); %Rotation Matrix at time k
+%                 omega_k = EulerRate_to_AngularVelocity(phi,theta,psi,phidot,thetadot,psidot,k); %angular velocity at time k
+%                 L_k = R_k*I*R_k'*omega_k; %angular momentum at time k
+%                 
+%                 Torquelf_k = cross(([Plfx(k); Plfy(k); Plfz(k)] - [x(k); y(k); z(k)]),[Flfx(k); Flfy(k); Flfz(k)]);
+%                 Torquelh_k = cross(([Plhx(k); Plhy(k); Plhz(k)] - [x(k); y(k); z(k)]),[Flhx(k); Flhy(k); Flhz(k)]);
+%                 Torquerf_k = cross(([Prfx(k); Prfy(k); Prfz(k)] - [x(k); y(k); z(k)]),[Frfx(k); Frfy(k); Frfz(k)]);
+%                 Troquerh_k = cross(([Prhx(k); Prhy(k); Prhz(k)] - [x(k); y(k); z(k)]),[Frhx(k); Frhy(k); Frhz(k)]);
+% 
+%                 J = J + 1/1000000*(h*(Flfx(k)^2) + h*(Flfy(k)^2) + h*(Flfz(k)^2) +... Left Front (lf) Forces
+%                                    h*(Flhx(k)^2) + h*(Flhy(k)^2) + h*(Flhz(k)^2) +... Left Hind (lh) Forces
+%                                    h*(Frfx(k)^2) + h*(Frfy(k)^2) + h*(Frfz(k)^2) +... Right Front (rf) Forces
+%                                    h*(Frhx(k)^2) + h*(Frhy(k)^2) + h*(Frhz(k)^2)) +... Right Hind (rh) Forces
+%                         h*sum((Torquelf_k + Torquelh_k + Torquerf_k + Troquerh_k).^2);
+                        
+%A potential but failed cost
+%Minimize Linear Momentum Rate and Angular Momentum Rate           
+
+%                 
+%                 J = J + h*((Flfx(k) + Flhx(k) + Frfx(k) + Frhx(k))^2) +...x-axis
+%                         h*((Flfy(k) + Flhy(k) + Frfy(k) + Frhy(k))^2) +...y-axis
+%                         h*((Flfz(k) + Flhz(k) + Frfz(k) + Frhz(k) - m*G)^2) +...z-axis
+%                         h*sum((Torquelf_k + Torquelh_k + Torquerf_k + Troquerh_k).^2);
+                    
+            elseif cost_flag == 4 %Smoothness of Force Profile
                 if k<=tauSeriesLength - 2
                     J = J + (Flfx(k+1)-Flfx(k))^2/h + (Flfy(k+1)-Flfy(k))^2/h + (Flfz(k+1)-Flfz(k))^2/h +... Left Front (lf)
                             (Flhx(k+1)-Flhx(k))^2/h + (Flhy(k+1)-Flhy(k))^2/h + (Flhz(k+1)-Flhz(k))^2/h +... Left Hind (lh)
                             (Frfx(k+1)-Frfx(k))^2/h + (Frfy(k+1)-Frfy(k))^2/h + (Frfz(k+1)-Frfz(k))^2/h +... Right Front (rf)
                             (Frhx(k+1)-Frhx(k))^2/h + (Frhy(k+1)-Frhy(k))^2/h + (Frhz(k+1)-Frhz(k))^2/h;    %Right Hind (rh)
                 end
-
-            elseif cost_flag == 4 %5 -> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)
-                error('No.4 Cost is Redundant');
             elseif cost_flag == 5 %Minimize Vibration (Cost 3) with Constant Tangential Velocity (at Every Knot)
                 error('No.3 Cost Need Adaptations')
 %               % Add Constant Tangential Velocity (at Every Knot) Term -> Depends on which direction the desired speed is defined

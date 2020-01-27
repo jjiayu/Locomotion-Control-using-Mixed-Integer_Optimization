@@ -616,10 +616,9 @@ if Paras_Define_Method == 1 %Load Parameters from File
     elseif cost_flag == 2
         disp('2-> Minimize Lateral Displacement and Force Regularization');
     elseif cost_flag == 3
-        disp('3-> Smooth Force Profile');
+        disp('3-> Minimize Linear and Angular Momentum Rate');
     elseif cost_flag == 4
-        error('Not Implemented')
-        %disp('4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero)');
+        disp('4 -> Smooth Force Profile');
     elseif cost_flag == 5
         error('Not Implemented, need adaptation')
         %disp('5-> Smooth Motion: \ntangential speed is constant and close to the desired velocity in tangential direction \ntheta close to theta_slope \nthetadot close to 0 normal velocity close to 0)')
@@ -635,7 +634,7 @@ elseif Paras_Define_Method == 2 %Manually Define Variables
     disp('====================================================');
     disp('Set up Cost Terms:')
     disp('----------------------------------------------------');
-    cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n 2-> Minimize Lateral Displacement and Force Regularization \n 3-> Smooth Force Profile \n [Not Implemented] 4-> Maximize Velocity Smoothness (x_tangent towards desired speed, ydot towards zero, thetadot towards zero) \n [Not Implemented] 5-> Smooth Motion (tangential speed is constant and close to the desired velocity in tangential direction \ntheta close to theta_slope \nthetadot close to 0 normal velocity close to 0)\n [Not Implemented] 6-> Feet Velocity \n [Not Implemented] 7-> Humanoid Smooth Motion (theta, thetadot towards zero) \n');
+    cost_flag = input('Decide Cost: \n 1-> Minimize Force Squared (Energy Loss) \n 2-> Minimize Lateral Displacement and Force Regularization \n 3-> Minimize Linear and Angular Momentum Rate \n 4-> Smooth Force Profile \n [Not Implemented] 5-> Smooth Motion (tangential speed is constant and close to the desired velocity in tangential direction \ntheta close to theta_slope \nthetadot close to 0 normal velocity close to 0)\n [Not Implemented] 6-> Feet Velocity \n [Not Implemented] 7-> Humanoid Smooth Motion (theta, thetadot towards zero) \n');
     disp('====================================================');
 end
 

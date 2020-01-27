@@ -251,7 +251,7 @@ elseif gait_discovery_switch == 2 %Fixed Gait Optimization
 end
 
 % Intial Angular Velocity of the Body
-omega0 = EulerRate_to_AngularVelocity(phi_result(1),theta_result(1),psi_result(1),phidot_result(1),thetadot_result(1),psidot_result(1));
+omega0 = EulerRate_to_AngularVelocity(phi_result,theta_result,psi_result,phidot_result,thetadot_result,psidot_result,1);
 
 
 disp('Result Variables Extracted')
