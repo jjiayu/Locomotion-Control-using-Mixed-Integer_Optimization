@@ -1,0 +1,173 @@
+====================================================
+Gait Search for 8Phases Motion(5Knots per Phase), Locomotion Speed 1 m/s Round 1
+Experiment Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/MINLP_test/StridePeriod_1
+Exp Start Time: 20200128T115036
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Decision Variable List Built Successfully
+====================================================
+ 
+=====================================================
+All Constraint Set up
+=====================================================
+ 
+=====================================================
+Boundaries of Decision Variables Build
+=====================================================
+ 
+=====================================================
+Initial Guess Build
+=====================================================
+ 
+===================================================
+Optimization Start
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+hessopt:                 1
+mip_branchrule:          2
+mip_maxnodes:            0
+mip_outinterval:         100
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_heuristic from AUTO to 2.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                               1984
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                       1984
+    fixed:                                            0
+    free:                                             0
+Number of binary variables:                          32
+Number of integer variables:                          0
+Number of constraints:                             5012
+    linear equalities:                               16
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                      972
+    linear one-sided inequalities:                 3040
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    8
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:          976
+Number of nonzeros in Jacobian:                   22384
+Number of nonzeros in Hessian:                    11061
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 2080 constraints
+Knitro solving root node relaxation
+Knitro searching for integer feasible point using heuristic
+   iter =      1: Iinf =      8, FeasError =   2.000e+00
+   iter =      2: Iinf =     32, FeasError =   6.000e+00
+   iter =      3: Iinf =     32, FeasError =   1.500e+00
+   iter =      4: Iinf =     32, FeasError =   4.000e+00
+*  iter =      5: Iinf =      0, FeasError =   1.000e-10, Obj =   6.836e+06
+Knitro found integer feasible point in 5 heuristic iterations
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+*      1       0       0  -1.80e+308     -1.80e+308    6.84e+06      30.415
+     100      31      19    3.40e-24       5.32e-16    6.84e+06     322.052
+     200      31      14    5.62e-08       7.56e-04    6.84e+06     719.786
+*    295      34       0    6.01e+06  f    7.56e-04    6.01e+06    1231.469
+     300      33         INFEASIBLE  pr    7.56e-04    6.01e+06    1502.313
+     400      25      14    1.93e-08       7.56e-04    6.01e+06    1862.521
+     500      25         INFEASIBLE  pr    1.32e-03    6.01e+06    2542.520
+     600      23      13    1.50e+05       1.32e-03    6.01e+06    3204.295
+     700      25         INFEASIBLE  pr    1.32e-03    6.01e+06    3726.424
+*    793      32       0    2.43e+06  f    1.32e-03    2.43e+06    4376.535
+     800      35         INFEASIBLE  pr    1.32e-03    2.43e+06    4386.034
+     900      25         INFEASIBLE  pr    1.32e-03    2.43e+06    4752.085
+    1000      23         INFEASIBLE  pr    1.32e-03    2.43e+06    5148.321
+    1100      19         INFEASIBLE  pr    1.32e-03    2.43e+06    5576.524
+    1200      17         INFEASIBLE  pr    1.50e-03    2.43e+06    6179.085
+    1300      27         INFEASIBLE  pr    2.68e-03    2.43e+06    6642.448
+    1400      21         INFEASIBLE  pr    2.68e-03    2.43e+06    7124.312
+    1500      11         INFEASIBLE  pr    6.80e-01    2.43e+06    7718.756
+    1600      13      13    5.69e-08       6.80e-01    2.43e+06    8134.651
+*   1667      18       0    1.94e+06  f    6.80e-01    1.94e+06    8388.144
+    1700       9         INFEASIBLE  pr    2.35e+01    1.94e+06    8502.318
+    1739       0            3.56e+07       1.94e+06    1.94e+06    8711.643
+  WARNING -- integrality gap is negative
+
+EXIT: Optimal solution found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =   1.94204251129375e+06
+Final integrality gap (abs / rel)   = -2.16e-01 /  -1.11e-07 (-0.00%)
+# of nodes processed                =     1739
+# of subproblems processed          =     1748
+Total program time (secs)           =    8711.65625 (  9030.925 CPU time)
+Time spent in evaluations (secs)    =     399.60925
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg         72.6           67    434328
+   nlp_gf_jg          106          101    232131
+  nlp_hess_l          227          219    230897
+      solver     9.03e+03     8.71e+03         1
+
+ans =
+
+  <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a>
+
+   1
+
+===================================================
+Computation Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+[Warning: NOTE 1: For display, Gait Matrix Sequence Becomes "gait_display": LH -> LF -> RF -> RH] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ResultExtraction', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m', 529)" style="font-weight:bold">ResultExtraction</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m',529,0)">line 529</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 503)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',503,0)">line 503</a>)] 
+[Warning: NOTE 2: The Gait Matric for display is the Transpose of the original column vectors (Each LINE Represnet the
+Contact Sequence of a Limb)] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ResultExtraction', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m', 530)" style="font-weight:bold">ResultExtraction</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m',530,0)">line 530</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 503)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',503,0)">line 503</a>)] 
+[Warning: NOTE 3: "gait" is the SOLELY variable name storing the gait sequence which is consistent with respect to the
+optimization program, and it is Read COLUMN by COLUMN] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ResultExtraction', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m', 531)" style="font-weight:bold">ResultExtraction</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m',531,0)">line 531</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 503)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',503,0)">line 503</a>)] 
+
+ans =
+
+    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000         0
+    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000         0         0
+    1.0000    1.0000    1.0000         0         0         0         0         0
+    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000         0         0
+    0.0500    0.0500    0.0500    0.0500    0.0500    0.4738    0.0500    0.2262
+
+Removed Variables within Vanished Phases
+===================================================
+ 
+===================================================
+Computation Result Extracted
+===================================================
+ 

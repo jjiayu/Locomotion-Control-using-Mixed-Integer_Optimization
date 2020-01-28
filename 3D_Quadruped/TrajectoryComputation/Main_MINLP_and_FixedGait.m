@@ -387,7 +387,7 @@ for speedIdx = 1:length(SpeedList)
                 R_k = EulerAngle_to_RotationMatrix(phi, theta, psi, k); %Rotation Matrix at time k
                 omega_k = EulerRate_to_AngularVelocity(phi,theta,psi,phidot,thetadot,psidot,k); %angular velocity at time k
                 L_k = R_k*I*R_k'*omega_k; %angular momentum at time k
-                
+                                
                 J = J + h*((m*xdot(k))^2) + h*((m*ydot(k))^2) + h*((m*zdot(k))^2) + ...
                         h*((L_k(1))^2) + h*((L_k(2))^2) + h*((L_k(3))^2) +...
                         h*((Flfx(k) + Flhx(k) + Frfx(k) + Frhx(k))^2) +...x-axis

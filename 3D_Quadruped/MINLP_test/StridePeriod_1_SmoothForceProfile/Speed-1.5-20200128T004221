@@ -1,0 +1,524 @@
+====================================================
+Gait Search for 8Phases Motion(10Knots per Phase), Locomotion Speed 1.5 m/s Round 9
+Experiment Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/MINLP_test/StridePeriod_1
+Exp Start Time: 20200128T004221
+====================================================
+====================================================
+Generate Decision Variables Vectors/Lists:
+----------------------------------------------------
+Decision Variable List Built Successfully
+====================================================
+ 
+=====================================================
+All Constraint Set up
+=====================================================
+ 
+=====================================================
+Boundaries of Decision Variables Build
+=====================================================
+ 
+=====================================================
+Initial Guess Build
+=====================================================
+ 
+===================================================
+Optimization Start
+===================================================
+ 
+===================================================
+Optimization Started
+
+=======================================
+           Academic License
+       (NOT FOR COMMERCIAL USE)
+         Artelys Knitro 11.1.2
+=======================================
+
+hessopt:                 1
+mip_branchrule:          2
+mip_heuristic:           0
+mip_maxnodes:            0
+mip_outinterval:         1
+mip_outlevel:            2
+mip_selectrule:          3
+Knitro changing mip_method from AUTO to 1.
+Knitro changing mip_rootalg from AUTO to 1.
+Knitro changing mip_lpalg from AUTO to 3.
+Knitro changing mip_rounding from AUTO to 3.
+Knitro changing mip_pseudoinit from AUTO to 1.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Objective type:  general
+Number of variables:                               3904
+    bounded below only:                               0
+    bounded above only:                               0
+    bounded below and above:                       3904
+    fixed:                                            0
+    free:                                             0
+Number of binary variables:                          32
+Number of integer variables:                          0
+Number of constraints:                             9972
+    linear equalities:                               16
+    quadratic equalities:                             0
+    gen. nonlinear equalities:                     1932
+    linear one-sided inequalities:                 6080
+    quadratic one-sided inequalities:                 0
+    gen. nonlinear one-sided inequalities:            0
+    linear two-sided inequalities:                    8
+    quadratic two-sided inequalities:                 0
+    gen. nonlinear two-sided inequalities:         1936
+Number of nonzeros in Jacobian:                   44384
+Number of nonzeros in Hessian:                    21941
+
+Knitro detected 0 GUB constraints
+Knitro derived 0 knapsack covers after examining 4160 constraints
+Knitro solving root node relaxation
+Knitro MIP using Branch and Bound method
+
+                                            Best        Best     Cumulative
+   Node    Left    Iinf    Objective     Relaxation   Incumbent   Real Time
+  ------  ------  ------  ----------     ----------  ----------  ----------
+       1       0      32  -1.80e+308     -1.80e+308                   8.541
+       2       1         INFEASIBLE  pr  -1.80e+308                  14.878
+       3       0      31    8.21e+03       8.21e+03                  19.593
+       4       1      30    3.54e-01       8.21e+03                  29.778
+       5       2      29    6.13e-01       8.21e+03                  42.579
+       6       3      28    7.41e-01       8.21e+03                  47.617
+       7       4      27    3.22e-09       8.21e+03                  56.614
+       8       5         INFEASIBLE  pr    8.21e+03                  90.344
+       9       4         INFEASIBLE  pr    8.21e+03                 106.483
+      10       3      27    2.28e-08       8.21e+03                 189.440
+      11       4         INFEASIBLE  pr    8.21e+03                 223.147
+      12       3         INFEASIBLE  pr    8.21e+03                 271.890
+      13       2         INFEASIBLE  pr    8.21e+03                 314.906
+      14       1      29    7.90e-09       8.21e+03                 315.725
+      15       2      28    1.60e-03       8.21e+03                 338.172
+      16       3      27    2.54e-08       8.21e+03                 338.922
+      17       4      26    3.27e-08       8.21e+03                 339.622
+      18       5         INFEASIBLE  pr    8.21e+03                 345.947
+      19       4         INFEASIBLE  pr    8.21e+03                 350.981
+      20       3         INFEASIBLE  pr    8.21e+03                 356.270
+      21       2      27    1.35e-08       8.21e+03                 357.392
+      22       3      28    9.42e-09       8.21e+03                 358.215
+      23       4      27    1.47e-02       8.21e+03                 397.375
+      24       5      26    1.05e+00       8.21e+03                 425.363
+      25       6      25    9.28e-08       8.21e+03                 447.281
+      26       7      24    7.27e-09       8.21e+03                 450.221
+      27       8         INFEASIBLE  pr    8.21e+03                 496.899
+      28       7         INFEASIBLE  pr    8.21e+03                 501.414
+      29       6         INFEASIBLE  pr    8.21e+03                 523.212
+      30       5         INFEASIBLE  pr    8.21e+03                 532.125
+      31       4      26    1.42e-10       8.21e+03                 582.072
+      32       5      25    4.08e-01       8.21e+03                 636.840
+      33       6         INFEASIBLE        8.21e+03                 733.260
+      34       7         INFEASIBLE  pr    8.21e+03                 785.164
+      35       6         INFEASIBLE  pr    8.21e+03                 794.586
+      36       5         INFEASIBLE  pr    8.21e+03                 810.282
+      37       4      25    6.40e-07       8.21e+03                 810.998
+      38       5      27    2.32e-08       8.21e+03                 812.369
+      39       6      26    1.13e+01       8.21e+03                 818.294
+      40       7      25    1.28e-07       8.21e+03                 829.943
+      41       8         INFEASIBLE  pr    8.21e+03                 837.515
+      42       7      24    7.10e-08       8.21e+03                 838.360
+      43       8      23    2.74e-08       8.21e+03                 840.682
+      44       9         INFEASIBLE  pr    8.21e+03                 846.235
+      45       8      22    1.36e-08       8.21e+03                 853.005
+      46       9      21    1.77e-08       8.21e+03                 853.076
+      47      10         INFEASIBLE  pr    8.21e+03                 865.499
+      48       9         INFEASIBLE  pr    8.21e+03                 872.090
+      49       8         INFEASIBLE  pr    8.21e+03                 880.082
+      50       7         INFEASIBLE  pr    8.21e+03                 896.406
+      51       6         INFEASIBLE  pr    8.21e+03                1236.760
+      52       5         INFEASIBLE  pr    8.21e+03                1245.254
+      53       4         INFEASIBLE        8.21e+03                1317.186
+      54       5         INFEASIBLE  pr    8.21e+03                1323.110
+      55       4         INFEASIBLE  pr    8.21e+03                1332.626
+      56       3      24    9.79e-02       8.21e+03                1338.090
+      57       4      23    1.26e-07       8.21e+03                1339.187
+      58       5      22    2.82e-09       8.21e+03                1343.514
+      59       6      21    2.98e-08       8.21e+03                1343.588
+      60       7      20    3.21e-08       8.21e+03                1343.661
+      61       8      19    6.22e-08       8.21e+03                1343.739
+      62       9      18    6.25e-08       8.21e+03                1343.810
+      63      10      17    5.11e-08       8.21e+03                1343.874
+      64      11      16    2.07e-08       8.21e+03                1343.950
+      65      12         INFEASIBLE  pr    8.21e+03                1358.381
+      66      11         INFEASIBLE  pr    8.21e+03                1365.420
+      67      10      16    1.69e-08       8.21e+03                1367.706
+      68      11         INFEASIBLE  pr    8.21e+03                1375.621
+      69      10      15    3.08e-08       8.21e+03                1375.685
+      70      11      14    4.45e-08       8.21e+03                1375.752
+      71      12      13    4.23e-08       8.21e+03                1375.818
+      72      13         INFEASIBLE  pr    8.21e+03                1382.104
+      73      12         INFEASIBLE  pr    8.21e+03                1527.062
+      74      11         INFEASIBLE  pr    8.21e+03                1533.687
+      75      10         INFEASIBLE  pr    8.21e+03                1539.415
+      76       9         INFEASIBLE  pr    8.21e+03                1545.038
+      77       8         INFEASIBLE  pr    8.21e+03                1549.857
+      78       7         INFEASIBLE  pr    8.21e+03                1556.657
+      79       6         INFEASIBLE  pr    8.21e+03                1563.136
+      80       5         INFEASIBLE  pr    8.21e+03                1570.063
+      81       4         INFEASIBLE  pr    8.21e+03                1583.951
+      82       3         INFEASIBLE  pr    8.21e+03                1629.158
+      83       2      24    1.78e-08       8.21e+03                1630.292
+      84       3      26    2.83e-10       8.21e+03                1631.978
+      85       4      25    7.57e-10       8.21e+03                1632.055
+      86       5      24    3.16e-09       8.21e+03                1632.140
+      87       6      23    3.54e-08       8.21e+03                1632.856
+      88       7      22    4.31e-08       8.21e+03                1633.545
+      89       8      21    3.80e-08       8.21e+03                1633.612
+      90       9      20    1.38e-07       8.21e+03                1633.679
+      91      10      19    5.12e-07       8.21e+03                1633.749
+      92      11      18    4.60e-07       8.21e+03                1633.818
+      93      12      17    2.43e-08       8.21e+03                1633.890
+      94      13         INFEASIBLE  pr    8.21e+03                1640.634
+      95      12      16    8.53e-09       8.21e+03                1641.347
+      96      13         INFEASIBLE  pr    8.21e+03                1647.816
+      97      12         INFEASIBLE  pr    8.21e+03                1654.614
+      98      11         INFEASIBLE  pr    8.21e+03                1661.226
+      99      10         INFEASIBLE  pr    8.21e+03                1665.045
+     100       9      19    5.06e-08       8.21e+03                1666.356
+     101      10         INFEASIBLE  pr    8.21e+03                1677.044
+     102       9      18    6.01e-10       8.21e+03                1681.847
+     103      10      17    2.00e-09       8.21e+03                1681.919
+     104      11         INFEASIBLE  pr    8.21e+03                1688.540
+     105      10      16    3.05e-08       8.21e+03                1689.295
+     106      11         INFEASIBLE  pr    8.21e+03                1695.744
+     107      10      15    3.21e-08       8.21e+03                1696.521
+     108      11         INFEASIBLE  pr    8.21e+03                1700.578
+     109      10      14    3.12e-08       8.21e+03                1701.896
+     110      11      13    1.77e-02       8.21e+03                1731.862
+     111      12         INFEASIBLE  pr    8.21e+03                1735.057
+     112      11         INFEASIBLE  pr    8.21e+03                1826.628
+     113      10      13    1.66e-08       8.21e+03                1827.659
+     114      11      17    1.01e-06       8.21e+03                1829.298
+     115      12      24    1.15e-08       8.21e+03                1831.009
+     116      13      23    2.71e-08       8.21e+03                1832.292
+     117      14         INFEASIBLE  pr    8.21e+03                1836.797
+     118      13      22    1.32e-07       8.21e+03                1850.440
+     119      14      21    1.22e-07       8.21e+03                1850.512
+     120      15      20    6.27e-07       8.21e+03                1850.585
+     121      16         INFEASIBLE  pr    8.21e+03                1898.553
+     122      15         INFEASIBLE  pr    8.21e+03                1905.685
+     123      14         INFEASIBLE  pr    8.21e+03                1912.800
+     124      13         INFEASIBLE  pr    8.21e+03                1920.208
+     125      12         INFEASIBLE  pr    8.21e+03                1940.257
+     126      11      23    1.37e-09       8.21e+03                1941.234
+     127      12      22    6.38e-08       8.21e+03                1946.900
+     128      13      21    5.87e-08       8.21e+03                1946.972
+     129      14      20    1.83e-07       8.21e+03                1947.042
+     130      15      19    3.27e-07       8.21e+03                1947.110
+     131      16      18    6.84e-01       8.21e+03                1980.949
+     132      17         INFEASIBLE  pr    8.21e+03                2019.453
+     133      16         INFEASIBLE  pr    8.21e+03                2023.639
+     134      15         INFEASIBLE  pr    8.21e+03                2028.323
+     135      14         INFEASIBLE  pr    8.21e+03                2034.615
+     136      13         INFEASIBLE  pr    8.21e+03                2041.578
+     137      12         INFEASIBLE  pr    8.21e+03                2047.628
+     138      11         INFEASIBLE  pr    8.21e+03                2070.342
+     139      10         INFEASIBLE  pr    8.21e+03                2080.759
+     140       9      16    1.48e-08       8.21e+03                2081.541
+     141      10      15    1.10e+05       8.21e+03                2094.271
+     142      11         INFEASIBLE  pr    8.21e+03                2098.022
+     143      10         INFEASIBLE  pr    8.21e+03                2154.494
+     144       9         INFEASIBLE  pr    8.21e+03                2169.290
+     145       8         INFEASIBLE  pr    8.21e+03                2172.960
+     146       7      12    1.10e-08       8.21e+03                2174.724
+     147       8         INFEASIBLE  pr    8.21e+03                2178.441
+     148       7      11    8.86e-07       8.21e+03                2179.142
+     149       8         INFEASIBLE  pr    8.21e+03                2183.241
+     150       7      10    1.31e-08       8.21e+03                2184.188
+     151       8         INFEASIBLE  pr    8.21e+03                2191.810
+     152       7       9    3.52e-08       8.21e+03                2192.671
+     153       8         INFEASIBLE  pr    8.21e+03                2199.323
+     154       7       8    1.17e-08       8.21e+03                2200.803
+     155       8       7    3.26e-08       8.21e+03                2200.863
+     156       9         INFEASIBLE  pr    8.21e+03                2204.329
+     157       8       6    1.56e-09       8.21e+03                2252.773
+     158       9       4    3.27e-05       8.21e+03                2301.510
+     159      10         INFEASIBLE  pr    8.21e+03                2305.676
+     160       9       3    2.60e-02       8.21e+03                2793.229
+     161      10         INFEASIBLE  pr    8.21e+03                2799.426
+     162       9         INFEASIBLE  pr    8.21e+03                2803.406
+     163       8         INFEASIBLE  pr    8.21e+03                2835.384
+     164       7         INFEASIBLE  pr    8.21e+03                2839.687
+     165       6         INFEASIBLE  pr    8.21e+03                2878.954
+     166       5         INFEASIBLE  pr    8.21e+03                2883.464
+     167       4         INFEASIBLE  pr    8.21e+03                2887.899
+     168       3         INFEASIBLE  pr    8.21e+03                2894.579
+     169       2         INFEASIBLE  pr    8.21e+03                2901.237
+     170       1      23    4.24e-08       8.21e+03                2968.126
+     171       2      22    1.67e-07       8.21e+03                2968.196
+     172       3         INFEASIBLE  pr    8.21e+03                2975.556
+     173       2         INFEASIBLE  pr    8.21e+03                2980.777
+     174       1         INFEASIBLE  pr    8.21e+03                2988.086
+     175       0      30    1.53e-19       8.21e+03                3005.124
+     176       1      29    2.50e-01       8.21e+03                3007.939
+     177       2      28    2.78e-02       8.21e+03                3018.541
+     178       3      27    1.52e-07       8.21e+03                3116.666
+     179       4      26    2.83e-07       8.21e+03                3116.741
+     180       5      25    1.33e-07       8.21e+03                3116.817
+     181       6      24    2.72e-08       8.21e+03                3118.409
+     182       7      23    5.50e-08       8.21e+03                3118.478
+     183       8      22    1.11e-08       8.21e+03                3119.777
+     184       9      21    2.19e-08       8.21e+03                3119.843
+     185      10      20    1.90e-08       8.21e+03                3119.918
+     186      11      19    2.10e-02       8.21e+03                3126.484
+     187      12         INFEASIBLE  pr    8.21e+03                3296.598
+     188      11      18    7.49e-10       8.21e+03                3300.446
+     189      12         INFEASIBLE  pr    8.21e+03                3307.902
+     190      11         INFEASIBLE  pr    8.21e+03                3314.643
+     191      10      19    5.67e-10       8.21e+03                3315.562
+     192      11         INFEASIBLE  pr    8.21e+03                3343.057
+     193      10         INFEASIBLE  pr    8.21e+03                3351.635
+     194       9      18    2.78e-08       8.21e+03                3352.319
+     195      10      17    4.55e-05       8.21e+03                3354.625
+     196      11      16    1.32e+05       8.21e+03                3356.341
+     197      12      15    1.82e+05       8.21e+03                3360.064
+     198      13         INFEASIBLE  pr    8.21e+03                3368.017
+     199      12         INFEASIBLE  pr    8.21e+03                3376.255
+     200      11      15    1.32e+05       8.21e+03                3377.010
+     201      12         INFEASIBLE        8.21e+03                3538.621
+     202      13      18    3.47e+00       8.21e+03                3542.056
+     203      14      17    7.56e-07       8.21e+03                3546.081
+     204      15      16    2.26e+05       8.21e+03                3594.339
+     205      16         INFEASIBLE  pr    8.21e+03                3632.021
+     206      15      16    2.31e+05       8.21e+03                3711.734
+     207      16      14    2.54e+05       8.21e+03                3781.774
+     208      17         INFEASIBLE  pr    8.21e+03                3790.421
+     209      16      13    2.55e+05       8.21e+03                3791.815
+     210      17         INFEASIBLE  pr    8.21e+03                3821.420
+     211      16         INFEASIBLE  pr    8.21e+03                3830.663
+     212      15         INFEASIBLE  pr    8.21e+03                3838.197
+     213      14      15    1.31e+02       8.21e+03                3933.022
+     214      15      18    7.85e-01       8.21e+03                4564.462
+     215      16      20    5.45e-10       8.21e+03                4574.012
+     216      17      19    2.66e-01       8.21e+03                4590.736
+     217      18      18    1.89e+05       8.21e+03                4620.053
+     218      19      17    2.19e+05       8.21e+03                4666.733
+     219      20      16    2.17e+05       8.21e+03                4702.424
+     220      21      15    2.34e+05       8.21e+03                4776.057
+     221      22         INFEASIBLE  pr    8.21e+03                4783.745
+     222      21      14    2.34e+05       8.21e+03                4785.186
+     223      22      11    5.23e+05       8.21e+03                4819.938
+     224      23         INFEASIBLE  pr    8.21e+03                4848.092
+     225      22         INFEASIBLE  pr    8.21e+03                4854.023
+     226      21         INFEASIBLE  pr    8.21e+03                4874.678
+     227      20         INFEASIBLE  pr    8.21e+03                4913.832
+     228      19         INFEASIBLE  pr    8.21e+03                4935.718
+     229      18      17    1.64e+05       8.21e+03                4945.326
+     230      19      19    2.41e-08       8.21e+03                4946.317
+     231      20         INFEASIBLE  pr    8.21e+03                4962.654
+     232      19      18    4.22e-08       8.21e+03                4964.417
+     233      20      17    1.00e-01       8.21e+03                4975.137
+     234      21         INFEASIBLE  pr    8.21e+03                4988.160
+     235      20         INFEASIBLE  pr    8.21e+03                4996.978
+     236      19      17    4.02e-10       8.21e+03                4997.865
+     237      20         INFEASIBLE  pr    8.21e+03                5004.035
+     238      19      16    2.08e-08       8.21e+03                5006.403
+     239      20         INFEASIBLE  pr    8.21e+03                5014.602
+     240      19      15    9.24e-09       8.21e+03                5016.776
+     241      20         INFEASIBLE  pr    8.21e+03                5031.290
+     242      19      14    7.96e-09       8.21e+03                5031.978
+     243      20         INFEASIBLE  pr    8.21e+03                5043.754
+     244      19         INFEASIBLE  pr    8.21e+03                5057.777
+     245      18         INFEASIBLE  pr    8.21e+03                5063.125
+     246      17         INFEASIBLE  pr    8.21e+03                5066.374
+     247      16      17    8.08e+01       8.21e+03                5113.767
+     248      17         INFEASIBLE  pr    8.21e+03                5119.724
+     249      16      17    2.20e-05       8.21e+03                5124.367
+     250      17         INFEASIBLE  pr    8.21e+03                5132.642
+     251      16         INFEASIBLE  pr    8.21e+03                5190.880
+     252      15         INFEASIBLE  pr    8.21e+03                5201.981
+     253      14         INFEASIBLE  pr    8.21e+03                5223.671
+     254      13         INFEASIBLE  pr    8.21e+03                5230.608
+     255      12         INFEASIBLE  pr    8.21e+03                5239.399
+     256      11         INFEASIBLE  pr    8.21e+03                5267.091
+     257      10         INFEASIBLE  pr    8.21e+03                5369.249
+     258       9         INFEASIBLE  pr    8.21e+03                5375.914
+     259       8      14    1.32e+05       8.21e+03                5382.400
+     260       9         INFEASIBLE  pr    8.21e+03                5387.796
+     261       8      13    1.32e+05       8.21e+03                5388.567
+     262       9      12    1.32e+05       8.21e+03                5394.629
+     263      10         INFEASIBLE  pr    8.21e+03                5410.203
+     264       9         INFEASIBLE  pr    8.21e+03                5423.229
+     265       8      11    1.32e+05       8.21e+03                5641.941
+     266       9      17    7.95e-09       8.21e+03                5643.676
+     267      10      16    2.68e-02       8.21e+03                5667.863
+     268      11      15    1.50e-08       8.21e+03                5668.608
+     269      12      14    2.00e-09       8.21e+03                5669.347
+     270      13      13    2.31e-09       8.21e+03                5669.415
+     271      14      12    2.00e-08       8.21e+03                5670.146
+     272      15         INFEASIBLE  pr    8.21e+03                5677.815
+     273      14         INFEASIBLE  pr    8.21e+03                5684.786
+     274      13      11    9.72e-08       8.21e+03                5711.932
+     275      14         INFEASIBLE  pr    8.21e+03                5722.502
+     276      13         INFEASIBLE  pr    8.21e+03                5726.381
+     277      12         INFEASIBLE  pr    8.21e+03                5735.446
+     278      11      14    2.89e-10       8.21e+03                5742.647
+     279      12      13    3.24e-10       8.21e+03                5742.713
+     280      13         INFEASIBLE  pr    8.21e+03                5750.249
+     281      12      11    1.27e-09       8.21e+03                5752.776
+     282      13         INFEASIBLE  pr    8.21e+03                5758.833
+     283      12         INFEASIBLE  pr    8.21e+03                5768.412
+     284      11         INFEASIBLE  pr    8.21e+03                5774.027
+     285      10      15    2.45e-08       8.21e+03                5776.687
+     286      11      16    3.71e-08       8.21e+03                5832.050
+     287      12         INFEASIBLE  pr    8.21e+03                5843.563
+     288      11      15    1.99e+08       8.21e+03                5924.626
+     289      12      14    8.21e+01       8.21e+03                5929.800
+     290      13         INFEASIBLE  pr    8.21e+03                5938.891
+     291      12      13    1.74e-07       8.21e+03                5939.587
+     292      13         INFEASIBLE  pr    8.21e+03                5947.422
+     293      12         INFEASIBLE  pr    8.21e+03                5954.222
+     294      11         INFEASIBLE  pr    8.21e+03                5964.711
+     295      10      15    9.68e-09       8.21e+03                5967.913
+     296      11         INFEASIBLE  pr    8.21e+03                5973.995
+     297      10         INFEASIBLE  pr    8.21e+03                5985.141
+     298       9         INFEASIBLE  pr    8.21e+03                6022.867
+     299       8         INFEASIBLE  pr    8.21e+03                6033.310
+     300       7         INFEASIBLE  pr    8.21e+03                6040.304
+     301       6      16    2.17e-08       8.21e+03                6040.994
+     302       7      15    1.64e+05       8.21e+03                6043.345
+     303       8         INFEASIBLE  pr    8.21e+03                6047.234
+     304       7      13    1.64e+05       8.21e+03                6048.653
+     305       8         INFEASIBLE  pr    8.21e+03                6054.929
+     306       7      12    1.64e+05       8.21e+03                6056.715
+     307       8      11    1.64e+05       8.21e+03                6058.603
+     308       9         INFEASIBLE  pr    8.21e+03                6076.033
+     309       8         INFEASIBLE  pr    8.21e+03                6083.206
+     310       7         INFEASIBLE  pr    8.21e+03                6098.357
+     311       6      15    2.96e-09       8.21e+03                6163.826
+     312       7      14    1.48e+05       8.21e+03                6188.642
+     313       8      13    1.52e+05       8.21e+03                6189.405
+     314       9      12    1.52e+05       8.21e+03                6190.147
+     315      10      11    2.11e+05       8.21e+03                6225.925
+     316      11         INFEASIBLE  pr    8.21e+03                6306.131
+     317      10         INFEASIBLE  pr    8.21e+03                6356.661
+     318       9      11    1.98e+05       8.21e+03                6402.168
+     319      10      14    1.56e-08       8.21e+03                6403.602
+     320      11         INFEASIBLE  pr    8.21e+03                6468.996
+     321      10      13    2.30e+08       8.21e+03                6497.571
+     322      11         INFEASIBLE  pr    8.21e+03                6542.199
+     323      10      12    2.00e+00       8.21e+03                6545.021
+     324      11      11    1.88e-08       8.21e+03                6545.848
+     325      12      10    3.82e-07       8.21e+03                6545.921
+     326      13         INFEASIBLE  pr    8.21e+03                6550.660
+     327      12       9    1.56e-08       8.21e+03                6551.962
+     328      13       8    3.73e-08       8.21e+03                6552.036
+     329      14       7    1.28e-08       8.21e+03                6552.104
+     330      15         INFEASIBLE  pr    8.21e+03                6558.435
+     331      14         INFEASIBLE  pr    8.21e+03                6583.888
+     332      13         INFEASIBLE  pr    8.21e+03                6598.265
+     333      12         INFEASIBLE  pr    8.21e+03                6607.369
+     334      11      10    4.16e-08       8.21e+03                6609.729
+     335      12       9    1.06e-07       8.21e+03                6609.793
+     336      13         INFEASIBLE  pr    8.21e+03                6615.061
+     337      12         INFEASIBLE  pr    8.21e+03                6645.717
+     338      11         INFEASIBLE  pr    8.21e+03                6653.890
+     339      10         INFEASIBLE  pr    8.21e+03                6669.507
+     340       9         INFEASIBLE  pr    8.21e+03                6675.920
+     341       8         INFEASIBLE  pr    8.21e+03                6731.190
+     342       7      11    1.52e+05       8.21e+03                6744.588
+     343       8         INFEASIBLE  pr    8.21e+03                6769.080
+     344       7         INFEASIBLE  pr    8.21e+03                6792.550
+     345       6      10    1.98e+05       8.21e+03                6881.241
+     346       7         INFEASIBLE  pr    8.21e+03                6886.765
+     347       6       9    2.01e+05       8.21e+03                6888.070
+     348       7         INFEASIBLE  pr    8.21e+03                6896.755
+     349       6         INFEASIBLE  pr    8.21e+03                6905.206
+     350       5      13    1.48e+05       8.21e+03                6909.334
+     351       6         INFEASIBLE  pr    8.21e+03                6914.101
+     352       5         INFEASIBLE  pr    8.21e+03                6920.497
+     353       4         INFEASIBLE  pr    8.21e+03                6925.227
+     354       3         INFEASIBLE  pr    8.21e+03                6930.611
+     355       2         INFEASIBLE  pr    8.21e+03                6936.918
+     356       1         INFEASIBLE  pr    8.21e+03                6943.998
+     357       0      28    1.13e-08       8.21e+03                6991.156
+     358       1         INFEASIBLE  pr    8.21e+03                7003.697
+     359       0      27    7.86e-09       8.21e+03                7005.550
+     360       1      26    1.16e-02       8.21e+03                7010.715
+     361       2      25    3.24e-08       8.21e+03                7069.470
+     362       3      24    1.46e-08       8.21e+03                7070.646
+     363       4         INFEASIBLE  pr    8.21e+03                7077.758
+     364       3         INFEASIBLE  pr    8.21e+03                7084.827
+     365       2         INFEASIBLE  pr    8.21e+03                7091.981
+     366       1      25    5.30e-09       8.21e+03                7151.641
+     367       2         INFEASIBLE  pr    8.21e+03                7157.451
+     368       1         INFEASIBLE  pr    8.21e+03                7163.793
+     369       0      26    2.75e-07       8.21e+03                7165.693
+     370       1      25    2.45e+00       8.21e+03                7173.046
+     371       2      24    9.06e-08       8.21e+03                7191.360
+     372       3         INFEASIBLE  pr    8.21e+03                7201.061
+     373       2         INFEASIBLE  pr    8.21e+03                7208.489
+     374       1      24    3.33e-06       8.21e+03                7215.869
+     375       2         INFEASIBLE  pr    8.21e+03                7268.913
+     376       1         INFEASIBLE  pr    8.21e+03                7274.313
+     377       0      23    1.40e-08       8.21e+03                7277.344
+     378       1         INFEASIBLE  pr    8.21e+03                7282.765
+     379       0      22    7.03e-09       8.21e+03                7284.249
+     380       1         INFEASIBLE  pr    8.21e+03                7291.147
+     381       0         INFEASIBLE  pr   1.80e+308                7298.796
+
+EXIT: All nodes have been explored. No integer feasible point found.
+
+Final Statistics for MIP
+------------------------
+Final objective value               =  -1.52366275963641e+08
+Final integrality gap (abs / rel)   =   Infinity
+# of nodes processed                =      381
+# of subproblems processed          =      381
+Total program time (secs)           =    7298.79883 (  7555.629 CPU time)
+Time spent in evaluations (secs)    =     232.67950
+
+===========================================================================
+
+               t_proc [s]   t_wall [s]    n_eval
+      nlp_fg           39         36.4    113286
+   nlp_gf_jg         62.9         60.3     65797
+  nlp_hess_l          133          129     65758
+      solver     7.56e+03      7.3e+03         1
+
+ans =
+
+  <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a>
+
+   0
+
+===================================================
+Computation Result Extraction:
+---------------------------------------------------
+Result Variables Extracted
+Original Result Variables Backuped - Result Include Vanishing Phases - End with "origin"
+[Warning: NOTE 1: For display, Gait Matrix Sequence Becomes "gait_display": LH -> LF -> RF -> RH] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ResultExtraction', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m', 529)" style="font-weight:bold">ResultExtraction</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m',529,0)">line 529</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 503)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',503,0)">line 503</a>)] 
+[Warning: NOTE 2: The Gait Matric for display is the Transpose of the original column vectors (Each LINE Represnet the
+Contact Sequence of a Limb)] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ResultExtraction', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m', 530)" style="font-weight:bold">ResultExtraction</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m',530,0)">line 530</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 503)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',503,0)">line 503</a>)] 
+[Warning: NOTE 3: "gait" is the SOLELY variable name storing the gait sequence which is consistent with respect to the
+optimization program, and it is Read COLUMN by COLUMN] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ResultExtraction', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m', 531)" style="font-weight:bold">ResultExtraction</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/ResultExtraction.m',531,0)">line 531</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', '/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019b/toolbox/matlab/lang/run.m',91,0)">line 91</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Main_MINLP_and_FixedGait', '/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m', 503)" style="font-weight:bold">Main_MINLP_and_FixedGait</a> (<a href="matlab: opentoline('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m',503,0)">line 503</a>)] 
+
+ans =
+
+    0.5390         0    0.5820    0.4585
+    1.0000    1.0000    1.0000    0.6511
+    0.6003    0.6326    0.6326         0
+    0.5376    0.5596    0.6040    0.4634
+    0.1047    0.0396    0.0667    0.9670
+
+Removed Variables within Vanished Phases
+===================================================
+ 
+===================================================
+Computation Result Extracted
+===================================================
+ 
