@@ -267,11 +267,11 @@ Vmax(3) = 2.5;
 Mf = [0;0;0];
 %<---------------------------------------------------------->
 %Big-M/Boundaries for Foot-Ground Reaction Forces along X-axis (in World Frame)
-Mf(1) = 500;
+Mf(1) = 300;
 %Big-M/Boundaries for Foot-Ground Reaction Forces along Y-axis (in World Frame)
-Mf(2) = 500;
+Mf(2) = 300;
 %Big-M/Boundaries for Foot-Ground Reaction Forces along Z-axis (in World Frame)
-Mf(3) = 500;
+Mf(3) = 300;
 %<---------------------------------------------------------->
 %==========================================================================
 
