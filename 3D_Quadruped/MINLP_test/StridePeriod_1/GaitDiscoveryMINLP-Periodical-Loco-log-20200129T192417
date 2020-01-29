@@ -10,10 +10,10 @@ Multi-Phase Formulation:
 Optimize over State, Control, and Switching Time, and (Gait Sequence if we select to optimize)
 ----------------------------------------------------
 Date and Time:
-   28-Jan-2020 11:50:28
+   29-Jan-2020 19:24:17
 
 ----------------------------------------------------
-Correspondent Log File Name: GaitDiscoveryMINLP-Periodical-Loco-log-20200128T115028in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/MINLP_test/StridePeriod_1
+Correspondent Log File Name: GaitDiscoveryMINLP-Periodical-Loco-log-20200129T192417in the Directory: /home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/MINLP_test/StridePeriod_1
 ====================================================
 Using Rotated Force Limits with respect to the slope of the environment
 ====================================================
@@ -87,38 +87,28 @@ Friction Cone: 0.6
 Task Specification:
 ----------------------------------------------------
 Desired Velocity Direction along Horizontal x-Axis
-Minimal Speed in Parameter File: 0.5
+Minimal Speed in Parameter File: 0.3
 Maximum Speed in Parameter File: 3.5
-Speed Resolution in Parameter File: 0.3
+Speed Resolution in Parameter File: 0.2
 Decide if we want to change the desired speed: 1-> Yes 2->No 
-1
-Decide what Direction the Desired Velocity should be? 1-> Horizontal x-axis2-> Tangential x-axis to the Slope
-1
-Specify the MINIMUM Desired Speed along the Desired Direction (m/s): 
-1
-----------------------------------------------------
-Specify the MAXIMUM Desired Speed along the Desired Direction (m/s): 
 2
-----------------------------------------------------
-Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):
-0.5
-----------------------------------------------------
 Fixed Terminal Time: 1
 ----------------------------------------------------
  
 ====================================================
 Temporal and Discretization Setup:
 ----------------------------------------------------
-Number of Phase: 8
+Number of Phase: 2
 ----------------------------------------------------
-Number of Knots for each phase:5
+Number of Knots for each phase:10
 ----------------------------------------------------
 Resultant Discretization:
-Knot/Discretization Step Size of tau: 0.025
-Number of Knots/Discretization of tau (from 0 to 1: 41) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
+Knot/Discretization Step Size of tau: 0.05
+Number of Knots/Discretization of tau (from 0 to 1: 21) (Number of Knots/Discretization in Each Phase * Number of Phases(NumKnots) + 1)
 ----------------------------------------------------
 Phase Duration Lower Bound
-Phase Duration Lower Bound is a Fixed Value: 0.05
+Phase Duration Lower Bound is defined as *Percentage* of Total Duration
+Phase Duration Lower Bound (Percentage): 5%
 ----------------------------------------------------
  
 ====================================================
@@ -142,7 +132,7 @@ Big-M for Foot/End-Effector Forces in Z-axis: 500
 Cost Setup
 ----------------------------------------------------
 Selected Cost:
-4 -> Smooth Force Profile
+1-> Minimize Force Squared (Energy Loss)
 ====================================================
 ====================================================
 Solver Setups:
@@ -152,7 +142,7 @@ Solver Selected: Knitro
 ----------------------------------------------------
 Solver Dependent Options:
 ----------------------------------------------------
-Number of Maximum Nodes to be solved: 68719476736
+Number of Maximum Nodes to be solved: 4096
 NUmber of Maximum Optimization Runes: 15
 Satisfied with the paramter setting? 1-> yes, 2-> no 
 1

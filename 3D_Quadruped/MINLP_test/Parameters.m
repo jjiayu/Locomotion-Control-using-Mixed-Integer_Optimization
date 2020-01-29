@@ -191,11 +191,11 @@ miu = 0.6; %friction coefficient
 %    SpeedDirection = 2 -> Tangential to the slope
 SpeedDirection = 1;
 %    Specify the MINIMUM Desired Speed along the Desired Direction (m/s)
-MinSpeed = 0.5;
+MinSpeed = 0.3;
 %    Specify the MAXIMUM Desired Speed along the Desired Direction (m/s)
 MaxSpeed = 3.5;
 %    Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.)
-SpeedResolution = 0.3;
+SpeedResolution = 0.2;
 %<---------------------------------------------------------->
 SpeedList = MinSpeed:SpeedResolution:MaxSpeed;
 
@@ -203,7 +203,7 @@ SpeedList = MinSpeed:SpeedResolution:MaxSpeed;
 %   Number of Phases
 if gait_discovery_switch == 1 %Free Gait Optimization
     %<---------------------------------------------------------->
-    NumPhases = 8; 
+    NumPhases = 2; 
     %<---------------------------------------------------------->
 elseif gait_discovery_switch == 2 %Fixed Gait Optimization
     %[CF_Sequence, ~, ~] = Gait_Selection(user_defined_gait);
@@ -212,7 +212,7 @@ end
 
 %<---------------------------------------------------------->
 %   Number of timesteps for each phase
-NumLocalKnots = 5;
+NumLocalKnots = 10;
 %<---------------------------------------------------------->
 
 %   Setup other dependent paramters
@@ -230,14 +230,14 @@ tauSeriesLength = length(tauSeries);
 %       phaselb_type:
 %        1 -> Defined as *Percentage* of Total Duration
 %        2 -> Defined as a fixed Value
-phaselb_type = 2;
+phaselb_type = 1;
 
 if phaselb_type == 1 %Using Percentage of Total Duration (x%)
     phase_lower_bound_portion = 5;
     phase_lower_bound_portion = phase_lower_bound_portion/100;
-    Phaselb = phase_lower_bound_portion*Tend;
+    %Phaselb = phase_lower_bound_portion*Tend;
 elseif phaselb_type == 2 %Using Percentage of Total Duration (i.e. 0.025s, 0.05s)
-    Phaselb = 0.05;
+    Phaselb = 0.025;
 end
 %<---------------------------------------------------------->
 
@@ -285,7 +285,7 @@ Mf(3) = 500;
 %   [Not Implemented]cost_flag = 5 -> Smooth Motion: 1)tangential speed is constant and close to the desired velocity in tangential direction 2)theta close to theta_slope 3)thetadot close to 0 normal velocity close to 0
 %   [Not Implemented]cost_flag = 6 -> Feet Velocity
 %   [Not Implemented]cost_flag = 7 -> Humanoid Smooth Motion
-cost_flag = 4;
+cost_flag = 1;
 %<---------------------------------------------------------->
 %==========================================================================
 

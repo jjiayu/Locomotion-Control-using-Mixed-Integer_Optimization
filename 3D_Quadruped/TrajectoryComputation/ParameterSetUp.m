@@ -491,6 +491,8 @@ if Paras_Define_Method == 1 %Load Parameter From File
     if phaselb_type == 1 %Using Percentage of Total Duration
         disp('Phase Duration Lower Bound is defined as *Percentage* of Total Duration')
         disp(['Phase Duration Lower Bound (Percentage): ',num2str(phase_lower_bound_portion*100),'%'])
+        Phaselb = phase_lower_bound_portion*Tend;
+        disp(['The Value of Phase Lower Bound: ',num2str(Phaselb)])
     elseif phaselb_type == 2 %Using Percentage of Total Duration
         disp(['Phase Duration Lower Bound is a Fixed Value: ', num2str(Phaselb)])
     end
@@ -540,6 +542,7 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
         phase_lower_bound_portion = phase_lower_bound_portion/100;
         Phaselb = phase_lower_bound_portion*Tend;
         disp(['Phase Duration Lower Bound: ',num2str(phase_lower_bound_portion*100),'%'])
+        disp(['The Value of Phase Lower Bound: ',num2str(Phaselb)])
     elseif phaselb_type == 2 %Using Percentage of Total Duration
         Phaselb = input('Define the Value of Phase Lower Bound (i.e. 0.025s, 0.05s, etc.): \n');
     end
