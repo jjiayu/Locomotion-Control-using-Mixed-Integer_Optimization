@@ -237,7 +237,7 @@ if phaselb_type == 1 %Using Percentage of Total Duration (x%)
     phase_lower_bound_portion = phase_lower_bound_portion/100;
     Phaselb = phase_lower_bound_portion*Tend;
 elseif phaselb_type == 2 %Using Percentage of Total Duration (i.e. 0.025s, 0.05s)
-    Phaselb = 0.025;
+    Phaselb = 0.1;
 end
 %<---------------------------------------------------------->
 
@@ -285,7 +285,7 @@ Mf(3) = 500;
 %   [Not Implemented]cost_flag = 5 -> Smooth Motion: 1)tangential speed is constant and close to the desired velocity in tangential direction 2)theta close to theta_slope 3)thetadot close to 0 normal velocity close to 0
 %   [Not Implemented]cost_flag = 6 -> Feet Velocity
 %   [Not Implemented]cost_flag = 7 -> Humanoid Smooth Motion
-cost_flag = 4;
+cost_flag = 3;
 %<---------------------------------------------------------->
 %==========================================================================
 

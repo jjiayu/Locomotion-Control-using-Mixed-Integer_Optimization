@@ -21,6 +21,7 @@ function [Clf,Clh,Crf,Crh, GaitName] = QuadrupedGaitPatternGenerator(GaitNumber)
 %   15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)
 %   16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)
 %   17 -> Pronking
+%   18 -> Gallop from Remy's Group
 
     %Note the Sequence we assign the gait sequece becomes *Clh*,*Clf*,Crf,Crh
     %But the output of the function becomese *Clf*,*Clh*,Crf,Crh, which is
@@ -40,20 +41,24 @@ function [Clf,Clh,Crf,Crh, GaitName] = QuadrupedGaitPatternGenerator(GaitNumber)
         Crh = [0,0,0,1,1,1,1,1]';
         GaitName = 'FourBeatWalking';
     elseif GaitNumber == 3 % Walking Trot (Also Called Two-Beat Walking in Remy's Paper)
-        Clh = [1,1,1,1,1,1,0,0]';
-        Clf = [1,1,0,0,1,1,1,1]';
-        Crf = [1,1,1,1,1,1,0,0]';
-        Crh = [1,1,0,0,1,1,1,1]';
+        Clh = [1,1,1,0]';
+        Clf = [1,0,1,1]';
+        Crf = [1,1,1,0]';
+        Crh = [1,0,1,1]';
+%         Clh = [1,1,1,1,1,1,0,0]';
+%         Clf = [1,1,0,0,1,1,1,1]';
+%         Crf = [1,1,1,1,1,1,0,0]';
+%         Crh = [1,1,0,0,1,1,1,1]';
         GaitName = 'WalkingTrot';
     elseif GaitNumber == 4 % Running Trot (Trotting with a Flying Phase)
-        Clh = [1,1,0,0,0,0,0,0]';
-        Clf = [0,0,0,0,1,1,0,0]';
-        Crf = [1,1,0,0,0,0,0,0]';
-        Crh = [0,0,0,0,1,1,0,0]';
-%         Clh = [1,0,0,0]';
-%         Clf = [0,0,1,0]';
-%         Crf = [1,0,0,0]';
-%         Crh = [0,0,1,0]';
+%         Clh = [1,1,0,0,0,0,0,0]';
+%         Clf = [0,0,0,0,1,1,0,0]';
+%         Crf = [1,1,0,0,0,0,0,0]';
+%         Crh = [0,0,0,0,1,1,0,0]';
+        Clh = [1,0,0,0]';
+        Clf = [0,0,1,0]';
+        Crf = [1,0,0,0]';
+        Crh = [0,0,1,0]';
         GaitName = 'RunningTrot';
     elseif GaitNumber == 5 % Tolting from Remy's Paper
         Clh = [1,1,0,0,0,0,0,1]';
@@ -62,22 +67,34 @@ function [Clf,Clh,Crf,Crh, GaitName] = QuadrupedGaitPatternGenerator(GaitNumber)
         Crh = [0,0,0,1,1,1,0,0]';
         GaitName = 'Tolting';
     elseif GaitNumber == 6 % Pacing
-        Clh = [1,1,0,0,0,0,0,0]';
-        Clf = [1,1,0,0,0,0,0,0]';
-        Crf = [0,0,0,0,1,1,0,0]';
-        Crh = [0,0,0,0,1,1,0,0]';
+        Clh = [1,0,0,0]';
+        Clf = [1,0,0,0]';
+        Crf = [0,0,1,0]';
+        Crh = [0,0,1,0]';
+%         Clh = [1,1,0,0,0,0,0,0]';
+%         Clf = [1,1,0,0,0,0,0,0]';
+%         Crf = [0,0,0,0,1,1,0,0]';
+%         Crh = [0,0,0,0,1,1,0,0]';
         GaitName = 'Pacing';
     elseif GaitNumber == 7 % Amble
-        Clh = [0,0,0,0,1,1,1,1]';
-        Clf = [0,0,1,1,1,1,0,0]';
-        Crf = [1,1,0,0,0,0,1,1]';
-        Crh = [1,1,1,1,0,0,0,0]';
+        Clh = [0,0,1,1]';
+        Clf = [0,1,1,0]';
+        Crf = [1,0,0,1]';
+        Crh = [1,1,0,0]';
+%         Clh = [0,0,0,0,1,1,1,1]';
+%         Clf = [0,0,1,1,1,1,0,0]';
+%         Crf = [1,1,0,0,0,0,1,1]';
+%         Crh = [1,1,1,1,0,0,0,0]';
         GaitName = 'Amble';
     elseif GaitNumber == 8 % Canter
-        Clh = [0,0,0,0,0,0,1,1]';
-        Clf = [0,0,0,0,1,1,0,0]';
-        Crf = [0,0,0,0,0,0,1,1]';
-        Crh = [1,1,0,0,0,0,0,0]';
+        Clh = [0,0,0,1]';
+        Clf = [0,0,1,0]';
+        Crf = [0,0,0,1]';
+        Crh = [1,0,0,0]';
+%         Clh = [0,0,0,0,0,0,1,1]';
+%         Clf = [0,0,0,0,1,1,0,0]';
+%         Crf = [0,0,0,0,0,0,1,1]';
+%         Crh = [1,1,0,0,0,0,0,0]';
         GaitName = 'Canter';
     elseif GaitNumber == 9 % Transverse Gallop
         Clh = [1,1,0,0,0,0,0,0]';
@@ -92,51 +109,81 @@ function [Clf,Clh,Crf,Crh, GaitName] = QuadrupedGaitPatternGenerator(GaitNumber)
         Crh = [0,1,1,0,0,0,0,0]';
         GaitName = 'Rotary Gallop';
     elseif GaitNumber == 11 % Bounding
-        Clh = [0,0,0,0,1,1,0,0]';
-        Clf = [1,1,0,0,0,0,0,0]';
-        Crf = [1,1,0,0,0,0,0,0]';
-        Crh = [0,0,0,0,1,1,0,0]';
+        Clh = [0,0,1,0]';
+        Clf = [1,0,0,0]';
+        Crf = [1,0,0,0]';
+        Crh = [0,0,1,0]';
+%         Clh = [0,0,0,0,1,1,0,0]';
+%         Clf = [1,1,0,0,0,0,0,0]';
+%         Crf = [1,1,0,0,0,0,0,0]';
+%         Crh = [0,0,0,0,1,1,0,0]';
         GaitName = 'Bounding';
     elseif GaitNumber == 12 % Half Cheetah Walking-D (Mirrored)
-        Clh = [1,1,1,1,1,1,0,0]';
-        Clf = [1,1,0,0,0,0,1,1]';
-        Crf = [1,1,0,0,0,0,1,1]';
-        Crh = [1,1,1,1,1,1,0,0]';
-%         Clh = [1,1,1,0]';
-%         Clf = [1,0,0,1]';
-%         Crf = [1,0,0,1]';
-%         Crh = [1,1,1,0]';
+%         Clh = [1,1,1,1,1,1,0,0]';
+%         Clf = [1,1,0,0,0,0,1,1]';
+%         Crf = [1,1,0,0,0,0,1,1]';
+%         Crh = [1,1,1,1,1,1,0,0]';
+        Clh = [1,1,1,0]';
+        Clf = [1,0,0,1]';
+        Crf = [1,0,0,1]';
+        Crh = [1,1,1,0]';
         GaitName = 'HalfCheetahWalkingD';
     elseif GaitNumber == 13 % Half Cheetah Galloping (Mirrored)
-        Clh = [1,1,0,0,0,0,1,1]';
-        Clf = [1,1,1,1,0,0,0,0]';
-        Crf = [1,1,1,1,0,0,0,0]';
-        Crh = [1,1,0,0,0,0,1,1]';
+        Clh = [1,0,0,1]';
+        Clf = [1,1,0,0]';
+        Crf = [1,1,0,0]';
+        Crh = [1,0,0,1]';
+%         Clh = [1,1,0,0,0,0,1,1]';
+%         Clf = [1,1,1,1,0,0,0,0]';
+%         Crf = [1,1,1,1,0,0,0,0]';
+%         Crh = [1,1,0,0,0,0,1,1]';
         GaitName = 'HalfCheetahGalloping';
     elseif GaitNumber == 14 % Half Cheetah Walking-S (Mirrored) (6 Phases)
-        Clh = [1,1,0,0,1,1]';
-        Clf = [1,1,1,1,0,0]';
-        Crf = [1,1,1,1,0,0]';
-        Crh = [1,1,0,0,1,1]';
+        Clh = [1,0,1]';
+        Clf = [1,1,0]';
+        Crf = [1,1,0]';
+        Crh = [1,0,1]';
+%         Clh = [1,1,0,0,1,1]';
+%         Clf = [1,1,1,1,0,0]';
+%         Crf = [1,1,1,1,0,0]';
+%         Crh = [1,1,0,0,1,1]';
         GaitName = 'HalfCheetahWalkingS';
     elseif GaitNumber == 15 % Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)
-        Clh = [1,1,0,0,0,0]';
-        Clf = [0,0,1,1,0,0]';
-        Crf = [0,0,1,1,0,0]';
-        Crh = [1,1,0,0,0,0]';
+        Clh = [1,0,0]';
+        Clf = [0,1,0]';
+        Crf = [0,1,0]';
+        Crh = [1,0,0]';
+%         Clh = [1,1,0,0,0,0]';
+%         Clf = [0,0,1,1,0,0]';
+%         Crf = [0,0,1,1,0,0]';
+%         Crh = [1,1,0,0,0,0]';
         GaitName = 'HalfCheetahBuondingS_H_F_FLY';
     elseif GaitNumber == 16 % Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)
-        Clh = [1,1,0,0,0,0]';
-        Clf = [0,0,0,0,1,1]';
-        Crf = [0,0,0,0,1,1]';
-        Crh = [1,1,0,0,0,0]';
+        Clh = [1,0,0]';
+        Clf = [0,0,1]';
+        Crf = [0,0,1]';
+        Crh = [1,0,0]';
+%         Clh = [1,1,0,0,0,0]';
+%         Clf = [0,0,0,0,1,1]';
+%         Crf = [0,0,0,0,1,1]';
+%         Crh = [1,1,0,0,0,0]';
         GaitName = 'HalfCheetahBuondingS_H_FLY_F';
     elseif GaitNumber == 17 % Pronking
-        Clh = [1,1,0,0,0,0,1,1]';
-        Clf = [1,1,0,0,0,0,1,1]';
-        Crf = [1,1,0,0,0,0,1,1]';
-        Crh = [1,1,0,0,0,0,1,1]';
+        Clh = [1,0,0,1]';
+        Clf = [1,0,0,1]';
+        Crf = [1,0,0,1]';
+        Crh = [1,0,0,1]';
+%         Clh = [1,1,0,0,0,0,1,1]';
+%         Clf = [1,1,0,0,0,0,1,1]';
+%         Crf = [1,1,0,0,0,0,1,1]';
+%         Crh = [1,1,0,0,0,0,1,1]';
         GaitName = 'Pronking';
+    elseif GaitNumber == 18 % Gallop from Remy's Group
+        Clh = [1,0,0,0]';
+        Clf = [0,1,0,0]';
+        Crf = [0,0,1,0]';
+        Crh = [0,1,0,0]';
+        GaitName = 'GallopfromRemy';
     end
 
     %Display Gait Pattern

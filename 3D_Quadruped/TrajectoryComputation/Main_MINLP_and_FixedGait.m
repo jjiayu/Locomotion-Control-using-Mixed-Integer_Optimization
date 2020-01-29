@@ -378,23 +378,18 @@ for speedIdx = 1:length(SpeedList)
                                  h*(Frfx(k)^2) + h*(Frfy(k)^2) + h*(Frfz(k)^2)  +... Right Front (rf)
                                  h*(Frhx(k)^2) + h*(Frhy(k)^2) + h*(Frhz(k)^2)) +... Right Hind (rh)
                           10000*h*(y(k)^2);
-            elseif cost_flag == 3 %Minimize Force Squared and Angular Momentum *Rates*
-                Torquelf_k = cross(([Plfx(k); Plfy(k); Plfz(k)] - [x(k); y(k); z(k)]),[Flfx(k); Flfy(k); Flfz(k)]);
-                Torquelh_k = cross(([Plhx(k); Plhy(k); Plhz(k)] - [x(k); y(k); z(k)]),[Flhx(k); Flhy(k); Flhz(k)]);
-                Torquerf_k = cross(([Prfx(k); Prfy(k); Prfz(k)] - [x(k); y(k); z(k)]),[Frfx(k); Frfy(k); Frfz(k)]);
-                Troquerh_k = cross(([Prhx(k); Prhy(k); Prhz(k)] - [x(k); y(k); z(k)]),[Frhx(k); Frhy(k); Frhz(k)]);
-
-                R_k = EulerAngle_to_RotationMatrix(phi, theta, psi, k); %Rotation Matrix at time k
-                omega_k = EulerRate_to_AngularVelocity(phi,theta,psi,phidot,thetadot,psidot,k); %angular velocity at time k
-                L_k = R_k*I*R_k'*omega_k; %angular momentum at time k
-                                
-                J = J + h*((m*xdot(k))^2) + h*((m*ydot(k))^2) + h*((m*zdot(k))^2) + ...
-                        h*((L_k(1))^2) + h*((L_k(2))^2) + h*((L_k(3))^2) +...
-                        h*((Flfx(k) + Flhx(k) + Frfx(k) + Frhx(k))^2) +...x-axis
-                        h*((Flfy(k) + Flhy(k) + Frfy(k) + Frhy(k))^2) +...y-axis
-                        h*((Flfz(k) + Flhz(k) + Frfz(k) + Frhz(k) - m*G)^2) +... %z-axis
-                        h*sum((Torquelf_k + Torquelh_k + Torquerf_k + Troquerh_k).^2);
-%                                 Torquelf_k = cross(([Plfx(k); Plfy(k); Plfz(k)] - [x(k); y(k); z(k)]),[Flfx(k); Flfy(k); Flfz(k)]);
+            elseif cost_flag == 3 %MiniBodyVibration
+                J = J + h*(ydot(k)*1e2)^2 + ...
+                        h*((zdot(k)*1e2)^2) + ...
+                        h*(phidot(k)*1e2)^2 + ...
+                        h*(thetadot(k)*1e2)^2 + ...
+                        h*(psidot(k)*1e2)^2;% + ...
+%                         h*((Flfx(k)^2)/1e3) + h*((Flfy(k)^2)/1e3) + h*((Flfz(k)^2)/1e3) +... Left Front (lf)
+%                         h*((Flhx(k)^2)/1e3) + h*((Flhy(k)^2)/1e3) + h*((Flhz(k)^2)/1e3) +... Left Hind (lh)
+%                         h*((Frfx(k)^2)/1e3) + h*((Frfy(k)^2)/1e3) + h*((Frfz(k)^2)/1e3) +... Right Front (rf)
+%                         h*((Frhx(k)^2)/1e3) + h*((Frhy(k)^2)/1e3) + h*((Frhz(k)^2)/1e3);     %Right Hind (rh)
+                
+%                 Torquelf_k = cross(([Plfx(k); Plfy(k); Plfz(k)] - [x(k); y(k); z(k)]),[Flfx(k); Flfy(k); Flfz(k)]);
 %                 Torquelh_k = cross(([Plhx(k); Plhy(k); Plhz(k)] - [x(k); y(k); z(k)]),[Flhx(k); Flhy(k); Flhz(k)]);
 %                 Torquerf_k = cross(([Prfx(k); Prfy(k); Prfz(k)] - [x(k); y(k); z(k)]),[Frfx(k); Frfy(k); Frfz(k)]);
 %                 Troquerh_k = cross(([Prhx(k); Prhy(k); Prhz(k)] - [x(k); y(k); z(k)]),[Frhx(k); Frhy(k); Frhz(k)]);
