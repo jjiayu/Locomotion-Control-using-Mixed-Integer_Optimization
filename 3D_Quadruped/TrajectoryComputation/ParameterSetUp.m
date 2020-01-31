@@ -619,11 +619,11 @@ if Paras_Define_Method == 1 %Load Parameters from File
     elseif cost_flag == 2
         disp('2-> Minimize Lateral Displacement and Force Regularization');
     elseif cost_flag == 3
-        disp('3-> Minimize Linear and Angular Momentum Rate');
+        disp('3-> Minimize Body Vibration');
     elseif cost_flag == 4
         disp('4 -> Smooth Force Profile');
     elseif cost_flag == 5
-        error('Not Implemented, need adaptation')
+        disp('5 -> Minimize Body Vibration with Minimize y-axis Limb deviation')
         %disp('5-> Smooth Motion: \ntangential speed is constant and close to the desired velocity in tangential direction \ntheta close to theta_slope \nthetadot close to 0 normal velocity close to 0)')
     elseif cost_flag == 6
         error('Not Implemented')

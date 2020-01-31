@@ -388,52 +388,7 @@ for speedIdx = 1:length(SpeedList)
                         h*((theta(k)*1e3)^2) + ...
                         h*((thetadot(k)*1e3)^2) + ...
                         h*((psi(k)*1e3)^2) + ...
-                        h*((psidot(k)*1e3)^2);% + ...
-%                         h*((Flfx(k)^2)/1e3) + h*((Flfy(k)^2)/1e3) + h*((Flfz(k)^2)/1e3) +... Left Front (lf)
-%                         h*((Flhx(k)^2)/1e3) + h*((Flhy(k)^2)/1e3) + h*((Flhz(k)^2)/1e3) +... Left Hind (lh)
-%                         h*((Frfx(k)^2)/1e3) + h*((Frfy(k)^2)/1e3) + h*((Frfz(k)^2)/1e3) +... Right Front (rf)
-%                         h*((Frhx(k)^2)/1e3) + h*((Frhy(k)^2)/1e3) + h*((Frhz(k)^2)/1e3);     %Right Hind (rh)
-                
-%                 Torquelf_k = cross(([Plfx(k); Plfy(k); Plfz(k)] - [x(k); y(k); z(k)]),[Flfx(k); Flfy(k); Flfz(k)]);
-%                 Torquelh_k = cross(([Plhx(k); Plhy(k); Plhz(k)] - [x(k); y(k); z(k)]),[Flhx(k); Flhy(k); Flhz(k)]);
-%                 Torquerf_k = cross(([Prfx(k); Prfy(k); Prfz(k)] - [x(k); y(k); z(k)]),[Frfx(k); Frfy(k); Frfz(k)]);
-%                 Troquerh_k = cross(([Prhx(k); Prhy(k); Prhz(k)] - [x(k); y(k); z(k)]),[Frhx(k); Frhy(k); Frhz(k)]);
-% 
-%                 J = J + h*((Flfx(k)/100)^2) + h*((Flfy(k)/100)^2) + h*((Flfz(k)/100)^2) +... Left Front (lf)
-%                         h*((Flhx(k)/100)^2) + h*((Flhy(k)/100)^2) + h*((Flhz(k)/100)^2) +... Left Hind (lh)
-%                         h*((Frfx(k)/100)^2) + h*((Frfy(k)/100)^2) + h*((Frfz(k)/100)^2) +... Right Front (rf)
-%                         h*((Frhx(k)/100)^2) + h*((Frhy(k)/100)^2) + h*((Frhz(k)/100)^2) +... Right Hind (rh)
-%                         h*(sum((Torquelf_k*100).^2)) + ...
-%                         h*(sum((Torquelh_k*100).^2)) + ...
-%                         h*(sum((Torquerf_k*100).^2)) + ...
-%                         h*(sum((Troquerh_k*100).^2));
-                
-%                 J = J + h*((xdot(k)*1000)^2) + h*((ydot(k)*1000)^2) + h*((zdot(k)*1000)^2) + ...
-%                         h*((phidot(k)*1000)^2) + h*((thetadot(k)*1000)^2) + h*((psidot(k)*1000)^2);
-                
-%                 R_k = EulerAngle_to_RotationMatrix(phi, theta, psi, k); %Rotation Matrix at time k
-%                 omega_k = EulerRate_to_AngularVelocity(phi,theta,psi,phidot,thetadot,psidot,k); %angular velocity at time k
-%                 L_k = R_k*I*R_k'*omega_k; %angular momentum at time k
-%                 
-%                 Torquelf_k = cross(([Plfx(k); Plfy(k); Plfz(k)] - [x(k); y(k); z(k)]),[Flfx(k); Flfy(k); Flfz(k)]);
-%                 Torquelh_k = cross(([Plhx(k); Plhy(k); Plhz(k)] - [x(k); y(k); z(k)]),[Flhx(k); Flhy(k); Flhz(k)]);
-%                 Torquerf_k = cross(([Prfx(k); Prfy(k); Prfz(k)] - [x(k); y(k); z(k)]),[Frfx(k); Frfy(k); Frfz(k)]);
-%                 Troquerh_k = cross(([Prhx(k); Prhy(k); Prhz(k)] - [x(k); y(k); z(k)]),[Frhx(k); Frhy(k); Frhz(k)]);
-% 
-%                 J = J + 1/1000000*(h*(Flfx(k)^2) + h*(Flfy(k)^2) + h*(Flfz(k)^2) +... Left Front (lf) Forces
-%                                    h*(Flhx(k)^2) + h*(Flhy(k)^2) + h*(Flhz(k)^2) +... Left Hind (lh) Forces
-%                                    h*(Frfx(k)^2) + h*(Frfy(k)^2) + h*(Frfz(k)^2) +... Right Front (rf) Forces
-%                                    h*(Frhx(k)^2) + h*(Frhy(k)^2) + h*(Frhz(k)^2)) +... Right Hind (rh) Forces
-%                         h*sum((Torquelf_k + Torquelh_k + Torquerf_k + Troquerh_k).^2);
-                        
-%A potential but failed cost
-%Minimize Linear Momentum Rate and Angular Momentum Rate           
-
-%                 
-%                 J = J + h*((Flfx(k) + Flhx(k) + Frfx(k) + Frhx(k))^2) +...x-axis
-%                         h*((Flfy(k) + Flhy(k) + Frfy(k) + Frhy(k))^2) +...y-axis
-%                         h*((Flfz(k) + Flhz(k) + Frfz(k) + Frhz(k) - m*G)^2) +...z-axis
-%                         h*sum((Torquelf_k + Torquelh_k + Torquerf_k + Troquerh_k).^2);
+                        h*((psidot(k)*1e3)^2);
                     
             elseif cost_flag == 4 %Smoothness of Force Profile
                 if k<=tauSeriesLength - 2
@@ -442,20 +397,28 @@ for speedIdx = 1:length(SpeedList)
                             (Frfx(k+1)-Frfx(k))^2/h + (Frfy(k+1)-Frfy(k))^2/h + (Frfz(k+1)-Frfz(k))^2/h +... Right Front (rf)
                             (Frhx(k+1)-Frhx(k))^2/h + (Frhy(k+1)-Frhy(k))^2/h + (Frhz(k+1)-Frhz(k))^2/h;    %Right Hind (rh)
                 end
-            elseif cost_flag == 5 %Minimize Vibration (Cost 3) with Constant Tangential Velocity (at Every Knot)
-                error('No.3 Cost Need Adaptations')
-%               % Add Constant Tangential Velocity (at Every Knot) Term -> Depends on which direction the desired speed is defined
-%                 if SpeedDirection == 1 %speed is defind along horizontal direction
-%                     %A simpler form
-%                     %J = J + h*(((xdot(k)-speed)*Scale_Factor)^2)
-%                     J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed/cos(terrain_slope_rad))*Scale_Factor)^2);
-%                 elseif SpeedDirection == 2 %speed is defined along tangential direction
-%                     J = J + h*((([xdot(k),zdot(k)]*TerrainTangent - speed)*Scale_Factor)^2);
-%                 end
-%                 % Build Cost First -> Time Integral and Scaled
-%                 J = J + h*(((theta(k)-terrain_slope_rad)*Scale_Factor)^2) + ...    theta towards terrain slope
-%                         h*((thetadot(k)*Scale_Factor)^2) + ...                     thetadot towards zero
-%                         h*((([xdot(k),zdot(k)]*TerrainNorm)*Scale_Factor)^2);     %normal velocity towards zero
+            elseif cost_flag == 5 %Minimize Body Vibration with Minimize limb y-axis deviaton from nominal positons
+                %Limb Locations in robot frame
+                Plf_Robot = RTheta'*[Plfx(k);Plfy(k);Plfz(k)];
+                Plh_Robot = RTheta'*[Plhx(k);Plhy(k);Plhz(k)];
+                Prf_Robot = RTheta'*[Prfx(k);Prfy(k);Prfz(k)];
+                Prh_Robot = RTheta'*[Prhx(k);Prhy(k);Prhz(k)];
+                
+                J = J + h*(((xdot(k)-speed)*1e3)^2) + ...
+                        h*((y(k)*1e3)^2) + ...
+                        h*((ydot(k)*1e3)^2) + ...
+                        h*((zdot(k)*1e3)^2) + ...
+                        h*((phi(k)*1e3)^2)  + ...
+                        h*((phidot(k)*1e3)^2) + ...
+                        h*((theta(k)*1e3)^2) + ...
+                        h*((thetadot(k)*1e3)^2) + ...
+                        h*((psi(k)*1e3)^2) + ...
+                        h*((psidot(k)*1e3)^2) +...
+                        h*(((Plf_Robot(2) - PlfCenter(2))*1e3)^2) + ...
+                        h*(((Plh_Robot(2) - PlhCenter(2))*1e3)^2) + ...
+                        h*(((Prf_Robot(2) - PrfCenter(2))*1e3)^2) + ...
+                        h*(((Prh_Robot(2) - PrhCenter(2))*1e3)^2);
+                
             elseif cost_flag == 6 %Feet Velocity (Pending)
                 error('No.6 Cost is not implemented')
             end
