@@ -624,7 +624,6 @@ if Paras_Define_Method == 1 %Load Parameters from File
         disp('4 -> Smooth Force Profile');
     elseif cost_flag == 5
         disp('5 -> Minimize Body Vibration with Minimize y-axis Limb deviation')
-        %disp('5-> Smooth Motion: \ntangential speed is constant and close to the desired velocity in tangential direction \ntheta close to theta_slope \nthetadot close to 0 normal velocity close to 0)')
     elseif cost_flag == 6
         error('Not Implemented')
         %disp('6-> Feet Velocity');

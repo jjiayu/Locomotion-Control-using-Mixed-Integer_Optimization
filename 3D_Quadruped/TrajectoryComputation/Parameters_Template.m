@@ -280,9 +280,9 @@ Mf(3) = 500;
 %<---------------------------------------------------------->
 %   cost_flag = 1 -> Minimize Force Squared
 %   cost_flag = 2 -> Minimize Lateral Displacement with Force Regularization
-%   cost_flag = 3 -> Minimize Linear and Angular Momentum Rate
-%   cost_flag == 4 -> Smooth Force Profile
-%   [Not Implemented]cost_flag = 5 -> Smooth Motion: 1)tangential speed is constant and close to the desired velocity in tangential direction 2)theta close to theta_slope 3)thetadot close to 0 normal velocity close to 0
+%   cost_flag = 3 -> Minimize Body Vibration
+%   cost_flag = 4 -> Smooth Force Profile
+%   cost_flag = 5 -> Miniimze Body Vibration and Limb Lateral Placement
 %   [Not Implemented]cost_flag = 6 -> Feet Velocity
 %   [Not Implemented]cost_flag = 7 -> Humanoid Smooth Motion
 cost_flag = 1;
