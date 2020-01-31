@@ -126,7 +126,7 @@ PrhCenter = [-Morpho_Percentage*(1/2*BodyLength); -1/2*BodyWidth;  -(1/2*BodyHei
 %<---------------------------------------------------------->
 %   Kinematics Bounding Box Constraint
 BoundingBox_Length  = 0.4;
-BoundingBox_Width   = 0.2;
+BoundingBox_Width   = 0.15;
 BoundingBox_Height  = 0.14;%0.14;
 %<---------------------------------------------------------->
 
