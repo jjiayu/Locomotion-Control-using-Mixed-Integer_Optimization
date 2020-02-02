@@ -15,6 +15,8 @@
 # Load Python
 module load matlab/R2018a
 
+cd /home/s1545529/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/
+
 #use Eddie
 export Eddie=1
 
@@ -52,4 +54,4 @@ export MaxSpeed=0.3
 export SpeedResolution=0.2
  
 # Run the program
-matlab -nodesktop < /home/s1545529/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m
+matlab -nodesktop < Main_MINLP_and_FixedGait.m
