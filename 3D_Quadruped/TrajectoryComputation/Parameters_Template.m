@@ -56,7 +56,13 @@ if gait_discovery_switch == 2
         disp('  15 -> Half Cheetah Buonding-S_H_F_FLY (Mirrored) (6 Phases)');
         disp('  16 -> Half Cheetah Buonding-S_H_FLY_F (Mirrored) (6 Phases)');
         disp('  17 -> Pronking');
-        UserDefinedGaitNumber = input('Specify the Gait Number: \n');
+        
+        if Eddie_flag == 1 %use Eddie, get setup from environment variable
+            UserDefinedGaitNumber = str2double(getenv('UserDefinedGaitNumber'));
+        else
+            UserDefinedGaitNumber = input('Specify the Gait Number: \n');
+        end
+        
     
     %Build Gait Sequence
     if UserDefinedGaitNumber == 0
@@ -279,7 +285,7 @@ Mf(3) = 500;
 % Cost Function
 %<---------------------------------------------------------->
 %   cost_flag = 1 -> Minimize Force Squared
-%   cost_flag = 2 -> Minimize Lateral Displacement with Force Regularization
+%   cost_flag = 2 -> Minimize Body Vibration, Force Squared and Lateral Limb deviation
 %   cost_flag = 3 -> Minimize Body Vibration
 %   cost_flag = 4 -> Smooth Force Profile
 %   cost_flag = 5 -> Miniimze Body Vibration and Limb Lateral Placement

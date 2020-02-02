@@ -6,21 +6,50 @@ import casadi.*
 %Add current path
 addpath(pwd);
 
+%Get if we use Eddie or not
+Eddie_flag = str2double(getenv('Eddie'));
+if Eddie_flag == 1
+    disp('Using Eddie ~ ^_^');
+    addpath('/home/s1545529/bin/casadi/matlab/'); %addpath for eddie
+else
+    disp('Using Normal Computers');
+end
+
 %--------------------------------------------------------------------------
 % Determine Parameter Specification Method
 %--------------------------------------------------------------------------
 disp('=====================================================');
-Paras_Define_Method = input('Define the way of defining parameters: 1 -> Take from File 2-> Define Manually: \n');
+
+% Define the way of Defining Parameters base on if we Use Eddie or not
+if Eddie_flag == 1 %use Eddie, get set up from environment variable
+    Paras_Define_Method = str2double(getenv('Paras_Define_Method'));
+    if Paras_Define_Method == 1
+        disp('Using Eddie -> Get Parameter from File')
+    else
+        error('Eddie cannot define parameter mannually')
+    end
+else %not using Eddie
+    Paras_Define_Method = input('Define the way of defining parameters: 1 -> Take from File 2-> Define Manually: \n');
+end
 disp(' ')
 
+
 if Paras_Define_Method == 1 %Load Parameters from files
-    %Identify Parameter file storage folder
-    Remote_Computing_Flag = input('Specify which device we are using now: 1-> Laptop/Desktop 2-> Remote Computer (i.e. Terminator): \n');
+    %Identify Parameter file storage folder, base on Eddie again
+    if Eddie_flag == 1 %use Eddie, get set up from environment vairbale
+        Remote_Computing_Flag = str2double(getenv('Remote_Computing_Flag'));
+    else %not eddie
+        Remote_Computing_Flag = input('Specify which device we are using now: 1-> Laptop/Desktop 2-> Remote Computer (i.e. Terminator): \n');
+    end
         
     if Remote_Computing_Flag == 1 %Laptop/Desktop
         ParamFileDir = uigetdir;
     elseif Remote_Computing_Flag == 2 %Remote Computer
-        ParamFileDir = input('Manually Define Folder Path Storing Parameter File (quote with \''): \n');
+        if Eddie_flag == 1 %use Eddie, get set up from environment vairbale
+            ParamFileDir = getenv('ParamFileDir');
+        else
+            ParamFileDir = input('Manually Define Folder Path Storing Parameter File (quote with \''): \n');
+        end
         %get screen number for future use of sending finishing emails
         [cmd_status,cmdoutput] = system('screen -ls')
     else
@@ -104,7 +133,11 @@ disp(' ')
 if Paras_Define_Method == 1 %Load Parameters from File
     disp('=====================================================');
     disp('Define Terminal Time:')
-    Tend_flag = input('Optimization of Terminal Time (Tend): \n1 -> Pre-defined (Fixed), 2 -> Left as Free Variable \n');
+    if Eddie_flag == 1 %Use eddie, get setup from environment variable
+        Tend_flag = str2double(getenv('Tend_flag'));
+    else
+        Tend_flag = input('Optimization of Terminal Time (Tend): \n1 -> Pre-defined (Fixed), 2 -> Left as Free Variable \n');
+    end
    
     if Tend_flag == 1 %Optimize Terminal Time
         % Specify Terminal Time now for the case when we load parameter
@@ -112,7 +145,13 @@ if Paras_Define_Method == 1 %Load Parameters from File
         % Sotreo results. The Terminal Time for the cases when define
         % parameters manually will be set later
         disp('Fixed Terminal Time');
-        Tend = input('Input Termianl Time (e.g. 1s): \n');
+        
+        if Eddie_flag == 1 %Use eddie, get setup from environment variable
+            Tend = str2double(getenv('Tend'));
+            disp([num2str(Tend),'s']);
+        else
+            Tend = input('Input Termianl Time (e.g. 1s): \n');
+        end
         
         %Decide ExpDirectory for the case when we load parameters from file
         %For the cases where the parameters is defined mannually, the
@@ -411,21 +450,52 @@ if Paras_Define_Method == 1 % Parameter Loaded from File
     disp(['Minimal Speed in Parameter File: ',num2str(MinSpeed)]);
     disp(['Maximum Speed in Parameter File: ',num2str(MaxSpeed)]);
     disp(['Speed Resolution in Parameter File: ',num2str(SpeedResolution)])
+    disp(' ')
     
-    ChangSpeedFlag = input('Decide if we want to change the desired speed: 1-> Yes 2->No \n');
+    if Eddie_flag == 1 %Use Eddie, get setup from environment variable
+        ChangSpeedFlag = str2double(getenv('ChangSpeedFlag'));
+    else
+        ChangSpeedFlag = input('Decide if we want to change the desired speed: 1-> Yes 2->No \n');
+    end
+    
+    
     if ChangSpeedFlag ==1
-        SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal x-axis2-> Tangential x-axis to the Slope\n');
-        MinSpeed = input('Specify the MINIMUM Desired Speed along the Desired Direction (m/s): \n');
-        disp('----------------------------------------------------');
-        MaxSpeed = input('Specify the MAXIMUM Desired Speed along the Desired Direction (m/s): \n');
-        disp('----------------------------------------------------');
-        SpeedResolution = input('Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):\n');
-        disp('----------------------------------------------------');
+        disp('Re-Setup the Task Specifications')
+        if Eddie_flag == 1 %Use Eddie, get setup from environment variable
+            SpeedDirection = str2double(getenv('SpeedDirection'));
+            if SpeedDirection == 1
+                disp('Desired Velocity Direction along Horizontal x-Axis');        
+            elseif SpeedDirection == 2
+                disp('Desired Velocity Direction along Tangential x-Axis of the Terrain'); 
+            end
+            disp('----------------------------------------------------');
+            MinSpeed = str2double(getenv('MinSpeed'));
+            disp(['Minimal Speed in Parameter File: ',num2str(MinSpeed)]);
+            disp('----------------------------------------------------');
+            MaxSpeed = str2double(getenv('MaxSpeed'));
+            disp(['Maximum Speed in Parameter File: ',num2str(MaxSpeed)]);
+            disp('----------------------------------------------------');
+            SpeedResolution = str2double(getenv('SpeedResolution'));
+            disp(['Speed Resolution in Parameter File: ',num2str(SpeedResolution)]);
+            disp('----------------------------------------------------');
+        else
+            SpeedDirection = input('Decide what Direction the Desired Velocity should be? 1-> Horizontal x-axis2-> Tangential x-axis to the Slope\n');
+            MinSpeed = input('Specify the MINIMUM Desired Speed along the Desired Direction (m/s): \n');
+            disp('----------------------------------------------------');
+            MaxSpeed = input('Specify the MAXIMUM Desired Speed along the Desired Direction (m/s): \n');
+            disp('----------------------------------------------------');
+            SpeedResolution = input('Specify the Resolution for Scanning the Previously Defined Speed Range (e.g. 0.1, 0.05, 0.02, etc.):\n');
+            disp('----------------------------------------------------');
+        end
+        
         SpeedList = MinSpeed:SpeedResolution:MaxSpeed;
     end
+    disp('====================================================');
+    disp(' ')
     %----------------------------------------------------------------------
     %   Terminal time
     %----------------------------------------------------------------------
+    disp('====================================================');
     if Tend_flag == 1 %Fixed Terminal Time
         disp(['Fixed Terminal Time: ',num2str(Tend)]);
     elseif Tend_flag == 2
@@ -617,7 +687,7 @@ if Paras_Define_Method == 1 %Load Parameters from File
     if cost_flag == 1
         disp('1-> Minimize Force Squared (Energy Loss)');
     elseif cost_flag == 2
-        disp('2-> Minimize Lateral Displacement and Force Regularization');
+        disp('2-> Minimize Body Vibration, Force Squared and Lateral Limb deviation');
     elseif cost_flag == 3
         disp('3-> Minimize Body Vibration');
     elseif cost_flag == 4
@@ -661,11 +731,6 @@ if Paras_Define_Method == 1 %Take fro file
     disp('----------------------------------------------------');
     disp(['Number of Maximum Nodes to be solved: ',num2str(NumMaxNodes)]);
     disp(['NUmber of Maximum Optimization Runes: ',num2str(NumofRuns)]);
-    %-----------------------------------------------------------
-    Continue_flag = input('Satisfied with the paramter setting? 1-> yes, 2-> no \n');
-    if Continue_flag == 2
-        error('User is unsatified with the parameter setup')
-    end
 elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     disp('Solver Selection: ')
     SolverNum = input('1 -> Knitro; 2 -> Bonmin \n');
@@ -707,6 +772,14 @@ elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     disp(' ')
     %======================================================================
 end
+
+if Eddie_flag ~= 1 %only normal computers has the right to decide continue or not
+    Continue_flag = input('Satisfied with the paramter setting? 1-> yes, 2-> no \n');
+    if Continue_flag == 2
+        error('User is unsatified with the parameter setup')
+    end
+end
+
 
 %--------------------------------------------------------------------------
 %   Stop the Diary Logging

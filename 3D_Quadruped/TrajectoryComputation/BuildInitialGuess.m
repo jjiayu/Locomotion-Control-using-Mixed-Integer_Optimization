@@ -1,6 +1,7 @@
 % Build Initial Guess 
 
-
+%reset random seed genreator
+rng shuffle
 
 if gait_discovery_switch == 1 %Free Gait Discovery using MINLP
     DecisionVarsInit = lb_ContinuousDecisionVars + (ub_ContinuousDecisionVars - lb_ContinuousDecisionVars).*rand(1,length(lb_ContinuousDecisionVars));
