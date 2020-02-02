@@ -27,7 +27,7 @@ export Paras_Define_Method=1
 export Remote_Computing_Flag=2
 
 #Specify Parameter File Dir
-export ParamFileDir=/home/jiayu/Dropbox/3D_ANYmal_Gait_Discovery/2_Phases/Phaselb_20_Percent/Slim_KineBox/0_Degrees/1_MiniForces
+export ParamFileDir=/home/s1545529/Results/
 
 #Specify Time Horizon Type
 export Tend_flag=1
@@ -51,4 +51,4 @@ export MaxSpeed=3.5
 export SpeedResolution=0.2
  
 # Run the program
-matlab -nodesktop < Main_MINLP_and_FixedGait.m
+matlab -nodesktop < /home/s1545529/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m
