@@ -15,6 +15,8 @@
 # Load Python
 module load matlab/R2018a
 
+export ARTELYS_LICENSE_NETWORK_ADDR=terminator.robots.inf.ed.ac.uk:8349
+
 cd /home/s1545529/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/
 
 #use Eddie
