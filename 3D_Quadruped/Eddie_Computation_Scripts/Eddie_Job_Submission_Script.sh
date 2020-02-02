@@ -1,9 +1,9 @@
 #!/bin/sh
 # Grid Engine options (lines prefixed with #$)
-#$ -N hello              
+#$ -N Qudaruped_Gait_Discovery              
 #$ -cwd                  
 #$ -l h_rt=00:05:00 
-#$ -l h_vmem=1G
+#$ -l h_vmem=4G
 #  These options are:
 #  job name: -N
 #  use the current working directory: -cwd
@@ -17,6 +17,7 @@ module load matlab/R2018a
 
 #use Eddie
 export Eddie=1
+
 #Specify gait if using fixed gait optimization
 #export UserDefinedGaitNumber=1
 
@@ -45,7 +46,7 @@ export SpeedDirection=1
 export MinSpeed=0.3
 
 #Specify Maximum Speed
-export MaxSpeed=3.5
+export MaxSpeed=0.3
 
 #Specify Speed Resolution
 export SpeedResolution=0.2

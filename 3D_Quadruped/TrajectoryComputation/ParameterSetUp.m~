@@ -147,7 +147,7 @@ if Paras_Define_Method == 1 %Load Parameters from File
         disp('Fixed Terminal Time');
         
         if Eddie_flag == 1 %Use eddie, get setup from environment variable
-            Tend = str2double(getenv('Tend'));
+            %Tend = str2double(getenv('Tend'));
             disp([num2str(Tend),'s']);
         else
             Tend = input('Input Termianl Time (e.g. 1s): \n');
@@ -452,30 +452,27 @@ if Paras_Define_Method == 1 % Parameter Loaded from File
     disp(['Speed Resolution in Parameter File: ',num2str(SpeedResolution)])
     disp(' ')
     
-    if Eddie_flag == 1 %Use Eddie, get setup from environment variable
-        ChangSpeedFlag = str2double(getenv('ChangSpeedFlag'));
-    else
+    if Eddie_flag ~= 1 %Not Use Eddie, set up parameters by hand
         ChangSpeedFlag = input('Decide if we want to change the desired speed: 1-> Yes 2->No \n');
     end
-    
     
     if ChangSpeedFlag ==1
         disp('Re-Setup the Task Specifications')
         if Eddie_flag == 1 %Use Eddie, get setup from environment variable
-            SpeedDirection = str2double(getenv('SpeedDirection'));
+            %SpeedDirection = str2double(getenv('SpeedDirection'));
             if SpeedDirection == 1
                 disp('Desired Velocity Direction along Horizontal x-Axis');        
             elseif SpeedDirection == 2
                 disp('Desired Velocity Direction along Tangential x-Axis of the Terrain'); 
             end
             disp('----------------------------------------------------');
-            MinSpeed = str2double(getenv('MinSpeed'));
+            %MinSpeed = str2double(getenv('MinSpeed'));
             disp(['Minimal Speed in Parameter File: ',num2str(MinSpeed)]);
             disp('----------------------------------------------------');
-            MaxSpeed = str2double(getenv('MaxSpeed'));
+            %MaxSpeed = str2double(getenv('MaxSpeed'));
             disp(['Maximum Speed in Parameter File: ',num2str(MaxSpeed)]);
             disp('----------------------------------------------------');
-            SpeedResolution = str2double(getenv('SpeedResolution'));
+            %SpeedResolution = str2double(getenv('SpeedResolution'));
             disp(['Speed Resolution in Parameter File: ',num2str(SpeedResolution)]);
             disp('----------------------------------------------------');
         else
