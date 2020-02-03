@@ -9,8 +9,8 @@ addpath(pwd);
 %Get if we use Eddie or not
 Eddie_flag = str2double(getenv('Eddie'));
 if Eddie_flag == 1
-    disp('Using Eddie ~ ^_^');
-    addpath('/home/s1545529/bin/casadi/matlab/'); %addpath for eddie
+    disp('Using Eddie or Research Cluster ~ ^_^');
+    addpath(getenv('Casadi_Path')); %addpath for eddie
 else
     disp('Using Normal Computers');
 end

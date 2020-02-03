@@ -22,6 +22,9 @@ cd /home/s1545529/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadrup
 #use Eddie
 export Eddie=1
 
+#Define Casadi Path
+export Casadi_Path=/home/s1545529/bin/casadi/matlab/
+
 #Specify gait if using fixed gait optimization
 #export UserDefinedGaitNumber=1
 
