@@ -143,7 +143,7 @@ for strideperiod_index = 1:length(StridePeriodVector)
             
             fprintf(fid, '# Run the program\n');
             
-            fprintf(fid, strcat('cd /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/code','/TrajectoryComputation/','\n'));
+            fprintf(fid, strcat('cd /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/code','/TrajectoryComputation/','\n'));
             fprintf(fid, '\n');
             
             fprintf(fid, 'matlab -nodesktop < Main_MINLP_and_FixedGait.m\n');
@@ -153,7 +153,7 @@ for strideperiod_index = 1:length(StridePeriodVector)
             fprintf(fid, strcat('cp -r /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/results/*', ' ~/Cluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','\n'));
             fprintf(fid, '\n');
 
-            fprintf(fid, strcat('rm -rf /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/results','\n'));
+            fprintf(fid, strcat('rm -rf /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'\n'));
             fprintf(fid, '\n');
             
             fclose(fid);
