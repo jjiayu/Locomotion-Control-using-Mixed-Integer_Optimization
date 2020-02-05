@@ -730,6 +730,9 @@ if Paras_Define_Method == 1 %Take fro file
     disp('Solver Dependent Options:')
     disp('----------------------------------------------------');
     disp(['Number of Maximum Nodes to be solved: ',num2str(NumMaxNodes)]);
+    if Eddie_flag == 1 %Use Eddie, get setup from environment variable
+        NumofRuns = str2double(getenv('NumofRuns'));
+    end
     disp(['NUmber of Maximum Optimization Runes: ',num2str(NumofRuns)]);
 elseif Paras_Define_Method == 2 %Manually Define, currently set as fixed value
     disp('Solver Selection: ')

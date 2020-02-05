@@ -60,6 +60,10 @@ end
 disp(' ')
 
 NumberofBatches = input('Specify Number of Batches (Note:Check Parameters.m to get how many runs of a batch we have, 10): \n');
+disp(' ')
+
+NumofRuns = input('Specify Number of Runs for Each Batch: \n');
+disp(' ')
 
 %Loop over all the options
 for strideperiod_index = 1:length(StridePeriodVector)
@@ -160,6 +164,10 @@ for strideperiod_index = 1:length(StridePeriodVector)
             
             fprintf(fid, '#Specify Speed Resolution\n');
             fprintf(fid, 'export SpeedResolution=0.2\n');
+            fprintf(fid, '\n');
+            
+            fprintf(fid, '#Specify Number of Runs per Batch\n');
+            fprintf(fid, strcat('export NumofRuns=',num2str(NumofRuns),'\n'));
             fprintf(fid, '\n');
             
             fprintf(fid, '# Run the program\n');

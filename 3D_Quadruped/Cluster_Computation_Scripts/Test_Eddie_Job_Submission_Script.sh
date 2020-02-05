@@ -3,19 +3,19 @@
 #$ -N Quadruped_Gait_Discovery              
 #$ -cwd                  
 #$ -l h_rt=00:05:00 
-#$ -l h_vmem=4G
+#$ -l h_vmem=8G
+#$ -V 
 #  These options are:
 #  job name: -N
 #  use the current working directory: -cwd
 #  runtime limit of 5 minutes: -l h_rt
 #  memory limit of 1 Gbyte: -l h_vmem
+
 # Initialise the environment modules
 . /etc/profile.d/modules.sh
 
 # Load Python
 module load matlab/R2018a
-
-export ARTELYS_LICENSE_NETWORK_ADDR=terminator.robots.inf.ed.ac.uk:8349
 
 cd /home/s1545529/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/
 
