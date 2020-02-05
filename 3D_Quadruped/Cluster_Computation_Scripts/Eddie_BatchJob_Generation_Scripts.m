@@ -97,20 +97,26 @@ for strideperiod_index = 1:length(StridePeriodVector)
         
         fprintf(fid, '# Initialise the environment modules\n');
         fprintf(fid, '. /etc/profile.d/modules.sh\n');
+        fprintf(fid, '\n');
         
         fprintf(fid, '# Load Matlab\n');
         fprintf(fid, 'module load matlab/R2018a\n');
+        fprintf(fid, '\n');
         
         fprintf(fid, 'cd /home/s1545529/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/\n');
+        fprintf(fid, '\n');
 
         fprintf(fid, '#use Eddie\n');
         fprintf(fid, 'export Eddie=1\n');
+        fprintf(fid, '\n');
         
         fprintf(fid, '#Define Casadi Path\n');
         fprintf(fid, 'export Casadi_Path=/home/s1545529/bin/casadi/matlab/\n');
+        fprintf(fid, '\n');
         
         fprintf(fid, '#Specify gait if using fixed gait optimization\n');
         fprintf(fid, '#export UserDefinedGaitNumber=1\n');
+        fprintf(fid, '\n');
         
         fprintf(fid, '#Speficy get Parameters from Files\n');
         fprintf(fid, 'export Paras_Define_Method=1\n');
