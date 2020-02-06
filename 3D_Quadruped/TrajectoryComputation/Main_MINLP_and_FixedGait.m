@@ -585,6 +585,7 @@ disp('All Experiments Finished')
 disp('===================================================');
 
 % Send Emails
+
 if Eddie_flag ~= 1 %Not using Eddie, then do this
     if exist('Remote_Computing_Flag','var') == 1 && Remote_Computing_Flag == 2 %Remote Computing
         %Send email to notify the success

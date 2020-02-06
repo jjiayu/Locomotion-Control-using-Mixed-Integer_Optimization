@@ -159,10 +159,10 @@ for strideperiod_index = 1:length(StridePeriodVector)
         if Computer_node == 1 %Staff.compute
             fprintf(fid, 'cd /opt/matlab-R2018a/bin/\n');
             fprintf(fid, '\n');
-            fprintf(fid, 'matlab -nodesktop < /afs/inf.ed.ac.uk/user/s15/s1545529/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m\n');
+            fprintf(fid, 'nice ./matlab -nodesktop < /afs/inf.ed.ac.uk/user/s15/s1545529/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/Main_MINLP_and_FixedGait.m\n');
             fprintf(fid, '\n');
         elseif Computer_node == 2 %Student.compute
-            fprintf(fid, 'matlab -nodesktop < Main_MINLP_and_FixedGait.m\n');
+            fprintf(fid, 'nice matlab -nodesktop < Main_MINLP_and_FixedGait.m\n');
         else
             error('Unknown Computer node')
         end
