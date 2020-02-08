@@ -322,6 +322,7 @@ for runIdx = 1:NumofRuns
 
     %       Other Important Setups
 %     %           Initial Guess of Decision Variables
+rng shuffle %shuffle random number generator
 %     DecisionVarsInit = 10*rand(size(DecisionVars)); %Random Initial Guess
     %DecisionVarsInit = zeros(size(DecisionVars)); %Zero Initial guess
     %           Lower and upper bounds, variable type

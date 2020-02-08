@@ -108,7 +108,7 @@ for strideperiod_index = 1:length(StridePeriodVector)
             %Copy code and parameters
             fprintf(fid, '#Copy code and parameters\n');
             fprintf(fid, strcat('cp -r ~/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/',' /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/code','\n'));
-            fprintf(fid, strcat('cp -r ~/Cluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','Parameters.m',' /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/results','\n'));
+            fprintf(fid, strcat('cp -r ~/ResearchCluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','Parameters.m',' /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/results','\n'));
             fprintf(fid, '\n');
             
             %Setup Computation
@@ -180,25 +180,25 @@ for strideperiod_index = 1:length(StridePeriodVector)
             
             %Copy Results
             fprintf(fid, '# Copy Results\n');
-            fprintf(fid, strcat('mkdir -p ~/Cluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','batch_',num2str(batch_count),'_results','\n'));                        
+            fprintf(fid, strcat('mkdir -p ~/ResearchCluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','batch_',num2str(batch_count),'_results','\n'));                        
             fprintf(fid, '\n');
             
-            fprintf(fid, strcat('cp -r /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/results/*.*', ' ~/Cluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','batch_',num2str(batch_count),'_results','\n'));
+            fprintf(fid, strcat('cp -r /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/results/*.*', ' ~/ResearchCluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','batch_',num2str(batch_count),'_results','\n'));
             fprintf(fid, '\n');
             
-            fprintf(fid, strcat('cp -r /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/results/*', ' ~/Cluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','batch_',num2str(batch_count),'_results','\n'));
+            fprintf(fid, strcat('cp -r /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'/results/*', ' ~/ResearchCluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','batch_',num2str(batch_count),'_results','\n'));
             fprintf(fid, '\n');
             
             %due to the code, there is one more strid period folder in the
             %temporary result folder
-            fprintf(fid, strcat('cd ~/Cluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','batch_',num2str(batch_count),'_results','/','StridePeriod_',num2str(strideperiod),'\n'));
+            fprintf(fid, strcat('cd ~/ResearchCluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','batch_',num2str(batch_count),'_results','/','StridePeriod_',num2str(strideperiod),'\n'));
             fprintf(fid, '\n');
             %Therefore move double time
             fprintf(fid, 'mv * ../..\n');
             fprintf(fid, '\n');
             %fprintf(fid, 'mv * ..\n');
             
-            fprintf(fid, strcat('rm -rf ~/Cluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','batch_',num2str(batch_count),'_results','\n'));
+            fprintf(fid, strcat('rm -rf ~/ResearchCluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','batch_',num2str(batch_count),'_results','\n'));
             fprintf(fid, '\n');
 
             fprintf(fid, strcat('rm -rf /disk/scratch/s1545529/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','Speed_',num2str(speed),'/batch_',num2str(batch_count),'\n'));
@@ -206,7 +206,7 @@ for strideperiod_index = 1:length(StridePeriodVector)
             
             %Also remove script
             fprintf(fid, '# Remove Job Script\n');
-            fprintf(fid, strcat('rm -rf ~/Cluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','BatchJobScript','/Speed_',num2str(speed),'_Batch_',num2str(batch_count),'.sh','\n'));
+            fprintf(fid, strcat('rm -rf ~/ResearchCluster3D_ANYmal_Gait_Discovery_ExpScripts/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','StridePeriod_',num2str(strideperiod),'/','BatchJobScript','/Speed_',num2str(speed),'_Batch_',num2str(batch_count),'.sh','\n'));
             
             fclose(fid);
         end
