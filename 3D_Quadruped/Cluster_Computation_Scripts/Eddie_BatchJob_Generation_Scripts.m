@@ -127,7 +127,7 @@ for strideperiod_index = 1:length(StridePeriodVector)
         fprintf(fid, '\n');
         
         fprintf(fid, '#*************Specify Parameter File Dir (Change based on Tasks and Parameter Setup)*******************\n');
-        fprintf(fid, strcat('export ParamFileDir=/home/s1545529/Eddie_3D_ANYmal_Gait_Dsicovery/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'/','\n'));
+        fprintf(fid, strcat('export ParamFileDir=/home/s1545529/Eddie_3D_ANYmal_Gait_Dsicovery/',num2str(PhaseNum),'Phases','/','Phaselb_',num2str(PhaselbPercent),'_Percent','/',BoundingBoxTypeName,'_KineBox','/',num2str(TerrainSlope),'_Degrees','/',num2str(CostType),'_',costname,'\n'));
         fprintf(fid, '\n');
         
         fprintf(fid, '#Specify Time Horizon Type\n');
