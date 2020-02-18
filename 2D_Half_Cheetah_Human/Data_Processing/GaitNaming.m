@@ -31,9 +31,44 @@ else
                 HindContactIdx = [HindContactIdx,loop_Idx];
             end
         end
+        
+        %find front support phase
+        FrontContactIdx = [];
+        for loop_Idx = 1:size(gaitMatrix_doublephase,1)
+        if isequal(gaitMatrix_doublephase(loop_Idx,:),[1,0])
+            FrontContactIdx = [FrontContactIdx,loop_Idx];
+        end
+        end
+        
 
         if size(HindContactIdx) == 0 %no gait start from hind contact
-            GaitName = "Unknown";
+            %Then check if from front support phase
+            if size(FrontContactIdx) ~= 0
+                
+                %Clean gait from hind support
+                Gait_from_FrontSupport = gaitMatrix_doublephase(FrontContactIdx(1):FrontContactIdx(1)+3,:);
+                %remove phase with same contact config;
+                clean_Gait_from_FrontSupport = Gait_from_FrontSupport;
+                if isequal(clean_Gait_from_FrontSupport(1,:),clean_Gait_from_FrontSupport(end,:))
+                    clean_Gait_from_FrontSupport(end,:) = [];
+                end
+                
+                vanishing_phase_idx = [];
+                for loop_Idx = 1:size(clean_Gait_from_FrontSupport,1)-1
+                    if isequal(clean_Gait_from_FrontSupport(loop_Idx,:),clean_Gait_from_FrontSupport(loop_Idx+1,:))
+                        vanishing_phase_idx = [vanishing_phase_idx,loop_Idx+1];
+                    end
+                end         
+                clean_Gait_from_FrontSupport(vanishing_phase_idx,:) = [];
+                
+                if size(clean_Gait_from_FrontSupport,1) == 3
+                     if isequal(clean_Gait_from_FrontSupport(2,:),[0,0]) && isequal(clean_Gait_from_FrontSupport(3,:),[1,1]);
+                        GaitName = "Sync-FrontLand";
+                     end
+                end
+            else
+                GaitName = "Unknown";
+            end
         else
             %Clean gait from hind support
             Gait_from_HindSupport = gaitMatrix_doublephase(HindContactIdx(1):HindContactIdx(1)+3,:);
@@ -72,6 +107,8 @@ else
                     GaitName = "Bounding-S_H-FLY-F";
                 elseif isequal(clean_Gait_from_HindSupport(2,:),[1,0]) && isequal(clean_Gait_from_HindSupport(3,:),[0,0])
                    GaitName = "Bounding-S_H-F-FLY";
+                elseif isequal(clean_Gait_from_HindSupport(2,:),[1,1]) && isequal(clean_Gait_from_HindSupport(3,:),[0,0])
+                   GaitName = "Sync-HindLand";
                 else
                     GaitName = "Unknown";
                 end

@@ -32,6 +32,10 @@ for outerloop_idx = 1:size(resultMatrix,1)
             elseif contains(GaitNameTemp,'Pronking') == 1
                 %plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'-d','MarkerSize',30, 'LineWidth',4, 'MarkerEdgeColor','#EDB120', 'LineStyle','none')
                 pronking_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
+            elseif contains(GaitNameTemp,'Sync-FrontLand') == 1
+                sync_front_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
+            elseif contains(GaitNameTemp,'Sync-HindLand') == 1
+                sync_hind_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
             elseif contains(GaitNameTemp,'Unknown') == 1
                 %plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'x','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
                 unknown_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
@@ -80,6 +84,17 @@ if exist('pronking_sample','var') == 1
     plot(pronking_sample(1),pronking_sample(2),'-d','MarkerSize',30, 'LineWidth',4, 'MarkerEdgeColor','#EDB120', 'LineStyle','none')
     legend_vector = [legend_vector,"Pronking"];
 end
+
+if exist('sync_front_sample','var') == 1
+    plot(sync_front_sample(1),sync_front_sample(2),'<','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
+    legend_vector = [legend_vector,"Sync-FrontLand"];
+end
+
+if exist('sync_hind_sample','var') == 1
+    plot(sync_hind_sample(1),sync_hind_sample(2),'>','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
+    legend_vector = [legend_vector,"Sync-HindLand"];
+end
+
 if exist('unknown_sample','var') == 1
     plot(unknown_sample(1),unknown_sample(2),'x','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
     legend_vector = [legend_vector,"Unknown"];
@@ -130,6 +145,10 @@ for outerloop_idx = 1:size(resultMatrix,1)
             elseif contains(GaitNameTemp,'Pronking') == 1
                 plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'-d','MarkerSize',30, 'LineWidth',4, 'MarkerEdgeColor','#EDB120', 'LineStyle','none')
                 %pronking_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];
+            elseif contains(GaitNameTemp,'Sync-FrontLand') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'<','MarkerSize',30, 'LineWidth',4, 'MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F', 'LineStyle','none')
+            elseif contains(GaitNameTemp,'Sync-HindLand') == 1
+                plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'>','MarkerSize',30, 'LineWidth',4, 'MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F', 'LineStyle','none')
             elseif contains(GaitNameTemp,'Unknown') == 1
                 plot(resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2),'x','MarkerSize',30,'LineWidth',1,'LineStyle','none','MarkerFaceColor','#A2142F', 'MarkerEdgeColor','#A2142F')
                 %unknown_sample = [resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(1),resultMatrix{outerloop_idx,innerloop_idx}.strideperiod_speed_pair(2)];

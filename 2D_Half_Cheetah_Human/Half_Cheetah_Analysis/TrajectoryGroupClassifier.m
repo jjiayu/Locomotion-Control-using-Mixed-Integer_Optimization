@@ -135,6 +135,20 @@ function [GaitName, GroupName] = TrajectoryGroupClassifier(DiscoveredGaitName, D
     Bounding_S_H_FLY_F_Group_C_3 = Bounding_S_H_FLY_F_Group_C_TemplateDouble(3:6,:);
     Bounding_S_H_FLY_F_Group_C_4 = Bounding_S_H_FLY_F_Group_C_TemplateDouble(4:7,:);
     
+    %   For Pronking
+    %       For Uniform Pronking
+    Pronking_Template=[0,0;...
+                       1,1;...
+                       1,1;...
+                       0,0];
+    Pronking_TemplateDouble = [Pronking_Template;Pronking_Template];
+    
+    Pronking_Group_A = Pronking_TemplateDouble(1:4,:);
+    Pronking_Group_B = Pronking_TemplateDouble(2:5,:);
+    Pronking_Group_C = Pronking_TemplateDouble(3:6,:);
+    Pronking_Group_D = Pronking_TemplateDouble(4:7,:);
+    
+    
     %--------------------------------------------------------------------------
     if PrintGroups == 1
         
@@ -369,6 +383,27 @@ function [GaitName, GroupName] = TrajectoryGroupClassifier(DiscoveredGaitName, D
         disp('---------------------------------------------------------------')
         disp('---------------------------------------------------------------')
         
+        disp('===============================================================')
+        disp('Pronking')
+        disp('===============================================================')
+        disp('Pronking_Group_A:')
+        disp('---------------------------------------------------------------')
+        disp(Pronking_Group_A)
+        disp('---------------------------------------------------------------')
+        disp('Pronking_Group_B:')
+        disp('---------------------------------------------------------------')
+        disp(Pronking_Group_B)
+        disp('---------------------------------------------------------------')
+        disp('Pronking_Group_C:')
+        disp('---------------------------------------------------------------')
+        disp(Pronking_Group_C)
+        disp('---------------------------------------------------------------')
+        disp('Pronking_Group_D:')
+        disp('---------------------------------------------------------------')
+        disp(Pronking_Group_D)
+        disp('---------------------------------------------------------------')
+        disp(' ')
+        
         diary off
     end
     %--------------------------------------------------------------------------
@@ -445,6 +480,22 @@ function [GaitName, GroupName] = TrajectoryGroupClassifier(DiscoveredGaitName, D
             GroupName = 'Galloping_Group_D';
         else
             GroupName = 'Unknown_Group_Name_for_Galloping';
+        end
+        
+      elseif contains(DiscoveredGaitName,'Pronking') == 1
+
+        GaitName = 'Pronking';
+        
+        if isequal(DiscoveredGaitPattern(:,1:2),Pronking_Group_A)
+            GroupName = 'Pronking_Group_A';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Pronking_Group_B)
+            GroupName = 'Pronking_Group_B';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Pronking_Group_C)
+            GroupName = 'Pronking_Group_C';
+        elseif isequal(DiscoveredGaitPattern(:,1:2),Pronking_Group_D)
+            GroupName = 'Pronking_Group_D';
+        else
+            GroupName = 'Unknown_Group_Name_for_Pronking';
         end
         
     elseif contains(DiscoveredGaitName,'Bounding_S_H_F_FLY') == 1
