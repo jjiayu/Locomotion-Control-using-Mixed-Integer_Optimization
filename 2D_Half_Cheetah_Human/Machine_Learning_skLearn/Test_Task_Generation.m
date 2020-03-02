@@ -3,7 +3,7 @@ clc;
 
 % Generate random sample from the condition space as test task, for
 % different stride period and speed with fixed terrain slope
-NumTask_Requested = input('Define number of samples (i.e. 50): \n');
+NumTask_Requested = input('Define number of samples (i.e. 10): \n');
 NumTask = NumTask_Requested + 1; %more than the number of tasks requested to avoid repeating samples
 disp(' ')
 

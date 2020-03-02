@@ -16,6 +16,8 @@ GroupLabelsFileName = strcat(GroupLabel,'.',FilePostFix);
 %-------------------------------------------------------------------------
 TrajectoryTable = readtable([GroupTrajectoryFilePath,'/',GroupLabelsFileName]);
 
+TrajectoryTable
+
 %-------------------------------------------------------------------------
 % Extract Trajectories
 %-------------------------------------------------------------------------

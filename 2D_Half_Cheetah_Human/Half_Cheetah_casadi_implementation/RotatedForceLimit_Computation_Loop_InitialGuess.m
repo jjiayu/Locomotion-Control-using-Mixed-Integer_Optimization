@@ -8,23 +8,26 @@ import casadi.*
 %
 success_vector = [];
 
-for conditionIdx = 1:size(ConditionArray,1)
-%for runIdx = 1:NumofRuns
+%for conditionIdx = 1:size(ConditionArray,1)
+for runIdx = 1:NumofRuns
 
 %======================================================================
 %   Parameter Setup Done, Actual Optimization Starts
 %======================================================================
-for runIdx = 1:1
+%for runIdx = 1:1
 %for speedIdx = 1:length(SpeedList)
-    
+for speedIdx = 1:1
+
     %Missing Parameter Setup
     Tend_flag = 1; %Fixed Time Interval
+    Tend = 1.6;
+    speed = 1.4;
 
     %Get Speed and Stride Period
-    Tend = ConditionArray(conditionIdx,1);
-    speed = ConditionArray(conditionIdx,2);
+    %Tend = ConditionArray(conditionIdx,1);
+    %speed = ConditionArray(conditionIdx,2);
+   
 
-    
     diary off
     ExpLog_filename = strcat(['StridePeriod-',num2str(Tend),'-Speed-', num2str(speed), '-'], datestr(datetime('now'), 30)); %date format: 'yyyymmddTHHMMSS'(ISO 8601), e.g.20000301T154517
     diary([ExpDirectory, '/', ExpLog_filename]);
@@ -1693,7 +1696,7 @@ for runIdx = 1:1
     save([ExpDirectory, '/', ExpLog_filename, '.mat']);
     warning('on')
     
-    success_vector(conditionIdx) = return_status.success;
+    %success_vector(conditionIdx) = return_status.success;
 
 end
 

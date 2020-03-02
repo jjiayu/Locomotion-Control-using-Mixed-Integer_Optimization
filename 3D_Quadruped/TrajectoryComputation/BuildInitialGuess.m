@@ -17,5 +17,16 @@ Ts_init = lb_ContinuousDecisionVars(find(VarNamesList == Ts_label(1)):find(VarNa
 Ts_init = sort(Ts_init,'ascend');
 DecisionVarsInit(find(VarNamesList == Ts_label(1)):find(VarNamesList == Ts_label(end))) = Ts_init;
 
+
+%------------------------
+%For random initial guess
 %DecisionVarsInit has to be column vector
+
+%Init_flag = 1;
+
 DecisionVarsInit = DecisionVarsInit';
+
+% if Init_flag == 1
+%     builtInit = load('/home/jiayu/Desktop/Locomotion-Control-using-Mixed-Integer_Optimization/3D_Quadruped/TrajectoryComputation/MeanInit_DynamicAsymmetricTrot.mat','MeanDynamicAsymmetricTrot');
+%     DecisionVarsInit = builtInit.MeanDynamicAsymmetricTrot';
+% end

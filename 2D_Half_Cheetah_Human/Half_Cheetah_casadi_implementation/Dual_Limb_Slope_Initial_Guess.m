@@ -105,10 +105,10 @@ elseif InitialGuessType == 3
 elseif InitialGuessType == 4
     InitialGuessVector = TempInitialGuessTrajectory;
     %IntialGuessSubfolderName = ''
-elseif InitialGuessType == 5 %Mean with Invariant Quantities
+elseif InitialGuessType == 5 %Mean with Invariant Quantities, Abandon
     TempInit = load([GaitDiscoveryResult_Path,'/Galloping_Group_A_InitialGuess_Mean_with_Invariant.mat'],'MeanInitwithInvariant');
     InitialGuessVector = TempInit.MeanInitwithInvariant
-elseif InitialGuessType == 6 %Zero with Invariant Quantities
+elseif InitialGuessType == 6 %Zero with Invariant Quantities, Abandon
     TempInit = load([GaitDiscoveryResult_Path,'/Galloping_Group_A_ZeroInit_with_Invariant.mat'],'zeroInitwithInvariant');
     InitialGuessVector = TempInit.zeroInitwithInvariant;
 end

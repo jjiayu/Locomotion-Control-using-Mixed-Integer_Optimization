@@ -30,6 +30,10 @@ function [CF, CH, GaitName] = Gait_Selection(GaitNumber)
         [CF,CH]'
         GaitName = "Pronking"
     elseif GaitNumber == 6 %Walking-S (Asymmetric Walking/Galloping without flying phase) (3-Phases)
+%         CF = [0,1,1,1]';
+%         CH = [1,1,1,0]';
+%         CF = [0,0,1,1]';
+%         CH = [1,1,1,0]';
         CF = [0,1,1]';
         CH = [1,1,0]';
         [CF,CH]'
