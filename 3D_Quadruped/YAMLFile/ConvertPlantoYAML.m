@@ -27,8 +27,6 @@ fprintf(fid, '\n');
 %Main Body
 fprintf(fid, 'steps:\n');
 
-
-
 for knotIdx = 1:length(TimeSeries)
     %For a single Knot
     fprintf(fid, '  - step:\n');
@@ -43,7 +41,7 @@ for knotIdx = 1:length(TimeSeries)
     %Select Motion from Double Support Phase
     %Arrive first Knot Using some time (1s,2s)
     if knotIdx == 1
-       fprintf(fid, ['           - time: ',num2str(2.5),'\n']);
+       fprintf(fid, ['           - time: ',num2str(0),'\n']);
     else
        fprintf(fid, ['           - time: ',num2str(TimeSeries(knotIdx)-TimeSeries(knotIdx-1)),'\n']);
     end
@@ -61,7 +59,7 @@ for knotIdx = 1:length(TimeSeries)
     %Select Motion from Double Support Phase
     %Arrive first Knot Using some time (1s,2s)
     if knotIdx == 1
-        fprintf(fid, ['           - time: ',num2str(2.5),'\n']);
+        fprintf(fid, ['           - time: ',num2str(0),'\n']);
     else
         fprintf(fid, ['           - time: ',num2str(TimeSeries(knotIdx)-TimeSeries(knotIdx-1)),'\n']);
     end
@@ -78,7 +76,7 @@ for knotIdx = 1:length(TimeSeries)
     %Select Motion from Double Support Phase
     %Arrive first Knot Using some time (1s,2s)
     if knotIdx == 1
-        fprintf(fid, ['           - time: ',num2str(2.5),'\n']);
+        fprintf(fid, ['           - time: ',num2str(0),'\n']);
     else
         fprintf(fid, ['           - time: ',num2str(TimeSeries(knotIdx)-TimeSeries(knotIdx-1)),'\n']);
     end
@@ -95,7 +93,7 @@ for knotIdx = 1:length(TimeSeries)
     %Select Motion from Double Support Phase
     %Arrive first Knot Using some time (1s,2s)
     if knotIdx == 1
-        fprintf(fid, ['           - time: ',num2str(2.5),'\n']);
+        fprintf(fid, ['           - time: ',num2str(0),'\n']);
     else
         fprintf(fid, ['           - time: ',num2str(TimeSeries(knotIdx)-TimeSeries(knotIdx-1)),'\n']);
     end
@@ -107,11 +105,11 @@ for knotIdx = 1:length(TimeSeries)
     fprintf(fid, '         frame: odom\n');
     fprintf(fid, '         knots:\n');
     if knotIdx == 1
-        fprintf(fid, ['           - time: ',num2str(2.5),'\n']);
+        fprintf(fid, ['           - time: ',num2str(0),'\n']);
     else
         fprintf(fid, ['           - time: ',num2str(TimeSeries(knotIdx)-TimeSeries(knotIdx-1)),'\n']);
     end
-    fprintf(fid, ['             position:  [',num2str(x_result(knotIdx)),', ',num2str(y_result(knotIdx)),', ',num2str(z_result(knotIdx)),']\n']);
+    fprintf(fid, ['             position:  [',num2str(x_result(knotIdx)),', ',num2str(y_result(knotIdx)),', ',num2str(z_result(knotIdx)+0.03),']\n']);
     fprintf(fid, ['             orientation: [','deg(',num2str(phi_result(knotIdx)/pi*180),')',', ','deg(',num2str(theta_result(knotIdx)/pi*180),')',', ','deg(',num2str(psi_result(knotIdx)/pi*180),')',']','\n']);
     
     %A gap
