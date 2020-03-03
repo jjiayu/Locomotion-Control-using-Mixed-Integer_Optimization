@@ -533,7 +533,10 @@ for speedIdx = 1:length(SpeedList)
                             h*((Flhx(k)/10)^2) + h*((Flhy(k)/10)^2) + h*((Flhz(k)/10)^2) +... Left Hind (lh)
                             h*((Frfx(k)/10)^2) + h*((Frfy(k)/10)^2) + h*((Frfz(k)/10)^2) +... Right Front (rf)
                             h*((Frhx(k)/10)^2) + h*((Frhy(k)/10)^2) + h*((Frhz(k)/10)^2) +... Right Hind (rh)
-                            h*(Plfz())
+                            h*(((Plfx(k)-PlfCenter(1))*1e3)^2) + ...
+                            h*(((Plhx(k)-PlhCenter(1))*1e3)^2) + ...
+                            h*(((Prfx(k)-PrfCenter(1))*1e3)^2) + ...
+                            h*(((Prhx(k)-PrhCenter(1))*1e3)^2);
                         
             end
         end

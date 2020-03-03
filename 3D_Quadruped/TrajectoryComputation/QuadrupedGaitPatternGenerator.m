@@ -124,8 +124,8 @@ function [Clf,Clh,Crf,Crh, GaitName] = QuadrupedGaitPatternGenerator(GaitNumber)
 %         Crf = [1,1,0,0,0,0,1,1]';
 %         Crh = [1,1,1,1,1,1,0,0]';
         Clh = [1,1,1,0]';
-        Clf = [1,0,0,1]';
-        Crf = [1,0,0,1]';
+        Clf = [1,0,1,1]';
+        Crf = [1,0,1,1]';
         Crh = [1,1,1,0]';
         GaitName = 'HalfCheetahWalkingD';
     elseif GaitNumber == 13 % Half Cheetah Galloping (Mirrored)

@@ -695,8 +695,8 @@ if Paras_Define_Method == 1 %Load Parameters from File
     elseif cost_flag == 5
         disp('5 -> Minimize Body Vibration with Minimize y-axis Limb deviation')
     elseif cost_flag == 6
-        error('Not Implemented')
-        %disp('6-> Feet Velocity');
+%        error('Not Implemented')
+        disp('6-> Vertical Touch-down');
     elseif cost_flag == 7
         error('Not Implemented')
         %disp('7-> Humanoid Smooth Motion')
