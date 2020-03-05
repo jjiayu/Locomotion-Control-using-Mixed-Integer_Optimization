@@ -67,6 +67,8 @@ lb_phi = repmat(-pi*30/180, 1, VarLengthList(VarCategoryList == "phi"));  %30 de
 ub_phi = repmat( pi*30/180, 1, VarLengthList(VarCategoryList == "phi"));  %30 degrees
 
 %       theta
+% lb_theta = repmat(-pi/110,          1, VarLengthList(VarCategoryList == "theta"));    
+% ub_theta = repmat( pi/110, 1, VarLengthList(VarCategoryList == "theta")); %90% of pi/2 -> 90/100*(pi/2)
 lb_theta = repmat(-pi/3,          1, VarLengthList(VarCategoryList == "theta"));    
 ub_theta = repmat( pi/3, 1, VarLengthList(VarCategoryList == "theta")); %90% of pi/2 -> 90/100*(pi/2)
 
